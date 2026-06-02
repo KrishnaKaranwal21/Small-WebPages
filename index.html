@@ -3,20 +3,58 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Core Terminal | Micro-Apps Hub</title>
+    <title>Command Deck | Micro-Apps Hub</title>
     <style>
+        /* Theme Configurations */
         :root {
+            /* Smooth Transition Hub */
+            --transition-speed: 0.4s;
+            --transition-curve: cubic-bezier(0.16, 1, 0.3, 1);
+
+            /* App Accent Colors (Shared) */
+            --p1-color: #10b981; /* Emerald */
+            --p2-color: #f59e0b; /* Amber */
+            --p3-color: #0071e3; /* Classic Blue */
+        }
+
+        /* LIGHT MODE VARIABLES */
+        [data-theme="light"] {
+            --bg-color: #f4f7f6;
+            --card-bg: rgba(255, 255, 255, 0.75);
+            --border-color: rgba(0, 0, 0, 0.06);
+            --text-main: #1d1d1f;
+            --text-muted: #6e6e73;
+            --header-title: #000000;
+            --badge-bg: rgba(0, 0, 0, 0.03);
+            --action-btn-bg: #ffffff;
+            
+            --p1-glow: rgba(16, 185, 129, 0.12);
+            --p2-glow: rgba(245, 158, 11, 0.12);
+            --p3-glow: rgba(0, 113, 227, 0.12);
+            
+            --bg-gradient: 
+                radial-gradient(circle at 0% 0%, rgba(0, 113, 227, 0.04) 0%, transparent 35%),
+                radial-gradient(circle at 100% 100%, rgba(16, 185, 129, 0.04) 0%, transparent 35%);
+        }
+
+        /* DARK MODE VARIABLES */
+        [data-theme="dark"] {
             --bg-color: #0d1117;
             --card-bg: rgba(22, 27, 34, 0.7);
             --border-color: #30363d;
             --text-main: #c9d1d9;
             --text-muted: #8b949e;
-            --accent-glow: rgba(56, 189, 248, 0.15);
+            --header-title: #ffffff;
+            --badge-bg: rgba(255, 255, 255, 0.05);
+            --action-btn-bg: rgba(255, 255, 255, 0.03);
             
-            /* App Accent Colors */
-            --p1-color: #4ade80; /* Emerald green */
-            --p2-color: #f59e0b; /* Amber LeetCode orange */
-            --p3-color: #38bdf8; /* Cyan blue */
+            --p1-glow: rgba(16, 185, 129, 0.08);
+            --p2-glow: rgba(245, 158, 11, 0.08);
+            --p3-glow: rgba(0, 113, 227, 0.08);
+            
+            --bg-gradient: 
+                radial-gradient(circle at 10% 20%, rgba(56, 189, 248, 0.03) 0%, transparent 40%),
+                radial-gradient(circle at 90% 80%, rgba(74, 222, 128, 0.03) 0%, transparent 40%);
         }
 
         * {
@@ -26,86 +64,137 @@
         }
 
         body {
-            font-family: 'SF Pro Display', -apple-system, 'Segoe UI', Roboto, Helvetica, sans-serif;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
             background-color: var(--bg-color);
-            background-image: 
-                radial-gradient(circle at 10% 20%, rgba(56, 189, 248, 0.03) 0%, transparent 40%),
-                radial-gradient(circle at 90% 80%, rgba(74, 222, 128, 0.03) 0%, transparent 40%);
+            background-image: var(--bg-gradient);
             color: var(--text-main);
             min-height: 100vh;
             display: flex;
             flex-direction: column;
             justify-content: center;
             align-items: center;
-            padding: 40px 20px;
+            padding: 60px 20px;
+            -webkit-font-smoothing: antialiased;
+            transition: background-color var(--transition-speed) var(--transition-curve),
+                        color var(--transition-speed) var(--transition-curve);
         }
 
         .container {
             width: 100%;
-            max-width: 800px;
+            max-width: 840px;
         }
 
-        /* Header Console */
+        /* Premium Header Architecture */
         header {
-            margin-bottom: 40px;
-            border-left: 3px solid #38bdf8;
-            padding-left: 20px;
+            margin-bottom: 48px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid var(--border-color);
+            padding-bottom: 24px;
+            transition: border-color var(--transition-speed) var(--transition-curve);
         }
 
         header h1 {
-            font-size: 2.2rem;
-            font-weight: 800;
-            letter-spacing: -0.5px;
-            color: #ffffff;
-            margin-bottom: 6px;
-            background: linear-gradient(to right, #fff, var(--text-muted));
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
+            font-size: 2.4rem;
+            font-weight: 700;
+            letter-spacing: -0.03em;
+            color: var(--header-title);
+            transition: color var(--transition-speed) var(--transition-curve);
+        }
+
+        .header-right {
+            display: flex;
+            align-items: center;
+            gap: 16px;
         }
 
         .subtitle {
-            font-family: monospace;
+            font-family: 'SF Mono', SFMono-Regular, Consolas, monospace;
             color: var(--text-muted);
-            font-size: 0.95rem;
+            font-size: 0.85rem;
+            font-weight: 600;
+            background: var(--badge-bg);
+            padding: 6px 14px;
+            border-radius: 20px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            transition: all var(--transition-speed) var(--transition-curve);
         }
 
         .pulse-dot {
-            display: inline-block;
-            width: 8px;
-            height: 8px;
-            background-color: #4ade80;
+            width: 7px;
+            height: 7px;
+            background-color: var(--p1-color);
             border-radius: 50%;
-            margin-right: 6px;
-            box-shadow: 0 0 10px #4ade80;
             animation: pulse 2s infinite;
         }
 
-        /* Grid Layout */
-        .apps-grid {
-            display: grid;
-            grid-template-columns: 1fr;
-            gap: 20px;
+        /* Ultra-Sleek Switch Toggle Styles */
+        .theme-toggle-btn {
+            background: var(--badge-bg);
+            border: 1px solid var(--border-color);
+            width: 44px;
+            height: 44px;
+            border-radius: 14px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--text-main);
+            transition: all var(--transition-speed) var(--transition-curve);
         }
 
-        /* App Card Styles */
+        .theme-toggle-btn:hover {
+            transform: scale(1.05);
+            border-color: var(--text-muted);
+        }
+
+        .theme-toggle-btn svg {
+            width: 20px;
+            height: 20px;
+            fill: none;
+            stroke: currentColor;
+            stroke-width: 2;
+        }
+
+        /* Hide specific icon states cleanly */
+        [data-theme="light"] .sun-icon,
+        [data-theme="dark"] .moon-icon {
+            display: none;
+        }
+
+        /* Stacked Card Layout */
+        .apps-grid {
+            display: flex;
+            flex-direction: column;
+            gap: 24px;
+        }
+
+        /* Card Framework */
         .app-card {
             text-decoration: none;
             color: inherit;
             background: var(--card-bg);
             border: 1px solid var(--border-color);
-            border-radius: 16px;
-            padding: 24px;
+            border-radius: 24px;
+            padding: 32px;
             display: flex;
             align-items: center;
             justify-content: space-between;
             position: relative;
             overflow: hidden;
-            backdrop-filter: blur(12px);
-            -webkit-backdrop-filter: blur(12px);
-            transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            box-shadow: 0 4px 24px rgba(0, 0, 0, 0.01);
+            transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1), 
+                        border-color 0.4s, 
+                        box-shadow 0.4s,
+                        background-color var(--transition-speed) var(--transition-curve);
         }
 
-        /* Card Hover Effects */
+        /* Fluid Cursor Follow Aura */
         .app-card::before {
             content: '';
             position: absolute;
@@ -113,53 +202,58 @@
             left: 0;
             width: 100%;
             height: 100%;
-            background: radial-gradient(800px circle at var(--x, 0px) var(--y, 0px), rgba(255,255,255,0.06), transparent 40%);
+            background: radial-gradient(400px circle at var(--x, 0px) var(--y, 0px), var(--card-glow), transparent 60%);
             z-index: 1;
             pointer-events: none;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .app-card:hover::before {
+            opacity: 1;
         }
 
         .app-card:hover {
-            transform: translateY(-4px);
+            transform: scale(1.015) translateY(-2px);
             border-color: var(--app-color);
-            box-shadow: 0 12px 30px rgba(0, 0, 0, 0.4), 0 0 20px var(--accent-glow);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.03), 0 0 1px var(--app-color);
         }
 
-        /* Customizing colors per card dynamically via CSS variables */
-        .app-card.p1 { --app-color: var(--p1-color); --accent-glow: rgba(74, 222, 128, 0.1); }
-        .app-card.p2 { --app-color: var(--p2-color); --accent-glow: rgba(245, 158, 11, 0.1); }
-        .app-card.p3 { --app-color: var(--p3-color); --accent-glow: rgba(56, 189, 248, 0.1); }
+        /* Dynamic Card Property Assignments */
+        .app-card.p1 { --app-color: var(--p1-color); --card-glow: var(--p1-glow); }
+        .app-card.p2 { --app-color: var(--p2-color); --card-glow: var(--p2-glow); }
+        .app-card.p3 { --app-color: var(--p3-color); --card-glow: var(--p3-glow); }
 
-        /* Left Content Info */
         .app-info {
             z-index: 2;
             flex-grow: 1;
-            padding-right: 20px;
+            padding-right: 40px;
         }
 
         .app-meta {
             display: flex;
             align-items: center;
-            gap: 10px;
-            margin-bottom: 8px;
+            gap: 8px;
+            margin-bottom: 12px;
         }
 
         .app-badge {
-            font-family: monospace;
             font-size: 0.75rem;
-            text-transform: uppercase;
-            padding: 3px 8px;
-            border-radius: 20px;
-            background: rgba(255, 255, 255, 0.05);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            color: var(--app-color);
             font-weight: 600;
+            letter-spacing: 0.02em;
+            padding: 4px 10px;
+            border-radius: 8px;
+            background: var(--badge-bg);
+            color: var(--app-color);
+            transition: background-color var(--transition-speed) var(--transition-curve);
         }
 
         .app-title {
-            font-size: 1.35rem;
+            font-size: 1.5rem;
             font-weight: 700;
-            color: #ffffff;
-            transition: color 0.3s;
+            color: var(--header-title);
+            letter-spacing: -0.01em;
+            transition: color 0.2s ease;
         }
 
         .app-card:hover .app-title {
@@ -169,86 +263,101 @@
         .app-desc {
             font-size: 0.95rem;
             color: var(--text-muted);
-            margin-top: 6px;
-            line-height: 1.4;
+            margin-top: 8px;
+            line-height: 1.5;
+            max-width: 540px;
+            transition: color var(--transition-speed) var(--transition-curve);
         }
 
-        /* Micro UI Visual Elements (Progress bars, Status trackers) */
+        /* Micro Progress Engines */
         .app-visual {
-            margin-top: 12px;
+            margin-top: 20px;
             width: 100%;
-            max-width: 280px;
+            max-width: 320px;
         }
         
-        .progress-bar-bg {
-            background: rgba(255, 255, 255, 0.05);
-            height: 6px;
-            border-radius: 4px;
-            overflow: hidden;
-        }
-
-        .progress-bar-fill {
-            background: linear-gradient(90deg, var(--app-color), #ffffff);
-            height: 100%;
-            border-radius: 4px;
-            transition: width 1s ease-in-out;
-        }
-
         .visual-text {
-            font-family: monospace;
+            font-family: 'SF Mono', monospace;
             font-size: 0.75rem;
+            font-weight: 600;
             color: var(--text-muted);
             display: flex;
             justify-content: space-between;
-            margin-bottom: 4px;
+            margin-bottom: 6px;
+            transition: color var(--transition-speed) var(--transition-curve);
         }
 
-        /* Right Icon Arrow */
+        .progress-bar-bg {
+            background: var(--badge-bg);
+            height: 5px;
+            border-radius: 10px;
+            overflow: hidden;
+            transition: background-color var(--transition-speed) var(--transition-curve);
+        }
+
+        .progress-bar-fill {
+            background: var(--app-color);
+            height: 100%;
+            border-radius: 10px;
+            transform: scaleX(0);
+            transform-origin: left;
+            animation: growBar 1s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+        }
+
+        /* Action Pill Navigation Trigger */
         .app-action {
             z-index: 2;
-            width: 48px;
-            height: 48px;
-            border-radius: 50%;
-            background: rgba(255, 255, 255, 0.03);
+            width: 52px;
+            height: 52px;
+            border-radius: 18px;
+            background: var(--action-btn-bg);
             border: 1px solid var(--border-color);
             display: flex;
             align-items: center;
             justify-content: center;
-            transition: all 0.3s;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.01);
+            transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
             flex-shrink: 0;
         }
 
         .app-action svg {
-            width: 18px;
-            height: 18px;
+            width: 20px;
+            height: 20px;
             fill: none;
-            stroke: var(--text-muted);
+            stroke: var(--header-title);
             stroke-width: 2.5;
-            transition: all 0.3s;
+            transition: transform 0.3s ease, stroke var(--transition-speed) var(--transition-curve);
         }
 
         .app-card:hover .app-action {
             background: var(--app-color);
             border-color: var(--app-color);
-            transform: scale(1.05);
+            box-shadow: 0 8px 20px var(--card-glow);
         }
 
         .app-card:hover .app-action svg {
-            stroke: var(--bg-color);
-            transform: translateX(2px);
+            stroke: #ffffff;
+            transform: translateX(3px);
         }
 
-        /* Animations */
+        /* Keyframes */
         @keyframes pulse {
-            0% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(74, 222, 128, 0.5); }
-            70% { transform: scale(1); box-shadow: 0 0 0 8px rgba(74, 222, 128, 0); }
-            100% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(74, 222, 128, 0); }
+            0% { box-shadow: 0 0 0 0 rgba(16, 185, 129, 0.4); }
+            70% { box-shadow: 0 0 0 6px rgba(16, 185, 129, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(16, 185, 129, 0); }
         }
 
-        @media (max-width: 600px) {
-            body { padding: 20px 12px; }
-            .app-card { flex-direction: column; align-items: flex-start; gap: 20px; }
-            .app-action { align-self: flex-end; }
+        @keyframes growBar {
+            to { transform: scaleX(1); }
+        }
+
+        @media (max-width: 680px) {
+            header { flex-direction: row; align-items: center; justify-content: space-between; }
+            header h1 { font-size: 1.8rem; }
+            .subtitle { display: none; }
+            .app-card { flex-direction: column; align-items: flex-start; gap: 24px; padding: 24px; }
+            .app-action { align-self: flex-end; width: 100%; height: 44px; border-radius: 12px; }
+            .app-card:hover .app-action svg { transform: translateX(5px); }
             .app-visual { max-width: 100%; }
         }
     </style>
@@ -257,20 +366,25 @@
 
     <div class="container">
         <header>
-            <h1>System Command Deck</h1>
-            <div class="subtitle">
-                <span class="pulse-dot"></span>
-                <span>STATUS: ACTIVE // USER: DEVELOPER</span>
+            <h1>Command Deck</h1>
+            <div class="header-right">
+                <div class="subtitle">
+                    <span class="pulse-dot"></span>
+                    <span>DECK ENGINE ACTIVE</span>
+                </div>
+                <button class="theme-toggle-btn" id="themeToggle" aria-label="Toggle Theme">
+                    <svg class="moon-icon" viewBox="0 0 24 24"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+                    <svg class="sun-icon" viewBox="0 0 24 24"><circle cx="12" cy="12" r="5"/><path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"/></svg>
+                </button>
             </div>
         </header>
 
         <main class="apps-grid">
 
-            <!-- PROJECT 1: GPA CALC -->
             <a href="./GPA Sem 4/" class="app-card p1">
                 <div class="app-info">
                     <div class="app-meta">
-                        <span class="app-badge">Academic Engine</span>
+                        <span class="app-badge">ACADEMICS</span>
                     </div>
                     <div class="app-title">GPA Calculator (Sem 4)</div>
                     <div class="app-desc">Interactive credit-weighted performance metrics module tailored specifically for Semester 4 curriculum. Evaluates targets effortlessly.</div>
@@ -278,7 +392,7 @@
                     <div class="app-visual">
                         <div class="visual-text">
                             <span>Target Tracker</span>
-                            <span>9.5+ SGPA</span>
+                            <span>9.5+ SGPA Target</span>
                         </div>
                         <div class="progress-bar-bg">
                             <div class="progress-bar-fill" style="width: 95%;"></div>
@@ -290,11 +404,10 @@
                 </div>
             </a>
 
-            <!-- PROJECT 2: LEETCODE TRACKER -->
             <a href="./Leetcode Target/" class="app-card p2">
                 <div class="app-info">
                     <div class="app-meta">
-                        <span class="app-badge">Algorithms</span>
+                        <span class="app-badge">ALGORITHMS</span>
                     </div>
                     <div class="app-title">LeetCode Analytics Tracker</div>
                     <div class="app-desc">Algorithmic metrics dashboard. Keeps a strict inventory of absolute problems solved, tracks dynamic targets, and generates next optimal problems to conquer.</div>
@@ -314,19 +427,18 @@
                 </div>
             </a>
 
-            <!-- PROJECT 3: DSA TIMETABLE -->
             <a href="./TimeTable/" class="app-card p3">
                 <div class="app-info">
                     <div class="app-meta">
-                        <span class="app-badge">Sprint Schedule</span>
+                        <span class="app-badge">SPRINT SCHEDULE</span>
                     </div>
-                    <div class="app-title">Data Structures & Algos Timetable</div>
-                    <div class="app-desc">High-intensity runtime planner maps out focused daily objectives from June 5 to July 14. Designed to monitor layout scaling for master-level DSA foundations.</div>
+                    <div class="app-title">DSA Timetable Plan</div>
+                    <div class="app-desc">High-intensity runtime planner mapping out focused daily objectives from June 5 to July 14. Designed to monitor layout scaling for master-level foundations.</div>
                     
                     <div class="app-visual">
                         <div class="visual-text">
+                            <span>Timeline</span>
                             <span>June 05 - July 14</span>
-                            <span>40 Day Sprint</span>
                         </div>
                         <div class="progress-bar-bg">
                             <div class="progress-bar-fill" style="width: 100%;"></div>
@@ -341,8 +453,8 @@
         </main>
     </div>
 
-    <!-- Mouse Tracking Background Interaction Script -->
     <script>
+        /* Interactive Card Aura Tracker Script */
         const cards = document.querySelectorAll('.app-card');
         cards.forEach(card => {
             card.addEventListener('mousemove', e => {
@@ -352,6 +464,23 @@
                 card.style.setProperty('--x', `${x}px`);
                 card.style.setProperty('--y', `${y}px`);
             });
+        });
+
+        /* Dynamic Theme State Alternator Script */
+        const toggleBtn = document.getElementById('themeToggle');
+        
+        // Detect initial saved state or user default preference
+        const currentSavedTheme = localStorage.getItem('hub-theme');
+        const systemPrefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+        
+        let activeTheme = currentSavedTheme || (systemPrefersDark ? 'dark' : 'light');
+        document.documentElement.setAttribute('data-theme', activeTheme);
+
+        // Toggle state functionality
+        toggleBtn.addEventListener('click', () => {
+            activeTheme = (activeTheme === 'light') ? 'dark' : 'light';
+            document.documentElement.setAttribute('data-theme', activeTheme);
+            localStorage.setItem('hub-theme', activeTheme);
         });
     </script>
 </body>
