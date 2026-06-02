@@ -1,0 +1,2198 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>DSA Quest: Master Timeline Dashboard</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;500;600;700&family=Syne:wght@400;500;600;700;800&display=swap" rel="stylesheet"/>
+<script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+<style>
+:root {
+  --bg-base:#080b12;--bg-surface:#0d1117;--bg-elevated:#111827;
+  --bg-card:#131c2e;--bg-card-hover:#182034;
+  --border:#1e2d45;--border-bright:#2a3f5f;
+  --violet:#7c3aed;--violet-bright:#8b5cf6;--violet-glow:#6d28d9;
+  --violet-dim:rgba(124,58,237,.15);--violet-pulse:rgba(139,92,246,.25);
+  --emerald:#10b981;--emerald-dim:rgba(16,185,129,.15);--emerald-glow:rgba(16,185,129,.35);
+  --amber:#f59e0b;--amber-dim:rgba(245,158,11,.15);--amber-glow:rgba(245,158,11,.35);
+  --cyan:#06b6d4;--rose:#f43f5e;
+  --text-primary:#e2e8f0;--text-secondary:#94a3b8;--text-muted:#475569;--text-dim:#334155;
+  --mono:'JetBrains Mono',monospace;--sans:'Syne',sans-serif;
+  --radius-sm:4px;--radius:8px;--radius-lg:12px;
+  --shadow:0 4px 16px rgba(0,0,0,.4);
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{font-family:var(--sans);background:var(--bg-base);color:var(--text-primary);min-height:100vh;overflow-x:hidden;line-height:1.6}
+body::before{content:'';position:fixed;inset:0;pointer-events:none;z-index:9999;background:repeating-linear-gradient(0deg,transparent,transparent 2px,rgba(0,0,0,.03) 2px,rgba(0,0,0,.03) 4px)}
+::-webkit-scrollbar{width:5px;height:5px}
+::-webkit-scrollbar-track{background:var(--bg-surface)}
+::-webkit-scrollbar-thumb{background:var(--border-bright);border-radius:99px}
+::-webkit-scrollbar-thumb:hover{background:var(--violet)}
+
+/* ── HEADER ── */
+#app-header{position:sticky;top:0;z-index:100;background:rgba(8,11,18,.92);backdrop-filter:blur(16px);border-bottom:1px solid var(--border);padding:0 24px;height:56px;display:flex;align-items:center;justify-content:space-between}
+.header-brand{display:flex;align-items:center;gap:10px}
+.brand-icon{width:28px;height:28px;border-radius:6px;background:linear-gradient(135deg,var(--violet),var(--violet-bright));display:flex;align-items:center;justify-content:center;font-size:14px;box-shadow:0 0 12px rgba(124,58,237,.5)}
+.brand-title{font-family:var(--mono);font-size:13px;font-weight:600;letter-spacing:.05em}
+.brand-title span{color:var(--violet-bright)}
+.header-stats{display:flex;align-items:center;gap:16px}
+.stat-pill{font-family:var(--mono);font-size:11px;color:var(--text-secondary);background:var(--bg-elevated);border:1px solid var(--border);border-radius:99px;padding:3px 10px;display:flex;align-items:center;gap:5px}
+.stat-pill .dot{width:6px;height:6px;border-radius:50%;background:var(--emerald);box-shadow:0 0 6px var(--emerald);animation:pulse-dot 2s infinite}
+@keyframes pulse-dot{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.5;transform:scale(1.4)}}
+.progress-bar-wrap{width:120px;height:4px;background:var(--border);border-radius:99px;overflow:hidden}
+.progress-bar-fill{height:100%;background:linear-gradient(90deg,var(--violet),var(--emerald));border-radius:99px;transition:width .6s cubic-bezier(.4,0,.2,1)}
+
+/* ── LAYOUT ── */
+#main-layout{display:grid;grid-template-columns:1fr 420px;gap:0;height:calc(100vh - 56px);overflow:hidden}
+
+/* ── CALENDAR PANE ── */
+#calendar-pane{overflow-y:auto;padding:20px;border-right:1px solid var(--border);background:var(--bg-surface)}
+.week-block{margin-bottom:24px}
+.week-header{display:flex;align-items:center;gap:10px;margin-bottom:10px;padding-bottom:8px;border-bottom:1px solid var(--border)}
+.week-badge{font-family:var(--mono);font-size:10px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--violet-bright);background:var(--violet-dim);border:1px solid rgba(139,92,246,.3);border-radius:4px;padding:2px 8px}
+.week-title{font-size:12px;font-weight:600;color:var(--text-secondary);letter-spacing:.04em}
+.week-completion{margin-left:auto;font-family:var(--mono);font-size:10px;color:var(--text-muted)}
+.week-grid{display:grid;grid-template-columns:repeat(7,1fr);gap:6px}
+
+/* ── DAY CARD ── */
+.day-card{position:relative;background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius);padding:8px 7px;cursor:pointer;transition:all .18s ease;min-height:72px;display:flex;flex-direction:column;gap:4px;overflow:hidden}
+.day-card::before{content:'';position:absolute;inset:0;opacity:0;transition:opacity .18s ease;background:radial-gradient(ellipse at top left,var(--violet-pulse),transparent 70%)}
+.day-card:hover::before{opacity:1}
+.day-card:hover{border-color:var(--border-bright);transform:translateY(-1px);box-shadow:var(--shadow)}
+.day-card.active{border-color:var(--amber);background:var(--bg-card-hover);box-shadow:0 0 0 1px var(--amber),0 0 16px var(--amber-glow)}
+.day-card.active::before{opacity:1}
+.day-card.completed{border-color:var(--emerald);background:rgba(16,185,129,.06)}
+.day-card.completed::before{background:radial-gradient(ellipse at top left,rgba(16,185,129,.12),transparent 70%);opacity:1}
+.day-card.prereq{border-color:rgba(6,182,212,.4)}
+.day-card.revision{border-color:rgba(245,158,11,.3)}
+.day-card.milestone{border-color:rgba(251,191,36,.6);background:rgba(251,191,36,.05)}
+.day-num{font-family:var(--mono);font-size:10px;font-weight:700;color:var(--text-muted);letter-spacing:.05em}
+.day-card.active .day-num{color:var(--amber)}
+.day-card.completed .day-num{color:var(--emerald)}
+.day-label{font-size:9.5px;font-weight:500;color:var(--text-secondary);line-height:1.3;flex:1}
+.day-card.active .day-label{color:var(--text-primary)}
+.day-footer{display:flex;align-items:center;justify-content:space-between;margin-top:auto}
+.day-status-dot{width:6px;height:6px;border-radius:50%;background:var(--text-dim);flex-shrink:0}
+.day-card.active .day-status-dot{background:var(--amber);box-shadow:0 0 6px var(--amber)}
+.day-card.completed .day-status-dot{background:var(--emerald);box-shadow:0 0 6px var(--emerald)}
+.day-card.prereq:not(.completed) .day-status-dot{background:var(--cyan)}
+.day-card.revision:not(.completed) .day-status-dot{background:var(--amber)}
+.day-card.milestone:not(.completed) .day-status-dot{background:#fbbf24;box-shadow:0 0 8px #fbbf24;animation:pulse-dot 1.5s infinite}
+.day-check{width:14px;height:14px;border-radius:3px;border:1px solid var(--border-bright);background:transparent;display:flex;align-items:center;justify-content:center;font-size:9px;color:transparent}
+.day-card.completed .day-check{background:var(--emerald);border-color:var(--emerald);color:#fff}
+
+/* ── FOCUS PANE ── */
+#focus-pane{overflow-y:auto;background:var(--bg-base);display:flex;flex-direction:column}
+.focus-header{position:sticky;top:0;z-index:10;background:rgba(8,11,18,.95);backdrop-filter:blur(12px);border-bottom:1px solid var(--border);padding:16px 20px 12px}
+.focus-date-badge{font-family:var(--mono);font-size:10px;font-weight:600;letter-spacing:.12em;text-transform:uppercase;color:var(--violet-bright);margin-bottom:6px}
+.focus-day-title{font-size:16px;font-weight:700;color:var(--text-primary);line-height:1.3;margin-bottom:10px}
+.focus-nav{display:flex;gap:6px}
+.nav-btn{font-family:var(--mono);font-size:10px;font-weight:600;padding:4px 10px;border-radius:var(--radius-sm);border:1px solid var(--border-bright);background:var(--bg-elevated);color:var(--text-secondary);cursor:pointer;transition:all .15s ease;letter-spacing:.05em}
+.nav-btn:hover{border-color:var(--violet-bright);color:var(--violet-bright);background:var(--violet-dim)}
+.nav-btn:disabled{opacity:.3;cursor:not-allowed}
+.focus-body{padding:16px 20px;display:flex;flex-direction:column;gap:14px;flex:1}
+
+/* ── SECTION CARDS ── */
+.section-card{background:var(--bg-elevated);border:1px solid var(--border);border-radius:var(--radius-lg);overflow:hidden}
+.section-card-header{display:flex;align-items:center;gap:8px;padding:10px 14px;border-bottom:1px solid var(--border);background:rgba(255,255,255,.02)}
+.section-icon{font-size:13px}
+.section-title{font-family:var(--mono);font-size:10px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--text-secondary)}
+.section-body{padding:12px 14px}
+.phase-badge{display:inline-flex;align-items:center;gap:6px;font-family:var(--mono);font-size:10px;font-weight:600;letter-spacing:.08em;padding:3px 10px;border-radius:4px;margin-bottom:10px}
+.phase-badge.phase-1{background:rgba(6,182,212,.15);color:var(--cyan);border:1px solid rgba(6,182,212,.3)}
+.phase-badge.phase-2{background:var(--violet-dim);color:var(--violet-bright);border:1px solid rgba(139,92,246,.3)}
+.phase-badge.phase-3{background:var(--amber-dim);color:var(--amber);border:1px solid rgba(245,158,11,.3)}
+.phase-badge.phase-m{background:rgba(251,191,36,.1);color:#fbbf24;border:1px solid rgba(251,191,36,.4)}
+
+/* ── CHECKLIST ── */
+.checklist{display:flex;flex-direction:column;gap:6px}
+.check-item{display:flex;align-items:flex-start;gap:8px;cursor:pointer;padding:6px 8px;border-radius:var(--radius-sm);transition:background .12s ease;border:1px solid transparent}
+.check-item:hover{background:rgba(255,255,255,.03);border-color:var(--border)}
+.check-item.done{opacity:.6}
+.check-item.done .check-box{background:var(--emerald);border-color:var(--emerald)}
+.check-item.done .check-text{text-decoration:line-through;color:var(--text-muted)}
+.check-item.done .check-box::after{content:'✓';font-size:9px;color:#fff;font-weight:700}
+.check-box{flex-shrink:0;width:16px;height:16px;border-radius:3px;border:1px solid var(--border-bright);background:transparent;display:flex;align-items:center;justify-content:center;margin-top:1px;transition:all .15s ease}
+.check-text{font-size:12px;color:var(--text-secondary);line-height:1.4}
+
+/* ── PROBLEM LIST ── */
+.problem-list{display:flex;flex-direction:column;gap:6px}
+.problem-item{display:flex;align-items:flex-start;gap:8px;padding:8px 10px;background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius);cursor:pointer;transition:all .15s ease}
+.problem-item:hover{border-color:var(--violet-bright);background:var(--bg-card-hover)}
+.problem-item.done{border-color:var(--emerald);background:rgba(16,185,129,.05)}
+.problem-item.done .problem-name{text-decoration:line-through;color:var(--text-muted)}
+.problem-item.done .p-check{background:var(--emerald);border-color:var(--emerald);color:#fff}
+.p-check{flex-shrink:0;width:18px;height:18px;border-radius:4px;border:1px solid var(--border-bright);background:transparent;display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:700;margin-top:1px;transition:all .15s ease}
+.problem-name{font-family:var(--mono);font-size:11px;font-weight:500;color:var(--text-primary);flex:1}
+.problem-tag{font-family:var(--mono);font-size:9px;padding:1px 6px;border-radius:3px;background:var(--violet-dim);color:var(--violet-bright);border:1px solid rgba(139,92,246,.2);white-space:nowrap}
+.req-knowledge{font-size:11.5px;color:var(--text-secondary);line-height:1.5;padding:8px 10px;background:rgba(124,58,237,.07);border-left:2px solid var(--violet);border-radius:0 var(--radius-sm) var(--radius-sm) 0;margin-bottom:8px}
+.req-label{font-family:var(--mono);font-size:9px;font-weight:700;color:var(--violet-bright);letter-spacing:.1em;text-transform:uppercase;margin-bottom:3px}
+
+/* ── BUTTONS ── */
+.complete-btn{width:100%;padding:12px;border-radius:var(--radius);border:none;font-family:var(--mono);font-size:12px;font-weight:700;letter-spacing:.08em;cursor:pointer;transition:all .2s ease;display:flex;align-items:center;justify-content:center;gap:8px;text-transform:uppercase}
+.complete-btn.pending{background:linear-gradient(135deg,var(--violet),var(--violet-glow));color:#fff;box-shadow:0 4px 20px rgba(124,58,237,.4)}
+.complete-btn.pending:hover{transform:translateY(-1px);box-shadow:0 6px 28px rgba(124,58,237,.6)}
+.complete-btn.done-state{background:rgba(16,185,129,.15);color:var(--emerald);border:1px solid rgba(16,185,129,.4)}
+.unmark-btn{padding:8px 14px!important;border-color:rgba(245,158,11,.4)!important;color:var(--amber)!important;flex-shrink:0;font-size:10px!important;background:rgba(245,158,11,.07)!important}
+.unmark-btn:hover{background:rgba(245,158,11,.15)!important;border-color:var(--amber)!important}
+
+/* ── SCRATCHPAD ── */
+.scratchpad{width:100%;min-height:90px;resize:vertical;background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius);color:var(--text-secondary);font-family:var(--mono);font-size:11px;line-height:1.6;padding:10px 12px;transition:border-color .15s ease;outline:none}
+.scratchpad:focus{border-color:var(--violet-bright)}
+.scratchpad::placeholder{color:var(--text-dim)}
+/* ── CODE PANEL ── */
+.code-panel{background:var(--bg-elevated);border:1px solid var(--border);border-radius:var(--radius-lg);overflow:hidden}
+.code-panel-header{display:flex;align-items:center;border-bottom:1px solid var(--border)}
+.lang-tab{font-family:var(--mono);font-size:10px;font-weight:700;letter-spacing:.08em;padding:8px 16px;cursor:pointer;transition:all .15s ease;border:none;background:transparent;text-transform:uppercase;border-bottom:2px solid transparent;margin-bottom:-1px}
+.lang-tab.py{color:rgba(59,130,246,.5)}
+.lang-tab.py.active{color:#3b82f6;border-bottom-color:#3b82f6;background:rgba(59,130,246,.06)}
+.lang-tab.cpp{color:rgba(249,115,22,.5)}
+.lang-tab.cpp.active{color:#f97316;border-bottom-color:#f97316;background:rgba(249,115,22,.06)}
+.lang-tab:hover{background:rgba(255,255,255,.04)}
+.code-lang-label{font-family:var(--mono);font-size:9px;color:var(--text-muted);margin-left:auto;padding-right:14px;letter-spacing:.06em}
+.code-block{display:none;padding:12px 14px;overflow-x:auto;max-height:340px}
+.code-block.active{display:block}
+.code-block pre{font-family:var(--mono);font-size:10.5px;line-height:1.75;color:#c9d1d9;white-space:pre;margin:0}
+.kw{color:#ff79c6}.fn{color:#50fa7b}.cm{color:#6272a4;font-style:italic}.st{color:#f1fa8c}.nm{color:#bd93f9}.tp{color:#8be9fd}
+.info-box{padding:10px 12px;border-radius:var(--radius);font-size:11.5px;line-height:1.5}
+.info-box.cyan-box{background:rgba(6,182,212,.07);border:1px solid rgba(6,182,212,.2);color:#67e8f9}
+.info-box.amber-box{background:var(--amber-dim);border:1px solid rgba(245,158,11,.25);color:#fcd34d}
+.info-box.gold-box{background:rgba(251,191,36,.08);border:1px solid rgba(251,191,36,.35);color:#fde68a}
+.empty-state{display:flex;flex-direction:column;align-items:center;justify-content:center;padding:48px 24px;text-align:center;gap:12px;flex:1}
+.empty-icon{font-size:40px;opacity:.4}
+.empty-text{font-family:var(--mono);font-size:12px;color:var(--text-muted)}
+.bridge-panel{background:var(--bg-elevated);border:1px solid rgba(232,121,249,.3);border-radius:var(--radius-lg);overflow:hidden}
+.bridge-panel-header{display:flex;align-items:center;flex-wrap:wrap;gap:8px;padding:10px 14px;border-bottom:1px solid rgba(232,121,249,.2);background:rgba(232,121,249,.04)}
+.bridge-panel-title{font-family:var(--mono);font-size:10px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:#e879f9}
+.bridge-legend{display:flex;gap:8px;margin-left:auto}
+.bl-dot{width:7px;height:7px;border-radius:50%;display:inline-block;flex-shrink:0}
+.bl-dot.unseen{background:#475569}
+.bl-dot.familiar{background:#f59e0b}
+.bl-dot.nailed{background:#10b981}
+.bl-label{font-family:var(--mono);font-size:9px;color:var(--text-muted);display:flex;align-items:center;gap:4px}
+.bridge-card{border-bottom:1px solid var(--border);padding:10px 14px;transition:background .12s}
+.bridge-card:last-child{border-bottom:none}
+.bridge-card:hover{background:rgba(232,121,249,.03)}
+.bridge-top{display:flex;align-items:flex-start;gap:8px;margin-bottom:8px;flex-wrap:wrap}
+.bridge-concept{flex:1;font-family:var(--mono);font-size:11px;font-weight:600;color:var(--text-primary);line-height:1.4;min-width:0}
+.bridge-tag{font-family:var(--mono);font-size:9px;padding:2px 7px;border-radius:3px;border:1px solid rgba(232,121,249,.3);background:rgba(232,121,249,.08);color:#e879f9;white-space:nowrap;flex-shrink:0}
+.bridge-states{display:flex;gap:3px;flex-shrink:0}
+.state-btn{font-family:var(--mono);font-size:10px;font-weight:700;letter-spacing:.03em;width:26px;height:24px;border-radius:4px;border:1px solid var(--border-bright);background:transparent;cursor:pointer;transition:all .14s ease;color:var(--text-dim);display:flex;align-items:center;justify-content:center}
+.state-btn:hover{border-color:var(--border-bright);color:var(--text-secondary)}
+.state-btn.unseen.active{background:rgba(71,85,105,.25);border-color:#64748b;color:#94a3b8}
+.state-btn.familiar.active{background:rgba(245,158,11,.18);border-color:var(--amber);color:var(--amber);box-shadow:0 0 6px rgba(245,158,11,.2)}
+.state-btn.nailed.active{background:rgba(16,185,129,.18);border-color:var(--emerald);color:var(--emerald);box-shadow:0 0 6px rgba(16,185,129,.2)}
+.bridge-compare{display:grid;grid-template-columns:1fr 1fr;gap:7px;margin-top:6px}
+.bridge-col-label{font-family:var(--mono);font-size:9px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;padding:4px 9px;border-radius:4px 4px 0 0}
+.bridge-col-label.python{color:#3b82f6;background:rgba(59,130,246,.08);border:1px solid rgba(59,130,246,.2);border-bottom:none}
+.bridge-col-label.cpp{color:#f97316;background:rgba(249,115,22,.08);border:1px solid rgba(249,115,22,.2);border-bottom:none}
+.bridge-code{background:var(--bg-base);border-radius:0 0 4px 4px;padding:8px 9px;overflow-x:auto;max-height:200px}
+.bridge-code.python{border:1px solid rgba(59,130,246,.2);border-top:none}
+.bridge-code.cpp{border:1px solid rgba(249,115,22,.2);border-top:none}
+.bridge-code pre{font-family:var(--mono);font-size:10px;line-height:1.65;color:#c9d1d9;white-space:pre;margin:0}
+.bridge-gotcha{margin-top:7px;padding:6px 10px;border-radius:4px;background:rgba(244,63,94,.07);border:1px solid rgba(244,63,94,.2);font-family:var(--mono);font-size:10px;color:#fda4af;line-height:1.5}
+.bridge-gotcha-label{color:#f43f5e;font-weight:700;font-size:9px;letter-spacing:.08em;display:block;margin-bottom:2px}
+.bridge-progress-wrap{flex:1;height:3px;background:var(--border);border-radius:99px;overflow:hidden;min-width:40px}
+.bridge-progress-fill{height:100%;background:linear-gradient(90deg,var(--amber),#e879f9);border-radius:99px;transition:width .5s ease}
+.bridge-stats-label{font-family:var(--mono);font-size:9px;color:var(--text-muted);white-space:nowrap}
+.phase-badge.phase-5{background:rgba(232,121,249,.13);color:#e879f9;border:1px solid rgba(232,121,249,.35)}
+
+@keyframes fade-in-up{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
+.anim-in{animation:fade-in-up .22s ease forwards}
+@media(max-width:900px){#main-layout{grid-template-columns:1fr;height:auto;overflow:visible}#calendar-pane{border-right:none;border-bottom:1px solid var(--border)}#focus-pane{height:auto;min-height:600px}.week-grid{grid-template-columns:repeat(5,1fr)}.header-stats{display:none}}
+@media(max-width:480px){.week-grid{grid-template-columns:repeat(4,1fr)}#calendar-pane,.focus-body{padding:12px}}
+</style>
+</head>
+<body>
+
+<header id="app-header">
+  <div class="header-brand">
+    <div class="brand-icon">⚡</div>
+    <div class="brand-title">DSA<span>Quest</span> :: Master Timeline</div>
+  </div>
+  <div class="header-stats">
+    <div class="stat-pill"><span class="dot"></span><span id="stat-days">0 / 40 days</span></div>
+    <div class="stat-pill">🎯 <span id="stat-pct">0%</span></div>
+    <div class="progress-bar-wrap"><div class="progress-bar-fill" id="global-progress" style="width:0%"></div></div>
+  </div>
+</header>
+
+<div id="main-layout">
+  <div id="calendar-pane"></div>
+  <div id="focus-pane">
+    <div class="empty-state" id="empty-state">
+      <div class="empty-icon">📅</div>
+      <div class="empty-text">// SELECT A DAY TO LOAD THE FOCUS PANEL</div>
+    </div>
+  </div>
+</div>
+
+<script>
+/* ═══════════════════════════════════════════════════
+   TIMELINE MATRIX — June 5 to July 14, 2026 (40 days)
+   Full DSA curriculum compressed into 40 days.
+   Topics: Arrays → Strings → Linked Lists → Stacks/Queues
+           → Binary Search → Trees → Backtracking
+           → Dynamic Programming → Graphs + Bitwise
+═══════════════════════════════════════════════════ */
+const TIMELINE_MATRIX = [
+
+  /* ══════ WEEK 1 (June 5–11): Arrays Foundation + Advanced ══════ */
+  {
+    id:"2026-06-05",date:"June 5",week:1,weekTitle:"Arrays — Foundation",
+    type:"prereq",label:"📚 Arrays — Prerequisite Study Day",phase:1,
+    focus:"Arrays Theory: Two-Pointers, Sliding Window, Hash Maps",
+    summary:"Day 1 of the plan. Before writing any code, solidify the structural tools that power every Array problem. This foundation recurs across all future topics.",
+    prereqs:[
+      "Static vs. Dynamic Arrays — capacity doubling and amortized O(1) insertions",
+      "Two-Pointer mechanics — left/right convergence, when to advance each pointer",
+      "Sliding Window boundaries — fixed vs. variable-size window management",
+      "Hash Map fundamentals — O(1) average lookup, collision handling via chaining",
+      "Hash Map value-to-index tracking — the core pattern behind Two Sum and frequency counting"
+    ],
+    problems:[],
+    revision:"Draw a diagram of a hash collision chain. Write the sliding window template (both fixed and variable) from scratch.",
+    bridge:[{concept:"std::vector vs Python list",tag:"Core Container",py:`# Python list — dynamic, mixed types
+arr = []
+arr.append(1)    # O(1) amortized
+arr.pop()        # O(1) from back
+arr.pop(0)       # O(n) from front!
+len(arr)         # O(1)
+arr[i]           # O(1) random access`,cpp:`// C++ vector — typed, contiguous
+#include <vector>
+vector<int> arr;
+arr.push_back(1); // O(1) amortized
+arr.pop_back();   // O(1)
+// No O(1) pop_front! Use deque.
+arr.size();       // O(1)
+arr[i];           // O(1) random access`,gotcha:"Python list.pop(0) is O(n) \u2014 same as C++ vector erase(begin()). Both shift all elements. Use deque for O(1) front operations."},
+      {concept:"unordered_map vs dict",tag:"Hash Map",py:`# Python dict — O(1) avg operations
+d = {}
+d['key'] = val
+if 'key' in d: ...
+d.get('key', 0)   # with default
+del d['key']
+for k, v in d.items(): ...`,cpp:`// C++ unordered_map — O(1) avg
+#include <unordered_map>
+unordered_map<string,int> d;
+d["key"] = val;
+if (d.count("key")) { ... }  // not d["key"]!
+d.find("key") != d.end();
+d.erase("key");
+for (auto& [k,v] : d) { ... } // C++17`,gotcha:"d[\"missing\"] in C++ INSERT a zero-value entry! Always use d.count(key) or d.find(key) to check existence. Python d['missing'] throws KeyError."},
+      {concept:"Range loops & enumerate",tag:"Iteration",py:`# Python
+for i in range(n): ...
+for i, v in enumerate(arr): ...
+for v in arr: ...`,cpp:`// C++
+for (int i = 0; i < n; i++) { ... }
+for (int i = 0; i < arr.size(); i++) {
+    auto v = arr[i]; // manual index
+}
+for (auto& v : arr) { ... } // range-for`,gotcha:"C++ has no enumerate(). Track index manually with i or use a separate counter. In range-for, use auto& (reference) to avoid copying large objects."}]
+  },
+  {
+    id:"2026-06-06",date:"June 6",week:1,weekTitle:"Arrays — Foundation",
+    type:"problem",label:"LC #1 Two Sum + LC #217 Contains Duplicate",phase:2,
+    focus:"Hash Map & Hash Set Fundamentals",
+    summary:"Two hash-based array problems that establish the fundamental O(n) lookup pattern used everywhere.",
+    reqKnowledge:"#1: for each x, check if (target−x) exists in map; store x→index. #217: set.add(); if element already present → duplicate found.",
+    problems:[
+      {lc:"#1",name:"Two Sum",tag:"HashMap"},
+      {lc:"#217",name:"Contains Duplicate",tag:"HashSet"}
+    ],
+    benchmarks:[
+      "Derive #1's O(n) one-pass solution without hints",
+      "Compare Hash Set vs. Sorting approach for #217 — time/space trade-offs"
+    ],
+    bridge:[{concept:"unordered_set vs set()",tag:"Hash Set",py:`# Python set
+seen = set()
+seen.add(x)
+x in seen        # O(1)
+seen.discard(x)  # no error if absent
+len(seen)`,cpp:`// C++ unordered_set
+#include <unordered_set>
+unordered_set<int> seen;
+seen.insert(x);
+seen.count(x)    // 0 or 1, O(1)
+seen.erase(x);   // no error if absent
+seen.size();`,gotcha:"Python 'x in seen' \u2192 C++ 'seen.count(x)'. C++ also has 'seen.find(x) != seen.end()'. Don't use 'seen[x]' \u2014 sets have no [] operator!"},
+      {concept:"Return multiple values",tag:"Return Types",py:`# Python — trivially return tuples
+def twoSum(nums, target):
+    return [i, j]     # list
+    return (i, j)     # tuple
+    # caller unpacks naturally
+a, b = twoSum(nums, 9)`,cpp:`// C++ — use vector or pair
+vector<int> twoSum(...) {
+    return {i, j};   // initializer list
+}
+// or pair:
+pair<int,int> twoSum(...) {
+    return {i, j};
+}
+auto [a, b] = twoSum(...); // C++17 structured binding`,gotcha:"C++ functions must declare return type. Use vector<int> for variable-size returns, pair<T,T> for exactly 2 values. Structured bindings (auto [a,b]) require C++17."}]
+  },
+  {
+    id:"2026-06-07",date:"June 7",week:1,weekTitle:"Arrays — Foundation",
+    type:"problem",label:"LC #121 Best Time to Buy/Sell Stock + LC #238 Product Except Self",phase:2,
+    focus:"Greedy Running Min & Prefix/Suffix Scanning",
+    summary:"Two key algorithmic patterns: greedy tracking and prefix-suffix accumulation.",
+    reqKnowledge:"#121: profit = prices[i] − min_price_so_far. Update min if lower. #238: left[i] = product of all elements to the left; second pass multiplies running right-product.",
+    problems:[
+      {lc:"#121",name:"Best Time to Buy and Sell Stock",tag:"Greedy"},
+      {lc:"#238",name:"Product of Array Except Self",tag:"Prefix/Suffix"}
+    ],
+    benchmarks:[
+      "#238: achieve O(1) extra space using the output array as the prefix store",
+      "Why can't you divide total_product by nums[i] in the general case?"
+    ],
+    bridge:[{concept:"INT_MAX / float('inf')",tag:"Sentinel Values",py:`# Python — arbitrary precision
+min_price = float('inf')
+max_profit = float('-inf')
+# Works with all comparisons naturally
+min(float('inf'), 5)  # → 5`,cpp:`// C++ — fixed-width integers
+#include <climits>
+int minPrice = INT_MAX;  // 2147483647
+int maxProfit = INT_MIN;
+// float sentinel:
+float f = numeric_limits<float>::infinity();
+// Safe: INT_MAX + 1 overflows! Check before adding.`,gotcha:"INT_MAX + 1 causes undefined behaviour (integer overflow). If you need dp[i-coin]+1, always check dp[i-coin] != INT_MAX first. Python's int is unbounded \u2014 no such risk."},
+      {concept:"min() / max() with two args",tag:"Standard Algorithms",py:`# Python — variadic, works on any iterable
+min(a, b)
+max(a, b, c)
+min(arr)          # whole list
+max(arr, key=lambda x: x[1])`,cpp:`// C++ — std::min/max for 2 args
+#include <algorithm>
+min(a, b);        // same type required!
+max(a, b);
+// Whole container:
+*min_element(v.begin(), v.end());
+*max_element(v.begin(), v.end());
+// Lambda:
+max_element(v.begin(),v.end(),[](auto& a,auto& b){return a[1]<b[1];});`,gotcha:"std::min(a,b) requires BOTH to be the exact same type. min(int, long) won't compile \u2014 cast first: min((long)a, b). Python coerces types automatically."}]
+  },
+  {
+    id:"2026-06-08",date:"June 8",week:1,weekTitle:"Arrays — Foundation",
+    type:"problem",label:"LC #88 Merge Sorted Array + LC #53 Maximum Subarray",phase:2,
+    focus:"Two Pointers from Back + Kadane's Algorithm",
+    summary:"Back-fill two-pointer pattern and the classic Kadane's DP/greedy for maximum subarray.",
+    reqKnowledge:"#88: p1=m−1, p2=n−1, write=m+n−1; place larger value at write pointer each step. #53 Kadane's: local_max=max(nums[i], local_max+nums[i]); update global_max every step.",
+    problems:[
+      {lc:"#88",name:"Merge Sorted Array",tag:"Two Pointers"},
+      {lc:"#53",name:"Maximum Subarray",tag:"Kadane's / DP"}
+    ],
+    benchmarks:[
+      "#88: why does back-fill eliminate the need for extra space?",
+      "#53: relate Kadane's to 1D DP — write the recurrence relation"
+    ],
+    bridge:[{concept:"swap() \u2014 in-place exchange",tag:"Utility",py:`# Python — tuple unpacking, zero temp
+a, b = b, a
+arr[i], arr[j] = arr[j], arr[i]  # same`,cpp:`// C++ — std::swap, O(1) move semantics
+#include <algorithm>
+swap(a, b);
+swap(arr[i], arr[j]);
+// Avoid: int tmp=a; a=b; b=tmp; (still works but verbose)
+// For vectors/strings swap is O(1) (pointer swap)`,gotcha:"Python's tuple swap is idiomatic and zero-cost. In C++, std::swap on POD types is identical performance. On containers (vector, string) C++ swap is O(1) due to pointer exchange \u2014 much faster than Python's reference swap."},
+      {concept:"Slicing vs. subvector",tag:"Subsequences",py:`# Python slicing — creates a copy O(k)
+arr[1:4]       # elements 1,2,3
+arr[::-1]      # reversed copy
+arr[i:j]       # half-open [i,j)
+result = arr[l:r+1]  # common pattern`,cpp:`// C++ — no built-in slice, explicit copy
+vector<int> sub(arr.begin()+1, arr.begin()+4);
+// Reverse copy:
+vector<int> rev(arr.rbegin(), arr.rend());
+// Reverse in-place (no copy):
+reverse(arr.begin(), arr.end());
+// Substring (strings only):
+string sub = s.substr(l, r-l+1); // (start, length)`,gotcha:"Python s[l:r+1] uses [start, stop) \u2014 stop is exclusive. C++ substr(start, LENGTH) uses length, not end index! Common off-by-one bug: s.substr(l, r-l+1) for range [l,r]."}]
+  },
+  {
+    id:"2026-06-09",date:"June 9",week:1,weekTitle:"Arrays — Foundation",
+    type:"problem",label:"LC #56 Merge Intervals + LC #11 Container With Most Water",phase:2,
+    focus:"Coordinate Sorting & Two-Pointer Convergence",
+    summary:"Interval merging with greedy sorting and the classic two-pointer water problem.",
+    reqKnowledge:"#56: sort by start; merge if current.start ≤ last.end. #11: area=min(h[l],h[r])×(r−l); always move the shorter pointer inward.",
+    problems:[
+      {lc:"#56",name:"Merge Intervals",tag:"Sort + Greedy"},
+      {lc:"#11",name:"Container With Most Water",tag:"Two Pointers"}
+    ],
+    benchmarks:[
+      "#56 edge cases: single interval, all non-overlapping, all fully overlapping",
+      "#11: prove the greedy correctness — why moving the shorter pointer is optimal"
+    ],
+    bridge:[{concept:"Sorting vectors",tag:"Sorting",py:`# Python — Timsort, stable
+arr.sort()                    # in-place
+arr.sort(key=lambda x: x[0]) # by field
+sorted_arr = sorted(arr)      # returns new
+pairs.sort(key=lambda x: (x[0], -x[1]))`,cpp:`// C++ — introsort (unstable by default)
+#include <algorithm>
+sort(arr.begin(), arr.end());
+// Custom comparator (lambda C++11):
+sort(arr.begin(), arr.end(),
+     [](auto& a, auto& b){ return a[0] < b[0]; });
+// Stable sort:
+stable_sort(arr.begin(), arr.end(), cmp);
+// Sort only part:
+sort(arr.begin()+l, arr.begin()+r+1);`,gotcha:"Python sort is STABLE (preserves relative order of equal elements). C++ std::sort is NOT stable \u2014 use std::stable_sort if order matters. Also: Python sort key returns a value; C++ comparator returns bool (less-than)."},
+      {concept:"2D vector initialisation",tag:"Matrix",py:`# Python 2D list
+m = [[0]*cols for _ in range(rows)]
+m[r][c] = 1
+# WARNING: m = [[0]*cols]*rows
+# creates rows aliases of same list!`,cpp:`// C++ 2D vector
+vector<vector<int>> m(rows, vector<int>(cols, 0));
+m[r][c] = 1;
+// No aliasing bug — each inner vector is independent
+// Get dimensions:
+int rows = m.size();
+int cols = m[0].size();`,gotcha:"Python [[0]*cols]*rows creates rows that ALL point to the same inner list \u2014 mutating one mutates all! Always use list comprehension. C++ vector<vector<int>>(r, vector<int>(c)) creates independent rows."}]
+  },
+  {
+    id:"2026-06-10",date:"June 10",week:1,weekTitle:"Arrays — Foundation",
+    type:"problem",label:"LC #48 Rotate Image + LC #20 Valid Parentheses",phase:2,
+    focus:"Matrix Transposition + LIFO Stack Pairing",
+    summary:"In-place matrix rotation and the foundational stack problem bridging Arrays into Strings.",
+    reqKnowledge:"#48: transpose (swap matrix[i][j] and matrix[j][i] for i<j) then reverse each row. #20: push open brackets; on close bracket, check stack top matches; stack must be empty at end.",
+    problems:[
+      {lc:"#48",name:"Rotate Image",tag:"Matrix"},
+      {lc:"#20",name:"Valid Parentheses",tag:"Stack"}
+    ],
+    benchmarks:[
+      "#48: derive counter-clockwise rotation (reverse rows first, then transpose)",
+      "#20: why does LIFO work here? What does a queue fail to capture?"
+    ],
+    bridge:[{concept:"Stack \u2014 std::stack vs list",tag:"Stack",py:`# Python — use list as stack
+stack = []
+stack.append(x)   # push O(1)
+stack.pop()       # pop  O(1)
+stack[-1]         # peek O(1)
+if stack: ...     # empty check`,cpp:`// C++ — std::stack (LIFO adapter)
+#include <stack>
+stack<int> st;
+st.push(x);     // push O(1)
+st.pop();       // pop O(1) — returns void!
+st.top();       // peek O(1)
+if (!st.empty()) ...`,gotcha:"C++ st.pop() returns VOID \u2014 it does NOT return the value. You must call st.top() first to read, then st.pop() to remove. Python list.pop() returns the value. This is a very common bug."},
+      {concept:"String character access",tag:"Strings",py:`# Python — immutable, iterate freely
+for c in s: ...
+s[i]              # O(1) read
+s.lower(); s.upper()
+s.isalnum(); s.isdigit()
+c = 'A'
+ord(c) - ord('A') # → 0`,cpp:`// C++ — mutable string
+for (char c : s) { ... }
+s[i];              // O(1) read/write
+tolower(c); toupper(c); // per char
+isalnum(c); isdigit(c); // per char
+char c = 'A';
+c - 'A';           // → 0 (int arithmetic)`,gotcha:"C++ strings are mutable (s[i]='x' works). Python strings are immutable \u2014 build with list then ''.join(). C++ tolower/toupper/isalnum work on individual chars, not whole strings."}]
+  },
+  {
+    id:"2026-06-11",date:"June 11",week:1,weekTitle:"Arrays — Foundation",
+    type:"revision",label:"🔄 Arrays — Topic Completion Revision",phase:3,
+    focus:"Arrays Foundation + Advanced — All Patterns Locked",
+    summary:"Topic complete. 8 problems across Two-Pointer, HashMap, Greedy, Prefix/Suffix, Kadane's, Matrix, and Stack patterns. Reconstruct solutions from memory — no peeking.",
+    prereqs:[
+      "Re-derive Two Sum from memory — exact loop + hashmap logic",
+      "Trace #238 Product Except Self: what two passes does it make and what does each accumulate?",
+      "Explain the back-fill trick for #88 Merge Sorted Array to an interviewer",
+      "Write Kadane's recurrence: dp[i] = max(?, ?)",
+      "Describe the two-step Rotate Image trick (transpose → reverse rows) without notes",
+      "Which 4 problems this week used the Two-Pointer pattern in some form?"
+    ],
+    problems:[],
+    revision:"Active recall sprint: code #1 Two Sum, #53 Maximum Subarray, and #48 Rotate Image consecutively from scratch."
+  },
+
+  /* ══════ WEEK 2 (June 12–18): Strings + Linked Lists ══════ */
+  {
+    id:"2026-06-12",date:"June 12",week:2,weekTitle:"Strings Dominance",
+    type:"prereq",label:"📚 Strings — Prerequisite Study Day",phase:1,
+    focus:"String Fundamentals, ASCII Hashing, Sliding Window Templates",
+    summary:"Strings are immutable sequences. Master the frequency-tracking and sliding window tools before coding.",
+    prereqs:[
+      "Immutable String constraints — why concatenation in loops is O(n²); use list+join",
+      "ASCII hashing: ord(c)−ord('a') maps a-z to 0-25 for O(1) frequency arrays",
+      "Fixed-size sliding window: initialize window, slide right (add new), evict left (remove old)",
+      "Variable-size sliding window: expand right until invalid, contract left until valid",
+      "Character frequency tracking: dict vs. Counter vs. fixed 26-array — when to use each"
+    ],
+    problems:[],
+    revision:"Write both sliding window templates (fixed + variable) from scratch. Test mentally on a small example.",
+    bridge:[{concept:"Pass by value vs reference",tag:"Function Params",py:`# Python — everything is a reference
+def fn(arr):      # arr is a reference
+    arr.append(1) # modifies original!
+def fn(arr):      # copy explicitly:
+    arr = arr[:]  # now local copy
+    arr.append(1) # original unchanged`,cpp:`// C++ — explicit control
+void fn(vector<int> arr)   // copy (expensive)
+void fn(vector<int>& arr)  // reference (modifies)
+void fn(const vector<int>& arr) // read-only ref (best for inputs)
+void fn(vector<int>&& arr) // move (advanced)
+// Rule of thumb: const& for read-only, & for mutation`,gotcha:"In Python, lists/dicts are always passed by reference. In C++, you must use & explicitly. Passing a vector without & makes a full copy \u2014 very expensive for large inputs. Always use const& for read-only parameters."},
+      {concept:"auto keyword \u2014 type inference",tag:"Type System",py:`# Python — always dynamically typed
+x = 42           # int
+x = 'hello'      # now str — perfectly fine
+for k, v in d.items(): ...`,cpp:`// C++ auto — type inferred at compile time
+auto x = 42;       // int, fixed at compile time
+auto x = 3.14;     // double
+auto it = m.find(k); // iterator type (verbose without auto)
+for (auto& [k,v] : d) { ... } // C++17 structured binding
+const auto& s = longFunctionName(); // avoid copy`,gotcha:"C++ auto infers the type ONCE at compile time \u2014 it cannot change. Python variables can be rebound to any type. Use auto& (reference) in loops to avoid copying. auto without & creates a copy."}],
+    bridge:[{concept:"String building \u2014 O(n) vs O(n\u00b2)",tag:"String Performance",py:`# Python — += is O(n²) in a loop!
+result = ''
+for c in arr:
+    result += c   # O(n²) total!
+# Correct O(n) approach:
+result = ''.join(arr)`,cpp:`// C++ string += is O(n²) too
+string result = "";
+for (char c : arr)
+    result += c;   // actually O(n) amortized!
+// C++ string uses exponential realloc
+// For known size, reserve first:
+result.reserve(n);
+// Or use stringstream:
+stringstream ss;
+ss << token1 << token2;
+string out = ss.str();`,gotcha:"Unlike Python, C++ string += is actually O(n) amortized (similar to vector) due to exponential growth strategy. Python str += is O(n\u00b2) because strings are immutable and each += creates a new object. Always use ''.join() in Python."},
+      {concept:"String \u2194 int conversion",tag:"Type Conversion",py:`# Python
+n = int('42')       # str → int
+s = str(42)         # int → str
+n = int('0xff', 16)  # hex string
+s = f'{n}'          # f-string`,cpp:`// C++ — multiple ways
+int n = stoi("42");      // string → int
+int n = stoi("0xff",0,16); // hex
+string s = to_string(42); // int → string
+// Older style (avoid):
+sscanf("42", "%d", &n);
+char buf[20]; sprintf(buf, "%d", n);`,gotcha:"C++ stoi() throws std::invalid_argument on bad input. Python int() also throws ValueError. C++17 has std::from_chars (no exception, fastest). to_string(n) is the clean C++11 way \u2014 avoid sprintf in modern code."}]
+  },
+  {
+    id:"2026-06-13",date:"June 13",week:2,weekTitle:"Strings Dominance",
+    type:"problem",label:"LC #125 Valid Palindrome + LC #242 Valid Anagram + LC #49 Group Anagrams",phase:2,
+    focus:"Frequency Arrays & Sorted-Key Bucketing",
+    summary:"Three string problems establishing frequency-counting and the canonical anagram detection patterns.",
+    reqKnowledge:"#125: two pointers skip non-alphanumeric, compare lowercased. #242: 26-array increment for s, decrement for t — all zeros = anagram. #49: tuple(sorted(word)) as hash key; group into buckets.",
+    problems:[
+      {lc:"#125",name:"Valid Palindrome",tag:"Two Pointers"},
+      {lc:"#242",name:"Valid Anagram",tag:"Frequency Array"},
+      {lc:"#49",name:"Group Anagrams",tag:"HashMap"}
+    ],
+    benchmarks:[
+      "#242 follow-up: handle Unicode (hash map instead of 26-array)",
+      "#49 alternative: 26-count tuple as key — avoids O(k log k) sort, use O(k) counting"
+    ],
+    bridge:[{concept:"collections.Counter vs frequency array",tag:"Frequency Counting",py:`from collections import Counter
+freq = Counter(s)        # O(n)
+freq['a']                # 0 if absent
+freq.most_common(3)      # top 3
+for char, cnt in freq.items(): ...`,cpp:`// Option 1: fixed 26-array (a-z only)
+int freq[26] = {};
+for (char c : s) freq[c-'a']++;
+int cnt = freq['a'-'a'];
+// Option 2: unordered_map (any chars)
+unordered_map<char,int> freq;
+for (char c : s) freq[c]++;
+// freq[c] auto-inserts 0 if missing
+freq.count(c) // check without inserting`,gotcha:"unordered_map[c]++ inserts a 0 then increments \u2014 safe for building freq. But freq[c] to READ also inserts 0! Use freq.count(c) or freq.find(c) to check without side effects."},
+      {concept:"tuple as hash key",tag:"Hashing",py:`# Python tuples are hashable
+from collections import defaultdict
+mp = defaultdict(list)
+key = tuple(sorted(word))
+mp[key].append(word)
+# tuple, frozenset usable as dict keys`,cpp:`// Strings are hashable in unordered_map
+unordered_map<string, vector<string>> mp;
+string key = word;
+sort(key.begin(), key.end());
+mp[key].push_back(word);
+// For tuple keys, need custom hash
+// (advanced: define hash<tuple<int,int>>)`,gotcha:"C++ unordered_map supports string keys natively. For pair/tuple keys you must provide a custom hasher \u2014 it doesn't work out of the box unlike Python. Use sorted string as key instead of tuple(sorted()) for anagram problems."}]
+  },
+  {
+    id:"2026-06-14",date:"June 14",week:2,weekTitle:"Strings Dominance",
+    type:"problem",label:"LC #5 Longest Palindromic Substring + LC #76 Minimum Window Substring",phase:2,
+    focus:"Center Expansion + Variable Sliding Window",
+    summary:"Two advanced string problems — center-outward palindrome expansion and the complex have/need sliding window.",
+    reqKnowledge:"#5: for each index, expand odd-length (single center) and even-length (between-center) palindromes outward while chars match. #76: have/need tracking; expand right until need satisfied; contract left to minimize; track [l,r].",
+    problems:[
+      {lc:"#5",name:"Longest Palindromic Substring",tag:"Expand Around Center"},
+      {lc:"#76",name:"Minimum Window Substring",tag:"Sliding Window"}
+    ],
+    benchmarks:[
+      "#5: why 2n−1 centers? Handle both odd and even length palindromes",
+      "#76: time complexity O(|S|+|T|) — each character is visited at most twice"
+    ],
+    bridge:[{concept:"Lambda functions",tag:"Functional",py:`# Python lambda — any context
+f = lambda x: x * 2
+arr.sort(key=lambda x: -x[1])
+filtered = filter(lambda x: x > 0, arr)
+result = list(map(lambda x: x**2, arr))`,cpp:`// C++ lambda — C++11 [capture](params)->ret{body}
+auto f = [](int x){ return x*2; };
+sort(arr.begin(),arr.end(),
+     [](auto& a, auto& b){ return a[1]>b[1]; });
+// Capture outer variables:
+int target = 9;
+auto check = [&target](int x){ return x==target; };
+// [=] capture all by value, [&] all by reference`,gotcha:"C++ lambdas must CAPTURE outer variables explicitly: [&] by reference, [=] by value, [x] capture specific x. Python lambdas close over outer scope automatically. Forgetting capture = compile error."},
+      {concept:"String find / contains",tag:"String Search",py:`# Python
+'sub' in s              # bool, O(n)
+s.find('sub')           # index or -1
+s.index('sub')          # index or ValueError
+s.startswith('abc')
+s.endswith('xyz')
+s.count('sub')          # occurrences`,cpp:`// C++
+s.find("sub")            // index or string::npos
+s.find("sub") != string::npos  // bool check
+s.substr(0,3) == "abc"  // startswith equiv
+s.rfind("sub")          // last occurrence
+// C++23: s.contains("sub") — not yet universal
+// Check: s.find("sub") != s.npos`,gotcha:"C++ s.find() returns string::npos (a huge value, not -1) when not found. Always check != string::npos, not != -1 (though often they're equal due to unsigned wrap). Python find() returns -1, index() throws."}]
+  },
+  {
+    id:"2026-06-15",date:"June 15",week:2,weekTitle:"Strings Dominance",
+    type:"problem",label:"LC #28 First Occurrence + LC #14 Longest Common Prefix + LC #459 Repeated Substring",phase:2,
+    focus:"String Search, Prefix Matching & Periodicity",
+    summary:"Three string manipulation problems covering search, prefix extraction, and periodicity detection.",
+    reqKnowledge:"#28: KMP or indexOf. #14: sort + compare first and last strings character-by-character. #459: rotation trick — s in (s+s)[1:-1] checks if s is composed of a repeated substring.",
+    problems:[
+      {lc:"#28",name:"Find the Index of the First Occurrence",tag:"String Search"},
+      {lc:"#14",name:"Longest Common Prefix",tag:"Sorting"},
+      {lc:"#459",name:"Repeated Substring Pattern",tag:"String Period"}
+    ],
+    benchmarks:[
+      "#459: why does removing first and last char of s+s expose repetition?",
+      "#14: vertical scanning alternative — compare column-by-column across all strings"
+    ],
+    bridge:[{concept:"String splitting / joining",tag:"String Manipulation",py:`# Python
+words = s.split()       # split on whitespace
+words = s.split(',')    # split on delimiter
+result = ' '.join(words)
+result = ','.join(arr)  # join list
+# Clean: no trailing separator`,cpp:`// C++ — no built-in split, manual
+vector<string> words;
+stringstream ss(s);
+string token;
+while (getline(ss, token, ',')) {
+    words.push_back(token);
+}
+// Join with separator:
+for(int i=0;i<words.size();i++){
+    if(i) result+=',';
+    result+=words[i];
+}`,gotcha:"C++ has no str.split() equivalent in the standard library. The stringstream+getline pattern is the idiomatic way. For splitting on whitespace: 'while(ss >> token)' automatically handles multiple spaces."},
+      {concept:"String comparison",tag:"Strings",py:`# Python — == compares content
+s1 == s2          # content equality
+s1 < s2           # lexicographic
+sorted_key = ''.join(sorted(s))  # sort chars`,cpp:`// C++ — == compares content (std::string)
+string s1, s2;
+s1 == s2;         // content equality (NOT pointer!)
+s1 < s2;          // lexicographic
+// Sort characters:
+string key = s;
+sort(key.begin(), key.end());
+// C-strings (char*): use strcmp, NOT ==!
+// char* == compares pointer addresses!`,gotcha:"C++ std::string == compares content correctly. But char* (C-strings) == compares POINTER addresses \u2014 always use strcmp() for C-strings. In LeetCode use std::string everywhere to avoid this trap."}]
+  },
+  {
+    id:"2026-06-16",date:"June 16",week:2,weekTitle:"Strings Dominance",
+    type:"revision",label:"🔄 Strings — Topic Completion Revision",phase:3,
+    focus:"Sliding Window & String Pattern Mastery",
+    summary:"Topic complete. Cross-compare all string patterns — frequency arrays, sliding window, center expansion, and string manipulation.",
+    prereqs:[
+      "Fixed vs. variable-size sliding window — write both templates from memory",
+      "Draw the have/need tracking diagram for #76 Minimum Window Substring",
+      "Explain center expansion for #5 — why two separate expand calls (odd + even)?",
+      "When would you use a 26-element freq array vs. a hash map for string problems?",
+      "#459 rotation trick — prove why (s+s)[1:-1] contains s iff s has a repeated period"
+    ],
+    problems:[],
+    revision:"Timed challenge: re-solve #76 Minimum Window Substring from scratch in under 25 minutes.",
+    bridge:[{concept:"String reverse",tag:"String Ops",py:`# Python
+rev = s[::-1]         # slicing, new string
+rev = ''.join(reversed(s))
+# List of chars:
+arr = list(s)
+arr.reverse()         # in-place
+rev = ''.join(arr)`,cpp:`// C++ — reverse in-place
+string s = "hello";
+reverse(s.begin(), s.end()); // in-place O(n)
+// Or reversed copy:
+string rev(s.rbegin(), s.rend());
+// Two-pointer manual:
+int l=0, r=s.size()-1;
+while(l<r) { swap(s[l++],s[r--]); }`,gotcha:"C++ strings ARE mutable \u2014 reverse(s.begin(), s.end()) modifies s directly. Python strings are immutable so s[::-1] always creates a new string. For C++ reversed copy use rbegin/rend iterators."}]
+  },
+  {
+    id:"2026-06-17",date:"June 17",week:2,weekTitle:"Linked Lists",
+    type:"prereq",label:"📚 Linked Lists — Prerequisite Study Day",phase:1,
+    focus:"Node Architecture, Dummy Heads & Pointer Safety",
+    summary:"Linked Lists require a different mental model. Master pointer manipulation on paper before touching code.",
+    prereqs:[
+      "Singly Linked List: each Node has val and next. No random access — O(n) traversal",
+      "Dummy Head technique: sentinel node eliminates all head-insertion/deletion edge cases",
+      "Three-pointer reversal: prev=None, curr=head, nxt=curr.next — the standard in-place pattern",
+      "Fast/Slow pointer (Floyd's): slow moves 1 step, fast moves 2 — detects cycles, finds midpoints",
+      "Gap-tracking pattern: advance one pointer n steps ahead to create a fixed gap"
+    ],
+    problems:[],
+    revision:"Draw a 5-node list. Walk through three-pointer reversal manually — trace every pointer at every step.",
+    bridge:[{concept:"Linked List node definition",tag:"Struct / Class",py:`# Python
+class ListNode:
+    def __init__(self, val=0, next=None):
+        self.val = val
+        self.next = next
+
+# Creating nodes:
+head = ListNode(1)
+head.next = ListNode(2)`,cpp:`// C++ struct (simpler than class for plain data)
+struct ListNode {
+    int val;
+    ListNode* next;
+    ListNode(int x) : val(x), next(nullptr) {}
+    // Or: ListNode(int x=0, ListNode* n=nullptr)
+    //     : val(x), next(n) {}
+};
+// Creating:
+ListNode* head = new ListNode(1);
+head->next = new ListNode(2);`,gotcha:"C++ uses pointer syntax (ListNode*) and -> for member access through pointers. Python uses . always. Accessing a nullptr->member is undefined behaviour \u2014 always null-check: if(node && node->next)."},
+      {concept:"nullptr vs None",tag:"Null Safety",py:`# Python — None is the null sentinel
+if node is None: return
+if not node: return  # same thing
+next_node = node.next if node else None`,cpp:`// C++ — nullptr (C++11, replaces NULL)
+if (node == nullptr) return;
+if (!node) return;          // same, bool cast
+ListNode* nxt = node ? node->next : nullptr;
+// Never use NULL in modern C++ (it's just 0)
+// Never: if (node == 0) — use nullptr`,gotcha:"C++ nullptr is typed (nullptr_t), safer than the old NULL macro (which is just integer 0). Using NULL can cause ambiguous overload resolution. Always use nullptr in modern C++. Dereferencing nullptr = segfault."}]
+  },
+  {
+    id:"2026-06-18",date:"June 18",week:2,weekTitle:"Linked Lists",
+    type:"problem",label:"LC #206 Reverse Linked List + LC #21 Merge Two Sorted Lists + LC #141 Linked List Cycle",phase:2,
+    focus:"Reversal, Dummy Node Stitching & Floyd's Detection",
+    summary:"Three foundational Linked List patterns — reversal, merge, and cycle detection.",
+    reqKnowledge:"#206 Iterative: prev=None, curr=head; nxt=curr.next, curr.next=prev, prev=curr, curr=nxt. #21: dummy node, compare and stitch smaller, attach remaining. #141 Floyd's: slow+1, fast+2; if they meet → cycle.",
+    problems:[
+      {lc:"#206",name:"Reverse Linked List",tag:"Linked List"},
+      {lc:"#21",name:"Merge Two Sorted Lists",tag:"Dummy Head"},
+      {lc:"#141",name:"Linked List Cycle",tag:"Floyd's Algorithm"}
+    ],
+    benchmarks:[
+      "#206: code both iterative O(1) space AND recursive O(n) space versions",
+      "#141 extension to #142: after cycle detection, reset one pointer to head, advance both by 1 — they meet at cycle start"
+    ]
+  },
+
+  /* ══════ WEEK 3 (June 19–25): Linked Lists + Stacks/Queues ══════ */
+  {
+    id:"2026-06-19",date:"June 19",week:3,weekTitle:"Linked Lists",
+    type:"problem",label:"LC #19 Remove Nth From End + LC #2 Add Two Numbers + LC #234 Palindrome Linked List",phase:2,
+    focus:"Gap Tracking, Carry Arithmetic & Midpoint Reversal",
+    summary:"Three problems covering the gap-pointer technique, node arithmetic, and the midpoint+reverse combo.",
+    reqKnowledge:"#19: advance fast n+1 steps from dummy; then advance both until fast=None; slow.next=slow.next.next. #2: carry=(v1+v2+carry)//10, val=(v1+v2+carry)%10. #234: fast/slow → midpoint; reverse second half; compare.",
+    problems:[
+      {lc:"#19",name:"Remove Nth Node From End of List",tag:"Fast/Slow Pointer"},
+      {lc:"#2",name:"Add Two Numbers",tag:"Linked List Math"},
+      {lc:"#234",name:"Palindrome Linked List",tag:"Reverse + Compare"}
+    ],
+    benchmarks:[
+      "#19: why n+1 steps? (positions slow at node BEFORE target)",
+      "#2: edge case — carry after both lists exhausted creates an extra node"
+    ],
+    bridge:[{concept:"Pointer arithmetic & ->",tag:"Pointer Basics",py:`# Python — no pointers, just references
+node.next = prev      # attribute access
+# All objects live on heap, GC manages memory
+# No manual delete needed`,cpp:`// C++ — explicit pointer operations
+node->next = prev;    // ptr->member = (*ptr).member
+*node;                // dereference
+&node;                // address-of
+// Heap allocation:
+ListNode* n = new ListNode(5);
+delete n;             // manual deallocation
+// (LeetCode handles memory — no need to delete in submissions)
+// Stack allocation:
+ListNode dummy(0);    // no new, auto-destructs`,gotcha:"node->next is syntactic sugar for (*node).next. In C++, 'new' allocates on the heap and returns a pointer. For dummy nodes in linked list problems, prefer 'ListNode dummy(0); ListNode* curr = &dummy;' (stack allocation, no new/delete needed)."},
+      {concept:"while loop with multiple conditions",tag:"Control Flow",py:`# Python
+while l1 and l2:
+    ...
+while fast and fast.next:
+    slow = slow.next
+    fast = fast.next.next`,cpp:`// C++
+while (l1 && l2) { ... }
+while (fast && fast->next) {
+    slow = slow->next;
+    fast = fast->next->next;
+}
+// Short-circuit: fast checked before fast->next
+// If fast is nullptr, fast->next never evaluated`,gotcha:"C++ && short-circuits left to right \u2014 if fast is nullptr, fast->next is never evaluated (no crash). Same in Python. The order matters: always check the pointer BEFORE dereferencing it in the same condition."}],
+    bridge:[{concept:"divmod() vs / and %",tag:"Arithmetic",py:`# Python divmod
+carry, val = divmod(v1+v2+carry, 10)
+# Also:
+carry = (v1+v2+carry) // 10
+val   = (v1+v2+carry) % 10
+# Python % always returns non-negative
+-7 % 3  # → 2 (not -1!)`,cpp:`// C++ — no divmod, use / and %
+int sum = v1 + v2 + carry;
+carry = sum / 10;
+val   = sum % 10;
+// C++ % can return negative for negative operands:
+// -7 % 3 → -1 (implementation-defined pre-C++11)
+// C++11: truncates toward zero → -7%3 = -1
+// For circular index: ((i%n)+n)%n to ensure positive`,gotcha:"Python's % always returns a non-negative result (modulo). C++ % truncates toward zero \u2014 can return negative. For circular array indices, use ((i%n)+n)%n in C++ to guarantee positive result."}]
+  },
+  {
+    id:"2026-06-20",date:"June 20",week:3,weekTitle:"Linked Lists",
+    type:"problem",label:"LC #160 Intersection of Two Lists + LC #25 Reverse Nodes in k-Group",phase:2,
+    focus:"Length Alignment & Modular Batch Reversal",
+    summary:"Length-equalization intersection technique and the hard k-group reversal problem.",
+    reqKnowledge:"#160: find lengths la, lb; advance longer pointer by |la−lb|; advance both — first meeting is intersection. #25: check ≥k nodes remain; reverse k nodes; recursively attach result on remaining list.",
+    problems:[
+      {lc:"#160",name:"Intersection of Two Linked Lists",tag:"Length Alignment"},
+      {lc:"#25",name:"Reverse Nodes in k-Group",tag:"Linked List Hard"}
+    ],
+    benchmarks:[
+      "#160: if lists don't intersect, both pointers reach None simultaneously",
+      "#25 decompose: 'can we get k nodes?' + 'reverse k nodes' + 'recurse on rest'"
+    ],
+    bridge:[{concept:"References vs pointers",tag:"C++ Fundamentals",py:`# Python — no distinction
+# All variables are references to objects
+def reverse(node):  # node is a reference
+    node.val = 99   # modifies original`,cpp:`// C++ — references (safe alias) vs pointers (raw address)
+void fn(ListNode& node)  // reference — can't be null, can't be reseated
+void fn(ListNode* node)  // pointer — can be null, can be changed
+// In linked list problems: use pointers
+// ListNode*& head means a reference to a pointer (can change what head points to)
+ListNode* prev = nullptr;  // pointer to ListNode`,gotcha:"References (T&) cannot be null and cannot be reseated \u2014 they always refer to their initial target. Pointers (T*) can be null and can point elsewhere. For linked list problems always use pointers (T*). Use references for function parameters where you want to avoid copy but don't want null."}]
+  },
+  {
+    id:"2026-06-21",date:"June 21",week:3,weekTitle:"Linked Lists",
+    type:"revision",label:"🔄 Linked Lists — Topic Completion Revision",phase:3,
+    focus:"All Linked List Patterns Consolidated",
+    summary:"Topic complete. Revisit every pointer pattern before advancing to Stacks & Queues.",
+    prereqs:[
+      "Code #206 Reverse Linked List iteratively from memory in under 3 minutes",
+      "Floyd's algorithm: mathematical proof — why do fast and slow always meet inside the cycle?",
+      "Trace #2 Add Two Numbers with [9,9,9] + [9,9]: walk through carry propagation step by step",
+      "Dummy head technique: list 3 problems where it eliminates a head-edge-case",
+      "What is the exact pointer sequence for #25 k-group reversal?"
+    ],
+    problems:[],
+    revision:"Sprint: code #21 Merge Two Sorted Lists and #141 Linked List Cycle from memory back-to-back.",
+    bridge:[{concept:"Memory model \u2014 stack vs heap",tag:"Memory",py:`# Python — all objects on heap, GC cleans up
+dummy = ListNode(0)   # heap, GC managed
+# No stack allocation concept`,cpp:`// C++ — two allocation arenas
+ListNode dummy(0);        // STACK — auto-destructs at }
+ListNode* d = new ListNode(0); // HEAP — manual delete
+// In LeetCode: both work, stack dummy is cleaner
+ListNode dummy(0);
+ListNode* curr = &dummy;  // pointer to stack object
+return dummy.next;        // safe, dummy still alive`,gotcha:"Stack-allocated objects live until the enclosing } closes. Using them as dummy head in a function is safe as long as you return dummy.next (the value it points to) rather than the address of dummy itself."}]
+  },
+  {
+    id:"2026-06-22",date:"June 22",week:3,weekTitle:"Stacks & Queues",
+    type:"prereq",label:"📚 Stacks & Queues — Prerequisite Study Day",phase:1,
+    focus:"LIFO/FIFO Architecture, Monotonic Stacks, Circular Queues",
+    summary:"Deepen Stack and Queue mental models before diving into design and optimization problems.",
+    prereqs:[
+      "Stack LIFO: push/pop/peek all O(1). Top is the last element added",
+      "Queue FIFO: enqueue O(1), dequeue O(1) using collections.deque's popleft",
+      "Queue from Two Stacks: amortized O(1) dequeue via lazy transfer — push to s1; pop transfers all to s2 when s2 empty",
+      "Circular Queue: fixed array with head/tail and count using (tail+1)%size modular arithmetic",
+      "Monotonic Stack: maintains strictly increasing or decreasing order — used for 'next greater element' family"
+    ],
+    problems:[],
+    revision:"Draw the two-stack queue. Push [1,2,3] then dequeue twice. Label every pointer at every step.",
+    bridge:[{concept:"std::queue vs deque for BFS",tag:"Queue",py:`# Python — use collections.deque
+from collections import deque
+q = deque()
+q.append(x)    # enqueue O(1)
+q.popleft()    # dequeue O(1)
+q[0]           # peek front O(1)
+len(q)         # size`,cpp:`// C++ — use std::queue (FIFO adapter)
+#include <queue>
+queue<int> q;
+q.push(x);     // enqueue O(1)
+q.front();     // peek — does NOT remove!
+q.pop();       // dequeue O(1) — returns void!
+q.size();
+q.empty();
+// For BFS with deque-like operations use std::deque`,gotcha:"C++ queue::pop() returns void \u2014 read with q.front() THEN call q.pop(). Same issue as stack::pop(). Python's deque.popleft() returns the value directly. Never forget to call front() before pop()."},
+      {concept:"Monotonic stack \u2014 index storage",tag:"Monotonic Stack",py:`# Python
+stack = []   # stores indices
+for i, t in enumerate(temps):
+    while stack and temps[stack[-1]] < t:
+        idx = stack.pop()
+        ans[idx] = i - idx
+    stack.append(i)`,cpp:`// C++
+stack<int> st;  // stores indices
+for (int i = 0; i < temps.size(); i++) {
+    while (!st.empty() && temps[st.top()] < temps[i]) {
+        ans[st.top()] = i - st.top();
+        st.pop();  // pop AFTER reading top
+    }
+    st.push(i);
+}`,gotcha:"In C++: read st.top() to get the index, THEN call st.pop() to remove. Combining them into one expression is undefined behaviour. Also temps[st.top()] \u2014 you must dereference through temps[], the stack stores raw int indices."}]
+  },
+  {
+    id:"2026-06-23",date:"June 23",week:3,weekTitle:"Stacks & Queues",
+    type:"problem",label:"LC #232 Queue via Stacks + LC #155 Min Stack + LC #739 Daily Temperatures",phase:2,
+    focus:"Auxiliary History Stacks + Monotonic Stack Index Logic",
+    summary:"Three structural Stack problems — queue design, constant-time minimum, and the canonical monotonic stack.",
+    reqKnowledge:"#232 Lazy transfer: push to s1; pop/peek from s2 (transfer all from s1 when s2 empty). #155: parallel min_stack — push min(val, min_stack.top) on every push. #739: stack of indices; pop when temps[i]>temps[stack.top()]; answer[popped]=i−popped.",
+    problems:[
+      {lc:"#232",name:"Implement Queue using Stacks",tag:"Stack/Queue Design"},
+      {lc:"#155",name:"Min Stack",tag:"Design"},
+      {lc:"#739",name:"Daily Temperatures",tag:"Monotonic Stack"}
+    ],
+    benchmarks:[
+      "#232: prove amortized O(1) — each element crosses the bridge at most once",
+      "#155: why push a new min even when current val is NOT a new minimum?",
+      "#739: why store indices instead of values? (We need the distance)"
+    ],
+    bridge:[{concept:"std::stack \u2014 complete API",tag:"Stack API",py:`stack = []
+stack.append(x)  # push
+stack.pop()      # pop + return top
+stack[-1]        # peek top
+len(stack) == 0  # empty check
+len(stack)       # size`,cpp:`#include <stack>
+stack<int> st;
+st.push(x);          // push
+st.top();  st.pop(); // peek then pop (2 steps!)
+st.empty();          // bool
+st.size();           // size_t
+// Pattern: val=st.top(); st.pop(); use val;`,gotcha:"The single most common C++ stack bug: calling st.pop() thinking it returns the value. It doesn't. It returns void. Always: int v = st.top(); st.pop(); \u2014 two separate statements."},
+      {concept:"Class with constructor in C++",tag:"OOP Design",py:`# Python
+class MinStack:
+    def __init__(self):
+        self.st = []
+        self.mn = []
+    def push(self, val):
+        self.st.append(val)`,cpp:`// C++
+class MinStack {
+    stack<int> st, mn;
+public:
+    MinStack() {}  // constructor (often empty)
+    void push(int val) {
+        st.push(val);
+        mn.push(mn.empty() ? val : min(val, mn.top()));
+    }
+    // LeetCode provides the class shell — fill in methods
+};`,gotcha:"C++ class members default to private. Use 'public:' before methods that LeetCode calls. In Python everything is public by default. C++ constructor uses initializer list syntax: MinStack() : st(), mn() {} for explicit init."}]
+  },
+  {
+    id:"2026-06-24",date:"June 24",week:3,weekTitle:"Stacks & Queues",
+    type:"problem",label:"LC #150 Evaluate RPN + LC #496 Next Greater I + LC #503 Next Greater II + LC #622 Circular Queue",phase:2,
+    focus:"Operator Evaluation, Circular Arrays & Queue Design",
+    summary:"Completing Stacks & Queues with RPN evaluation, circular array monotonic stacks, and circular queue implementation.",
+    reqKnowledge:"#150: if number push; if operator, pop b then a, push a op b (order matters for − and /). #503: iterate 2n steps, use index%n to wrap (circular look-ahead). #622: enQueue: arr[(head+count)%k]=val; deQueue: head=(head+1)%k.",
+    problems:[
+      {lc:"#150",name:"Evaluate Reverse Polish Notation",tag:"Stack"},
+      {lc:"#496",name:"Next Greater Element I",tag:"Monotonic Stack"},
+      {lc:"#503",name:"Next Greater Element II",tag:"Circular + Stack"},
+      {lc:"#622",name:"Design Circular Queue",tag:"Design"}
+    ],
+    benchmarks:[
+      "#150: pop b THEN a — why does order matter for subtraction and division?",
+      "#503: why 2n iterations? What does the second pass over the array achieve?"
+    ],
+    bridge:[{concept:"Operator overloading / custom comparators",tag:"Comparators",py:`# Python — custom sort key
+pairs.sort(key=lambda x: x[0])
+# Or define __lt__ on class:
+class Node:
+    def __lt__(self, other):
+        return self.val < other.val`,cpp:`// C++ — lambda comparator
+sort(pairs.begin(), pairs.end(),
+     [](auto& a, auto& b){ return a[0] < b[0]; });
+// Struct with operator<:
+struct Node {
+    int val;
+    bool operator<(const Node& o) const {
+        return val < o.val;
+    }
+};
+// For priority_queue (max-heap default):
+priority_queue<int, vector<int>, greater<int>> minHeap;`,gotcha:"C++ priority_queue is a MAX-heap by default (largest on top). Python heapq is a MIN-heap. For a min-heap in C++: priority_queue<int, vector<int>, greater<int>>. The comparator logic is INVERTED \u2014 confusing!"}]
+  },
+  {
+    id:"2026-06-25",date:"June 25",week:3,weekTitle:"Stacks & Queues",
+    type:"revision",label:"🔄 Stacks & Queues — Topic Completion Revision",phase:3,
+    focus:"Stack & Queue Pattern Taxonomy",
+    summary:"Topic complete. All Stack and Queue patterns consolidated before Binary Search.",
+    prereqs:[
+      "Explain the two-stack queue pattern and its amortized cost analysis",
+      "When is a monotonic increasing vs. decreasing stack needed? Give an example of each",
+      "What core insight makes Min Stack achieve O(1) getMin?",
+      "Circular Queue: write enQueue and deQueue formulas from memory",
+      "What remains in the stack after Daily Temperatures finishes? Why?"
+    ],
+    problems:[],
+    revision:"From memory: code #155 Min Stack and #739 Daily Temperatures back-to-back."
+  },
+
+  /* ══════ WEEK 4 (June 26–July 2): Binary Search + Trees ══════ */
+  {
+    id:"2026-06-26",date:"June 26",week:4,weekTitle:"Binary Search",
+    type:"prereq",label:"📚 Binary Search — Prerequisite Study Day",phase:1,
+    focus:"Inclusive Boundary Templates, Invariants & Search Space Reduction",
+    summary:"Binary Search is deceptively subtle — off-by-one errors are everywhere. Master one template, then variations.",
+    prereqs:[
+      "Inclusive boundary: lo=0, hi=n−1. Loop while lo<=hi. mid=lo+(hi−lo)//2 (prevents overflow)",
+      "Boundary update rules: target<mid → hi=mid−1; target>mid → lo=mid+1",
+      "Leftmost occurrence: on match, record and continue with hi=mid−1",
+      "Rightmost occurrence: on match, record and continue with lo=mid+1",
+      "Answer-space binary search: search on the answer VALUE (e.g. min capacity) not on the array index"
+    ],
+    problems:[],
+    revision:"Write the template 3 times from scratch. Then write leftmost and rightmost bound variants separately.",
+    bridge:[{concept:"Range-based for \u2014 mutation",tag:"Loops",py:`# Python — for loop doesn't modify list
+for x in arr:
+    x = x * 2  # local copy, arr unchanged!
+# To modify:
+for i in range(len(arr)):
+    arr[i] *= 2`,cpp:`// C++ — auto vs auto& is critical
+for (auto x : arr)    // copy — arr unchanged
+    x = x * 2;
+for (auto& x : arr)   // reference — modifies arr!
+    x = x * 2;
+for (const auto& x : arr)  // read-only ref
+    cout << x;`,gotcha:"Python for-loop always creates a local name binding \u2014 mutating x never affects the original container. In C++, auto& gives you a reference that directly modifies the container. auto (no &) copies \u2014 same as Python behavior."}],
+    bridge:[{concept:"Integer overflow protection",tag:"Overflow",py:`# Python ints are arbitrary precision
+mid = (lo + hi) // 2   # SAFE always
+# No overflow possible
+x = 10**18 * 10**18     # fine`,cpp:`// C++ int is 32-bit → overflows at ~2.1B
+int mid = lo + (hi - lo) / 2;  // SAFE
+// Dangerous: int mid = (lo + hi) / 2;
+// If lo+hi > INT_MAX → overflow!
+// Use long long for large values:
+long long product = (long long)a * b;
+// Cast ONE operand to force 64-bit arithmetic`,gotcha:"The classic C++ binary search bug: mid = (lo+hi)/2 overflows when lo+hi > 2^31-1. Always use mid = lo + (hi-lo)/2. Python has no overflow risk. Also: multiplying two int values \u2014 cast one to (long long) before multiplying."},
+      {concept:"Binary search library functions",tag:"STL Algorithms",py:`import bisect
+bisect.bisect_left(arr, x)   # leftmost insert pos
+bisect.bisect_right(arr, x)  # rightmost insert pos
+bisect.insort(arr, x)        # insert in sorted order`,cpp:`#include <algorithm>
+// Both return iterators, use distance() or subtract begin():
+auto it = lower_bound(v.begin(),v.end(),x);
+int idx = it - v.begin();  // leftmost position
+auto it2 = upper_bound(v.begin(),v.end(),x);
+bool found = binary_search(v.begin(),v.end(),x);
+// Insert maintaining sort:
+v.insert(lower_bound(v.begin(),v.end(),x), x);`,gotcha:"C++ lower_bound returns an iterator, not an index. Subtract begin() to get index. lower_bound finds first position >= x (like bisect_left). upper_bound finds first position > x (like bisect_right)."}]
+  },
+  {
+    id:"2026-06-27",date:"June 27",week:4,weekTitle:"Binary Search",
+    type:"problem",label:"LC #704 Binary Search + LC #34 First/Last Position + LC #74 Search 2D Matrix",phase:2,
+    focus:"Standard Bisection + Upper/Lower Bounds + 1D-to-2D Mapping",
+    summary:"Core binary search — the base template, both bound variants, and the elegant virtual-index 2D matrix search.",
+    reqKnowledge:"#704: standard inclusive template. #34: two separate searches for leftmost (hi=mid−1 on match) and rightmost (lo=mid+1 on match). #74: lo=0, hi=m*n−1; mid_val=matrix[mid//n][mid%n].",
+    problems:[
+      {lc:"#704",name:"Binary Search",tag:"Binary Search"},
+      {lc:"#34",name:"Find First and Last Position of Element in Sorted Array",tag:"Binary Search"},
+      {lc:"#74",name:"Search a 2D Matrix",tag:"Binary Search"}
+    ],
+    benchmarks:[
+      "#34: the two variants differ in exactly ONE line — identify it",
+      "#74: derive row=mid//n, col=mid%n and explain why the mapping works"
+    ],
+    bridge:[{concept:"2D matrix binary search index math",tag:"Binary Search",py:`# Python — clean indexing
+lo, hi = 0, m*n - 1
+mid = (lo+hi)//2
+row, col = mid//n, mid%n
+val = matrix[row][col]`,cpp:`// C++ — same math, careful with types
+int lo=0, hi=m*n-1;
+while(lo<=hi){
+    int mid = lo+(hi-lo)/2;
+    int val = matrix[mid/n][mid%n];
+    if(val==target) return true;
+    else if(val<target) lo=mid+1;
+    else hi=mid-1;
+}
+// mid/n is integer division — both int, safe`,gotcha:"mid/n in C++ is integer division (floors toward zero) \u2014 same as Python's //. But if n is 0, this is division by zero! Always guarantee n > 0 before calling this. In the problem, n = matrix[0].size() which is always >= 1."}]
+  },
+  {
+    id:"2026-06-28",date:"June 28",week:4,weekTitle:"Binary Search",
+    type:"problem",label:"LC #33 Search Rotated Array + LC #81 Search Rotated II + LC #162 Find Peak Element",phase:2,
+    focus:"Sorted Half Identification + Gradient Search",
+    summary:"Rotated array search and peak finding — both require identifying structural properties at the midpoint.",
+    reqKnowledge:"#33: if nums[lo]<=nums[mid] left half is sorted; check if target in [lo,mid], else search right. #81: when nums[lo]==nums[mid]==nums[hi], do lo++ and hi-- (degrade to linear). #162: if nums[mid]<nums[mid+1] → lo=mid+1, else hi=mid.",
+    problems:[
+      {lc:"#33",name:"Search in Rotated Sorted Array",tag:"Binary Search"},
+      {lc:"#81",name:"Search in Rotated Sorted Array II",tag:"Binary Search"},
+      {lc:"#162",name:"Find Peak Element",tag:"Binary Search"}
+    ],
+    benchmarks:[
+      "#81: why do duplicates degrade worst-case to O(n)?",
+      "#162: prove correctness — what invariant does lo converge to?"
+    ],
+    bridge:[{concept:"Signed/unsigned comparison warnings",tag:"Type Safety",py:`# Python — no signed/unsigned distinction
+for i in range(len(arr)):
+    if i < arr.size(): ...  # always fine`,cpp:`// C++ vector::size() returns size_t (UNSIGNED)
+// Comparing int i < v.size() triggers warning
+// if i is negative, it wraps to huge positive!
+for (int i = 0; i < (int)v.size(); i++) { ... }  // cast
+// Or:
+for (size_t i = 0; i < v.size(); i++) { ... }
+// Or (modern):
+for (int i = 0; i < v.size(); ++i) { ... } // ok in practice`,gotcha:"vector::size() returns size_t (unsigned). Comparing int i < v.size() when i might be -1 is dangerous \u2014 unsigned comparison wraps -1 to UINT_MAX (huge). Always cast: (int)v.size() when doing signed arithmetic."}]
+  },
+  {
+    id:"2026-06-29",date:"June 29",week:4,weekTitle:"Binary Search",
+    type:"revision",label:"🔄 Binary Search — Topic Completion Revision",phase:3,
+    focus:"Binary Search Template Mastery",
+    summary:"Topic complete. Instant pattern recognition is the goal — which template does each problem call for?",
+    prereqs:[
+      "Write the standard binary search template cold — lo, hi, mid, both update rules, return",
+      "#34: how does leftmost differ from rightmost? (One line — identify it)",
+      "#74: O(log(m*n)) — derive why this is correct",
+      "#33: describe the sorted-half identification logic in plain English",
+      "When do you binary search on the ANSWER rather than on the index?"
+    ],
+    problems:[],
+    revision:"Code leftmost and rightmost binary search from scratch. Then code #33 Rotated Array from memory.",
+    bridge:[{concept:"Reverse iteration",tag:"Iterators",py:`# Python
+for i in range(n-1, -1, -1): ...  # indices
+for x in reversed(arr): ...        # values
+for i in range(len(arr)-1, -1, -1):
+    process(arr[i])`,cpp:`// C++ — reverse iterators
+for (int i = n-1; i >= 0; i--) { ... }
+for (auto it = v.rbegin(); it != v.rend(); ++it)
+    process(*it);
+// Modern range-based (C++20 reverse view):
+for (auto& x : views::reverse(v)) { ... }
+// Or just:
+for (int i=(int)v.size()-1; i>=0; i--) process(v[i]);`,gotcha:"C++ rbegin()/rend() give reverse iterators \u2014 ++ moves backward. *it dereferences to value. For index-based loops, cast size()-1 to int before comparing >= 0, or use signed int loop variable to avoid unsigned underflow."}]
+  },
+  {
+    id:"2026-06-30",date:"June 30",week:4,weekTitle:"Trees",
+    type:"prereq",label:"📚 Trees — Prerequisite Study Day",phase:1,
+    focus:"Tree Node Structure, All Four Traversals & Balanced Tree Properties",
+    summary:"Trees demand both recursive intuition and iterative stack simulation. Build both mental models today.",
+    prereqs:[
+      "TreeNode: val, left, right. BST property: all nodes in left subtree < root < all nodes in right subtree",
+      "Pre-order DFS (Root→Left→Right): used for copying/serializing trees",
+      "In-order DFS (Left→Root→Right): produces sorted output for BSTs",
+      "Post-order DFS (Left→Right→Root): used when child data needed before parent decision",
+      "Level-order BFS: queue-based; process all depth-d nodes before depth d+1"
+    ],
+    problems:[],
+    revision:"Draw a 7-node binary tree. Manually write out Pre/In/Post/Level traversal sequences for every node.",
+    bridge:[{concept:"Tree node \u2014 struct vs class",tag:"Tree Definition",py:`class TreeNode:
+    def __init__(self, val=0, left=None, right=None):
+        self.val = val
+        self.left = left
+        self.right = right`,cpp:`// LeetCode provides this definition:
+struct TreeNode {
+    int val;
+    TreeNode* left;
+    TreeNode* right;
+    TreeNode(int x):val(x),left(nullptr),right(nullptr){}
+};
+// Access:
+node->val;   node->left;   node->right;
+// Null check:
+if (!node) return;  // nullptr is falsy`,gotcha:"C++ struct members are public by default (unlike class which defaults to private). In TreeNode you access node->val through a pointer. node.val only works if node is an object on the stack, not a pointer \u2014 LeetCode always passes TreeNode*."},
+      {concept:"Recursive return values",tag:"Recursion",py:`# Python — return None implicitly
+def dfs(node):
+    if not node: return 0
+    l = dfs(node.left)
+    r = dfs(node.right)
+    return 1 + max(l, r)`,cpp:`// C++ — must specify return type, no implicit return
+int dfs(TreeNode* node) {
+    if (!node) return 0;
+    int l = dfs(node->left);
+    int r = dfs(node->right);
+    return 1 + max(l, r);
+}
+// Returning -1 as sentinel:
+int dfs(TreeNode* node) {
+    if (!node) return 0;
+    int l=dfs(node->left);
+    if(l==-1) return -1;  // propagate failure
+    // ...
+}`,gotcha:"C++ functions with non-void return type MUST return a value on all paths \u2014 missing return is undefined behaviour (often compiles but crashes or returns garbage). Python functions return None implicitly. Always trace all code paths."}]
+  },
+  {
+    id:"2026-07-01",date:"July 1",week:4,weekTitle:"Trees",
+    type:"problem",label:"LC #104 Max Depth + LC #100 Same Tree + LC #101 Symmetric Tree + LC #110 Balanced Binary Tree",phase:2,
+    focus:"Top-Down Recursion, Mirror Traversal & Bottom-Up Sentinel",
+    summary:"Four tree recursion problems establishing the core structural recursive patterns.",
+    reqKnowledge:"#104: 1+max(depth(L),depth(R)), base=0. #100: both null→T; one null→F; vals differ→F; recurse both. #101: isMirror(L,R): L.L↔R.R and L.R↔R.L. #110 bottom-up: return −1 if imbalanced (|lh−rh|>1), propagate upward.",
+    problems:[
+      {lc:"#104",name:"Maximum Depth of Binary Tree",tag:"DFS Recursion"},
+      {lc:"#100",name:"Same Tree",tag:"DFS Recursion"},
+      {lc:"#101",name:"Symmetric Tree",tag:"Mirror Recursion"},
+      {lc:"#110",name:"Balanced Binary Tree",tag:"DFS Bottom-Up"}
+    ],
+    benchmarks:[
+      "#101 key: left.left↔right.right, left.right↔right.left (crossing, not parallel)",
+      "#110: why is bottom-up O(n) but top-down height check is O(n log n)?"
+    ],
+    bridge:[{concept:"Passing functions / callbacks",tag:"Higher Order Functions",py:`# Python — first-class functions
+def helper(node):
+    if not node: return True
+    return helper(node.left) and helper(node.right)
+# Or with nested def (closure):
+def solve(root):
+    def dfs(node): ...`,cpp:`// C++ — use nested lambda or separate function
+class Solution {
+    bool dfs(TreeNode* node) {  // private helper
+        if(!node) return true;
+        return dfs(node->left) && dfs(node->right);
+    }
+public:
+    bool solve(TreeNode* root) { return dfs(root); }
+};
+// Or lambda inside function (captures this):
+bool solve(TreeNode* root) {
+    function<bool(TreeNode*)> dfs=[&](TreeNode* n)->bool{
+        if(!n) return true;
+        return dfs(n->left)&&dfs(n->right);
+    };
+    return dfs(root);
+}`,gotcha:"C++ recursive lambdas need std::function<RetType(Args)> to declare the type before use \u2014 you can't use 'auto' for a lambda that refers to itself. Always use [&] capture for recursive lambdas so they can call themselves."}]
+  },
+  {
+    id:"2026-07-02",date:"July 2",week:4,weekTitle:"Trees",
+    type:"problem",label:"LC #144 Preorder + LC #94 Inorder + LC #145 Postorder + LC #102 Level Order Traversal",phase:2,
+    focus:"Iterative Stack Simulation & BFS Level Grouping",
+    summary:"All four traversals implemented iteratively — a complete mastery of tree traversal mechanics.",
+    reqKnowledge:"Iterative Pre-order: push root; pop-process-push(right,left). Iterative In-order: go left as far as possible (push each), pop-process, go right. Post-order: track prev pointer. Level-order: snapshot level_size=len(queue); process exactly level_size nodes per level.",
+    problems:[
+      {lc:"#144",name:"Binary Tree Preorder Traversal",tag:"Tree DFS"},
+      {lc:"#94",name:"Binary Tree Inorder Traversal",tag:"Tree DFS"},
+      {lc:"#145",name:"Binary Tree Postorder Traversal",tag:"Tree DFS"},
+      {lc:"#102",name:"Binary Tree Level Order Traversal",tag:"BFS"}
+    ],
+    benchmarks:[
+      "Iterative pre-order: why push right before left? (LIFO — left must come out first)",
+      "Level-order: why snapshot queue size before the inner loop?"
+    ]
+  },
+
+  /* ══════ WEEK 5 (July 3–9): Backtracking + Dynamic Programming ══════ */
+  {
+    id:"2026-07-03",date:"July 3",week:5,weekTitle:"Trees + Backtracking",
+    type:"revision",label:"🔄 Trees — Topic Completion Revision",phase:3,
+    focus:"Tree Traversal Decision Map",
+    summary:"Topic complete. Build the mental decision tree: which traversal, which direction (top-down vs. bottom-up)?",
+    prereqs:[
+      "Pre/In/Post/Level — write the use case for each without notes",
+      "Bottom-up vs. top-down: which Tree problems this week used each, and why?",
+      "Code #102 Level Order from memory using the level-size BFS snapshot pattern",
+      "Space complexity: recursive DFS on balanced O(log n) vs. skewed O(n) tree — explain why",
+      "#101 mirror traversal: what makes left.left↔right.right the key insight?"
+    ],
+    problems:[],
+    revision:"Timed sprint: code #104 Max Depth, #101 Symmetric Tree, and #102 Level Order back-to-back from memory.",
+    bridge:[{concept:"Queue for BFS \u2014 level order",tag:"BFS",py:`from collections import deque
+q = deque([root])
+while q:
+    sz = len(q)    # snapshot before loop
+    for _ in range(sz):
+        node = q.popleft()
+        if node.left:  q.append(node.left)
+        if node.right: q.append(node.right)`,cpp:`#include <queue>
+queue<TreeNode*> q;
+if(root) q.push(root);
+while(!q.empty()){
+    int sz = q.size();  // snapshot
+    while(sz--){
+        TreeNode* node = q.front(); q.pop();
+        if(node->left)  q.push(node->left);
+        if(node->right) q.push(node->right);
+    }
+}`,gotcha:"Snapshot q.size() BEFORE the inner loop as 'int sz'. If you loop 'while(!q.empty())' in the inner loop, you process all levels in one pass \u2014 losing level grouping. The sz snapshot freezes the level boundary."}],
+    bridge:[{concept:"std::set \u2014 sorted unique container",tag:"Ordered Containers",py:`# Python set — unordered, O(1) ops
+seen = set(); seen.add(x)
+# For sorted set: use SortedList (sortedcontainers)
+# or bisect module for manual sorted lists`,cpp:`// C++ set — SORTED, unique, O(log n) ops
+#include <set>
+set<int> s;
+s.insert(x);
+s.count(x);    // 0 or 1
+s.erase(x);
+auto it = s.begin(); // smallest element
+auto it = s.end();   // past end
+// unordered_set — hash-based, O(1) avg
+// Use set when you need sorted order
+// Use unordered_set for pure membership test`,gotcha:"C++ has TWO set types: set (red-black tree, sorted, O(log n)) and unordered_set (hash table, O(1) avg). Python's set is always unordered. Use C++ set when you need min/max/ordered traversal. Otherwise use unordered_set for speed."}]
+  },
+  {
+    id:"2026-07-04",date:"July 4",week:5,weekTitle:"Recursion & Backtracking",
+    type:"prereq",label:"📚 Backtracking — Prerequisite Study Day",phase:1,
+    focus:"State-Space Trees, Base Cases & The Choice-Recurse-Undo Framework",
+    summary:"Backtracking is systematic exhaustive search with early termination. Master the canonical 3-step framework before writing any solution.",
+    prereqs:[
+      "State-space tree: each node is a decision point. Leaves are complete solutions or dead ends",
+      "Base case identification: when is a state a valid complete solution? When is it a dead end to prune?",
+      "Three-step framework: (1) Make a choice, (2) Recurse with updated state, (3) Undo the choice (backtrack)",
+      "Start-index tracking: pass a start parameter to prevent re-using earlier elements in combinations",
+      "Pruning: sort first, then break/continue early when the remaining candidates cannot possibly lead to valid solutions"
+    ],
+    problems:[],
+    revision:"On paper: draw the full state-space tree for combinations of [1,2,3] that sum to 3. Label every branch.",
+    bridge:[{concept:"Recursion \u2014 stack depth & stack overflow",tag:"Recursion Safety",py:`# Python default recursion limit: 1000
+import sys
+sys.setrecursionlimit(100000)
+# Python stack is heap-allocated — flexible
+# But still slower than iteration per call`,cpp:`// C++ stack size fixed (~1-8 MB typically)
+// Deep recursion → stack overflow (crash)
+// LeetCode trees can be 10^4 nodes deep
+// For skewed trees, convert recursion to iteration
+// using explicit stack<TreeNode*>
+stack<TreeNode*> stk;
+stk.push(root);
+while(!stk.empty()){
+    TreeNode* n=stk.top(); stk.pop();
+    // process
+}`,gotcha:"C++ has a fixed call stack (typically 1-8MB). Deep recursion on a skewed tree (10^4 nodes) can cause stack overflow. Python is more forgiving but also limited. For competitive C++, iterative solutions using explicit stack<> are safer for tree/graph problems."}]
+  },
+  {
+    id:"2026-07-05",date:"July 5",week:5,weekTitle:"Recursion & Backtracking",
+    type:"problem",label:"LC #39 Combination Sum + LC #46 Permutations + LC #78 Subsets + LC #90 Subsets II",phase:2,
+    focus:"Reuse Forks, Position Swapping & Index Pruning",
+    summary:"Four backtracking problems covering the core paradigm variants: combinations, permutations, and subsets.",
+    reqKnowledge:"#39: dfs(start,path,rem); for i from start: append, recurse same i (reuse), pop. #46: swap(nums[start],nums[i]); recurse(start+1); swap back. #78: dfs(start); for i from start: append, recurse(i+1), pop. #90: add sort + if i>start and nums[i]==nums[i-1]: skip.",
+    problems:[
+      {lc:"#39",name:"Combination Sum",tag:"Backtracking"},
+      {lc:"#46",name:"Permutations",tag:"Backtracking"},
+      {lc:"#78",name:"Subsets",tag:"Backtracking"},
+      {lc:"#90",name:"Subsets II",tag:"Backtracking"}
+    ],
+    benchmarks:[
+      "#39: how does sorting + break prune the search space?",
+      "#90: why does the duplicate skip check use i>start rather than i>0?",
+      "#46: why does swapping back guarantee all permutations are explored exactly once?"
+    ],
+    bridge:[{concept:"Backtracking \u2014 vector push_back/pop_back",tag:"Backtracking",py:`path = []
+path.append(x)   # push O(1)
+path.pop()       # pop last O(1)
+result.append(path[:])  # copy!`,cpp:`vector<int> path;
+path.push_back(x);   // push O(1)
+path.pop_back();     // pop last O(1)
+result.push_back(path);  // already a copy!
+// No need for path[:] — push_back copies by value
+// For string building:
+path_str += c;
+path_str.pop_back();  // remove last char`,gotcha:"Python result.append(path) appends a REFERENCE \u2014 you must copy with path[:]. C++ result.push_back(path) copies the vector by value automatically. This is a common Python-to-C++ transition bug \u2014 forgetting you no longer need the explicit copy."},
+      {concept:"N-Queens \u2014 set operations",tag:"Set Ops",py:`cols.add(c); diag.add(r-c); anti.add(r+c)
+cols.discard(c); diag.discard(r-c)
+# discard = no error if not present`,cpp:`cols.insert(c); diag.insert(r-c); anti.insert(r+c);
+cols.erase(c);  diag.erase(r-c);
+// erase on non-existent key = no-op for set/unordered_set
+// (different from map where erase(missing_key) is also safe)
+set<int> cols, diag, anti;  // sorted
+// or faster:
+unordered_set<int> cols, diag, anti;`,gotcha:"C++ set::erase(val) silently does nothing if val is not present \u2014 safe for backtracking undo. Python's discard() is the same. Avoid remove() in Python (throws) and don't assume erase is slow \u2014 it's O(log n) for set, O(1) avg for unordered_set."}]
+  },
+  {
+    id:"2026-07-06",date:"July 6",week:5,weekTitle:"Recursion & Backtracking",
+    type:"problem",label:"LC #51 N-Queens + LC #17 Letter Combinations + LC #37 Sudoku Solver",phase:2,
+    focus:"Safe Configuration Validation, Multi-Choice Trees & Grid Backtracking",
+    summary:"Three harder backtracking problems — constraint satisfaction on boards and multi-choice branching.",
+    reqKnowledge:"#51: track columns, diagonals (r−c), anti-diagonals (r+c) as sets for O(1) safety check. #17: for each digit, branch into all mapped letters; path complete when len==num_digits. #37: box_id=(row//3)*3+(col//3); try digits 1-9, add to sets, recurse, remove on backtrack.",
+    problems:[
+      {lc:"#51",name:"N-Queens",tag:"Backtracking Hard"},
+      {lc:"#17",name:"Letter Combinations of Phone Number",tag:"Backtracking"},
+      {lc:"#37",name:"Sudoku Solver",tag:"Backtracking Hard"}
+    ],
+    benchmarks:[
+      "#51: why do (r−c) and (r+c) uniquely identify all diagonals?",
+      "#37: derive box_id=(row//3)*3+(col//3) and verify it maps all 9 boxes correctly"
+    ],
+    bridge:[{concept:"2D array for Sudoku / N-Queens",tag:"2D Arrays",py:`# Python 2D list of chars
+board = [['.' if board[r][c]=='.'
+          else board[r][c]
+          for c in range(9)]
+         for r in range(9)]
+# Access: board[r][c]`,cpp:`// C++ vector<vector<char>> or vector<string>
+vector<string> board(n, string(n, '.'));
+// Access: board[r][c] = 'Q';
+// Building result for N-Queens:
+vector<string> b(n, string(n, '.'));
+b[row][col] = 'Q';
+result.push_back(b);`,gotcha:"For N-Queens in C++, vector<string> is idiomatic \u2014 each string is a row and chars are mutable. board[row][col]='Q' works directly. For Sudoku the board is passed as vector<vector<char>>& \u2014 modify in-place, it's already a reference."}]
+  },
+  {
+    id:"2026-07-07",date:"July 7",week:5,weekTitle:"Recursion & Backtracking",
+    type:"revision",label:"🔄 Backtracking — Topic Completion Revision",phase:3,
+    focus:"Backtracking Pattern Taxonomy",
+    summary:"Topic complete. Build a mental taxonomy of backtracking problem types and their structural differences.",
+    prereqs:[
+      "Name the 3-step framework from memory: Choice → Recurse → Undo",
+      "What makes #39 (reuse allowed) structurally different from #40 (no reuse)?",
+      "Draw the state-space tree for #46 Permutations with [1,2,3]",
+      "Why does #90 Subsets II use i>start and not i>0 for the duplicate skip?",
+      "Which problems use a path list vs. in-place swapping as the state representation?"
+    ],
+    problems:[],
+    revision:"Code #39 Combination Sum and #78 Subsets from memory. Then attempt #37 Sudoku Solver with only the box_id formula as a hint.",
+    bridge:[{concept:"std::function for recursive lambdas",tag:"Recursive Lambdas",py:`# Python — nested function, natural recursion
+def solve(candidates, target):
+    result = []
+    def bt(start, path, rem):
+        if rem == 0:
+            result.append(path[:])
+            return
+        for i in range(start, len(candidates)):
+            ...
+            bt(i, path, rem-candidates[i])
+    bt(0, [], target)
+    return result`,cpp:`// C++ — use function<> for self-referencing lambda
+vector<vector<int>> combinationSum(...) {
+    vector<vector<int>> result;
+    vector<int> path;
+    function<void(int,int)> bt=[&](int start,int rem){
+        if(rem==0){result.push_back(path);return;}
+        for(int i=start;i<candidates.size();i++){
+            if(candidates[i]>rem) break;
+            path.push_back(candidates[i]);
+            bt(i, rem-candidates[i]);
+            path.pop_back();
+        }
+    };
+    bt(0, target);
+    return result;
+}`,gotcha:"std::function<void(int,int)> has overhead vs regular function \u2014 for competitive programming, prefer a private class method. But for LeetCode readability, function<> + lambda [&] capturing the result/path is the cleanest equivalent to Python's nested def."}]
+  },
+  {
+    id:"2026-07-08",date:"July 8",week:5,weekTitle:"Dynamic Programming",
+    type:"prereq",label:"📚 Dynamic Programming — Prerequisite Study Day",phase:1,
+    focus:"Optimal Substructure, Overlapping Subproblems, Memoization vs. Tabulation",
+    summary:"DP transforms exponential recursion into polynomial solutions. The two core properties and two implementation strategies.",
+    prereqs:[
+      "Optimal Substructure: optimal solution to the whole problem contains optimal solutions to its subproblems",
+      "Overlapping Subproblems: the same subproblems are solved repeatedly in naive recursion",
+      "Top-down Memoization: recursive + cache dict/array. Natural to write, O(n) time and space",
+      "Bottom-up Tabulation: iterative, fill dp table in dependency order — often achieves O(1) space",
+      "State definition: define dp[i] with extreme precision. 'dp[i] = max money robbed from first i houses only'"
+    ],
+    problems:[],
+    revision:"Take #70 Climbing Stairs: write BOTH the memoized top-down AND the bottom-up O(1) space tabulation.",
+    bridge:[{concept:"Memoization \u2014 map vs vector",tag:"DP Memoization",py:`# Python — functools.lru_cache (cleanest)
+from functools import lru_cache
+@lru_cache(maxsize=None)
+def dp(i): ...
+# Or manual dict:
+memo = {}
+def dp(i):
+    if i in memo: return memo[i]
+    memo[i] = ...
+    return memo[i]`,cpp:`// Option 1: vector (when keys are 0..n)
+vector<int> memo(n+1, -1);  // -1 = uncomputed
+int dp(int i) {
+    if (memo[i]!=-1) return memo[i];
+    return memo[i] = ...;  // assign & return
+}
+// Option 2: unordered_map (sparse/string keys)
+unordered_map<int,int> memo;
+int dp(int i) {
+    if (memo.count(i)) return memo[i];
+    return memo[i] = ...;
+}`,gotcha:"For dense integer keys (0 to n), use vector<int> memo(n+1,-1) \u2014 much faster than unordered_map. Use -1 as 'uncomputed' sentinel only if valid results can't be -1. If results can be negative, use a separate bool vector or memo with optional<int>."}]
+  },
+  {
+    id:"2026-07-09",date:"July 9",week:5,weekTitle:"Dynamic Programming",
+    type:"problem",label:"LC #70 Climbing Stairs + LC #198 House Robber + LC #322 Coin Change + LC #300 LIS",phase:2,
+    focus:"1D State Dependency, Unbounded Knapsack & Nested Conditions",
+    summary:"Four core 1D DP problems covering Fibonacci-style, unbounded DP, and nested condition DP.",
+    reqKnowledge:"#70: dp[i]=dp[i-1]+dp[i-2], rolling vars O(1). #198: dp[i]=max(dp[i-1],dp[i-2]+nums[i]), rolling. #322: dp[0]=0, dp[i]=min(dp[i-coin]+1) for each coin. #300: dp[i]=max(dp[j]+1) for j<i where nums[j]<nums[i].",
+    problems:[
+      {lc:"#70",name:"Climbing Stairs",tag:"DP / Fibonacci"},
+      {lc:"#198",name:"House Robber",tag:"1D DP"},
+      {lc:"#322",name:"Coin Change",tag:"DP Unbounded"},
+      {lc:"#300",name:"Longest Increasing Subsequence",tag:"DP O(n²)"}
+    ],
+    benchmarks:[
+      "#322 unbounded: why can you reuse coins? Compare to #416 which you can't reuse elements",
+      "#300: what does dp[i] represent exactly? (LIS ending AT index i, not globally up to i)"
+    ]
+  },
+
+  /* ══════ WEEK 6 (July 10–14): DP Completion + Graphs + Bitwise ══════ */
+  {
+    id:"2026-07-10",date:"July 10",week:6,weekTitle:"Dynamic Programming",
+    type:"problem",label:"LC #1143 LCS + LC #62 Unique Paths + LC #416 Partition Sum + LC #5 Palindrome DP",phase:2,
+    focus:"2D Grid DP, 0/1 Knapsack & Interval DP",
+    summary:"Completing DP with 2D accumulation, 0/1 knapsack, and interval DP — the three remaining DP paradigms.",
+    reqKnowledge:"#1143: dp[i][j]=dp[i-1][j-1]+1 if match else max(dp[i-1][j],dp[i][j-1]). #62: dp[i][j]=dp[i-1][j]+dp[i][j-1]. #416: iterate sums BACKWARDS: dp[j]|=dp[j-num]. #5 DP: dp[i][j]=T if s[i]==s[j] and (dp[i+1][j-1] or j-i<2).",
+    problems:[
+      {lc:"#1143",name:"Longest Common Subsequence",tag:"2D DP"},
+      {lc:"#62",name:"Unique Paths",tag:"2D DP"},
+      {lc:"#416",name:"Partition Equal Subset Sum",tag:"0/1 Knapsack"},
+      {lc:"#5",name:"Longest Palindromic Substring (DP)",tag:"Interval DP"}
+    ],
+    benchmarks:[
+      "#416: why does iterating backwards prevent reusing the same element?",
+      "#1143: subarray (contiguous) vs. subsequence (non-contiguous) — what changes in the recurrence?"
+    ],
+    bridge:[{concept:"Bottom-up DP \u2014 vector initialisation",tag:"DP Tabulation",py:`# Python
+dp = [0] * (n+1)
+dp[0] = 0
+# Fill:
+for i in range(1, n+1):
+    dp[i] = max(dp[i-1], dp[i-2]+nums[i-1])
+# Infinity sentinel:
+dp = [float('inf')] * (amount+1)`,cpp:`// C++ — explicit type and fill
+vector<int> dp(n+1, 0);
+dp[0] = 0;
+for (int i=1; i<=n; i++)
+    dp[i] = max(dp[i-1], (i>=2?dp[i-2]:0)+nums[i-1]);
+// Infinity sentinel:
+vector<int> dp(amount+1, INT_MAX);
+dp[0] = 0;
+// Check before using: if(dp[i-c] != INT_MAX) dp[i]=min(...)`,gotcha:"INT_MAX + 1 overflows in C++! When checking dp[i] = min(dp[i], dp[i-c]+1), you must first verify dp[i-c] != INT_MAX before the +1. Python's float('inf') + 1 is still inf \u2014 no overflow. Use a safe large constant like 1e9 or check explicitly."}],
+    bridge:[{concept:"2D DP \u2014 vector of vectors",tag:"2D DP",py:`# Python
+dp = [[0]*(n+1) for _ in range(m+1)]
+for i in range(1, m+1):
+    for j in range(1, n+1):
+        if t1[i-1]==t2[j-1]:
+            dp[i][j]=dp[i-1][j-1]+1
+        else:
+            dp[i][j]=max(dp[i-1][j],dp[i][j-1])`,cpp:`// C++
+vector<vector<int>> dp(m+1, vector<int>(n+1, 0));
+for(int i=1;i<=m;i++)
+    for(int j=1;j<=n;j++)
+        dp[i][j]=t1[i-1]==t2[j-1]
+            ? dp[i-1][j-1]+1
+            : max(dp[i-1][j],dp[i][j-1]);
+// Space-optimised with 1D rolling row:
+vector<int> prev(n+1,0), curr(n+1,0);
+// ... swap(prev,curr) after each row`,gotcha:"2D vector in C++ is not contiguous in memory (each inner vector is a separate heap allocation) \u2014 worse cache performance than a 1D array with manual indexing: dp[i*(n+1)+j]. For competitive programming, flat 1D array is faster. For LeetCode, 2D vector is fine."},
+      {concept:"0/1 Knapsack \u2014 backwards loop",tag:"DP Knapsack",py:`# Python 0/1 knapsack (backwards iteration)
+dp = [False] * (target+1)
+dp[0] = True
+for num in nums:
+    for j in range(target, num-1, -1):  # BACKWARDS
+        dp[j] = dp[j] or dp[j-num]`,cpp:`// C++ 0/1 knapsack
+vector<bool> dp(target+1, false);
+dp[0] = true;
+for (int num : nums)
+    for (int j=target; j>=num; j--)  // BACKWARDS
+        dp[j] = dp[j] || dp[j-num];
+// Forward iteration would allow num to be used multiple times
+// (unbounded knapsack) — coin change uses forward!`,gotcha:"The backwards loop is the ONLY difference between 0/1 knapsack (each item once) and unbounded knapsack (items reusable). Coin Change iterates FORWARD. Partition Equal Subset Sum iterates BACKWARD. Mix them up = wrong answer."}]
+  },
+  {
+    id:"2026-07-11",date:"July 11",week:6,weekTitle:"Dynamic Programming",
+    type:"revision",label:"🔄 Dynamic Programming — Topic Completion Revision",phase:3,
+    focus:"DP Pattern Recognition & Transition Mastery",
+    summary:"Topic complete. The key skill is instant recognition of which DP paradigm applies — without deliberation.",
+    prereqs:[
+      "List all DP categories covered: 1D Fibonacci-style, 1D Unbounded, 1D 0/1 Knapsack, 2D Grid, Interval",
+      "For each category: write the dp[i] definition AND the recurrence relation from memory",
+      "Code #322 Coin Change from scratch — both initialization AND the recurrence",
+      "Backward iteration in 0/1 knapsack: what exact error does it prevent?",
+      "Top-down vs. bottom-up: when is each preferred? What is each one's space advantage?"
+    ],
+    problems:[],
+    revision:"Without notes: write recurrences for #198 House Robber, #322 Coin Change, #300 LIS, and #1143 LCS. Check each.",
+    bridge:[{concept:"accumulate \u2014 sum of container",tag:"STL Numeric",py:`# Python
+total = sum(nums)       # O(n)
+prefix = []
+curr = 0
+for n in nums:
+    curr += n
+    prefix.append(curr)`,cpp:`#include <numeric>
+int total = accumulate(nums.begin(), nums.end(), 0);
+// Prefix sum:
+vector<int> prefix(n+1, 0);
+for(int i=0;i<n;i++)
+    prefix[i+1] = prefix[i] + nums[i];
+// partial_sum:
+partial_sum(nums.begin(),nums.end(),prefix.begin()+1);`,gotcha:"C++ accumulate's third argument is the INITIAL VALUE and determines the type. accumulate(v.begin(),v.end(),0) uses int \u2014 will overflow for large sums! Use 0LL (long long) for large sums: accumulate(v.begin(),v.end(),0LL)."}]
+  },
+  {
+    id:"2026-07-12",date:"July 12",week:6,weekTitle:"Graphs & Bitwise",
+    type:"prereq",label:"📚 Graphs & Bitwise — Prerequisite Study Day",phase:1,
+    focus:"Graph Theory, BFS/DFS/Topo Sort & Bitwise Operator Toolkit",
+    summary:"Graphs generalize trees. Master representations, traversal strategies, and the bitwise toolkit in one focused session.",
+    prereqs:[
+      "Adjacency List: graph[node]=[neighbors]. Space O(V+E). Best for sparse graphs",
+      "BFS: queue-based, explores by level — use for shortest path in unweighted graphs",
+      "DFS: stack/recursion, explores branch fully — use for cycle detection, connected components",
+      "Topological Sort (Kahn's): in-degree array + zero-in-degree queue; all nodes processed = no cycle",
+      "Bitwise toolkit: AND (&) masking, OR (|) setting, XOR (^) toggling/cancelling, NOT (~), Left Shift (<<), Right Shift (>>). Key identity: a^a=0 and a^0=a"
+    ],
+    problems:[],
+    revision:"Draw a 5-node directed graph, write its adjacency list, perform BFS and DFS manually.",
+    bridge:[{concept:"Adjacency list representation",tag:"Graph Representation",py:`# Python — defaultdict or dict of lists
+from collections import defaultdict
+graph = defaultdict(list)
+graph[u].append(v)
+# Or: graph = [[] for _ in range(n)]`,cpp:`// C++ — vector of vectors (most common)
+vector<vector<int>> graph(n);
+graph[u].push_back(v);
+// Or unordered_map for non-integer nodes:
+unordered_map<int, vector<int>> graph;
+graph[u].push_back(v);
+// Access neighbours:
+for (int nei : graph[node]) { ... }`,gotcha:"vector<vector<int>> graph(n) creates n empty vectors \u2014 access graph[u] safely for u in [0,n). defaultdict(list) in Python auto-creates an empty list for new keys; C++ vector<vector<int>>(n) does NOT auto-expand \u2014 accessing graph[u] for u>=n is undefined behaviour."},
+      {concept:"Visited array vs set",tag:"Graph Traversal",py:`# Python — set for visited
+visited = set()
+visited.add(node)
+if node in visited: continue`,cpp:`// C++ — vector<bool> is faster than unordered_set
+vector<bool> visited(n, false);
+visited[node] = true;
+if (visited[node]) continue;
+// Or 3-state for cycle detection:
+vector<int> state(n, 0);
+// 0=unvisited, 1=visiting(in stack), 2=done`,gotcha:"vector<bool> in C++ is space-optimised (1 bit per element) but has quirks \u2014 it doesn't return real bool references. For most graph problems it works fine. For cycle detection, use vector<int> with 3 states (0/1/2) rather than two separate bool vectors."}]
+  },
+  {
+    id:"2026-07-13",date:"July 13",week:6,weekTitle:"Graphs & Bitwise",
+    type:"problem",label:"LC #200 Number of Islands + LC #207 Course Schedule + LC #994 Rotting Oranges + LC #133 Clone Graph",phase:2,
+    focus:"Grid DFS, Topological Sort, Multi-Source BFS & Deep Cloning",
+    summary:"Four graph problems covering the full range of graph algorithm patterns.",
+    reqKnowledge:"#200: DFS/BFS sinking '1'→'0'; count calls. #207 Kahn's: in-degree array; process zero-in-degree; decrement neighbors. #994 multi-source BFS: seed ALL rotten cells at t=0; layer-by-layer spread. #133: visited={old→new}; DFS recurse neighbors.",
+    problems:[
+      {lc:"#200",name:"Number of Islands",tag:"Grid DFS/BFS"},
+      {lc:"#207",name:"Course Schedule",tag:"Topological Sort"},
+      {lc:"#994",name:"Rotting Oranges",tag:"Multi-Source BFS"},
+      {lc:"#133",name:"Clone Graph",tag:"Graph DFS"}
+    ],
+    benchmarks:[
+      "#207: explain both cycle detection approaches — Kahn's in-degree vs. DFS 3-color",
+      "#994: what does it mean when fresh oranges remain after BFS completes? (Return −1)"
+    ],
+    revision:"",
+    code:{
+      py:`<span class="cm"># ── #200 Number of Islands (DFS sink) ──</span>
+<span class="kw">def</span> <span class="fn">numIslands</span>(grid):
+    <span class="kw">def</span> <span class="fn">dfs</span>(r,c):
+        <span class="kw">if</span> r&lt;0 <span class="kw">or</span> c&lt;0 <span class="kw">or</span> r&gt;=<span class="tp">len</span>(grid) <span class="kw">or</span> c&gt;=<span class="tp">len</span>(grid[0]) <span class="kw">or</span> grid[r][c]!="1": <span class="kw">return</span>
+        grid[r][c]="0"
+        <span class="kw">for</span> dr,dc <span class="kw">in</span> [(1,0),(-1,0),(0,1),(0,-1)]: <span class="fn">dfs</span>(r+dr,c+dc)
+    count=0
+    <span class="kw">for</span> r <span class="kw">in</span> <span class="tp">range</span>(<span class="tp">len</span>(grid)):
+        <span class="kw">for</span> c <span class="kw">in</span> <span class="tp">range</span>(<span class="tp">len</span>(grid[0])):
+            <span class="kw">if</span> grid[r][c]=="1": <span class="fn">dfs</span>(r,c); count+=1
+    <span class="kw">return</span> count
+
+<span class="cm"># ── #207 Course Schedule (Kahn's) ──</span>
+<span class="kw">def</span> <span class="fn">canFinish</span>(n, prereqs):
+    indeg=[0]*n; adj=[[] <span class="kw">for</span> _ <span class="kw">in</span> <span class="tp">range</span>(n)]
+    <span class="kw">for</span> a,b <span class="kw">in</span> prereqs: adj[b].append(a); indeg[a]+=1
+    q=deque(i <span class="kw">for</span> i <span class="kw">in</span> <span class="tp">range</span>(n) <span class="kw">if</span> indeg[i]==0)
+    done=0
+    <span class="kw">while</span> q:
+        u=q.popleft(); done+=1
+        <span class="kw">for</span> v <span class="kw">in</span> adj[u]:
+            indeg[v]-=1
+            <span class="kw">if</span> indeg[v]==0: q.append(v)
+    <span class="kw">return</span> done==n
+
+<span class="cm"># ── #994 Rotting Oranges (multi-source BFS) ──</span>
+<span class="kw">def</span> <span class="fn">orangesRotting</span>(grid):
+    q=deque(); fresh=0
+    R,C=<span class="tp">len</span>(grid),<span class="tp">len</span>(grid[0])
+    <span class="kw">for</span> r <span class="kw">in</span> <span class="tp">range</span>(R):
+        <span class="kw">for</span> c <span class="kw">in</span> <span class="tp">range</span>(C):
+            <span class="kw">if</span> grid[r][c]==2: q.append((r,c,0))
+            <span class="kw">elif</span> grid[r][c]==1: fresh+=1
+    time=0
+    <span class="kw">while</span> q:
+        r,c,t=q.popleft()
+        <span class="kw">for</span> dr,dc <span class="kw">in</span> [(1,0),(-1,0),(0,1),(0,-1)]:
+            nr,nc=r+dr,c+dc
+            <span class="kw">if</span> 0&lt;=nr&lt;R <span class="kw">and</span> 0&lt;=nc&lt;C <span class="kw">and</span> grid[nr][nc]==1:
+                grid[nr][nc]=2; fresh-=1; q.append((nr,nc,t+1)); time=t+1
+    <span class="kw">return</span> time <span class="kw">if</span> fresh==0 <span class="kw">else</span> -1`,
+      cpp:`<span class="cm">// ── #200 Number of Islands (DFS sink) ──</span>
+<span class="kw">void</span> <span class="fn">dfs</span>(<span class="tp">vector</span>&lt;<span class="tp">vector</span>&lt;<span class="tp">char</span>&gt;&gt;&amp; g,<span class="tp">int</span> r,<span class="tp">int</span> c){
+    <span class="kw">if</span>(r&lt;0||c&lt;0||r&gt;=g.size()||c&gt;=g[0].size()||g[r][c]!='1') <span class="kw">return</span>;
+    g[r][c]='0';
+    <span class="fn">dfs</span>(g,r+1,c);<span class="fn">dfs</span>(g,r-1,c);<span class="fn">dfs</span>(g,r,c+1);<span class="fn">dfs</span>(g,r,c-1);
+}
+<span class="tp">int</span> <span class="fn">numIslands</span>(<span class="tp">vector</span>&lt;<span class="tp">vector</span>&lt;<span class="tp">char</span>&gt;&gt;&amp; grid){
+    <span class="tp">int</span> count=0;
+    <span class="kw">for</span>(<span class="tp">int</span> r=0;r&lt;grid.size();r++)
+        <span class="kw">for</span>(<span class="tp">int</span> c=0;c&lt;grid[0].size();c++)
+            <span class="kw">if</span>(grid[r][c]=='1'){<span class="fn">dfs</span>(grid,r,c);count++;}
+    <span class="kw">return</span> count;
+}
+
+<span class="cm">// ── #207 Course Schedule (Kahn's) ──</span>
+<span class="tp">bool</span> <span class="fn">canFinish</span>(<span class="tp">int</span> n,<span class="tp">vector</span>&lt;<span class="tp">vector</span>&lt;<span class="tp">int</span>&gt;&gt;&amp; pre){
+    <span class="tp">vector</span>&lt;<span class="tp">int</span>&gt; ind(n,0); <span class="tp">vector</span>&lt;<span class="tp">vector</span>&lt;<span class="tp">int</span>&gt;&gt; adj(n);
+    <span class="kw">for</span>(<span class="kw">auto</span>&amp; p:pre){adj[p[1]].push_back(p[0]);ind[p[0]]++;}
+    <span class="tp">queue</span>&lt;<span class="tp">int</span>&gt; q;
+    <span class="kw">for</span>(<span class="tp">int</span> i=0;i&lt;n;i++) <span class="kw">if</span>(!ind[i]) q.push(i);
+    <span class="tp">int</span> done=0;
+    <span class="kw">while</span>(!q.empty()){
+        <span class="tp">int</span> u=q.front();q.pop();done++;
+        <span class="kw">for</span>(<span class="tp">int</span> v:adj[u]) <span class="kw">if</span>(--ind[v]==0) q.push(v);
+    }
+    <span class="kw">return</span> done==n;
+}`
+    },
+    bridge:[{concept:"BFS with distance tracking",tag:"BFS Distance",py:`# Python — tuple in queue
+from collections import deque
+q = deque([(r, c, 0)])   # (row, col, time)
+while q:
+    r, c, t = q.popleft()
+    for dr, dc in dirs:
+        q.append((nr, nc, t+1))`,cpp:`// C++ — struct or tuple in queue
+#include <tuple>
+queue<tuple<int,int,int>> q;
+q.push({r, c, 0});
+while(!q.empty()){
+    auto [r,c,t] = q.front(); q.pop();  // C++17
+    for(auto [dr,dc] : dirs)
+        q.push({r+dr, c+dc, t+1});
+}
+// Or use pair + separate dist array:
+vector<vector<int>> dist(R,vector<int>(C,INT_MAX));`,gotcha:"C++17 structured bindings (auto [r,c,t]) make tuple unpacking clean. In C++14 use get<0>(tup), get<1>(tup). Prefer a separate distance matrix over storing dist in the queue \u2014 cleaner and avoids stale entries."},
+      {concept:"Direction arrays for grid problems",tag:"Grid Patterns",py:`# Python
+dirs = [(1,0),(-1,0),(0,1),(0,-1)]
+for dr, dc in dirs:
+    nr, nc = r+dr, c+dc
+    if 0<=nr<R and 0<=nc<C: ...`,cpp:`// C++ — array of pairs or 2D array
+int dirs[4][2] = {{1,0},{-1,0},{0,1},{0,-1}};
+for(auto& d : dirs){
+    int nr=r+d[0], nc=c+d[1];
+    if(nr>=0&&nr<R&&nc>=0&&nc<C) ...
+}
+// Or vector<pair<int,int>>:
+vector<pair<int,int>> dirs={{1,0},{-1,0},{0,1},{0,-1}};`,gotcha:"Both styles work. The int[4][2] array is slightly faster (stack allocation, cache-friendly). In competitive programming, a global const dirs array is idiomatic. Always bounds-check ALL four: nr>=0 && nr<R && nc>=0 && nc<C."}]
+  },
+  {
+    id:"2026-07-14",date:"July 14",week:6,weekTitle:"Graphs & Bitwise",
+    type:"milestone",label:"👑 FINAL DAY — Bitwise + Grand Revision + MILESTONE",phase:4,
+    focus:"Bitwise Mastery + Full Curriculum Integration + 🏆 COMPLETE",
+    summary:"The final day. Four bitwise problems, then a cross-topic synthesis session, then the milestone. You did it.",
+    reqKnowledge:"#136: XOR all nums — paired cancel (a^a=0), single remains. #268: XOR indices 0..n with all nums — missing cancels out. #191 Hamming weight: n&(n-1) clears lowest set bit, count iterations. #190: extract each bit (n>>i)&1, build reverse with OR.",
+    problems:[
+      {lc:"#136",name:"Single Number",tag:"XOR"},
+      {lc:"#190",name:"Reverse Bits",tag:"Bit Manipulation"},
+      {lc:"#191",name:"Number of 1 Bits",tag:"Bit Counting"},
+      {lc:"#268",name:"Missing Number",tag:"XOR / Math"}
+    ],
+    prereqs:[
+      "🏆 Arrays: Two-Pointer, HashMap, Prefix/Suffix, Kadane's, Matrix Rotation — mastered",
+      "🏆 Strings: Frequency Arrays, Sliding Window, Center Expansion, Sorted-Key Bucketing — mastered",
+      "🏆 Linked Lists: Reversal, Dummy Head, Floyd's, Gap Tracking, k-Group — mastered",
+      "🏆 Stacks & Queues: Monotonic Stack, Lazy Transfer, Min Stack, Circular Queue — mastered",
+      "🏆 Binary Search: Standard, Left/Right Bounds, 2D Mapping, Rotated, Gradient — mastered",
+      "🏆 Trees: All 4 Traversals (iterative), Top-Down, Bottom-Up, Mirror — mastered",
+      "🏆 Backtracking: Combinations, Permutations, Subsets, N-Queens, Sudoku — mastered",
+      "🏆 Dynamic Programming: 1D, 2D, Unbounded, 0/1 Knapsack, Interval — mastered",
+      "🏆 Graphs: DFS, BFS, Topo Sort, Multi-Source BFS, Deep Clone — mastered",
+      "🏆 Bitwise: XOR cancellation, Hamming weight, Bit reversal — mastered",
+      "40 days. 80+ problems. Every major pattern. You are interview-ready. 🚀"
+    ],
+    revision:"Final milestone achieved. Review your scratchpad notes from all 40 days. You earned this.",
+    code:{
+      py:`<span class="cm"># ── #136 Single Number (XOR cancellation) ──</span>
+<span class="kw">def</span> <span class="fn">singleNumber</span>(nums):
+    res=0
+    <span class="kw">for</span> n <span class="kw">in</span> nums: res^=n  <span class="cm"># a^a=0, a^0=a</span>
+    <span class="kw">return</span> res
+
+<span class="cm"># ── #268 Missing Number (XOR indices + values) ──</span>
+<span class="kw">def</span> <span class="fn">missingNumber</span>(nums):
+    res=<span class="tp">len</span>(nums)
+    <span class="kw">for</span> i,n <span class="kw">in</span> <span class="tp">enumerate</span>(nums): res^=i^n
+    <span class="kw">return</span> res
+
+<span class="cm"># ── #191 Number of 1 Bits (Hamming weight) ──</span>
+<span class="kw">def</span> <span class="fn">hammingWeight</span>(n):
+    count=0
+    <span class="kw">while</span> n:
+        n &= n-1   <span class="cm"># clears lowest set bit</span>
+        count+=1
+    <span class="kw">return</span> count
+
+<span class="cm"># ── #190 Reverse Bits ──</span>
+<span class="kw">def</span> <span class="fn">reverseBits</span>(n):
+    res=0
+    <span class="kw">for</span> _ <span class="kw">in</span> <span class="tp">range</span>(32):
+        res=(res&lt;&lt;1)|(n&amp;1)  <span class="cm"># shift res left, OR in LSB of n</span>
+        n&gt;&gt;=1
+    <span class="kw">return</span> res
+
+<span class="cm"># ── Key XOR identities ──</span>
+<span class="cm"># a ^ a = 0   (self-cancellation)</span>
+<span class="cm"># a ^ 0 = a   (identity)</span>
+<span class="cm"># XOR is commutative and associative</span>`,
+      cpp:`<span class="cm">// ── #136 Single Number (XOR cancellation) ──</span>
+<span class="tp">int</span> <span class="fn">singleNumber</span>(<span class="tp">vector</span>&lt;<span class="tp">int</span>&gt;&amp; nums){
+    <span class="tp">int</span> res=0;
+    <span class="kw">for</span>(<span class="tp">int</span> n:nums) res^=n;  <span class="cm">// a^a=0, a^0=a</span>
+    <span class="kw">return</span> res;
+}
+
+<span class="cm">// ── #268 Missing Number (XOR) ──</span>
+<span class="tp">int</span> <span class="fn">missingNumber</span>(<span class="tp">vector</span>&lt;<span class="tp">int</span>&gt;&amp; nums){
+    <span class="tp">int</span> res=nums.size();
+    <span class="kw">for</span>(<span class="tp">int</span> i=0;i&lt;nums.size();i++) res^=i^nums[i];
+    <span class="kw">return</span> res;
+}
+
+<span class="cm">// ── #191 Number of 1 Bits (Hamming weight) ──</span>
+<span class="tp">int</span> <span class="fn">hammingWeight</span>(<span class="tp">uint32_t</span> n){
+    <span class="tp">int</span> count=0;
+    <span class="kw">while</span>(n){ n&=n-1; count++; }  <span class="cm">// clears lowest set bit</span>
+    <span class="kw">return</span> count;
+}
+
+<span class="cm">// ── #190 Reverse Bits ──</span>
+<span class="tp">uint32_t</span> <span class="fn">reverseBits</span>(<span class="tp">uint32_t</span> n){
+    <span class="tp">uint32_t</span> res=0;
+    <span class="kw">for</span>(<span class="tp">int</span> i=0;i&lt;32;i++){
+        res=(res&lt;&lt;1)|(n&amp;1);  <span class="cm">// shift res left, OR in LSB</span>
+        n&gt;&gt;=1;
+    }
+    <span class="kw">return</span> res;
+}
+
+<span class="cm">// ── Key XOR identities ──</span>
+<span class="cm">// a ^ a = 0   (self-cancellation)</span>
+<span class="cm">// a ^ 0 = a   (identity element)</span>
+<span class="cm">// XOR is commutative and associative</span>`
+    },
+    bridge:[{concept:"Bitwise XOR in C++ vs Python",tag:"Bitwise Ops",py:`# Python — arbitrary precision ints
+result = 0
+for n in nums: result ^= n
+# XOR identities:
+# a ^ a = 0, a ^ 0 = a
+# Commutative and associative
+-1 ^ 0  # → -1 (sign bit XOR'd)`,cpp:`// C++ — fixed-width types matter!
+int result = 0;
+for (int n : nums) result ^= n;
+// For bit reversal — use uint32_t (unsigned):
+uint32_t reverseBits(uint32_t n) {
+    uint32_t res=0;
+    for(int i=0;i<32;i++){
+        res=(res<<1)|(n&1);
+        n>>=1;
+    }
+    return res;
+}`,gotcha:"Right-shifting a SIGNED negative integer in C++ is implementation-defined (arithmetic or logical shift). Always use unsigned types (uint32_t) for bit manipulation problems. Python's >> is always arithmetic. Use uint32_t for #190 Reverse Bits, not int."},
+      {concept:"n & (n-1) \u2014 clear lowest set bit",tag:"Bit Tricks",py:`# Python — Hamming weight
+count = 0
+while n:
+    n &= n-1   # clears lowest set bit
+    count += 1
+# Alternative: bin(n).count('1')
+# Or: bin(n).count('1')  # O(log n)`,cpp:`// C++ — same trick, also __builtin_popcount
+int hammingWeight(uint32_t n) {
+    int count = 0;
+    while(n){ n &= n-1; count++; }
+    return count;
+}
+// Compiler intrinsic (fastest on modern CPUs):
+return __builtin_popcount(n);  // GCC
+// C++20: #include <bit>
+return popcount(n);  // standard`,gotcha:"n & (n-1) clears the LOWEST set bit because subtracting 1 flips all bits from the lowest set bit downward. Proven: for n = ...1 0...0, n-1 = ...0 1...1, so n & (n-1) = ...0 0...0. C++ __builtin_popcount is a single CPU instruction on x86 \u2014 far faster than the loop."}]
+  }
+];
+
+/* ════════════════════════════════════
+   STORAGE ENGINE
+════════════════════════════════════ */
+const STORAGE_KEY='dsaTimelineV1';
+function loadState(){try{const r=localStorage.getItem(STORAGE_KEY);const s=r?JSON.parse(r):{};return{completed:s.completed||{},checks:s.checks||{},notes:s.notes||{},bridge:s.bridge||{}}}catch(e){return{completed:{},checks:{},notes:{},bridge:{}}}}
+function saveState(s){try{localStorage.setItem(STORAGE_KEY,JSON.stringify(s))}catch(e){}}
+
+let STATE=loadState();
+let currentDayId=null;
+let activeLang=localStorage.getItem('dsaLang')||'py';
+function setLang(lang){activeLang=lang;localStorage.setItem('dsaLang',lang);}
+
+function getDayIndex(id){return TIMELINE_MATRIX.findIndex(d=>d.id===id)}
+function getDayById(id){return TIMELINE_MATRIX.find(d=>d.id===id)}
+function getWeekInfo(wNum){const days=TIMELINE_MATRIX.filter(d=>d.week===wNum);const done=days.filter(d=>STATE.completed[d.id]).length;return{total:days.length,done}}
+function getGlobalStats(){const total=TIMELINE_MATRIX.length;const done=Object.values(STATE.completed).filter(Boolean).length;return{total,done,pct:Math.round((done/total)*100)}}
+
+function updateHeaderStats(){
+  const{total,done,pct}=getGlobalStats();
+  document.getElementById('stat-days').textContent=`${done} / ${total} days`;
+  document.getElementById('stat-pct').textContent=`${pct}%`;
+  document.getElementById('global-progress').style.width=pct+'%';
+}
+
+/* ════════════════════════════════════
+   RENDER CALENDAR
+════════════════════════════════════ */
+function renderCalendar(){
+  const pane=document.getElementById('calendar-pane');
+  pane.innerHTML='';
+  const weeks=[...new Set(TIMELINE_MATRIX.map(d=>d.week))];
+  const weekNames={1:'Arrays',2:'Strings + Linked Lists',3:'Linked Lists + Stacks/Queues',4:'Binary Search + Trees',5:'Backtracking + DP',6:'DP + Graphs + Bitwise'};
+  weeks.forEach(wNum=>{
+    const days=TIMELINE_MATRIX.filter(d=>d.week===wNum);
+    const{done,total}=getWeekInfo(wNum);
+    const wb=document.createElement('div');wb.className='week-block';
+    const wh=document.createElement('div');wh.className='week-header';
+    wh.innerHTML=`<span class="week-badge">WK ${wNum}</span><span class="week-title">${weekNames[wNum]||''}</span><span class="week-completion">${done}/${total}</span>`;
+    const grid=document.createElement('div');grid.className='week-grid';
+    days.forEach(day=>{
+      const isCompleted=!!STATE.completed[day.id];
+      const isActive=day.id===currentDayId;
+      const card=document.createElement('div');
+      card.className='day-card'+(isActive?' active':'')+(isCompleted?' completed':'')+(day.type==='prereq'?' prereq':'')+(day.type==='revision'?' revision':'')+(day.type==='milestone'?' milestone':'');
+      card.innerHTML=`<div class="day-num">${day.date}</div><div class="day-label">${day.label}</div><div class="day-footer"><div class="day-status-dot"></div><div class="day-check">${isCompleted?'✓':''}</div></div>`;
+      card.addEventListener('click',()=>selectDay(day.id));
+      grid.appendChild(card);
+    });
+    wb.appendChild(wh);wb.appendChild(grid);pane.appendChild(wb);
+  });
+}
+
+/* ════════════════════════════════════
+   RENDER FOCUS PANEL
+════════════════════════════════════ */
+function renderFocusPanel(dayId){
+  const day=getDayById(dayId);
+  if(!day)return;
+  const pane=document.getElementById('focus-pane');
+  const idx=getDayIndex(dayId);
+  const isCompleted=!!STATE.completed[dayId];
+  const hasPrev=idx>0, hasNext=idx<TIMELINE_MATRIX.length-1;
+
+  const phaseMap={
+    1:['phase-1','◈ PHASE 1 — PREREQUISITE STUDY'],
+    2:['phase-2','◈ PHASE 2 — TARGETED PROBLEM SOLVING'],
+    3:['phase-3','◈ PHASE 3 — TOPIC COMPLETION REVISION'],
+    4:['phase-m','👑 FINAL MILESTONE'],
+    5:['phase-5','⚡ PHASE 5 — C++ LANGUAGE BRIDGING']
+  };
+  const[phaseClass,phaseLabel]=phaseMap[day.phase]||phaseMap[2];
+  let b=`<div class="phase-badge ${phaseClass}">${phaseLabel}</div>`;
+
+  if(day.summary){
+    b+=`<div class="section-card"><div class="section-card-header"><span class="section-icon">💡</span><span class="section-title">Day Overview</span></div><div class="section-body"><p style="font-size:12.5px;color:var(--text-secondary);line-height:1.6">${day.summary}</p></div></div>`;
+  }
+
+  if(day.prereqs&&day.prereqs.length>0){
+    const lid=dayId+'_prereq';
+    const sc=STATE.checks[lid]||{};
+    const icon=day.type==='prereq'?'📚':day.type==='milestone'?'🏆':'🔄';
+    const stitle=day.type==='prereq'?'Study Checklist':day.type==='milestone'?'Achievements Unlocked':'Revision Checklist';
+    const items=day.prereqs.map((item,i)=>{
+      const done=!!sc[i];
+      return`<div class="check-item${done?' done':''}" onclick="toggleCheck('${lid}',${i})"><div class="check-box"></div><span class="check-text">${item}</span></div>`;
+    }).join('');
+    b+=`<div class="section-card"><div class="section-card-header"><span class="section-icon">${icon}</span><span class="section-title">${stitle}</span></div><div class="section-body"><div class="checklist">${items}</div></div></div>`;
+  }
+
+  if(day.reqKnowledge){
+    b+=`<div class="section-card"><div class="section-card-header"><span class="section-icon">🔑</span><span class="section-title">Required Knowledge</span></div><div class="section-body"><div class="req-knowledge"><div class="req-label">▸ PREREQUISITE CONCEPT</div>${day.reqKnowledge}</div></div></div>`;
+  }
+
+  if(day.problems&&day.problems.length>0){
+    const lid=dayId+'_problems';
+    const sc=STATE.checks[lid]||{};
+    const probs=day.problems.map((p,i)=>{
+      const done=!!sc[i];
+      return`<div class="problem-item${done?' done':''}" onclick="toggleCheck('${lid}',${i})"><div class="p-check">${done?'✓':p.lc}</div><span class="problem-name">${p.name}</span><span class="problem-tag">${p.tag}</span></div>`;
+    }).join('');
+    b+=`<div class="section-card"><div class="section-card-header"><span class="section-icon">⚔️</span><span class="section-title">Targeted Problem Roster</span></div><div class="section-body"><div class="problem-list">${probs}</div></div></div>`;
+  }
+
+  if(day.benchmarks&&day.benchmarks.length>0){
+    const bms=day.benchmarks.map(bm=>`<div style="font-size:11.5px;color:var(--text-secondary);padding:5px 0;border-bottom:1px solid var(--border);line-height:1.5">▸ ${bm}</div>`).join('');
+    b+=`<div class="section-card"><div class="section-card-header"><span class="section-icon">🏋️</span><span class="section-title">Mastery Benchmarks</span></div><div class="section-body">${bms}</div></div>`;
+  }
+
+  // Code panel (Python + C++)
+  if(day.code&&(day.code.py||day.code.cpp)){
+    const pyActive=activeLang==='py'?'active':'';
+    const cppActive=activeLang==='cpp'?'active':'';
+    b+=`<div class="code-panel">
+      <div class="code-panel-header">
+        <button class="lang-tab py ${pyActive}" onclick="switchLang('py','${dayId}')">🐍 Python</button>
+        <button class="lang-tab cpp ${cppActive}" onclick="switchLang('cpp','${dayId}')">⚡ C++</button>
+        <span class="code-lang-label">KEY PATTERNS &amp; IMPLEMENTATIONS</span>
+      </div>
+      <div class="code-block ${pyActive}" id="code-py-${dayId}"><pre>${day.code.py||''}</pre></div>
+      <div class="code-block ${cppActive}" id="code-cpp-${dayId}"><pre>${day.code.cpp||''}</pre></div>
+    </div>`;
+  }
+
+  // ── C++ Language Bridge Panel ──
+  if(day.bridge&&day.bridge.length>0){
+    const bridgeKey=dayId+'_bridge';
+    const bs=STATE.bridge[bridgeKey]||{};
+    const nailed=Object.values(bs).filter(v=>v==='nailed').length;
+    const familiar=Object.values(bs).filter(v=>v==='familiar').length;
+    const total=day.bridge.length;
+    const pct=total?Math.round((nailed/total)*100):0;
+    let cards=day.bridge.map((c,i)=>{
+      const state=bs[i]||'unseen';
+      const sU=state==='unseen'?'active':'';
+      const sF=state==='familiar'?'active':'';
+      const sN=state==='nailed'?'active':'';
+      const cardBorder=state==='nailed'?'border-color:rgba(16,185,129,.4);background:rgba(16,185,129,.03)':state==='familiar'?'border-color:rgba(245,158,11,.3);background:rgba(245,158,11,.02)':'';
+      return`<div class="bridge-card" style="${cardBorder}">
+        <div class="bridge-top">
+          <div class="bridge-concept">${c.concept}</div>
+          <span class="bridge-tag">${c.tag}</span>
+          <div class="bridge-states">
+            <button class="state-btn unseen ${sU}" onclick="setBridgeState('${bridgeKey}',${i},'unseen','${dayId}')" title="Not yet studied">?</button>
+            <button class="state-btn familiar ${sF}" onclick="setBridgeState('${bridgeKey}',${i},'familiar','${dayId}')" title="Familiar">~</button>
+            <button class="state-btn nailed ${sN}" onclick="setBridgeState('${bridgeKey}',${i},'nailed','${dayId}')" title="Nailed it">✓</button>
+          </div>
+        </div>
+        <div class="bridge-compare">
+          <div>
+            <div class="bridge-col-label python">🐍 Python / Your Base</div>
+            <div class="bridge-code python"><pre>${c.py}</pre></div>
+          </div>
+          <div>
+            <div class="bridge-col-label cpp">⚡ Modern C++</div>
+            <div class="bridge-code cpp"><pre>${c.cpp}</pre></div>
+          </div>
+        </div>
+        <div class="bridge-gotcha"><div class="bridge-gotcha-label">⚠ GOTCHA</div>${c.gotcha}</div>
+      </div>`;
+    }).join('');
+    b+=`<div class="bridge-panel">
+      <div class="bridge-panel-header">
+        <span class="section-icon">⚡</span>
+        <span class="bridge-panel-title">C++ Language Bridge</span>
+        <div class="bridge-progress-wrap"><div class="bridge-progress-fill" style="width:${pct}%"></div></div>
+        <span class="bridge-stats-label">${nailed}/${total} nailed · ${familiar} familiar</span>
+        <div class="bridge-legend">
+          <span class="bl-label"><span class="bl-dot unseen"></span>unseen</span>
+          <span class="bl-label"><span class="bl-dot familiar"></span>familiar</span>
+          <span class="bl-label"><span class="bl-dot nailed"></span>nailed</span>
+        </div>
+      </div>
+      ${cards}
+    </div>`;
+  }
+
+  if(day.revision){
+    const bc=day.type==='prereq'?'cyan-box':day.type==='milestone'?'gold-box':'amber-box';
+    b+=`<div class="info-box ${bc}">📝 ${day.revision}</div>`;
+  }
+
+  if(isCompleted){
+    b+=`<div style="display:flex;gap:8px;align-items:stretch">
+      <button class="complete-btn done-state" style="flex:1;cursor:default">✅ DAY COMPLETED</button>
+      <button class="nav-btn unmark-btn" onclick="toggleDayComplete('${dayId}')" title="Unmark as completed">↩ UNMARK</button>
+    </div>`;
+  } else {
+    b+=`<button class="complete-btn pending" onclick="toggleDayComplete('${dayId}')">⚡ MARK DAY AS COMPLETED</button>`;
+  }
+
+  const note=STATE.notes[dayId]||'';
+  b+=`<div class="section-card"><div class="section-card-header"><span class="section-icon">✏️</span><span class="section-title">Daily Revision Scratchpad</span></div><div class="section-body"><textarea class="scratchpad" placeholder="// Write edge cases, approach notes, complexity analysis, interview tips..." oninput="saveNote('${dayId}',this.value)">${note}</textarea></div></div>`;
+
+  pane.innerHTML=`
+    <div class="focus-header">
+      <div class="focus-date-badge">📅 ${day.date} — Week ${day.week} of 6</div>
+      <div class="focus-day-title">${day.label}</div>
+      <div class="focus-nav">
+        <button class="nav-btn" onclick="navigateDay(-1)" ${!hasPrev?'disabled':''}>← PREV</button>
+        <button class="nav-btn" onclick="navigateDay(1)" ${!hasNext?'disabled':''}>NEXT →</button>
+      </div>
+    </div>
+    <div class="focus-body anim-in">${b}</div>`;
+}
+
+/* ════════════════════════════════════
+   INTERACTIONS
+════════════════════════════════════ */
+function switchLang(lang, dayId){
+  setLang(lang);
+  document.querySelectorAll('.lang-tab').forEach(t=>{
+    t.classList.toggle('active', t.classList.contains(lang));
+  });
+  const py=document.getElementById('code-py-'+dayId);
+  const cpp=document.getElementById('code-cpp-'+dayId);
+  if(py)  py.classList.toggle('active', lang==='py');
+  if(cpp) cpp.classList.toggle('active', lang==='cpp');
+}
+
+function setBridgeState(bridgeKey, idx, newState, dayId){
+  if(!STATE.bridge[bridgeKey]) STATE.bridge[bridgeKey]={};
+  // 3-state cycle: unseen → familiar → nailed → unseen
+  const cur=STATE.bridge[bridgeKey][idx]||'unseen';
+  if(newState===cur){
+    // clicking same state cycles forward
+    const cycle={unseen:'familiar',familiar:'nailed',nailed:'unseen'};
+    STATE.bridge[bridgeKey][idx]=cycle[cur];
+  } else {
+    STATE.bridge[bridgeKey][idx]=newState;
+  }
+  saveState(STATE);
+  updateBridgeStat();
+  renderFocusPanel(dayId);
+}
+
+function updateBridgeStat(){
+  let nailed=0;
+  Object.values(STATE.bridge).forEach(dayBridge=>{
+    Object.values(dayBridge).forEach(v=>{ if(v==='nailed') nailed++; });
+  });
+  const el=document.getElementById('bridge-stat');
+  if(el) el.textContent=nailed+' nailed';
+}
+
+function selectDay(dayId){
+  currentDayId=dayId;
+  document.getElementById('empty-state')?.remove();
+  renderFocusPanel(dayId);
+  renderCalendar();
+  setTimeout(()=>{const a=document.querySelector('.day-card.active');if(a)a.scrollIntoView({behavior:'smooth',block:'nearest'})},50);
+}
+
+function navigateDay(delta){
+  const ni=getDayIndex(currentDayId)+delta;
+  if(ni>=0&&ni<TIMELINE_MATRIX.length){
+    selectDay(TIMELINE_MATRIX[ni].id);
+    document.getElementById('focus-pane').scrollTo({top:0,behavior:'smooth'});
+  }
+}
+
+function toggleCheck(lid,idx){
+  if(!STATE.checks[lid])STATE.checks[lid]={};
+  STATE.checks[lid][idx]=!STATE.checks[lid][idx];
+  saveState(STATE);
+  renderFocusPanel(currentDayId);
+}
+
+function saveNote(dayId,val){
+  STATE.notes[dayId]=val;
+  saveState(STATE);
+}
+
+function toggleDayComplete(dayId){
+  const wasCompleted=!!STATE.completed[dayId];
+  STATE.completed[dayId]=!wasCompleted;
+  saveState(STATE);
+  if(!wasCompleted)fireConfetti();
+  renderCalendar();
+  renderFocusPanel(dayId);
+  updateHeaderStats();
+  updateBridgeStat();
+}
+
+function fireConfetti(){
+  const colors=['#7c3aed','#8b5cf6','#10b981','#f59e0b','#06b6d4','#f43f5e'];
+  const opts={particleCount:120,spread:90,colors};
+  confetti({...opts,angle:60,origin:{x:.1,y:.55}});
+  confetti({...opts,angle:120,origin:{x:.9,y:.55}});
+  setTimeout(()=>confetti({...opts,particleCount:60,origin:{y:.4}}),200);
+}
+
+/* ════════════════════════════════════
+   BOOTSTRAP
+════════════════════════════════════ */
+function init(){
+  renderCalendar();
+  updateHeaderStats();
+  updateBridgeStat();
+  const today=new Date();
+  const todayId=`${today.getFullYear()}-${String(today.getMonth()+1).padStart(2,'0')}-${String(today.getDate()).padStart(2,'0')}`;
+  const todayDay=getDayById(todayId);
+  if(todayDay){
+    selectDay(todayId);
+    setTimeout(()=>{const a=document.querySelector('.day-card.active');if(a)a.scrollIntoView({behavior:'smooth',block:'center'})},100);
+  }
+}
+init();
+</script>
+</body>
+</html>
