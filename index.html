@@ -3,24 +3,356 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>My Micro-Projects Hub</title>
+    <title>Core Terminal | Micro-Apps Hub</title>
     <style>
-        body { font-family: system-ui, sans-serif; max-width: 600px; margin: 40px auto; padding: 0 20px; background: #f9f9f9; color: #333; }
-        h1 { border-bottom: 2px solid #eee; padding-bottom: 10px; }
-        ul { list-style: none; padding: 0; }
-        li { margin: 10px 0; background: white; padding: 15px; border-radius: 6px; box-shadow: 0 2px 4px rgba(0,0,0,0.05); }
-        a { text-decoration: none; color: #0066cc; font-weight: bold; font-size: 1.1rem; }
-        a:hover { color: #004499; }
+        :root {
+            --bg-color: #0d1117;
+            --card-bg: rgba(22, 27, 34, 0.7);
+            --border-color: #30363d;
+            --text-main: #c9d1d9;
+            --text-muted: #8b949e;
+            --accent-glow: rgba(56, 189, 248, 0.15);
+            
+            /* App Accent Colors */
+            --p1-color: #4ade80; /* Emerald green */
+            --p2-color: #f59e0b; /* Amber LeetCode orange */
+            --p3-color: #38bdf8; /* Cyan blue */
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'SF Pro Display', -apple-system, 'Segoe UI', Roboto, Helvetica, sans-serif;
+            background-color: var(--bg-color);
+            background-image: 
+                radial-gradient(circle at 10% 20%, rgba(56, 189, 248, 0.03) 0%, transparent 40%),
+                radial-gradient(circle at 90% 80%, rgba(74, 222, 128, 0.03) 0%, transparent 40%);
+            color: var(--text-main);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 40px 20px;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 800px;
+        }
+
+        /* Header Console */
+        header {
+            margin-bottom: 40px;
+            border-left: 3px solid #38bdf8;
+            padding-left: 20px;
+        }
+
+        header h1 {
+            font-size: 2.2rem;
+            font-weight: 800;
+            letter-spacing: -0.5px;
+            color: #ffffff;
+            margin-bottom: 6px;
+            background: linear-gradient(to right, #fff, var(--text-muted));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .subtitle {
+            font-family: monospace;
+            color: var(--text-muted);
+            font-size: 0.95rem;
+        }
+
+        .pulse-dot {
+            display: inline-block;
+            width: 8px;
+            height: 8px;
+            background-color: #4ade80;
+            border-radius: 50%;
+            margin-right: 6px;
+            box-shadow: 0 0 10px #4ade80;
+            animation: pulse 2s infinite;
+        }
+
+        /* Grid Layout */
+        .apps-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 20px;
+        }
+
+        /* App Card Styles */
+        .app-card {
+            text-decoration: none;
+            color: inherit;
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 16px;
+            padding: 24px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            position: relative;
+            overflow: hidden;
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        /* Card Hover Effects */
+        .app-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(800px circle at var(--x, 0px) var(--y, 0px), rgba(255,255,255,0.06), transparent 40%);
+            z-index: 1;
+            pointer-events: none;
+        }
+
+        .app-card:hover {
+            transform: translateY(-4px);
+            border-color: var(--app-color);
+            box-shadow: 0 12px 30px rgba(0, 0, 0, 0.4), 0 0 20px var(--accent-glow);
+        }
+
+        /* Customizing colors per card dynamically via CSS variables */
+        .app-card.p1 { --app-color: var(--p1-color); --accent-glow: rgba(74, 222, 128, 0.1); }
+        .app-card.p2 { --app-color: var(--p2-color); --accent-glow: rgba(245, 158, 11, 0.1); }
+        .app-card.p3 { --app-color: var(--p3-color); --accent-glow: rgba(56, 189, 248, 0.1); }
+
+        /* Left Content Info */
+        .app-info {
+            z-index: 2;
+            flex-grow: 1;
+            padding-right: 20px;
+        }
+
+        .app-meta {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 8px;
+        }
+
+        .app-badge {
+            font-family: monospace;
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            padding: 3px 8px;
+            border-radius: 20px;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            color: var(--app-color);
+            font-weight: 600;
+        }
+
+        .app-title {
+            font-size: 1.35rem;
+            font-weight: 700;
+            color: #ffffff;
+            transition: color 0.3s;
+        }
+
+        .app-card:hover .app-title {
+            color: var(--app-color);
+        }
+
+        .app-desc {
+            font-size: 0.95rem;
+            color: var(--text-muted);
+            margin-top: 6px;
+            line-height: 1.4;
+        }
+
+        /* Micro UI Visual Elements (Progress bars, Status trackers) */
+        .app-visual {
+            margin-top: 12px;
+            width: 100%;
+            max-width: 280px;
+        }
+        
+        .progress-bar-bg {
+            background: rgba(255, 255, 255, 0.05);
+            height: 6px;
+            border-radius: 4px;
+            overflow: hidden;
+        }
+
+        .progress-bar-fill {
+            background: linear-gradient(90deg, var(--app-color), #ffffff);
+            height: 100%;
+            border-radius: 4px;
+            transition: width 1s ease-in-out;
+        }
+
+        .visual-text {
+            font-family: monospace;
+            font-size: 0.75rem;
+            color: var(--text-muted);
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 4px;
+        }
+
+        /* Right Icon Arrow */
+        .app-action {
+            z-index: 2;
+            width: 48px;
+            height: 48px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid var(--border-color);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s;
+            flex-shrink: 0;
+        }
+
+        .app-action svg {
+            width: 18px;
+            height: 18px;
+            fill: none;
+            stroke: var(--text-muted);
+            stroke-width: 2.5;
+            transition: all 0.3s;
+        }
+
+        .app-card:hover .app-action {
+            background: var(--app-color);
+            border-color: var(--app-color);
+            transform: scale(1.05);
+        }
+
+        .app-card:hover .app-action svg {
+            stroke: var(--bg-color);
+            transform: translateX(2px);
+        }
+
+        /* Animations */
+        @keyframes pulse {
+            0% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(74, 222, 128, 0.5); }
+            70% { transform: scale(1); box-shadow: 0 0 0 8px rgba(74, 222, 128, 0); }
+            100% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(74, 222, 128, 0); }
+        }
+
+        @media (max-width: 600px) {
+            body { padding: 20px 12px; }
+            .app-card { flex-direction: column; align-items: flex-start; gap: 20px; }
+            .app-action { align-self: flex-end; }
+            .app-visual { max-width: 100%; }
+        }
     </style>
 </head>
 <body>
 
-    <h1>My Small Projects & Tools</h1>
-    <ul>
-        <li><a href="./GPA Sem 4/">🚀 Project One</a> - A brief description of what this small task does.</li>
-        <li><a href="./Leetcode Target/">🛠️ Project Two</a> - Another cool utility tool.</li>
-        <li><a href="./TimeTable/">🛠️ Project Two</a> - Another cool utility tool.</li>
-    </ul>
+    <div class="container">
+        <header>
+            <h1>System Command Deck</h1>
+            <div class="subtitle">
+                <span class="pulse-dot"></span>
+                <span>STATUS: ACTIVE // USER: DEVELOPER</span>
+            </div>
+        </header>
 
+        <main class="apps-grid">
+
+            <!-- PROJECT 1: GPA CALC -->
+            <a href="./GPA Sem 4/" class="app-card p1">
+                <div class="app-info">
+                    <div class="app-meta">
+                        <span class="app-badge">Academic Engine</span>
+                    </div>
+                    <div class="app-title">GPA Calculator (Sem 4)</div>
+                    <div class="app-desc">Interactive credit-weighted performance metrics module tailored specifically for Semester 4 curriculum. Evaluates targets effortlessly.</div>
+                    
+                    <div class="app-visual">
+                        <div class="visual-text">
+                            <span>Target Tracker</span>
+                            <span>9.5+ SGPA</span>
+                        </div>
+                        <div class="progress-bar-bg">
+                            <div class="progress-bar-fill" style="width: 95%;"></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="app-action">
+                    <svg viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+                </div>
+            </a>
+
+            <!-- PROJECT 2: LEETCODE TRACKER -->
+            <a href="./Leetcode Target/" class="app-card p2">
+                <div class="app-info">
+                    <div class="app-meta">
+                        <span class="app-badge">Algorithms</span>
+                    </div>
+                    <div class="app-title">LeetCode Analytics Tracker</div>
+                    <div class="app-desc">Algorithmic metrics dashboard. Keeps a strict inventory of absolute problems solved, tracks dynamic targets, and generates next optimal problems to conquer.</div>
+                    
+                    <div class="app-visual">
+                        <div class="visual-text">
+                            <span>Queue Status</span>
+                            <span>Optimal Path Active</span>
+                        </div>
+                        <div class="progress-bar-bg">
+                            <div class="progress-bar-fill" style="width: 70%;"></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="app-action">
+                    <svg viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+                </div>
+            </a>
+
+            <!-- PROJECT 3: DSA TIMETABLE -->
+            <a href="./TimeTable/" class="app-card p3">
+                <div class="app-info">
+                    <div class="app-meta">
+                        <span class="app-badge">Sprint Schedule</span>
+                    </div>
+                    <div class="app-title">Data Structures & Algos Timetable</div>
+                    <div class="app-desc">High-intensity runtime planner maps out focused daily objectives from June 5 to July 14. Designed to monitor layout scaling for master-level DSA foundations.</div>
+                    
+                    <div class="app-visual">
+                        <div class="visual-text">
+                            <span>June 05 - July 14</span>
+                            <span>40 Day Sprint</span>
+                        </div>
+                        <div class="progress-bar-bg">
+                            <div class="progress-bar-fill" style="width: 100%;"></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="app-action">
+                    <svg viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+                </div>
+            </a>
+
+        </main>
+    </div>
+
+    <!-- Mouse Tracking Background Interaction Script -->
+    <script>
+        const cards = document.querySelectorAll('.app-card');
+        cards.forEach(card => {
+            card.addEventListener('mousemove', e => {
+                const rect = card.getBoundingClientRect();
+                const x = e.clientX - rect.left;
+                const y = e.clientY - rect.top;
+                card.style.setProperty('--x', `${x}px`);
+                card.style.setProperty('--y', `${y}px`);
+            });
+        });
+    </script>
 </body>
 </html>
