@@ -1,0 +1,863 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>7-Week DSA Quest Dashboard</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700&family=Syne:wght@400;600;700;800&display=swap" rel="stylesheet"/>
+<style>
+:root{--bg-base:#0a0b0f;--bg-card:#0f1117;--bg-elevated:#151822;--border:#1e2130;--border-bright:#2a2f45;--text-primary:#e8eaf6;--text-muted:#6b7280;--emerald:#10b981;--amber:#f59e0b;--violet:#8b5cf6;--indigo:#6366f1;--cyan:#06b6d4;--rose:#f43f5e;}
+*{box-sizing:border-box;margin:0;padding:0;}html{scroll-behavior:smooth;}
+body{font-family:'Syne',sans-serif;background:var(--bg-base);color:var(--text-primary);min-height:100vh;background-image:radial-gradient(ellipse at 20% 0%,rgba(99,102,241,.07) 0%,transparent 50%),radial-gradient(ellipse at 80% 0%,rgba(139,92,246,.05) 0%,transparent 50%);}
+code,.mono{font-family:'JetBrains Mono',monospace;}
+::-webkit-scrollbar{width:6px;height:6px;}::-webkit-scrollbar-track{background:var(--bg-base);}::-webkit-scrollbar-thumb{background:var(--border-bright);border-radius:3px;}
+#main-header{position:sticky;top:0;z-index:100;background:rgba(10,11,15,.92);backdrop-filter:blur(20px);border-bottom:1px solid var(--border);}
+.xp-bar-outer{height:6px;border-radius:3px;background:var(--bg-elevated);overflow:hidden;}
+.xp-bar-inner{height:100%;border-radius:3px;background:linear-gradient(90deg,var(--violet),var(--indigo),var(--cyan));transition:width .6s cubic-bezier(.34,1.56,.64,1);box-shadow:0 0 8px rgba(139,92,246,.6);}
+.nav-tab{cursor:pointer;padding:10px 18px;border-bottom:2px solid transparent;font-size:13px;font-weight:700;color:var(--text-muted);transition:all .2s;font-family:'JetBrains Mono',monospace;white-space:nowrap;background:none;border-top:none;border-left:none;border-right:none;}
+.nav-tab:hover{color:var(--text-primary);}.nav-tab.active{color:var(--violet);border-bottom-color:var(--violet);}
+.topic-tab{cursor:pointer;white-space:nowrap;padding:8px 14px;border-radius:8px;font-size:12px;font-weight:600;color:var(--text-muted);border:1px solid transparent;transition:all .2s;font-family:'JetBrains Mono',monospace;}
+.topic-tab:hover{color:var(--text-primary);background:var(--bg-elevated);}.topic-tab.active{color:var(--violet);border-color:var(--violet);background:rgba(139,92,246,.1);}
+.q-card{background:var(--bg-card);border:1px solid var(--border);border-radius:12px;transition:border-color .3s,box-shadow .3s,transform .2s;overflow:hidden;}
+.q-card:hover{border-color:var(--border-bright);transform:translateY(-1px);}
+.q-card.state-working{border-color:rgba(245,158,11,.4);box-shadow:0 0 18px rgba(245,158,11,.07);}
+.q-card.state-completed{border-color:rgba(16,185,129,.4);box-shadow:0 0 18px rgba(16,185,129,.07);}
+.state-btn{font-size:11px;font-weight:600;padding:4px 10px;border-radius:6px;cursor:pointer;border:1px solid transparent;transition:all .2s;font-family:'JetBrains Mono',monospace;}
+.state-btn-unattempted{color:var(--text-muted);border-color:var(--border);background:var(--bg-elevated);}
+.state-btn-unattempted.active,.state-btn-unattempted:hover{color:var(--text-primary);border-color:var(--border-bright);background:#1e2130;}
+.state-btn-working{color:var(--amber);border-color:rgba(245,158,11,.3);background:rgba(245,158,11,.05);}
+.state-btn-working.active,.state-btn-working:hover{background:rgba(245,158,11,.15);border-color:var(--amber);}
+.state-btn-completed{color:var(--emerald);border-color:rgba(16,185,129,.3);background:rgba(16,185,129,.05);}
+.state-btn-completed.active,.state-btn-completed:hover{background:rgba(16,185,129,.15);border-color:var(--emerald);}
+.diff-easy{color:#34d399;background:rgba(52,211,153,.1);border:1px solid rgba(52,211,153,.2);}
+.diff-medium{color:#fbbf24;background:rgba(251,191,36,.1);border:1px solid rgba(251,191,36,.2);}
+.diff-hard{color:#f87171;background:rgba(248,113,113,.1);border:1px solid rgba(248,113,113,.2);}
+.hint-block{border-left:2px solid var(--border-bright);padding:10px 14px;background:var(--bg-elevated);border-radius:0 8px 8px 0;margin-top:8px;font-size:12px;line-height:1.6;color:#9ca3af;font-family:'JetBrains Mono',monospace;animation:fadeIn .3s ease;}
+.code-tab{cursor:pointer;padding:6px 14px;border-radius:6px 6px 0 0;font-size:12px;font-weight:600;font-family:'JetBrains Mono',monospace;transition:all .2s;border:none;}
+.code-tab.active{background:var(--violet);color:#fff;}.code-tab:not(.active){color:var(--text-muted);background:var(--bg-base);}
+pre.code-block{background:var(--bg-base);border:1px solid var(--border);border-radius:0 8px 8px 8px;padding:14px;font-size:11px;overflow-x:auto;line-height:1.7;color:#a5b4fc;font-family:'JetBrains Mono',monospace;white-space:pre;}
+.badge-card{background:var(--bg-card);border:1px solid var(--border);border-radius:14px;padding:20px 12px;text-align:center;transition:all .4s;position:relative;overflow:hidden;}
+.badge-card.locked{opacity:.28;filter:grayscale(1);}
+.badge-card.unlocked{border-color:var(--violet);box-shadow:0 0 24px rgba(139,92,246,.35),inset 0 0 30px rgba(139,92,246,.05);animation:badgeGlow 3s ease-in-out infinite;}
+@keyframes badgeGlow{0%,100%{box-shadow:0 0 24px rgba(139,92,246,.35)}50%{box-shadow:0 0 42px rgba(139,92,246,.6)}}
+.badge-unlock-anim{animation:badgeUnlock .65s cubic-bezier(.34,1.56,.64,1)!important;}
+@keyframes badgeUnlock{from{transform:scale(.4) rotate(-15deg);opacity:0}to{transform:scale(1) rotate(0);opacity:1}}
+.prog-bar-outer{height:4px;background:var(--border);border-radius:2px;overflow:hidden;}
+.prog-bar-inner{height:100%;border-radius:2px;transition:width .5s ease;}
+.notes-ta{width:100%;background:var(--bg-base);border:1px solid var(--border);border-radius:8px;padding:10px 12px;color:var(--text-primary);font-family:'JetBrains Mono',monospace;font-size:12px;resize:vertical;min-height:80px;transition:border-color .2s;line-height:1.6;}
+.notes-ta:focus{outline:none;border-color:var(--violet);box-shadow:0 0 0 3px rgba(139,92,246,.1);}
+.level-pill{background:linear-gradient(135deg,var(--violet),var(--indigo));border-radius:20px;padding:2px 10px;font-size:11px;font-weight:700;letter-spacing:.05em;font-family:'JetBrains Mono',monospace;}
+.section-heading{font-size:11px;font-weight:700;letter-spacing:.12em;color:var(--text-muted);text-transform:uppercase;font-family:'JetBrains Mono',monospace;}
+.save-btn{font-size:11px;font-weight:600;padding:5px 12px;border-radius:6px;cursor:pointer;border:1px solid var(--violet);color:var(--violet);background:rgba(139,92,246,.1);transition:all .2s;font-family:'JetBrains Mono',monospace;}
+.save-btn.saved{border-color:var(--emerald);color:var(--emerald);background:rgba(16,185,129,.1);}
+.collapsible-content{overflow:hidden;transition:max-height .4s ease,opacity .3s ease;max-height:0;opacity:0;}
+.collapsible-content.open{max-height:3000px;opacity:1;}
+.lc-num{font-family:'JetBrains Mono',monospace;font-size:11px;font-weight:700;color:var(--cyan);background:rgba(6,182,212,.1);border:1px solid rgba(6,182,212,.25);border-radius:5px;padding:2px 7px;}
+.lc-link{display:inline-flex;align-items:center;gap:4px;font-size:10px;font-weight:600;font-family:'JetBrains Mono',monospace;color:#818cf8;background:rgba(99,102,241,.1);border:1px solid rgba(99,102,241,.25);border-radius:5px;padding:2px 8px;text-decoration:none;transition:all .2s;}
+.lc-link:hover{background:rgba(99,102,241,.2);color:#a5b4fc;border-color:rgba(99,102,241,.5);}
+.toast{position:fixed;bottom:24px;right:24px;z-index:9999;background:var(--bg-elevated);border:1px solid var(--border-bright);border-radius:10px;padding:12px 18px;font-size:13px;box-shadow:0 8px 32px rgba(0,0,0,.5);animation:fadeIn .3s ease;font-family:'JetBrains Mono',monospace;}
+.stat-card{background:var(--bg-card);border:1px solid var(--border);border-radius:10px;padding:14px 18px;}
+.hint-reveal-btn{font-size:11px;font-weight:600;padding:5px 12px;border-radius:6px;cursor:pointer;border:1px solid rgba(245,158,11,.3);color:var(--amber);background:rgba(245,158,11,.08);transition:all .2s;font-family:'JetBrains Mono',monospace;display:inline-flex;align-items:center;gap:6px;}
+.hint-reveal-btn:hover{background:rgba(245,158,11,.15);border-color:var(--amber);}
+#sidebar{position:sticky;top:82px;max-height:calc(100vh - 100px);overflow-y:auto;}
+#mobile-topics{display:none;}
+@media(max-width:768px){#sidebar{display:none;}#mobile-topics{display:flex;}}
+.week-header{background:linear-gradient(135deg,rgba(139,92,246,.12),rgba(99,102,241,.07));border:1px solid rgba(139,92,246,.25);border-radius:12px;padding:14px 18px;}
+.day-card{background:var(--bg-card);border:1px solid var(--border);border-radius:10px;padding:14px 16px;}
+.day-pill{font-size:10px;font-weight:700;font-family:'JetBrains Mono',monospace;padding:3px 10px;border-radius:20px;border:1px solid;}
+.plan-q-chip{display:inline-flex;align-items:center;gap:5px;background:var(--bg-elevated);border:1px solid var(--border);border-radius:7px;padding:5px 10px;font-size:11px;font-family:'JetBrains Mono',monospace;color:#cbd5e1;cursor:pointer;transition:all .2s;white-space:nowrap;}
+.plan-q-chip:hover{border-color:var(--violet);color:var(--violet);background:rgba(139,92,246,.08);}
+.plan-q-chip.done{border-color:rgba(16,185,129,.35);background:rgba(16,185,129,.07);color:var(--emerald);}
+.plan-q-chip.wip{border-color:rgba(245,158,11,.35);background:rgba(245,158,11,.07);color:var(--amber);}
+.tab-panel{display:none;}.tab-panel.active{display:block;animation:fadeIn .25s ease;}
+@keyframes fadeIn{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:translateY(0)}}
+canvas#badge-canvas{display:none;}
+.dl-btn{display:inline-flex;align-items:center;gap:4px;font-size:10px;font-weight:700;font-family:'JetBrains Mono',monospace;padding:5px 12px;border-radius:6px;cursor:pointer;border:none;transition:all .2s;margin-top:8px;}
+</style>
+</head>
+<body>
+<header id="main-header">
+  <div class="max-w-7xl mx-auto px-4 py-3">
+    <div class="flex items-center justify-between gap-4 flex-wrap">
+      <div class="flex items-center gap-3">
+        <div class="w-8 h-8 rounded-lg bg-gradient-to-br from-violet-600 to-indigo-600 flex items-center justify-center text-white font-black text-sm">⚡</div>
+        <div><div class="text-sm font-bold text-white">DSA Quest</div><div class="text-[10px] text-gray-500 mono">7-Week Challenge</div></div>
+      </div>
+      <div class="flex items-center gap-3 flex-wrap">
+        <div class="flex items-center gap-2"><span class="text-xs text-gray-500 mono">Done</span><span id="hdr-total" class="text-sm font-bold mono text-indigo-400">0/77</span></div>
+        <div class="w-px h-5 bg-gray-800"></div>
+        <div class="flex items-center gap-2"><span class="text-xs text-gray-500 mono">Active</span><span id="hdr-working" class="text-sm font-bold mono text-amber-400">0</span></div>
+        <div class="w-px h-5 bg-gray-800"></div>
+        <div class="flex items-center gap-2"><span class="text-xs text-gray-500 mono">Badges</span><span id="hdr-badges" class="text-sm font-bold mono text-violet-400">0/10</span></div>
+      </div>
+      <div class="flex items-center gap-3">
+        <div class="text-right">
+          <div class="flex items-center gap-2 justify-end mb-1">
+            <span class="level-pill text-white" id="level-label">LVL 1</span>
+            <span class="text-sm font-bold mono text-violet-300" id="xp-display">0 XP</span>
+          </div>
+          <div class="xp-bar-outer w-32"><div class="xp-bar-inner" id="xp-bar" style="width:0%"></div></div>
+          <div class="text-[10px] text-gray-600 mono mt-0.5" id="xp-next-label">500 to next level</div>
+        </div>
+      </div>
+    </div>
+    <div class="flex mt-1 overflow-x-auto" style="border-bottom:1px solid #1e2130">
+      <button class="nav-tab active" onclick="switchMainTab('questions')">📚 Questions</button>
+      <button class="nav-tab" onclick="switchMainTab('trophies')">🏆 Trophy Room</button>
+      <button class="nav-tab" onclick="switchMainTab('plan')">📅 7-Week Plan</button>
+    </div>
+  </div>
+</header>
+<canvas id="badge-canvas" width="420" height="420"></canvas>
+<div id="mobile-topics" class="overflow-x-auto px-4 py-3 gap-2 border-b border-gray-800/50" style="display:none"></div>
+<div class="max-w-7xl mx-auto px-4 py-6 flex gap-6">
+  <aside id="sidebar" class="w-52 flex-shrink-0">
+    <div class="space-y-1" id="topic-nav"></div>
+    <div class="mt-6 stat-card">
+      <div class="section-heading mb-3">Overall Progress</div>
+      <div class="space-y-2">
+        <div class="flex justify-between text-xs"><span class="text-gray-400 mono">Completed</span><span id="sb-completed" class="text-emerald-400 mono font-bold">0</span></div>
+        <div class="prog-bar-outer"><div id="sb-completed-bar" class="prog-bar-inner bg-emerald-500" style="width:0%"></div></div>
+        <div class="flex justify-between text-xs"><span class="text-gray-400 mono">Working</span><span id="sb-working" class="text-amber-400 mono font-bold">0</span></div>
+        <div class="prog-bar-outer"><div id="sb-working-bar" class="prog-bar-inner bg-amber-500" style="width:0%"></div></div>
+      </div>
+    </div>
+    <div class="mt-4">
+      <button onclick="switchMainTab('trophies')" class="w-full stat-card text-left hover:border-violet-800/50 transition-all cursor-pointer">
+        <div class="section-heading mb-2">Trophy Room</div>
+        <div class="text-2xl mb-1">🏆</div>
+        <div class="text-xs text-gray-500 mono"><span id="sb-badges">0</span>/10 unlocked</div>
+      </button>
+    </div>
+    <div class="mt-4">
+      <button onclick="switchMainTab('plan')" class="w-full stat-card text-left hover:border-violet-800/50 transition-all cursor-pointer">
+        <div class="section-heading mb-2">7-Week Plan</div>
+        <div class="text-2xl mb-1">📅</div>
+        <div class="text-xs text-gray-500 mono" id="sb-plan-text">View schedule</div>
+      </button>
+    </div>
+  </aside>
+  <main class="flex-1 min-w-0">
+    <div id="panel-questions" class="tab-panel active">
+      <div class="flex items-center gap-3 mb-5 flex-wrap">
+        <div id="topic-icon" class="text-2xl"></div>
+        <div><h2 id="topic-title" class="text-xl font-bold text-white"></h2><p id="topic-desc" class="text-xs text-gray-500 mono mt-0.5"></p></div>
+        <div class="ml-auto">
+          <div id="topic-progress-text" class="text-lg font-bold mono text-violet-300 text-right"></div>
+          <div class="prog-bar-outer w-24 mt-1"><div id="topic-progress-bar" class="prog-bar-inner bg-gradient-to-r from-violet-600 to-indigo-500" style="width:0%"></div></div>
+        </div>
+      </div>
+      <div id="questions-list" class="space-y-3"></div>
+    </div>
+    <div id="panel-trophies" class="tab-panel">
+      <div class="flex items-center gap-3 mb-2">
+        <div class="text-2xl">🏆</div>
+        <div><h2 class="text-xl font-bold text-white">Trophy Room</h2><p class="text-xs text-gray-500 mono">Complete all questions in a topic · then download your badge</p></div>
+        <div class="ml-auto"><span class="section-heading"><span id="badge-count">0</span>/10 UNLOCKED</span></div>
+      </div>
+      <p class="text-xs text-gray-600 mono mb-5">Click ⬇ Download on any unlocked badge to save a PNG certificate to your device.</p>
+      <div id="badges-grid" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-4"></div>
+    </div>
+    <div id="panel-plan" class="tab-panel">
+      <div class="flex items-center gap-3 mb-2 flex-wrap">
+        <div class="text-2xl">📅</div>
+        <div><h2 class="text-xl font-bold text-white">7-Week DSA Battle Plan</h2><p class="text-xs text-gray-500 mono">Day-by-day schedule — click any chip to jump straight to that question</p></div>
+        <div class="ml-auto stat-card px-4 py-2 text-center">
+          <div class="text-[10px] text-gray-500 mono mb-1">Progress</div>
+          <div class="text-base font-bold mono text-violet-300" id="plan-progress-text">0/77</div>
+        </div>
+      </div>
+      <div id="plan-container" class="space-y-4 mt-4"></div>
+    </div>
+  </main>
+</div>
+<div id="toast-container"></div>
+<script>
+
+const TOPICS = [
+  {id:'arrays',name:'Arrays',icon:'📊',color:'#06b6d4',desc:'Foundation of all data structures',questions:[
+    {id:'a1',num:1,title:'Two Sum',diff:'Easy',hints:['Use a hash map to store complements.','For each x, check if target-x exists in map.','One-pass O(n) time O(n) space.'],cpp:'vector<int> twoSum(vector<int>& n,int t){\n  unordered_map<int,int> m;\n  for(int i=0;i<n.size();i++){\n    int c=t-n[i];\n    if(m.count(c))return{m[c],i};\n    m[n[i]]=i;\n  }\n  return{};\n}',python:'def twoSum(nums,target):\n  seen={}\n  for i,x in enumerate(nums):\n    if target-x in seen: return[seen[target-x],i]\n    seen[x]=i'},
+    {id:'a2',num:121,title:'Best Time to Buy and Sell Stock',diff:'Easy',hints:['Track minimum price so far.','Profit = price[i] - minSoFar.','Update maxProfit each step.'],cpp:'int maxProfit(vector<int>& p){\n  int mn=INT_MAX,ans=0;\n  for(int x:p){mn=min(mn,x);ans=max(ans,x-mn);}\n  return ans;\n}',python:'def maxProfit(prices):\n  mn,ans=float("inf"),0\n  for p in prices:\n    mn=min(mn,p);ans=max(ans,p-mn)\n  return ans'},
+    {id:'a3',num:88,title:'Merge Sorted Array',diff:'Easy',hints:['Merge from the end.','Three pointers i=m-1,j=n-1,k=m+n-1.','Place larger at k, decrement.'],cpp:'void merge(vector<int>& a,int m,vector<int>& b,int n){\n  int i=m-1,j=n-1,k=m+n-1;\n  while(j>=0){\n    if(i>=0&&a[i]>b[j])a[k--]=a[i--];\n    else a[k--]=b[j--];\n  }\n}',python:'def merge(nums1,m,nums2,n):\n  i,j,k=m-1,n-1,m+n-1\n  while j>=0:\n    if i>=0 and nums1[i]>nums2[j]: nums1[k]=nums1[i];i-=1\n    else: nums1[k]=nums2[j];j-=1\n    k-=1'},
+    {id:'a4',num:217,title:'Contains Duplicate',diff:'Easy',hints:['Hash set for O(1) lookup.','Return true if element already in set.'],cpp:'bool containsDuplicate(vector<int>& n){\n  unordered_set<int> s;\n  for(int x:n){if(s.count(x))return true;s.insert(x);}\n  return false;\n}',python:'def containsDuplicate(nums):\n  return len(nums)!=len(set(nums))'},
+    {id:'a5',num:238,title:'Product of Array Except Self',diff:'Medium',hints:['Prefix products left to right.','Suffix products right to left.','res[i]=prefix[i]*suffix[i], no division.'],cpp:'vector<int> productExceptSelf(vector<int>& n){\n  int sz=n.size();vector<int> r(sz,1);\n  int p=1;for(int i=0;i<sz;i++){r[i]=p;p*=n[i];}\n  int s=1;for(int i=sz-1;i>=0;i--){r[i]*=s;s*=n[i];}\n  return r;\n}',python:'def productExceptSelf(nums):\n  n=len(nums);res=[1]*n\n  p=1\n  for i in range(n):res[i]=p;p*=nums[i]\n  s=1\n  for i in range(n-1,-1,-1):res[i]*=s;s*=nums[i]\n  return res'},
+    {id:'a6',num:53,title:'Maximum Subarray',diff:'Medium',hints:["Kadane's algorithm.",'cur=max(nums[i], cur+nums[i]).','Track global max.'],cpp:'int maxSubArray(vector<int>& n){\n  int cur=n[0],mx=n[0];\n  for(int i=1;i<n.size();i++){cur=max(n[i],cur+n[i]);mx=max(mx,cur);}\n  return mx;\n}',python:'def maxSubArray(nums):\n  cur=mx=nums[0]\n  for x in nums[1:]:cur=max(x,cur+x);mx=max(mx,cur)\n  return mx'},
+    {id:'a7',num:15,title:'3Sum',diff:'Medium',hints:['Sort first.','Fix one, two-pointer for rest.','Skip duplicates carefully.'],cpp:'vector<vector<int>> threeSum(vector<int>& n){\n  sort(n.begin(),n.end());vector<vector<int>> res;\n  for(int i=0;i+2<n.size();i++){\n    if(i&&n[i]==n[i-1])continue;\n    int l=i+1,r=n.size()-1;\n    while(l<r){int s=n[i]+n[l]+n[r];\n      if(!s){res.push_back({n[i],n[l],n[r]});while(l<r&&n[l]==n[l+1])l++;while(l<r&&n[r]==n[r-1])r--;l++;r--;}\n      else if(s<0)l++;else r--;}\n  }\n  return res;\n}',python:'def threeSum(nums):\n  nums.sort();res=[]\n  for i in range(len(nums)-2):\n    if i and nums[i]==nums[i-1]:continue\n    l,r=i+1,len(nums)-1\n    while l<r:\n      s=nums[i]+nums[l]+nums[r]\n      if s==0:res.append([nums[i],nums[l],nums[r]]);l+=1;r-=1\n      elif s<0:l+=1\n      else:r-=1\n  return res'},
+    {id:'a8',num:56,title:'Merge Intervals',diff:'Medium',hints:['Sort by start.','If start<=prev end, merge.','Else push new interval.'],cpp:'vector<vector<int>> merge(vector<vector<int>>& iv){\n  sort(iv.begin(),iv.end());vector<vector<int>> r={iv[0]};\n  for(auto& i:iv)if(i[0]<=r.back()[1])r.back()[1]=max(r.back()[1],i[1]);else r.push_back(i);\n  return r;\n}',python:'def merge(intervals):\n  intervals.sort();res=[intervals[0]]\n  for s,e in intervals[1:]:\n    if s<=res[-1][1]:res[-1][1]=max(res[-1][1],e)\n    else:res.append([s,e])\n  return res'},
+    {id:'a9',num:11,title:'Container With Most Water',diff:'Medium',hints:['Two pointers both ends.','Area=min(h[l],h[r])*(r-l).','Move shorter pointer inward.'],cpp:'int maxArea(vector<int>& h){\n  int l=0,r=h.size()-1,a=0;\n  while(l<r){a=max(a,min(h[l],h[r])*(r-l));if(h[l]<h[r])l++;else r--;}\n  return a;\n}',python:'def maxArea(h):\n  l,r,a=0,len(h)-1,0\n  while l<r:\n    a=max(a,min(h[l],h[r])*(r-l))\n    if h[l]<h[r]:l+=1\n    else:r-=1\n  return a'},
+    {id:'a10',num:48,title:'Rotate Image',diff:'Medium',hints:['Transpose matrix (swap [i][j],[j][i]).','Then reverse each row.'],cpp:'void rotate(vector<vector<int>>& m){\n  int n=m.size();\n  for(int i=0;i<n;i++)for(int j=i+1;j<n;j++)swap(m[i][j],m[j][i]);\n  for(auto& r:m)reverse(r.begin(),r.end());\n}',python:'def rotate(matrix):\n  n=len(matrix)\n  for i in range(n):\n    for j in range(i+1,n):matrix[i][j],matrix[j][i]=matrix[j][i],matrix[i][j]\n  for r in matrix:r.reverse()'},
+  ]},
+  {id:'strings',name:'Strings',icon:'🔤',color:'#f59e0b',desc:'Pattern matching & manipulation',questions:[
+    {id:'s1',num:20,title:'Valid Parentheses',diff:'Easy',hints:['Use a stack.','Push open brackets.','On close, check stack top matches.'],cpp:'bool isValid(string s){\n  stack<char> st;\n  for(char c:s){\n    if(c=="("[0]||c=="["[0]||c=="{"[0])st.push(c);\n    else{if(st.empty())return false;\n      if(c==")"[0]&&st.top()!="("[0])return false;\n      if(c=="]"[0]&&st.top()!="["[0])return false;\n      if(c=="}"[0]&&st.top()!="{"[0])return false;\n      st.pop();}\n  }\n  return st.empty();\n}',python:'def isValid(s):\n  st=[];m={")":"(","]":"[","}":"{"}\n  for c in s:\n    if c in "([{":st.append(c)\n    elif not st or st[-1]!=m[c]:return False\n    else:st.pop()\n  return not st'},
+    {id:'s2',num:125,title:'Valid Palindrome',diff:'Easy',hints:['Two pointers from both ends.','Skip non-alphanumeric.','Compare lowercased.'],cpp:'bool isPalindrome(string s){\n  int l=0,r=s.size()-1;\n  while(l<r){while(l<r&&!isalnum(s[l]))l++;while(l<r&&!isalnum(s[r]))r--;\n    if(tolower(s[l])!=tolower(s[r]))return false;l++;r--;}\n  return true;\n}',python:'def isPalindrome(s):\n  t=[c.lower() for c in s if c.isalnum()]\n  return t==t[::-1]'},
+    {id:'s3',num:242,title:'Valid Anagram',diff:'Easy',hints:['Freq array size 26.','Increment for s, decrement for t.','All zeros = anagram.'],cpp:'bool isAnagram(string s,string t){\n  if(s.size()!=t.size())return false;\n  int c[26]={};\n  for(char x:s)c[x-"a"[0]]++;\n  for(char x:t)if(--c[x-"a"[0]]<0)return false;\n  return true;\n}',python:'def isAnagram(s,t):\n  from collections import Counter\n  return Counter(s)==Counter(t)'},
+    {id:'s4',num:49,title:'Group Anagrams',diff:'Medium',hints:['Sort each string as key.','Group by sorted key.'],cpp:'vector<vector<string>> groupAnagrams(vector<string>& v){\n  unordered_map<string,vector<string>> m;\n  for(auto& s:v){auto k=s;sort(k.begin(),k.end());m[k].push_back(s);}\n  vector<vector<string>> r;\n  for(auto& p:m)r.push_back(p.second);\n  return r;\n}',python:'def groupAnagrams(strs):\n  from collections import defaultdict\n  m=defaultdict(list)\n  for s in strs:m[tuple(sorted(s))].append(s)\n  return list(m.values())'},
+    {id:'s5',num:5,title:'Longest Palindromic Substring',diff:'Medium',hints:['Expand from center.','Check odd (i,i) and even (i,i+1).','Track longest.'],cpp:'string longestPalindrome(string s){\n  int n=s.size(),st=0,mx=1;\n  auto ex=[&](int l,int r){while(l>=0&&r<n&&s[l]==s[r]){l--;r++;}if(r-l-1>mx){mx=r-l-1;st=l+1;}};\n  for(int i=0;i<n;i++){ex(i,i);ex(i,i+1);}\n  return s.substr(st,mx);\n}',python:'def longestPalindrome(s):\n  res=""\n  for i in range(len(s)):\n    for l,r in[(i,i),(i,i+1)]:\n      while l>=0 and r<len(s) and s[l]==s[r]:l-=1;r+=1\n      if r-l-1>len(res):res=s[l+1:r]\n  return res'},
+    {id:'s6',num:76,title:'Minimum Window Substring',diff:'Hard',hints:['Sliding window two pointers.','Expand right until all t chars covered.','Shrink left while valid.','Track freq with hash map.'],cpp:'string minWindow(string s,string t){\n  unordered_map<char,int> need;\n  for(char c:t)need[c]++;\n  int have=0,tot=need.size(),l=0,mn=INT_MAX,st=0;\n  for(int r=0;r<s.size();r++){need[s[r]]--;if(need[s[r]]==0)have++;\n    while(have==tot){if(r-l+1<mn){mn=r-l+1;st=l;}need[s[l]]++;if(need[s[l]]==1)have--;l++;}}\n  return mn==INT_MAX?"":s.substr(st,mn);\n}',python:'def minWindow(s,t):\n  from collections import Counter\n  need=Counter(t);have=0;tot=len(need);res="";mn=float("inf");l=0\n  for r,c in enumerate(s):\n    need[c]-=1\n    if need[c]==0:have+=1\n    while have==tot:\n      if r-l+1<mn:mn=r-l+1;res=s[l:r+1]\n      need[s[l]]+=1\n      if need[s[l]]==1:have-=1\n      l+=1\n  return res'},
+    {id:'s7',num:28,title:'Find the Index of the First Occurrence',diff:'Easy',hints:['Use built-in find/index.'],cpp:'int strStr(string h,string n){return h.find(n)==string::npos?-1:h.find(n);}',python:'def strStr(h,n):return h.find(n)'},
+    {id:'s8',num:443,title:'String Compression',diff:'Medium',hints:['Two pointers read/write.','Count consecutive chars.','Write char then digits if cnt>1.'],cpp:'int compress(vector<char>& c){\n  int w=0,r=0;\n  while(r<c.size()){char ch=c[r];int cnt=0;\n    while(r<c.size()&&c[r]==ch){r++;cnt++;}\n    c[w++]=ch;\n    if(cnt>1)for(char d:to_string(cnt))c[w++]=d;}\n  return w;\n}',python:'def compress(chars):\n  w=r=0\n  while r<len(chars):\n    ch=chars[r];cnt=0\n    while r<len(chars) and chars[r]==ch:r+=1;cnt+=1\n    chars[w]=ch;w+=1\n    if cnt>1:\n      for d in str(cnt):chars[w]=d;w+=1\n  return w'},
+    {id:'s9',num:14,title:'Longest Common Prefix',diff:'Easy',hints:['Sort and compare first/last strings.'],cpp:'string longestCommonPrefix(vector<string>& v){\n  sort(v.begin(),v.end());\n  string a=v.front(),b=v.back();int i=0;\n  while(i<a.size()&&a[i]==b[i])i++;\n  return a.substr(0,i);\n}',python:'def longestCommonPrefix(strs):\n  strs.sort();a,b=strs[0],strs[-1];i=0\n  while i<len(a) and a[i]==b[i]:i+=1\n  return a[:i]'},
+    {id:'s10',num:459,title:'Repeated Substring Pattern',diff:'Easy',hints:['Double the string.','Remove first and last char.','If s found inside, true.'],cpp:'bool repeatedSubstringPattern(string s){string t=s+s;return t.substr(1,t.size()-2).find(s)!=string::npos;}',python:'def repeatedSubstringPattern(s):return s in(s+s)[1:-1]'},
+  ]},
+  {id:'linkedlist',name:'Linked List',icon:'🔗',color:'#10b981',desc:'Pointer manipulation & traversal',questions:[
+    {id:'ll1',num:206,title:'Reverse Linked List',diff:'Easy',hints:['prev=null,curr=head.','Iterate: save next, point curr.next=prev, advance.'],cpp:'ListNode* reverseList(ListNode* h){\n  ListNode *p=nullptr,*c=h;\n  while(c){auto n=c->next;c->next=p;p=c;c=n;}\n  return p;\n}',python:'def reverseList(head):\n  p=None;c=head\n  while c:n=c.next;c.next=p;p=c;c=n\n  return p'},
+    {id:'ll2',num:21,title:'Merge Two Sorted Lists',diff:'Easy',hints:['Dummy node.','Compare heads, attach smaller.'],cpp:'ListNode* mergeTwoLists(ListNode* a,ListNode* b){\n  ListNode d(0);auto c=&d;\n  while(a&&b){if(a->val<=b->val){c->next=a;a=a->next;}else{c->next=b;b=b->next;}c=c->next;}\n  c->next=a?a:b;return d.next;\n}',python:'def mergeTwoLists(a,b):\n  d=ListNode(0);c=d\n  while a and b:\n    if a.val<=b.val:c.next=a;a=a.next\n    else:c.next=b;b=b.next\n    c=c.next\n  c.next=a or b;return d.next'},
+    {id:'ll3',num:19,title:'Remove Nth Node From End',diff:'Medium',hints:['Two pointers gap=n.','Advance fast n+1 steps.','Remove slow.next.'],cpp:'ListNode* removeNthFromEnd(ListNode* h,int n){\n  ListNode d(0,h);auto f=&d,s=&d;\n  for(int i=0;i<=n;i++)f=f->next;\n  while(f){f=f->next;s=s->next;}\n  s->next=s->next->next;return d.next;\n}',python:'def removeNthFromEnd(head,n):\n  d=ListNode(0,head);f=s=d\n  for _ in range(n+1):f=f.next\n  while f:f=f.next;s=s.next\n  s.next=s.next.next;return d.next'},
+    {id:'ll4',num:141,title:'Linked List Cycle',diff:'Easy',hints:["Floyd's tortoise & hare.",'slow=1 step, fast=2.',' Meet = cycle.'],cpp:'bool hasCycle(ListNode* h){\n  auto s=h,f=h;\n  while(f&&f->next){s=s->next;f=f->next->next;if(s==f)return true;}\n  return false;\n}',python:'def hasCycle(head):\n  s=f=head\n  while f and f.next:\n    s=s.next;f=f.next.next\n    if s==f:return True\n  return False'},
+    {id:'ll5',num:2,title:'Add Two Numbers',diff:'Medium',hints:['Digit by digit addition.','Track carry.','Handle unequal lengths.'],cpp:'ListNode* addTwoNumbers(ListNode* a,ListNode* b){\n  ListNode d(0);auto c=&d;int carry=0;\n  while(a||b||carry){int s=(a?a->val:0)+(b?b->val:0)+carry;\n    carry=s/10;c->next=new ListNode(s%10);c=c->next;\n    if(a)a=a->next;if(b)b=b->next;}\n  return d.next;\n}',python:'def addTwoNumbers(a,b):\n  d=ListNode(0);c=d;carry=0\n  while a or b or carry:\n    s=(a.val if a else 0)+(b.val if b else 0)+carry\n    carry,r=divmod(s,10);c.next=ListNode(r);c=c.next\n    if a:a=a.next\n    if b:b=b.next\n  return d.next'},
+    {id:'ll6',num:160,title:'Intersection of Two Linked Lists',diff:'Easy',hints:['Two pointers switch lists at end.','Same total path length.'],cpp:'ListNode* getIntersectionNode(ListNode* a,ListNode* b){\n  auto p=a,q=b;\n  while(p!=q){p=p?p->next:b;q=q?q->next:a;}\n  return p;\n}',python:'def getIntersectionNode(a,b):\n  p,q=a,b\n  while p!=q:p=p.next if p else b;q=q.next if q else a\n  return p'},
+    {id:'ll7',num:234,title:'Palindrome Linked List',diff:'Easy',hints:['Find mid with slow/fast.','Reverse second half.','Compare halves.'],cpp:'bool isPalindrome(ListNode* h){\n  auto s=h,f=h;\n  while(f&&f->next){s=s->next;f=f->next->next;}\n  ListNode *p=nullptr,*c=s;\n  while(c){auto n=c->next;c->next=p;p=c;c=n;}\n  while(p){if(p->val!=h->val)return false;p=p->next;h=h->next;}\n  return true;\n}',python:'def isPalindrome(head):\n  s=f=head\n  while f and f.next:s=s.next;f=f.next.next\n  prev=None\n  while s:s.next,prev,s=prev,s,s.next\n  while prev:\n    if prev.val!=head.val:return False\n    prev=prev.next;head=head.next\n  return True'},
+    {id:'ll8',num:25,title:'Reverse Nodes in k-Group',diff:'Hard',hints:['Count k nodes.','Reverse k nodes.','Recurse on rest.'],cpp:'ListNode* reverseKGroup(ListNode* h,int k){\n  auto c=h;int cnt=0;\n  while(c&&cnt<k){c=c->next;cnt++;}\n  if(cnt<k)return h;\n  ListNode *p=nullptr,*cur=h;\n  for(int i=0;i<k;i++){auto n=cur->next;cur->next=p;p=cur;cur=n;}\n  h->next=reverseKGroup(cur,k);return p;\n}',python:'def reverseKGroup(head,k):\n  c=head;cnt=0\n  while c and cnt<k:c=c.next;cnt+=1\n  if cnt<k:return head\n  p=None;c=head\n  for _ in range(k):c.next,p,c=p,c,c.next\n  head.next=reverseKGroup(c,k);return p'},
+  ]},
+  {id:'stacks',name:'Stacks & Queues',icon:'📚',color:'#f43f5e',desc:'LIFO/FIFO problems',questions:[
+    {id:'sq1',num:232,title:'Implement Queue using Stacks',diff:'Easy',hints:['Two stacks in/out.','Fill out from in when out empty.'],cpp:'class MyQueue{\n  stack<int> in,out;\npublic:\n  void push(int x){in.push(x);}\n  int pop(){peek();int t=out.top();out.pop();return t;}\n  int peek(){if(out.empty())while(!in.empty()){out.push(in.top());in.pop();}return out.top();}\n  bool empty(){return in.empty()&&out.empty();}\n};',python:'class MyQueue:\n  def __init__(self):self.i=[];self.o=[]\n  def push(self,x):self.i.append(x)\n  def _mv(self):\n    if not self.o:\n      while self.i:self.o.append(self.i.pop())\n  def pop(self):self._mv();return self.o.pop()\n  def peek(self):self._mv();return self.o[-1]\n  def empty(self):return not self.i and not self.o'},
+    {id:'sq2',num:225,title:'Implement Stack using Queues',diff:'Easy',hints:['One queue.','On push, rotate all but last.'],cpp:'class MyStack{\n  queue<int> q;\npublic:\n  void push(int x){q.push(x);for(int i=0;i<q.size()-1;i++){q.push(q.front());q.pop();}}\n  int pop(){int t=q.front();q.pop();return t;}\n  int top(){return q.front();}\n  bool empty(){return q.empty();}\n};',python:'from collections import deque\nclass MyStack:\n  def __init__(self):self.q=deque()\n  def push(self,x):\n    self.q.append(x)\n    for _ in range(len(self.q)-1):self.q.append(self.q.popleft())\n  def pop(self):return self.q.popleft()\n  def top(self):return self.q[0]\n  def empty(self):return not self.q'},
+    {id:'sq3',num:155,title:'Min Stack',diff:'Medium',hints:['Two stacks: main and min-tracker.'],cpp:'class MinStack{\n  stack<int> s,m;\npublic:\n  void push(int x){s.push(x);m.push(m.empty()?x:min(x,m.top()));}\n  void pop(){s.pop();m.pop();}\n  int top(){return s.top();}\n  int getMin(){return m.top();}\n};',python:'class MinStack:\n  def __init__(self):self.s=[];self.m=[]\n  def push(self,x):self.s.append(x);self.m.append(min(x,self.m[-1] if self.m else x))\n  def pop(self):self.s.pop();self.m.pop()\n  def top(self):return self.s[-1]\n  def getMin(self):return self.m[-1]'},
+    {id:'sq4',num:739,title:'Daily Temperatures',diff:'Medium',hints:['Monotonic decreasing stack of indices.','Pop when curr > stack top.'],cpp:'vector<int> dailyTemperatures(vector<int>& t){\n  int n=t.size();vector<int> r(n,0);stack<int> s;\n  for(int i=0;i<n;i++){while(!s.empty()&&t[i]>t[s.top()]){r[s.top()]=i-s.top();s.pop();}s.push(i);}\n  return r;\n}',python:'def dailyTemperatures(t):\n  res=[0]*len(t);st=[]\n  for i,x in enumerate(t):\n    while st and x>t[st[-1]]:j=st.pop();res[j]=i-j\n    st.append(i)\n  return res'},
+    {id:'sq5',num:150,title:'Evaluate Reverse Polish Notation',diff:'Medium',hints:['Stack. Push numbers.','On operator pop two, compute, push.'],cpp:'int evalRPN(vector<string>& t){\n  stack<long> s;\n  for(auto& x:t){\n    if(x=="+"||x=="-"||x=="*"||x=="/"){long b=s.top();s.pop();long a=s.top();s.pop();\n      if(x=="+")s.push(a+b);else if(x=="-")s.push(a-b);else if(x=="*")s.push(a*b);else s.push(a/b);}\n    else s.push(stol(x));}\n  return s.top();\n}',python:'def evalRPN(tokens):\n  st=[]\n  for t in tokens:\n    if t in "+-*/":\n      b,a=st.pop(),st.pop()\n      st.append(int(a/b) if t=="/" else eval(f"{a}{t}{b}"))\n    else:st.append(int(t))\n  return st[0]'},
+    {id:'sq6',num:496,title:'Next Greater Element I',diff:'Easy',hints:['Monotonic stack on nums2.','Map each to next greater.'],cpp:'vector<int> nextGreaterElement(vector<int>& a,vector<int>& b){\n  unordered_map<int,int> m;stack<int> s;\n  for(int x:b){while(!s.empty()&&x>s.top()){m[s.top()]=x;s.pop();}s.push(x);}\n  vector<int> r;for(int x:a)r.push_back(m.count(x)?m[x]:-1);return r;\n}',python:'def nextGreaterElement(a,b):\n  m={};st=[]\n  for x in b:\n    while st and x>st[-1]:m[st.pop()]=x\n    st.append(x)\n  return[m.get(x,-1) for x in a]'},
+    {id:'sq7',num:503,title:'Next Greater Element II',diff:'Medium',hints:['Circular: 2n iterations.','Use i%n for index.'],cpp:'vector<int> nextGreaterElements(vector<int>& n){\n  int sz=n.size();vector<int> r(sz,-1);stack<int> s;\n  for(int i=0;i<2*sz;i++){while(!s.empty()&&n[i%sz]>n[s.top()]){r[s.top()]=n[i%sz];s.pop();}if(i<sz)s.push(i);}\n  return r;\n}',python:'def nextGreaterElements(nums):\n  n=len(nums);res=[-1]*n;st=[]\n  for i in range(2*n):\n    while st and nums[i%n]>nums[st[-1]]:res[st.pop()]=nums[i%n]\n    if i<n:st.append(i)\n  return res'},
+    {id:'sq8',num:622,title:'Design Circular Queue',diff:'Medium',hints:['Array + head/tail/size.','Modular arithmetic for wrap.'],cpp:'class MyCircularQueue{\n  vector<int> q;int h=0,t=0,sz=0,cap;\npublic:\n  MyCircularQueue(int k):q(k),cap(k){}\n  bool enQueue(int v){if(isFull())return false;q[t]=v;t=(t+1)%cap;sz++;return true;}\n  bool deQueue(){if(isEmpty())return false;h=(h+1)%cap;sz--;return true;}\n  int Front(){return isEmpty()?-1:q[h];}\n  int Rear(){return isEmpty()?-1:q[(t-1+cap)%cap];}\n  bool isEmpty(){return!sz;}\n  bool isFull(){return sz==cap;}\n};',python:'class MyCircularQueue:\n  def __init__(self,k):self.q=[0]*k;self.h=self.t=self.sz=0;self.cap=k\n  def enQueue(self,v):\n    if self.isFull():return False\n    self.q[self.t]=v;self.t=(self.t+1)%self.cap;self.sz+=1;return True\n  def deQueue(self):\n    if self.isEmpty():return False\n    self.h=(self.h+1)%self.cap;self.sz-=1;return True\n  def Front(self):return-1 if self.isEmpty() else self.q[self.h]\n  def Rear(self):return-1 if self.isEmpty() else self.q[(self.t-1+self.cap)%self.cap]\n  def isEmpty(self):return not self.sz\n  def isFull(self):return self.sz==self.cap'},
+  ]},
+  {id:'binsearch',name:'Binary Search',icon:'🔍',color:'#8b5cf6',desc:'Divide & conquer search',questions:[
+    {id:'bs1',num:704,title:'Binary Search',diff:'Easy',hints:['l=0,r=n-1.','mid=(l+r)/2.','Adjust l or r.'],cpp:'int search(vector<int>& n,int t){\n  int l=0,r=n.size()-1;\n  while(l<=r){int m=(l+r)/2;if(n[m]==t)return m;else if(n[m]<t)l=m+1;else r=m-1;}\n  return-1;\n}',python:'def search(nums,target):\n  l,r=0,len(nums)-1\n  while l<=r:\n    m=(l+r)//2\n    if nums[m]==target:return m\n    elif nums[m]<target:l=m+1\n    else:r=m-1\n  return-1'},
+    {id:'bs2',num:34,title:'Find First and Last Position',diff:'Medium',hints:['Two binary searches.','lower_bound for first.','upper_bound-1 for last.'],cpp:'vector<int> searchRange(vector<int>& n,int t){\n  auto lb=lower_bound(n.begin(),n.end(),t);\n  auto ub=upper_bound(n.begin(),n.end(),t)-1;\n  if(lb==n.end()||*lb!=t)return{-1,-1};\n  return{(int)(lb-n.begin()),(int)(ub-n.begin())};\n}',python:'def searchRange(nums,target):\n  import bisect\n  l=bisect.bisect_left(nums,target)\n  if l==len(nums) or nums[l]!=target:return[-1,-1]\n  return[l,bisect.bisect_right(nums,target)-1]'},
+    {id:'bs3',num:74,title:'Search a 2D Matrix',diff:'Medium',hints:['Treat as flat sorted array.','mid//cols, mid%cols.'],cpp:'bool searchMatrix(vector<vector<int>>& m,int t){\n  int r=m.size(),c=m[0].size(),l=0,h=r*c-1;\n  while(l<=h){int md=(l+h)/2,v=m[md/c][md%c];if(v==t)return true;else if(v<t)l=md+1;else h=md-1;}\n  return false;\n}',python:'def searchMatrix(matrix,target):\n  r,c=len(matrix),len(matrix[0]);l,h=0,r*c-1\n  while l<=h:\n    m=(l+h)//2;v=matrix[m//c][m%c]\n    if v==target:return True\n    elif v<target:l=m+1\n    else:h=m-1\n  return False'},
+    {id:'bs4',num:33,title:'Search in Rotated Sorted Array',diff:'Medium',hints:['Which half is sorted?','Target in sorted half?','Narrow accordingly.'],cpp:'int search(vector<int>& n,int t){\n  int l=0,r=n.size()-1;\n  while(l<=r){int m=(l+r)/2;if(n[m]==t)return m;\n    if(n[l]<=n[m]){if(t>=n[l]&&t<n[m])r=m-1;else l=m+1;}\n    else{if(t>n[m]&&t<=n[r])l=m+1;else r=m-1;}}\n  return-1;\n}',python:'def search(nums,target):\n  l,r=0,len(nums)-1\n  while l<=r:\n    m=(l+r)//2\n    if nums[m]==target:return m\n    if nums[l]<=nums[m]:\n      if nums[l]<=target<nums[m]:r=m-1\n      else:l=m+1\n    else:\n      if nums[m]<target<=nums[r]:l=m+1\n      else:r=m-1\n  return-1'},
+    {id:'bs5',num:81,title:'Search in Rotated Array II',diff:'Medium',hints:['Same as #33.','Handle duplicates: if nums[l]==nums[m], l++.'],cpp:'bool search(vector<int>& n,int t){\n  int l=0,r=n.size()-1;\n  while(l<=r){int m=(l+r)/2;if(n[m]==t)return true;\n    if(n[l]==n[m]){l++;continue;}\n    if(n[l]<n[m]){if(t>=n[l]&&t<n[m])r=m-1;else l=m+1;}\n    else{if(t>n[m]&&t<=n[r])l=m+1;else r=m-1;}}\n  return false;\n}',python:'def search(nums,target):\n  l,r=0,len(nums)-1\n  while l<=r:\n    m=(l+r)//2\n    if nums[m]==target:return True\n    if nums[l]==nums[m]:l+=1;continue\n    if nums[l]<nums[m]:\n      if nums[l]<=target<nums[m]:r=m-1\n      else:l=m+1\n    else:\n      if nums[m]<target<=nums[r]:l=m+1\n      else:r=m-1\n  return False'},
+    {id:'bs6',num:162,title:'Find Peak Element',diff:'Medium',hints:['If nums[mid]<nums[mid+1], go right.','Else go left.'],cpp:'int findPeakElement(vector<int>& n){\n  int l=0,r=n.size()-1;\n  while(l<r){int m=(l+r)/2;if(n[m]<n[m+1])l=m+1;else r=m;}\n  return l;\n}',python:'def findPeakElement(nums):\n  l,r=0,len(nums)-1\n  while l<r:\n    m=(l+r)//2\n    if nums[m]<nums[m+1]:l=m+1\n    else:r=m\n  return l'},
+  ]},
+  {id:'trees',name:'Trees',icon:'🌲',color:'#22c55e',desc:'Binary tree traversal & properties',questions:[
+    {id:'t1',num:104,title:'Maximum Depth of Binary Tree',diff:'Easy',hints:['1+max(left,right).','Base: null=0.'],cpp:'int maxDepth(TreeNode* r){\n  if(!r)return 0;\n  return 1+max(maxDepth(r->left),maxDepth(r->right));\n}',python:'def maxDepth(root):\n  if not root:return 0\n  return 1+max(maxDepth(root.left),maxDepth(root.right))'},
+    {id:'t2',num:100,title:'Same Tree',diff:'Easy',hints:['Both null=true, one null=false.','Check val and recurse.'],cpp:'bool isSameTree(TreeNode* p,TreeNode* q){\n  if(!p&&!q)return true;if(!p||!q||p->val!=q->val)return false;\n  return isSameTree(p->left,q->left)&&isSameTree(p->right,q->right);\n}',python:'def isSameTree(p,q):\n  if not p and not q:return True\n  if not p or not q or p.val!=q.val:return False\n  return isSameTree(p.left,q.left) and isSameTree(p.right,q.right)'},
+    {id:'t3',num:101,title:'Symmetric Tree',diff:'Easy',hints:['l.left vs r.right, l.right vs r.left.'],cpp:'bool isSymmetric(TreeNode* r){\n  function<bool(TreeNode*,TreeNode*)> f=[&](TreeNode* a,TreeNode* b)->bool{\n    if(!a&&!b)return true;if(!a||!b||a->val!=b->val)return false;\n    return f(a->left,b->right)&&f(a->right,b->left);};\n  return f(r->left,r->right);\n}',python:'def isSymmetric(root):\n  def f(a,b):\n    if not a and not b:return True\n    if not a or not b or a.val!=b.val:return False\n    return f(a.left,b.right) and f(a.right,b.left)\n  return f(root.left,root.right)'},
+    {id:'t4',num:144,title:'Binary Tree Preorder Traversal',diff:'Easy',hints:['Root->Left->Right.'],cpp:'vector<int> preorderTraversal(TreeNode* r){\n  vector<int> res;\n  function<void(TreeNode*)> f=[&](TreeNode* n){if(!n)return;res.push_back(n->val);f(n->left);f(n->right);};\n  f(r);return res;\n}',python:'def preorderTraversal(root):\n  res=[]\n  def f(n):\n    if not n:return\n    res.append(n.val);f(n.left);f(n.right)\n  f(root);return res'},
+    {id:'t5',num:94,title:'Binary Tree Inorder Traversal',diff:'Easy',hints:['Left->Root->Right.'],cpp:'vector<int> inorderTraversal(TreeNode* r){\n  vector<int> res;\n  function<void(TreeNode*)> f=[&](TreeNode* n){if(!n)return;f(n->left);res.push_back(n->val);f(n->right);};\n  f(r);return res;\n}',python:'def inorderTraversal(root):\n  res=[]\n  def f(n):\n    if not n:return\n    f(n.left);res.append(n.val);f(n.right)\n  f(root);return res'},
+    {id:'t6',num:145,title:'Binary Tree Postorder Traversal',diff:'Easy',hints:['Left->Right->Root.'],cpp:'vector<int> postorderTraversal(TreeNode* r){\n  vector<int> res;\n  function<void(TreeNode*)> f=[&](TreeNode* n){if(!n)return;f(n->left);f(n->right);res.push_back(n->val);};\n  f(r);return res;\n}',python:'def postorderTraversal(root):\n  res=[]\n  def f(n):\n    if not n:return\n    f(n.left);f(n.right);res.append(n.val)\n  f(root);return res'},
+    {id:'t7',num:102,title:'Binary Tree Level Order Traversal',diff:'Medium',hints:['BFS queue.','Process by queue size per level.'],cpp:'vector<vector<int>> levelOrder(TreeNode* r){\n  if(!r)return{};\n  queue<TreeNode*> q;q.push(r);vector<vector<int>> res;\n  while(!q.empty()){int sz=q.size();vector<int> lv;\n    for(int i=0;i<sz;i++){auto n=q.front();q.pop();lv.push_back(n->val);if(n->left)q.push(n->left);if(n->right)q.push(n->right);}\n    res.push_back(lv);}\n  return res;\n}',python:'def levelOrder(root):\n  from collections import deque\n  if not root:return[]\n  q=deque([root]);res=[]\n  while q:\n    lv=[]\n    for _ in range(len(q)):\n      n=q.popleft();lv.append(n.val)\n      if n.left:q.append(n.left)\n      if n.right:q.append(n.right)\n    res.append(lv)\n  return res'},
+    {id:'t8',num:110,title:'Balanced Binary Tree',diff:'Easy',hints:['Helper returns height or -1.','Propagate -1 if unbalanced.'],cpp:'bool isBalanced(TreeNode* r){\n  function<int(TreeNode*)> h=[&](TreeNode* n)->int{\n    if(!n)return 0;int l=h(n->left),r=h(n->right);\n    if(l<0||r<0||abs(l-r)>1)return-1;return max(l,r)+1;};\n  return h(r)>=0;\n}',python:'def isBalanced(root):\n  def h(n):\n    if not n:return 0\n    l,r=h(n.left),h(n.right)\n    if l<0 or r<0 or abs(l-r)>1:return-1\n    return max(l,r)+1\n  return h(root)>=0'},
+  ]},
+  {id:'backtrack',name:'Recursion & BT',icon:'🔄',color:'#ec4899',desc:'Backtracking & recursive exploration',questions:[
+    {id:'rb1',num:39,title:'Combination Sum',diff:'Medium',hints:['DFS + backtrack.','Can reuse element.','Sort & prune when >rem.'],cpp:'vector<vector<int>> combinationSum(vector<int>& c,int t){\n  sort(c.begin(),c.end());vector<vector<int>> res;vector<int> cur;\n  function<void(int,int)> f=[&](int s,int r){\n    if(!r){res.push_back(cur);return;}\n    for(int i=s;i<c.size()&&c[i]<=r;i++){cur.push_back(c[i]);f(i,r-c[i]);cur.pop_back();}};\n  f(0,t);return res;\n}',python:'def combinationSum(candidates,target):\n  candidates.sort();res=[]\n  def f(s,rem,cur):\n    if not rem:res.append(cur[:]);return\n    for i in range(s,len(candidates)):\n      if candidates[i]>rem:break\n      cur.append(candidates[i]);f(i,rem-candidates[i],cur);cur.pop()\n  f(0,target,[]);return res'},
+    {id:'rb2',num:46,title:'Permutations',diff:'Medium',hints:['Swap-based DFS.','Swap back to backtrack.'],cpp:'vector<vector<int>> permute(vector<int>& n){\n  vector<vector<int>> res;\n  function<void(int)> f=[&](int s){\n    if(s==n.size()){res.push_back(n);return;}\n    for(int i=s;i<n.size();i++){swap(n[s],n[i]);f(s+1);swap(n[s],n[i]);}};\n  f(0);return res;\n}',python:'def permute(nums):\n  res=[]\n  def f(s):\n    if s==len(nums):res.append(nums[:]);return\n    for i in range(s,len(nums)):\n      nums[s],nums[i]=nums[i],nums[s]\n      f(s+1)\n      nums[s],nums[i]=nums[i],nums[s]\n  f(0);return res'},
+    {id:'rb3',num:78,title:'Subsets',diff:'Medium',hints:['Each element: include or not.','Iterative: add to all existing subsets.'],cpp:'vector<vector<int>> subsets(vector<int>& n){\n  vector<vector<int>> res={{}};\n  for(int x:n){int sz=res.size();for(int i=0;i<sz;i++){auto s=res[i];s.push_back(x);res.push_back(s);}}\n  return res;\n}',python:'def subsets(nums):\n  res=[[]]\n  for x in nums:res+=[s+[x] for s in res]\n  return res'},
+    {id:'rb4',num:51,title:'N-Queens',diff:'Hard',hints:['Row by row placement.','Track cols,diag,anti-diag sets.','Backtrack on conflict.'],cpp:'vector<vector<string>> solveNQueens(int n){\n  vector<vector<string>> res;vector<string> b(n,string(n,"."));\n  set<int> c,d,a;\n  function<void(int)> f=[&](int r){\n    if(r==n){res.push_back(b);return;}\n    for(int col=0;col<n;col++){if(c.count(col)||d.count(r-col)||a.count(r+col))continue;\n      b[r][col]="Q"[0];c.insert(col);d.insert(r-col);a.insert(r+col);f(r+1);\n      b[r][col]="."[0];c.erase(col);d.erase(r-col);a.erase(r+col);}};\n  f(0);return res;\n}',python:'def solveNQueens(n):\n  res=[];c=set();d=set();a=set()\n  b=[["."]*n for _ in range(n)]\n  def f(r):\n    if r==n:res.append(["".join(row) for row in b]);return\n    for col in range(n):\n      if col in c or r-col in d or r+col in a:continue\n      b[r][col]="Q";c.add(col);d.add(r-col);a.add(r+col)\n      f(r+1)\n      b[r][col]=".";c.discard(col);d.discard(r-col);a.discard(r+col)\n  f(0);return res'},
+    {id:'rb5',num:17,title:'Letter Combinations of Phone Number',diff:'Medium',hints:['Map digits to letters.','DFS build string.'],cpp:'vector<string> letterCombinations(string d){\n  if(d.empty())return{};\n  vector<string> m={"","","abc","def","ghi","jkl","mno","pqrs","tuv","wxyz"};\n  vector<string> res;string cur;\n  function<void(int)> f=[&](int i){\n    if(i==d.size()){res.push_back(cur);return;}\n    for(char c:m[d[i]-"0"[0]]){cur+=c;f(i+1);cur.pop_back();}};\n  f(0);return res;\n}',python:'def letterCombinations(digits):\n  if not digits:return[]\n  m={"2":"abc","3":"def","4":"ghi","5":"jkl","6":"mno","7":"pqrs","8":"tuv","9":"wxyz"}\n  res=[]\n  def f(i,cur):\n    if i==len(digits):res.append(cur);return\n    for c in m[digits[i]]:f(i+1,cur+c)\n  f(0,"");return res'},
+    {id:'rb6',num:90,title:'Subsets II',diff:'Medium',hints:['Sort to group dups.','Skip dup at same level.'],cpp:'vector<vector<int>> subsetsWithDup(vector<int>& n){\n  sort(n.begin(),n.end());vector<vector<int>> res;vector<int> cur;\n  function<void(int)> f=[&](int s){\n    res.push_back(cur);\n    for(int i=s;i<n.size();i++){if(i>s&&n[i]==n[i-1])continue;\n      cur.push_back(n[i]);f(i+1);cur.pop_back();}};\n  f(0);return res;\n}',python:'def subsetsWithDup(nums):\n  nums.sort();res=[]\n  def f(s,cur):\n    res.append(cur[:])\n    for i in range(s,len(nums)):\n      if i>s and nums[i]==nums[i-1]:continue\n      cur.append(nums[i]);f(i+1,cur);cur.pop()\n  f(0,[]);return res'},
+    {id:'rb7',num:37,title:'Sudoku Solver',diff:'Hard',hints:['Try 1-9 each empty cell.','Check row,col,3x3 box.','Backtrack.'],cpp:'void solveSudoku(vector<vector<char>>& b){\n  function<bool()> f=[&]()->bool{\n    for(int r=0;r<9;r++)for(int c=0;c<9;c++){if(b[r][c]!="."[0])continue;\n      for(char ch="1"[0];ch<="9"[0];ch++){bool ok=true;\n        for(int i=0;i<9&&ok;i++){ok=b[r][i]!=ch&&b[i][c]!=ch&&b[3*(r/3)+i/3][3*(c/3)+i%3]!=ch;}\n        if(ok){b[r][c]=ch;if(f())return true;b[r][c]="."[0];}}\n      return false;}\n    return true;};\n  f();\n}',python:'def solveSudoku(board):\n  def ok(r,c,ch):\n    for i in range(9):\n      if board[r][i]==ch or board[i][c]==ch:return False\n      if board[3*(r//3)+i//3][3*(c//3)+i%3]==ch:return False\n    return True\n  def f():\n    for r in range(9):\n      for c in range(9):\n        if board[r][c]!=".":continue\n        for ch in "123456789":\n          if ok(r,c,ch):\n            board[r][c]=ch\n            if f():return True\n            board[r][c]="."\n        return False\n    return True\n  f()'},
+  ]},
+  {id:'dp',name:'Dynamic Programming',icon:'🧮',color:'#f97316',desc:'Optimal substructure & memoization',questions:[
+    {id:'dp1',num:70,title:'Climbing Stairs',diff:'Easy',hints:['Fibonacci: dp[i]=dp[i-1]+dp[i-2].'],cpp:'int climbStairs(int n){\n  if(n<=2)return n;int a=1,b=2;\n  for(int i=3;i<=n;i++){int c=a+b;a=b;b=c;}return b;\n}',python:'def climbStairs(n):\n  a,b=1,2\n  for _ in range(n-2):a,b=b,a+b\n  return b if n>=2 else 1'},
+    {id:'dp2',num:198,title:'House Robber',diff:'Medium',hints:['dp[i]=max(dp[i-1],dp[i-2]+nums[i]).'],cpp:'int rob(vector<int>& n){\n  int a=0,b=0;\n  for(int x:n){int c=max(b,a+x);a=b;b=c;}\n  return b;\n}',python:'def rob(nums):\n  a=b=0\n  for x in nums:a,b=b,max(b,a+x)\n  return b'},
+    {id:'dp3',num:322,title:'Coin Change',diff:'Medium',hints:['dp[i]=min coins to make i.','dp[i]=min(dp[i],dp[i-c]+1).'],cpp:'int coinChange(vector<int>& c,int a){\n  vector<int> dp(a+1,a+1);dp[0]=0;\n  for(int i=1;i<=a;i++)for(int x:c)if(x<=i)dp[i]=min(dp[i],dp[i-x]+1);\n  return dp[a]>a?-1:dp[a];\n}',python:'def coinChange(coins,amount):\n  dp=[amount+1]*(amount+1);dp[0]=0\n  for i in range(1,amount+1):\n    for c in coins:\n      if c<=i:dp[i]=min(dp[i],dp[i-c]+1)\n  return-1 if dp[amount]>amount else dp[amount]'},
+    {id:'dp4',num:300,title:'Longest Increasing Subsequence',diff:'Medium',hints:['O(n log n) patience sort.','Binary search to maintain dp array.'],cpp:'int lengthOfLIS(vector<int>& n){\n  vector<int> dp;\n  for(int x:n){auto it=lower_bound(dp.begin(),dp.end(),x);\n    if(it==dp.end())dp.push_back(x);else *it=x;}\n  return dp.size();\n}',python:'def lengthOfLIS(nums):\n  import bisect;dp=[]\n  for x in nums:\n    i=bisect.bisect_left(dp,x)\n    if i==len(dp):dp.append(x)\n    else:dp[i]=x\n  return len(dp)'},
+    {id:'dp5',num:1143,title:'Longest Common Subsequence',diff:'Medium',hints:['2D DP.','Match: dp[i][j]=dp[i-1][j-1]+1.','Else max of adjacent.'],cpp:'int longestCommonSubsequence(string a,string b){\n  int m=a.size(),n=b.size();\n  vector<vector<int>> dp(m+1,vector<int>(n+1,0));\n  for(int i=1;i<=m;i++)for(int j=1;j<=n;j++)\n    dp[i][j]=a[i-1]==b[j-1]?dp[i-1][j-1]+1:max(dp[i-1][j],dp[i][j-1]);\n  return dp[m][n];\n}',python:'def longestCommonSubsequence(a,b):\n  m,n=len(a),len(b)\n  dp=[[0]*(n+1) for _ in range(m+1)]\n  for i in range(1,m+1):\n    for j in range(1,n+1):\n      if a[i-1]==b[j-1]:dp[i][j]=dp[i-1][j-1]+1\n      else:dp[i][j]=max(dp[i-1][j],dp[i][j-1])\n  return dp[m][n]'},
+    {id:'dp6',num:62,title:'Unique Paths',diff:'Medium',hints:['dp[i][j]=dp[i-1][j]+dp[i][j-1].'],cpp:'int uniquePaths(int m,int n){\n  vector<vector<int>> dp(m,vector<int>(n,1));\n  for(int i=1;i<m;i++)for(int j=1;j<n;j++)dp[i][j]=dp[i-1][j]+dp[i][j-1];\n  return dp[m-1][n-1];\n}',python:'def uniquePaths(m,n):\n  dp=[[1]*n for _ in range(m)]\n  for i in range(1,m):\n    for j in range(1,n):dp[i][j]=dp[i-1][j]+dp[i][j-1]\n  return dp[m-1][n-1]'},
+    {id:'dp7',num:5,title:'Longest Palindromic Substring (DP)',diff:'Medium',hints:['dp[i][j]=true if s[i..j] is palindrome.','Fill by length.'],cpp:'string longestPalindrome(string s){\n  int n=s.size(),st=0,ml=1;\n  vector<vector<bool>> dp(n,vector<bool>(n,false));\n  for(int i=0;i<n;i++)dp[i][i]=true;\n  for(int l=2;l<=n;l++)for(int i=0;i+l-1<n;i++){int j=i+l-1;\n    if(s[i]==s[j]&&(l==2||dp[i+1][j-1])){dp[i][j]=true;if(l>ml){ml=l;st=i;}}}\n  return s.substr(st,ml);\n}',python:'def longestPalindrome(s):\n  n=len(s);dp=[[False]*n for _ in range(n)]\n  for i in range(n):dp[i][i]=True\n  st,ml=0,1\n  for l in range(2,n+1):\n    for i in range(n-l+1):\n      j=i+l-1\n      if s[i]==s[j] and(l==2 or dp[i+1][j-1]):\n        dp[i][j]=True\n        if l>ml:ml=l;st=i\n  return s[st:st+ml]'},
+    {id:'dp8',num:718,title:'Maximum Length of Repeated Subarray',diff:'Medium',hints:['dp[i][j]=common array length ending i,j.'],cpp:'int findLength(vector<int>& a,vector<int>& b){\n  int m=a.size(),n=b.size(),ans=0;\n  vector<vector<int>> dp(m+1,vector<int>(n+1,0));\n  for(int i=1;i<=m;i++)for(int j=1;j<=n;j++)\n    if(a[i-1]==b[j-1]){dp[i][j]=dp[i-1][j-1]+1;ans=max(ans,dp[i][j]);}\n  return ans;\n}',python:'def findLength(a,b):\n  m,n=len(a),len(b);ans=0\n  dp=[[0]*(n+1) for _ in range(m+1)]\n  for i in range(1,m+1):\n    for j in range(1,n+1):\n      if a[i-1]==b[j-1]:dp[i][j]=dp[i-1][j-1]+1;ans=max(ans,dp[i][j])\n  return ans'},
+    {id:'dp9',num:416,title:'Partition Equal Subset Sum',diff:'Medium',hints:['Sum must be even.','0/1 knapsack reach sum/2.'],cpp:'bool canPartition(vector<int>& n){\n  int s=accumulate(n.begin(),n.end(),0);\n  if(s%2)return false;int t=s/2;\n  vector<bool> dp(t+1,false);dp[0]=true;\n  for(int x:n)for(int j=t;j>=x;j--)dp[j]=dp[j]||dp[j-x];\n  return dp[t];\n}',python:'def canPartition(nums):\n  s=sum(nums)\n  if s%2:return False\n  t=s//2;dp=[False]*(t+1);dp[0]=True\n  for x in nums:\n    for j in range(t,x-1,-1):dp[j]=dp[j] or dp[j-x]\n  return dp[t]'},
+    {id:'dp10',num:53,title:'Maximum Subarray (DP)',diff:'Medium',hints:["Kadane's DP: cur=max(x,cur+x)."],cpp:'int maxSubArray(vector<int>& n){\n  int c=n[0],m=n[0];\n  for(int i=1;i<n.size();i++){c=max(n[i],c+n[i]);m=max(m,c);}\n  return m;\n}',python:'def maxSubArray(nums):\n  c=m=nums[0]\n  for x in nums[1:]:c=max(x,c+x);m=max(m,c)\n  return m'},
+  ]},
+  {id:'graphs',name:'Graphs',icon:'🕸️',color:'#a78bfa',desc:'BFS/DFS & graph algorithms',questions:[
+    {id:'g1',num:133,title:'Clone Graph',diff:'Medium',hints:['DFS + hash map node->clone.'],cpp:'Node* cloneGraph(Node* n){\n  if(!n)return nullptr;\n  unordered_map<Node*,Node*> m;\n  function<Node*(Node*)> f=[&](Node* x)->Node*{\n    if(m.count(x))return m[x];\n    m[x]=new Node(x->val);\n    for(auto nb:x->neighbors)m[x]->neighbors.push_back(f(nb));\n    return m[x];};\n  return f(n);\n}',python:'def cloneGraph(node):\n  if not node:return None\n  m={}\n  def f(n):\n    if n in m:return m[n]\n    m[n]=Node(n.val)\n    for nb in n.neighbors:m[n].neighbors.append(f(nb))\n    return m[n]\n  return f(node)'},
+    {id:'g2',num:200,title:'Number of Islands',diff:'Medium',hints:['DFS from unvisited land.','Mark visited as water.'],cpp:'int numIslands(vector<vector<char>>& g){\n  int r=g.size(),c=g[0].size(),ans=0;\n  function<void(int,int)> f=[&](int i,int j){\n    if(i<0||i>=r||j<0||j>=c||g[i][j]!="1"[0])return;\n    g[i][j]="0"[0];f(i+1,j);f(i-1,j);f(i,j+1);f(i,j-1);};\n  for(int i=0;i<r;i++)for(int j=0;j<c;j++)if(g[i][j]=="1"[0]){ans++;f(i,j);}\n  return ans;\n}',python:'def numIslands(grid):\n  if not grid:return 0\n  r,c=len(grid),len(grid[0]);ans=0\n  def f(i,j):\n    if i<0 or i>=r or j<0 or j>=c or grid[i][j]!="1":return\n    grid[i][j]="0"\n    f(i+1,j);f(i-1,j);f(i,j+1);f(i,j-1)\n  for i in range(r):\n    for j in range(c):\n      if grid[i][j]=="1":ans+=1;f(i,j)\n  return ans'},
+    {id:'g3',num:207,title:'Course Schedule',diff:'Medium',hints:['Cycle detection DFS.','0=unvisited,1=visiting,2=done.'],cpp:'bool canFinish(int n,vector<vector<int>>& p){\n  vector<vector<int>> g(n);for(auto& e:p)g[e[1]].push_back(e[0]);\n  vector<int> st(n,0);\n  function<bool(int)> f=[&](int u)->bool{\n    if(st[u]==1)return false;if(st[u]==2)return true;\n    st[u]=1;for(int v:g[u])if(!f(v))return false;\n    st[u]=2;return true;};\n  for(int i=0;i<n;i++)if(!f(i))return false;return true;\n}',python:'def canFinish(n,prerequisites):\n  g=[[] for _ in range(n)]\n  for a,b in prerequisites:g[b].append(a)\n  st=[0]*n\n  def f(u):\n    if st[u]==1:return False\n    if st[u]==2:return True\n    st[u]=1\n    for v in g[u]:\n      if not f(v):return False\n    st[u]=2;return True\n  return all(f(i) for i in range(n))'},
+    {id:'g4',num:785,title:'Is Graph Bipartite?',diff:'Medium',hints:['2-coloring BFS.','Conflict = not bipartite.'],cpp:'bool isBipartite(vector<vector<int>>& g){\n  int n=g.size();vector<int> col(n,-1);\n  for(int s=0;s<n;s++){if(col[s]!=-1)continue;\n    queue<int> q;q.push(s);col[s]=0;\n    while(!q.empty()){int u=q.front();q.pop();\n      for(int v:g[u]){if(col[v]==-1){col[v]=1-col[u];q.push(v);}else if(col[v]==col[u])return false;}}}\n  return true;\n}',python:'def isBipartite(graph):\n  from collections import deque\n  n=len(graph);col=[-1]*n\n  for s in range(n):\n    if col[s]!=-1:continue\n    q=deque([s]);col[s]=0\n    while q:\n      u=q.popleft()\n      for v in graph[u]:\n        if col[v]==-1:col[v]=1-col[u];q.append(v)\n        elif col[v]==col[u]:return False\n  return True'},
+    {id:'g5',num:994,title:'Rotting Oranges',diff:'Medium',hints:['Multi-source BFS all rotten.','Spread level by level.'],cpp:'int orangesRotting(vector<vector<int>>& g){\n  int r=g.size(),c=g[0].size(),fresh=0,t=0;\n  queue<pair<int,int>> q;\n  for(int i=0;i<r;i++)for(int j=0;j<c;j++){if(g[i][j]==1)fresh++;else if(g[i][j]==2)q.push({i,j});}\n  int dx[]={0,0,1,-1},dy[]={1,-1,0,0};\n  while(!q.empty()&&fresh){t++;int sz=q.size();\n    while(sz--){auto[x,y]=q.front();q.pop();for(int d=0;d<4;d++){int nx=x+dx[d],ny=y+dy[d];\n      if(nx>=0&&nx<r&&ny>=0&&ny<c&&g[nx][ny]==1){g[nx][ny]=2;fresh--;q.push({nx,ny});}}}}\n  return fresh?-1:t;\n}',python:'def orangesRotting(grid):\n  from collections import deque\n  r,c=len(grid),len(grid[0]);fresh=0;q=deque()\n  for i in range(r):\n    for j in range(c):\n      if grid[i][j]==1:fresh+=1\n      elif grid[i][j]==2:q.append((i,j))\n  t=0\n  while q and fresh:\n    t+=1\n    for _ in range(len(q)):\n      x,y=q.popleft()\n      for dx,dy in[(0,1),(0,-1),(1,0),(-1,0)]:\n        nx,ny=x+dx,y+dy\n        if 0<=nx<r and 0<=ny<c and grid[nx][ny]==1:\n          grid[nx][ny]=2;fresh-=1;q.append((nx,ny))\n  return-1 if fresh else t'},
+    {id:'g6',num:323,title:'Number of Connected Components',diff:'Medium',hints:['Union-Find.','Merge edges, count roots.'],cpp:'int countComponents(int n,vector<vector<int>>& e){\n  vector<int> p(n);iota(p.begin(),p.end(),0);\n  function<int(int)> find=[&](int x)->int{return p[x]==x?x:p[x]=find(p[x]);};\n  int ans=n;\n  for(auto& ed:e){int a=find(ed[0]),b=find(ed[1]);if(a!=b){p[a]=b;ans--;}}\n  return ans;\n}',python:'def countComponents(n,edges):\n  p=list(range(n))\n  def find(x):p[x]=find(p[x]) if p[x]!=x else x;return p[x]\n  ans=n\n  for a,b in edges:\n    ra,rb=find(a),find(b)\n    if ra!=rb:p[ra]=rb;ans-=1\n  return ans'},
+  ]},
+  {id:'bits',name:'Bit Manipulation',icon:'⚙️',color:'#64748b',desc:'XOR, bit tricks & binary ops',questions:[
+    {id:'bm1',num:136,title:'Single Number',diff:'Easy',hints:['XOR all — dups cancel.'],cpp:'int singleNumber(vector<int>& n){int r=0;for(int x:n)r^=x;return r;}',python:'def singleNumber(nums):\n  from functools import reduce;from operator import xor\n  return reduce(xor,nums)'},
+    {id:'bm2',num:190,title:'Reverse Bits',diff:'Easy',hints:['Shift result left, add LSB, shift n right.'],cpp:'uint32_t reverseBits(uint32_t n){\n  uint32_t r=0;for(int i=0;i<32;i++){r=(r<<1)|(n&1);n>>=1;}return r;\n}',python:'def reverseBits(n):\n  r=0\n  for _ in range(32):r=(r<<1)|(n&1);n>>=1\n  return r'},
+    {id:'bm3',num:191,title:'Number of 1 Bits',diff:'Easy',hints:['n&(n-1) clears lowest set bit.','Count until 0.'],cpp:'int hammingWeight(uint32_t n){int c=0;while(n){n&=n-1;c++;}return c;}',python:'def hammingWeight(n):return bin(n).count("1")'},
+    {id:'bm4',num:268,title:'Missing Number',diff:'Easy',hints:['Expected sum - actual sum.','Or XOR approach.'],cpp:'int missingNumber(vector<int>& n){\n  int r=n.size();for(int i=0;i<n.size();i++)r^=i^n[i];return r;\n}',python:'def missingNumber(nums):\n  n=len(nums);return n*(n+1)//2-sum(nums)'},
+  ]},
+];
+
+const PLAN=[
+  {week:1,theme:'Arrays & Strings Foundation',color:'#06b6d4',days:[
+    {day:1,label:'Day 1',focus:'Array Basics',qids:['a1','a2','a3']},
+    {day:2,label:'Day 2',focus:'Array Techniques',qids:['a4','a5','a6']},
+    {day:3,label:'Day 3',focus:'Array Advanced',qids:['a7','a8']},
+    {day:4,label:'Day 4',focus:'Array Wrap-up',qids:['a9','a10']},
+    {day:5,label:'Day 5',focus:'String Basics',qids:['s1','s2','s3']},
+    {day:6,label:'Day 6',focus:'String Patterns',qids:['s4','s5','s6']},
+    {day:7,label:'Day 7',focus:'String Wrap-up + Review',qids:['s7','s8','s9','s10']},
+  ]},
+  {week:2,theme:'Linked Lists & Stacks/Queues',color:'#10b981',days:[
+    {day:8,label:'Day 8',focus:'LL Basics',qids:['ll1','ll2','ll3']},
+    {day:9,label:'Day 9',focus:'LL Cycle & Intersection',qids:['ll4','ll5','ll6']},
+    {day:10,label:'Day 10',focus:'LL Hard + Review',qids:['ll7','ll8']},
+    {day:11,label:'Day 11',focus:'Stack Fundamentals',qids:['sq1','sq2','sq3']},
+    {day:12,label:'Day 12',focus:'Monotonic Stack',qids:['sq4','sq5','sq6']},
+    {day:13,label:'Day 13',focus:'Stack Wrap-up',qids:['sq7','sq8']},
+    {day:14,label:'Day 14',focus:'Week 2 Review',qids:['ll1','sq3','sq4']},
+  ]},
+  {week:3,theme:'Binary Search & Trees',color:'#8b5cf6',days:[
+    {day:15,label:'Day 15',focus:'Binary Search Basics',qids:['bs1','bs2','bs3']},
+    {day:16,label:'Day 16',focus:'Binary Search Advanced',qids:['bs4','bs5','bs6']},
+    {day:17,label:'Day 17',focus:'Tree Traversals',qids:['t1','t2','t3']},
+    {day:18,label:'Day 18',focus:'Tree DFS Patterns',qids:['t4','t5','t6']},
+    {day:19,label:'Day 19',focus:'Tree BFS & Balance',qids:['t7','t8']},
+    {day:20,label:'Day 20',focus:'BS + Tree Mixed Practice',qids:['bs4','t7']},
+    {day:21,label:'Day 21',focus:'Week 3 Full Review',qids:['bs1','t1','t2']},
+  ]},
+  {week:4,theme:'Recursion & Backtracking',color:'#ec4899',days:[
+    {day:22,label:'Day 22',focus:'Recursion Intro',qids:['rb1','rb2']},
+    {day:23,label:'Day 23',focus:'Subset Problems',qids:['rb3','rb6']},
+    {day:24,label:'Day 24',focus:'Permutations & Combos',qids:['rb2','rb5']},
+    {day:25,label:'Day 25',focus:'Hard Backtracking',qids:['rb4','rb7']},
+    {day:26,label:'Day 26',focus:'Review + Polish',qids:['rb1','rb3','rb4']},
+    {day:27,label:'Day 27',focus:'Flex / Catch-up',qids:['rb5','rb6','rb7']},
+    {day:28,label:'Day 28',focus:'Week 4 Full Review',qids:['rb1','rb2','rb3']},
+  ]},
+  {week:5,theme:'Dynamic Programming',color:'#f97316',days:[
+    {day:29,label:'Day 29',focus:'DP Intro (1D)',qids:['dp1','dp2']},
+    {day:30,label:'Day 30',focus:'DP Classics',qids:['dp3','dp4']},
+    {day:31,label:'Day 31',focus:'2D DP',qids:['dp5','dp6']},
+    {day:32,label:'Day 32',focus:'DP on Strings',qids:['dp7','dp8']},
+    {day:33,label:'Day 33',focus:'Knapsack DP',qids:['dp9','dp10']},
+    {day:34,label:'Day 34',focus:'DP Hard Review',qids:['dp3','dp5','dp9']},
+    {day:35,label:'Day 35',focus:'Week 5 Full Review',qids:['dp1','dp2','dp4']},
+  ]},
+  {week:6,theme:'Graphs & Bit Manipulation',color:'#a78bfa',days:[
+    {day:36,label:'Day 36',focus:'Graph DFS',qids:['g1','g2']},
+    {day:37,label:'Day 37',focus:'Graph BFS & Topo',qids:['g3','g4']},
+    {day:38,label:'Day 38',focus:'Graph Advanced',qids:['g5','g6']},
+    {day:39,label:'Day 39',focus:'Bit Manipulation',qids:['bm1','bm2','bm3','bm4']},
+    {day:40,label:'Day 40',focus:'Graph + Bit Review',qids:['g2','g3','bm1']},
+    {day:41,label:'Day 41',focus:'Mixed Practice',qids:['g1','g5','bm4']},
+    {day:42,label:'Day 42',focus:'Week 6 Full Review',qids:['g2','g3','g6']},
+  ]},
+  {week:7,theme:'Full Mock & Consolidation',color:'#f43f5e',days:[
+    {day:43,label:'Day 43',focus:'Arrays + Strings Revisit',qids:['a1','a5','s6']},
+    {day:44,label:'Day 44',focus:'LL + Stack Revisit',qids:['ll4','ll8','sq4']},
+    {day:45,label:'Day 45',focus:'BS + Trees Revisit',qids:['bs4','t7','t8']},
+    {day:46,label:'Day 46',focus:'Backtracking Revisit',qids:['rb1','rb4','rb7']},
+    {day:47,label:'Day 47',focus:'DP Revisit',qids:['dp3','dp5','dp9']},
+    {day:48,label:'Day 48',focus:'Graphs Revisit',qids:['g2','g3','g5']},
+    {day:49,label:'Day 49',focus:'🏁 Final Mock — Top 10',qids:['a1','a6','s1','ll4','bs4','t7','rb1','dp3','g2','bm1']},
+  ]},
+];
+
+const TOTAL_Q=TOPICS.reduce((a,t)=>a+t.questions.length,0);
+const LEVELS=[
+  {name:'LVL 1',min:0,max:500},{name:'LVL 2',min:501,max:1500},
+  {name:'LVL 3',min:1501,max:3000},{name:'LVL 4',min:3001,max:5000},{name:'LVL 5',min:5001,max:Infinity},
+];
+
+// Build quick lookup qid -> {q, t}
+const Q_MAP={};
+for(const t of TOPICS)for(const q of t.questions)Q_MAP[q.id]={q,t};
+
+// STATE
+function loadState(){try{return JSON.parse(localStorage.getItem('dsaQuestV2')||'{}')}catch{return{}}}
+function saveState(s){localStorage.setItem('dsaQuestV2',JSON.stringify(s))}
+let state=loadState();
+if(!state.questions)state.questions={};
+if(!state.notes)state.notes={};
+if(!state.hints)state.hints={};
+if(!state.xp)state.xp=0;
+if(!state.badges)state.badges={};
+
+let currentTopic=TOPICS[0].id;
+let currentMainTab='questions';
+
+function getQ(id){return state.questions[id]||'unattempted'}
+function getLevel(xp){for(let i=LEVELS.length-1;i>=0;i--)if(xp>=LEVELS[i].min)return LEVELS[i];return LEVELS[0];}
+function getXPPct(xp){const l=getLevel(xp);if(l.max===Infinity)return 100;return Math.min(100,Math.round(((xp-l.min)/(l.max-l.min))*100));}
+
+function computeTopicStats(topic){
+  let completed=0,working=0;
+  for(const q of topic.questions){const s=getQ(q.id);if(s==='completed')completed++;else if(s==='working')working++;}
+  return{completed,working,total:topic.questions.length};
+}
+function computeGlobalStats(){
+  let completed=0,working=0;
+  for(const t of TOPICS){const s=computeTopicStats(t);completed+=s.completed;working+=s.working;}
+  return{completed,working};
+}
+
+// CONFETTI
+function fireConfetti(){
+  const d={origin:{y:.7},zIndex:9999};
+  const f=(r,o)=>confetti({...d,...o,particleCount:Math.floor(300*r)});
+  f(.25,{spread:26,startVelocity:55,colors:['#8b5cf6','#6366f1','#10b981']});
+  f(.2,{spread:60,colors:['#f59e0b','#06b6d4']});
+  f(.35,{spread:100,decay:.91,scalar:.8,colors:['#fff','#a5b4fc']});
+  f(.1,{spread:120,startVelocity:25,decay:.92,scalar:1.2});
+}
+
+// TOAST
+function showToast(msg,color='#8b5cf6'){
+  const t=document.createElement('div');
+  t.className='toast';t.style.borderLeftColor=color;t.style.color=color;t.innerHTML=msg;
+  document.getElementById('toast-container').appendChild(t);
+  setTimeout(()=>{t.style.opacity='0';t.style.transform='translateY(10px)';t.style.transition='all .3s';setTimeout(()=>t.remove(),300);},2500);
+}
+
+// HEADER
+function renderHeader(){
+  const s=computeGlobalStats();
+  document.getElementById('hdr-total').textContent=`${s.completed}/${TOTAL_Q}`;
+  document.getElementById('hdr-working').textContent=s.working;
+  const bc=Object.values(state.badges).filter(Boolean).length;
+  document.getElementById('hdr-badges').textContent=`${bc}/10`;
+  const xp=state.xp,lv=getLevel(xp),pct=getXPPct(xp);
+  document.getElementById('xp-display').textContent=`${xp.toLocaleString()} XP`;
+  document.getElementById('level-label').textContent=lv.name;
+  document.getElementById('xp-bar').style.width=pct+'%';
+  document.getElementById('xp-next-label').textContent=lv.max===Infinity?'MAX LEVEL':`${(lv.max-xp).toLocaleString()} to next`;
+  document.getElementById('sb-completed').textContent=s.completed;
+  document.getElementById('sb-working').textContent=s.working;
+  document.getElementById('sb-completed-bar').style.width=Math.round((s.completed/TOTAL_Q)*100)+'%';
+  document.getElementById('sb-working-bar').style.width=Math.round((s.working/TOTAL_Q)*100)+'%';
+  document.getElementById('sb-badges').textContent=bc;
+  const pp=document.getElementById('plan-progress-text');if(pp)pp.textContent=`${s.completed}/${TOTAL_Q}`;
+}
+
+// MAIN TAB SWITCH
+function switchMainTab(tab){
+  currentMainTab=tab;
+  document.querySelectorAll('.nav-tab').forEach((b,i)=>{
+    b.classList.toggle('active',['questions','trophies','plan'][i]===tab);
+  });
+  document.querySelectorAll('.tab-panel').forEach(p=>p.classList.remove('active'));
+  document.getElementById(`panel-${tab}`).classList.add('active');
+  const sb=document.getElementById('sidebar');
+  sb.style.display=tab==='questions'?'':'none';
+  if(tab==='trophies')renderBadges();
+  if(tab==='plan')renderPlan();
+}
+
+// NAV
+function renderNav(){
+  const nav=document.getElementById('topic-nav'),mob=document.getElementById('mobile-topics');
+  nav.innerHTML='';mob.innerHTML='';
+  for(const t of TOPICS){
+    const s=computeTopicStats(t);
+    const btn=document.createElement('button');
+    btn.className=`topic-tab w-full text-left flex items-center gap-2${t.id===currentTopic?' active':''}`;
+    btn.innerHTML=`<span>${t.icon}</span><span class="flex-1 truncate" style="font-size:12px">${t.name}</span><span class="mono" style="font-size:10px;color:${s.completed===s.total?'#10b981':'#4b5563'}">${s.completed}/${s.total}</span>`;
+    btn.onclick=()=>{currentTopic=t.id;renderNav();renderTopic();};
+    nav.appendChild(btn);
+    const mb=document.createElement('button');
+    mb.className=`topic-tab flex-shrink-0${t.id===currentTopic?' active':''}`;
+    mb.textContent=`${t.icon} ${t.name}`;
+    mb.onclick=()=>{currentTopic=t.id;renderNav();renderTopic();switchMainTab('questions');};
+    mob.appendChild(mb);
+  }
+}
+
+// BADGES
+function renderBadges(animId=null){
+  const grid=document.getElementById('badges-grid');
+  if(!grid)return;
+  grid.innerHTML='';
+  let count=0;
+  for(const t of TOPICS){
+    const s=computeTopicStats(t);
+    const unlocked=s.completed===s.total;
+    if(unlocked)count++;
+    const card=document.createElement('div');
+    card.id=`badge-card-${t.id}`;
+    card.className=`badge-card${unlocked?' unlocked':' locked'}${animId===t.id?' badge-unlock-anim':''}`;
+    card.innerHTML=`
+      <div style="position:absolute;inset:0;border-radius:14px;background:radial-gradient(circle at 50% 0%,${unlocked?t.color+'22':'transparent'},transparent 70%);pointer-events:none"></div>
+      <div style="font-size:38px;margin-bottom:8px">${t.icon}</div>
+      <div style="font-size:12px;font-weight:700;color:${unlocked?'#fff':'#4b5563'};margin-bottom:4px">${t.name}</div>
+      <div style="font-size:10px;font-family:'JetBrains Mono',monospace;color:${unlocked?t.color:'#374151'};margin-bottom:8px">
+        ${unlocked?'✓ MASTERED':`${s.completed}/${s.total}`}
+      </div>
+      ${unlocked
+        ?`<button class="dl-btn" style="background:${t.color}22;color:${t.color};border:1px solid ${t.color}55" onclick="event.stopPropagation();downloadBadge('${t.id}')">⬇ Download PNG</button>`
+        :`<div style="font-size:10px;color:#374151;font-family:'JetBrains Mono',monospace">🔒 locked</div>`
+      }
+    `;
+    grid.appendChild(card);
+  }
+  ['badge-count','sb-badges'].forEach(id=>{const el=document.getElementById(id);if(el)el.textContent=count;});
+  document.getElementById('hdr-badges').textContent=`${count}/10`;
+}
+
+// CHECK BADGE
+function checkBadge(topicId){
+  const topic=TOPICS.find(t=>t.id===topicId);if(!topic)return;
+  const s=computeTopicStats(topic);
+  if(s.completed===s.total&&!state.badges[topicId]){
+    state.badges[topicId]=true;saveState(state);
+    setTimeout(()=>{
+      if(currentMainTab==='trophies')renderBadges(topicId);
+      fireConfetti();
+      confetti({particleCount:100,angle:60,spread:55,origin:{x:0,y:.6},colors:[topic.color,'#fff','#8b5cf6']});
+      confetti({particleCount:100,angle:120,spread:55,origin:{x:1,y:.6},colors:[topic.color,'#fff','#6366f1']});
+      showBadgeModal(topic);
+    },350);
+  }
+}
+
+// BADGE MODAL
+function showBadgeModal(topic){
+  const o=document.createElement('div');
+  o.style.cssText='position:fixed;inset:0;z-index:99999;display:flex;align-items:center;justify-content:center;background:rgba(0,0,0,.82);backdrop-filter:blur(10px);';
+  o.classList.add('bdg-ov');
+  o.innerHTML=`
+    <div style="background:linear-gradient(135deg,#0f1117,#151822);border:2px solid ${topic.color};border-radius:20px;padding:40px 48px;text-align:center;box-shadow:0 0 80px ${topic.color}50;animation:badgeUnlock .5s cubic-bezier(.34,1.56,.64,1);max-width:360px;width:90%;position:relative;overflow:hidden;">
+      <div style="position:absolute;inset:0;background:radial-gradient(circle at 50% 0%,${topic.color}18,transparent 65%);pointer-events:none"></div>
+      <div style="font-size:72px;margin-bottom:12px">${topic.icon}</div>
+      <div style="font-size:10px;letter-spacing:.2em;font-family:'JetBrains Mono',monospace;color:${topic.color};margin-bottom:6px;font-weight:700">🏆 BADGE UNLOCKED</div>
+      <div style="font-size:22px;font-weight:800;color:#fff;font-family:'Syne',sans-serif;margin-bottom:4px">${topic.name}</div>
+      <div style="font-size:12px;font-family:'JetBrains Mono',monospace;color:#6b7280;margin-bottom:24px">Topic Mastered · All questions completed!</div>
+      <div style="display:flex;gap:10px;justify-content:center;flex-wrap:wrap;">
+        <button onclick="downloadBadge('${topic.id}');this.closest('.bdg-ov').remove()" style="background:${topic.color};color:#000;font-weight:700;border:none;border-radius:10px;padding:10px 20px;cursor:pointer;font-family:'JetBrains Mono',monospace;font-size:12px;">⬇ Download Badge</button>
+        <button onclick="this.closest('.bdg-ov').remove()" style="background:transparent;color:#6b7280;border:1px solid #2a2f45;border-radius:10px;padding:10px 20px;cursor:pointer;font-family:'JetBrains Mono',monospace;font-size:12px;">Dismiss</button>
+      </div>
+    </div>`;
+  o.onclick=e=>{if(e.target===o)o.remove();};
+  document.body.appendChild(o);
+  setTimeout(()=>{if(o.parentNode)o.remove();},8000);
+}
+
+// DOWNLOAD BADGE (Canvas PNG)
+function downloadBadge(topicId){
+  const topic=TOPICS.find(t=>t.id===topicId);if(!topic)return;
+  const stats=computeTopicStats(topic);
+  const canvas=document.getElementById('badge-canvas');
+  const W=420,H=420;canvas.width=W;canvas.height=H;
+  const ctx=canvas.getContext('2d');
+
+  // BG
+  const bg=ctx.createRadialGradient(W/2,H/2,0,W/2,H/2,240);
+  bg.addColorStop(0,'#181d2a');bg.addColorStop(1,'#0a0b0f');
+  ctx.fillStyle=bg;ctx.beginPath();
+  if(ctx.roundRect)ctx.roundRect(0,0,W,H,24);else ctx.rect(0,0,W,H);
+  ctx.fill();
+
+  // Glow border
+  ctx.save();ctx.strokeStyle=topic.color;ctx.lineWidth=3;
+  ctx.shadowColor=topic.color;ctx.shadowBlur=28;
+  ctx.beginPath();
+  if(ctx.roundRect)ctx.roundRect(4,4,W-8,H-8,22);else ctx.rect(4,4,W-8,H-8);
+  ctx.stroke();ctx.restore();
+
+  // Top radial glow
+  const ig=ctx.createRadialGradient(W/2,80,0,W/2,80,180);
+  ig.addColorStop(0,topic.color+'38');ig.addColorStop(1,'transparent');
+  ctx.fillStyle=ig;ctx.fillRect(0,0,W,H);
+
+  // Decorative dots
+  ctx.fillStyle=topic.color+'55';
+  [[40,40],[380,40],[40,380],[380,380],[210,30],[30,210],[390,210]].forEach(([x,y])=>{
+    ctx.beginPath();ctx.arc(x,y,2.5,0,Math.PI*2);ctx.fill();
+  });
+
+  // Horizontal separator top
+  const grad1=ctx.createLinearGradient(60,0,360,0);
+  grad1.addColorStop(0,'transparent');grad1.addColorStop(.5,topic.color+'80');grad1.addColorStop(1,'transparent');
+  ctx.strokeStyle=grad1;ctx.lineWidth=1;
+  ctx.beginPath();ctx.moveTo(60,58);ctx.lineTo(360,58);ctx.stroke();
+
+  // Top label
+  ctx.font='bold 10px "JetBrains Mono", monospace';
+  ctx.fillStyle=topic.color;ctx.textAlign='center';
+  ctx.fillText('⚡ DSA QUEST  ·  ACHIEVEMENT UNLOCKED',W/2,44);
+
+  // Icon
+  ctx.font='88px serif';ctx.textAlign='center';
+  ctx.shadowColor=topic.color;ctx.shadowBlur=24;
+  ctx.fillText(topic.icon,W/2,168);ctx.shadowBlur=0;
+
+  // Separator
+  const grad2=ctx.createLinearGradient(60,0,360,0);
+  grad2.addColorStop(0,'transparent');grad2.addColorStop(.5,topic.color+'55');grad2.addColorStop(1,'transparent');
+  ctx.strokeStyle=grad2;ctx.lineWidth=1;
+  ctx.beginPath();ctx.moveTo(60,190);ctx.lineTo(360,190);ctx.stroke();
+
+  // Topic name
+  ctx.shadowColor=topic.color;ctx.shadowBlur=12;
+  ctx.font='bold 30px "Syne", sans-serif';ctx.fillStyle='#ffffff';ctx.textAlign='center';
+  ctx.fillText(topic.name,W/2,236);ctx.shadowBlur=0;
+
+  // Subtitle
+  ctx.font='12px "JetBrains Mono", monospace';ctx.fillStyle='#9ca3af';
+  ctx.fillText('TOPIC MASTERED',W/2,262);
+
+  // Progress pill
+  const pW=150,pH=38,pX=(W-pW)/2,pY=278;
+  ctx.fillStyle=topic.color+'28';
+  ctx.strokeStyle=topic.color+'70';ctx.lineWidth=1;
+  ctx.beginPath();
+  if(ctx.roundRect)ctx.roundRect(pX,pY,pW,pH,19);else ctx.rect(pX,pY,pW,pH);
+  ctx.fill();ctx.stroke();
+  ctx.font='bold 13px "JetBrains Mono", monospace';ctx.fillStyle=topic.color;ctx.textAlign='center';
+  ctx.fillText(`${stats.total} / ${stats.total}  ✓  COMPLETE`,W/2,pY+24);
+
+  // Stars
+  ctx.font='14px serif';ctx.fillStyle=topic.color;ctx.textAlign='center';
+  ctx.fillText('★  ★  ★',W/2,346);
+
+  // Bottom line
+  const grad3=ctx.createLinearGradient(60,0,360,0);
+  grad3.addColorStop(0,'transparent');grad3.addColorStop(.5,'#2a2f4580');grad3.addColorStop(1,'transparent');
+  ctx.strokeStyle=grad3;ctx.lineWidth=1;
+  ctx.beginPath();ctx.moveTo(60,362);ctx.lineTo(360,362);ctx.stroke();
+
+  // Branding
+  ctx.font='10px "JetBrains Mono", monospace';ctx.fillStyle='#374151';ctx.textAlign='center';
+  ctx.fillText('7-Week DSA Quest  ·  leetcode.com',W/2,388);
+
+  const link=document.createElement('a');
+  link.download=`dsa-badge-${topic.id}.png`;
+  link.href=canvas.toDataURL('image/png');
+  link.click();
+  showToast(`⬇ ${topic.icon} ${topic.name} badge saved!`,topic.color);
+}
+
+// RENDER TOPIC
+function renderTopic(){
+  const topic=TOPICS.find(t=>t.id===currentTopic);if(!topic)return;
+  const s=computeTopicStats(topic);
+  document.getElementById('topic-icon').textContent=topic.icon;
+  document.getElementById('topic-title').textContent=topic.name;
+  document.getElementById('topic-desc').textContent=topic.desc;
+  document.getElementById('topic-progress-text').textContent=`${s.completed}/${s.total}`;
+  document.getElementById('topic-progress-bar').style.width=Math.round((s.completed/s.total)*100)+'%';
+  const list=document.getElementById('questions-list');list.innerHTML='';
+  for(const q of topic.questions)list.appendChild(buildQuestionCard(q,topic));
+}
+
+// QUESTION CARD
+function buildQuestionCard(q,topic){
+  const qs=getQ(q.id);
+  const card=document.createElement('div');
+  card.id=`card-${q.id}`;card.className=`q-card state-${qs}`;
+  const dc=q.diff==='Easy'?'diff-easy':q.diff==='Medium'?'diff-medium':'diff-hard';
+  const slug=q.title.toLowerCase().replace(/[^a-z0-9]+/g,'-').replace(/^-|-$/g,'');
+  const lcHref=`https://leetcode.com/problems/${slug}/`;
+  card.innerHTML=`
+    <div class="p-4 cursor-pointer flex items-start gap-3" onclick="toggleCard('${q.id}')">
+      <div class="flex-1 min-w-0">
+        <div class="flex items-center gap-2 flex-wrap mb-2">
+          <span class="lc-num">#${q.num}</span>
+          <span style="font-size:14px;font-weight:700;color:#fff">${q.title}</span>
+          <span class="text-[10px] font-bold px-2 py-0.5 rounded-full ${dc}">${q.diff}</span>
+          <a href="${lcHref}" target="_blank" rel="noopener" class="lc-link" onclick="event.stopPropagation()">
+            <svg width="10" height="10" viewBox="0 0 24 24" fill="currentColor"><path d="M14 3v2H5v14h14v-9h2v10a1 1 0 01-1 1H4a1 1 0 01-1-1V4a1 1 0 011-1h10zm7-2v7h-2V4.41l-8.29 8.3-1.42-1.42L17.58 3H14V1h7z"/></svg>
+            LeetCode ↗
+          </a>
+        </div>
+        <div class="flex items-center gap-2 flex-wrap">
+          <button class="state-btn state-btn-unattempted${qs==='unattempted'?' active':''}" onclick="event.stopPropagation();setState('${q.id}','unattempted','${topic.id}')">◯ Unattempted</button>
+          <button class="state-btn state-btn-working${qs==='working'?' active':''}" onclick="event.stopPropagation();setState('${q.id}','working','${topic.id}')">⟳ Working</button>
+          <button class="state-btn state-btn-completed${qs==='completed'?' active':''}" onclick="event.stopPropagation();setState('${q.id}','completed','${topic.id}')">✓ Completed</button>
+        </div>
+      </div>
+      <span style="font-size:11px;color:#4b5563;font-family:'JetBrains Mono',monospace;flex-shrink:0;margin-top:4px" id="ti-${q.id}">▼</span>
+    </div>
+    <div id="exp-${q.id}" class="collapsible-content">
+      <div class="px-4 pb-4 space-y-4 pt-4" style="border-top:1px solid #1e2130">
+        <div>
+          <div class="section-heading mb-2">📝 Revision Notes</div>
+          <textarea id="notes-${q.id}" class="notes-ta" placeholder="How I solved it — approach, edge cases, complexity...">${state.notes[q.id]||''}</textarea>
+          <div class="flex items-center justify-between mt-2">
+            <span style="font-size:10px;color:#374151;font-family:'JetBrains Mono',monospace">auto-saved to localStorage</span>
+            <button class="save-btn" id="sb-${q.id}" onclick="saveNote('${q.id}')">💾 Save</button>
+          </div>
+        </div>
+        <div>
+          <div class="section-heading mb-2">💡 Progressive Hints</div>
+          <div id="hc-${q.id}" class="space-y-2"></div>
+          <div id="hr-${q.id}" class="mt-2"></div>
+        </div>
+      </div>
+    </div>`;
+  setTimeout(()=>{
+    renderHints(q);
+    const ta=document.getElementById(`notes-${q.id}`);
+    if(ta)ta.addEventListener('input',()=>{state.notes[q.id]=ta.value;saveState(state);});
+  },0);
+  return card;
+}
+
+function toggleCard(id){
+  const el=document.getElementById(`exp-${id}`),ic=document.getElementById(`ti-${id}`);
+  if(!el)return;
+  el.classList.toggle('open');
+  if(ic)ic.textContent=el.classList.contains('open')?'▲':'▼';
+}
+
+// SET STATE
+function setState(qId,newState,topicId){
+  const old=getQ(qId);if(old===newState)return;
+  const xpMap={working:5,completed:50},rev={working:-5,completed:-50};
+  if(old!=='unattempted')state.xp+=rev[old]||0;
+  if(newState!=='unattempted')state.xp+=xpMap[newState]||0;
+  if(state.xp<0)state.xp=0;
+  state.questions[qId]=newState;saveState(state);
+  const card=document.getElementById(`card-${qId}`);
+  if(card){
+    card.className=`q-card state-${newState}`;
+    ['unattempted','working','completed'].forEach(s=>{
+      const b=card.querySelector(`.state-btn-${s}`);
+      if(b)b.classList.toggle('active',s===newState);
+    });
+  }
+  if(newState==='working')showToast('⟳ +5 XP — Working on it!','#f59e0b');
+  if(newState==='completed'){fireConfetti();showToast('🎉 +50 XP — Solved! 🔥','#10b981');checkBadge(topicId);}
+  if(newState==='unattempted'){
+    if(old==='completed')showToast('↩ -50 XP reverted','#6b7280');
+    else if(old==='working')showToast('↩ -5 XP reverted','#6b7280');
+  }
+  renderHeader();renderNav();
+  const topic=TOPICS.find(t=>t.id===topicId);
+  if(topic){
+    const s=computeTopicStats(topic);
+    const pt=document.getElementById('topic-progress-text');if(pt)pt.textContent=`${s.completed}/${s.total}`;
+    const pb=document.getElementById('topic-progress-bar');if(pb)pb.style.width=Math.round((s.completed/s.total)*100)+'%';
+  }
+  if(currentMainTab==='plan')updatePlanChips();
+}
+
+function saveNote(id){
+  const ta=document.getElementById(`notes-${id}`);if(!ta)return;
+  state.notes[id]=ta.value;saveState(state);
+  const btn=document.getElementById(`sb-${id}`);
+  if(btn){btn.textContent='✓ Saved!';btn.classList.add('saved');setTimeout(()=>{btn.textContent='💾 Save';btn.classList.remove('saved');},1500);}
+}
+
+// HINTS
+function renderHints(q){
+  const con=document.getElementById(`hc-${q.id}`),ra=document.getElementById(`hr-${q.id}`);
+  if(!con||!ra)return;
+  const rev=state.hints[q.id]||0;
+  con.innerHTML='';
+  for(let i=0;i<Math.min(rev,q.hints.length);i++){
+    const h=document.createElement('div');h.className='hint-block';
+    h.innerHTML=`<span style="color:var(--amber);font-weight:700">Hint ${i+1}:</span> ${esc(q.hints[i])}`;
+    con.appendChild(h);
+  }
+  if(rev>=q.hints.length+1){
+    const s=document.createElement('div');s.className='hint-block';s.style.borderLeftColor='#8b5cf6';
+    s.innerHTML=buildSolBlock(q);con.appendChild(s);
+  }
+  ra.innerHTML='';
+  let btn;
+  if(rev===0){
+    btn=mkBtn('🤔 Stuck? Reveal Hint 1',()=>{state.hints[q.id]=1;saveState(state);renderHints(q);});
+  } else if(rev<q.hints.length){
+    btn=mkBtn(`🔓 Reveal Hint ${rev+1} of ${q.hints.length}`,()=>{state.hints[q.id]=(state.hints[q.id]||0)+1;saveState(state);renderHints(q);});
+  } else if(rev===q.hints.length){
+    btn=mkBtn('💡 Reveal Solution Code',()=>{state.hints[q.id]=(state.hints[q.id]||0)+1;saveState(state);renderHints(q);});
+    btn.style.cssText='border-color:rgba(139,92,246,.4);color:#8b5cf6;background:rgba(139,92,246,.08);font-size:11px;font-weight:600;padding:5px 12px;border-radius:6px;cursor:pointer;font-family:"JetBrains Mono",monospace;display:inline-flex;align-items:center;gap:6px;border:1px solid;';
+  }
+  if(btn)ra.appendChild(btn);
+}
+function mkBtn(label,fn){
+  const b=document.createElement('button');b.className='hint-reveal-btn';b.innerHTML=label;b.onclick=fn;return b;
+}
+function buildSolBlock(q){
+  const uid=q.id+'_s';
+  return`<div style="color:#a5b4fc;font-weight:700;margin-bottom:8px;font-size:12px">🔑 Solution Code</div>
+    <div style="display:flex;gap:4px"><button class="code-tab active" id="tc-${uid}" onclick="swTab('${uid}','cpp')">C++</button><button class="code-tab" id="tp-${uid}" onclick="swTab('${uid}','py')">Python</button></div>
+    <pre class="code-block" id="cc-${uid}">${esc(q.cpp)}</pre>
+    <pre class="code-block" id="cp-${uid}" style="display:none">${esc(q.python)}</pre>`;
+}
+function swTab(uid,lang){
+  const cc=document.getElementById(`cc-${uid}`),cp=document.getElementById(`cp-${uid}`);
+  const tc=document.getElementById(`tc-${uid}`),tp=document.getElementById(`tp-${uid}`);
+  if(!cc)return;
+  if(lang==='cpp'){cc.style.display='';cp.style.display='none';tc.classList.add('active');tp.classList.remove('active');}
+  else{cp.style.display='';cc.style.display='none';tp.classList.add('active');tc.classList.remove('active');}
+}
+function esc(s){return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');}
+
+// 7-WEEK PLAN
+function renderPlan(){
+  const container=document.getElementById('plan-container');if(!container)return;
+  container.innerHTML='';
+  for(const week of PLAN){
+    const wDiv=document.createElement('div');wDiv.className='space-y-2';
+    // Week header
+    const wDone=week.days.reduce((a,d)=>a+d.qids.filter(id=>getQ(id)==='completed').length,0);
+    const wTotal=week.days.reduce((a,d)=>a+d.qids.length,0);
+    const wHead=document.createElement('div');wHead.className='week-header flex items-center justify-between gap-4 flex-wrap';
+    wHead.innerHTML=`
+      <div class="flex items-center gap-3">
+        <div style="width:34px;height:34px;border-radius:9px;background:${week.color}22;border:1px solid ${week.color}55;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:13px;font-family:'JetBrains Mono',monospace;color:${week.color};flex-shrink:0">W${week.week}</div>
+        <div>
+          <div style="font-size:14px;font-weight:700;color:#fff">Week ${week.week} · ${week.theme}</div>
+          <div style="font-size:10px;color:#6b7280;font-family:'JetBrains Mono',monospace">Days ${week.days[0].day}–${week.days[week.days.length-1].day} · ${week.days.length} days · ${wTotal} questions</div>
+        </div>
+      </div>
+      <div class="flex items-center gap-3">
+        <div class="prog-bar-outer" style="width:80px"><div class="prog-bar-inner" style="width:${Math.round((wDone/wTotal)*100)}%;background:${week.color}"></div></div>
+        <span style="font-size:12px;font-weight:700;font-family:'JetBrains Mono',monospace;color:${week.color}">${wDone}/${wTotal}</span>
+      </div>`;
+    wDiv.appendChild(wHead);
+    // Days
+    const daysWrap=document.createElement('div');daysWrap.className='space-y-2 pl-1';
+    for(const day of week.days){
+      const dc=document.createElement('div');dc.className='day-card';dc.id=`dc-${day.day}`;
+      const done=day.qids.filter(id=>getQ(id)==='completed').length;
+      const allDone=done===day.qids.length;
+      dc.innerHTML=`
+        <div class="flex items-start gap-3 flex-wrap">
+          <div class="flex items-center gap-2 flex-shrink-0 pt-0.5">
+            <span class="day-pill" style="color:${allDone?'#10b981':week.color};background:${allDone?'rgba(16,185,129,.1)':week.color+'15'};border-color:${allDone?'rgba(16,185,129,.3)':week.color+'40'}">${day.label}</span>
+            <span style="font-size:12px;color:#9ca3af;font-weight:600">${day.focus}</span>
+            <span style="font-size:10px;font-family:'JetBrains Mono',monospace;color:${allDone?'#10b981':'#4b5563'}">${done}/${day.qids.length}</span>
+          </div>
+          <div class="flex flex-wrap gap-2 flex-1 min-w-0" id="chips-${day.day}">
+            ${day.qids.map(id=>buildChip(id)).join('')}
+          </div>
+        </div>`;
+      daysWrap.appendChild(dc);
+    }
+    wDiv.appendChild(daysWrap);
+    container.appendChild(wDiv);
+  }
+}
+
+function buildChip(qid){
+  const entry=Q_MAP[qid];if(!entry)return'';
+  const{q,t}=entry,qs=getQ(qid);
+  const done=qs==='completed',wip=qs==='working';
+  return`<button class="plan-q-chip${done?' done':wip?' wip':''}" onclick="jumpToQ('${t.id}','${qid}')" title="Open ${q.title}">
+    <span style="color:var(--cyan);font-size:10px">#${q.num}</span>
+    <span style="max-width:110px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${q.title}</span>
+    ${done?'<span style="color:#10b981;font-size:11px">✓</span>':wip?'<span style="color:#f59e0b;font-size:11px">⟳</span>':''}
+  </button>`;
+}
+
+function updatePlanChips(){
+  for(const week of PLAN)for(const day of week.days){
+    const el=document.getElementById(`chips-${day.day}`);
+    if(el)el.innerHTML=day.qids.map(id=>buildChip(id)).join('');
+  }
+}
+
+function jumpToQ(topicId,qId){
+  currentTopic=topicId;
+  switchMainTab('questions');
+  renderNav();renderTopic();
+  setTimeout(()=>{
+    const el=document.getElementById(`card-${qId}`);
+    if(el){el.scrollIntoView({behavior:'smooth',block:'center'});setTimeout(()=>toggleCard(qId),400);}
+  },200);
+}
+
+// INIT
+function init(){
+  for(const t of TOPICS){const s=computeTopicStats(t);if(s.completed===s.total)state.badges[t.id]=true;}
+  saveState(state);
+  renderHeader();renderNav();renderTopic();renderBadges();
+  const mob=document.getElementById('mobile-topics');
+  mob.style.display=window.innerWidth<=768?'flex':'none';
+  window.addEventListener('resize',()=>{mob.style.display=window.innerWidth<=768?'flex':'none';});
+}
+init();
+</script>
+</body>
+</html>
