@@ -1,0 +1,895 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SRM GPA Predictor</title>
+<link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Syne:wght@400;600;700;800&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0a0a0f;
+    --bg2: #111118;
+    --bg3: #1a1a24;
+    --border: #2a2a3a;
+    --border2: #3a3a50;
+    --text: #e8e8f0;
+    --text2: #9898b8;
+    --text3: #5a5a7a;
+    --accent: #6c63ff;
+    --accent2: #a78bfa;
+    --accent3: #7c3aed;
+    --green: #10b981;
+    --amber: #f59e0b;
+    --red: #ef4444;
+    --card-bg: #13131c;
+    --card-hover: #1e1e2a;
+    --shadow: 0 4px 24px rgba(0,0,0,0.4);
+    --radius: 16px;
+    --fail-glow: rgba(239,68,68,0.15);
+  }
+  [data-theme="light"] {
+    --bg: #f0f0f8;
+    --bg2: #e8e8f4;
+    --bg3: #ddddf0;
+    --border: #c8c8e0;
+    --border2: #b0b0d0;
+    --text: #1a1a2e;
+    --text2: #4a4a6a;
+    --text3: #8888aa;
+    --card-bg: #ffffff;
+    --card-hover: #f5f5ff;
+    --shadow: 0 4px 24px rgba(0,0,0,0.08);
+    --fail-glow: rgba(239,68,68,0.08);
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: 'Syne', sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    min-height: 100vh;
+    padding-bottom: 120px;
+    transition: background 0.3s, color 0.3s;
+  }
+
+  header {
+    position: sticky; top: 0; z-index: 100;
+    background: var(--bg);
+    border-bottom: 1px solid var(--border);
+    padding: 14px 24px;
+    display: flex; align-items: center; justify-content: space-between;
+    backdrop-filter: blur(12px);
+  }
+  .logo { display: flex; align-items: center; gap: 10px; }
+  .logo-badge {
+    background: linear-gradient(135deg, var(--accent), var(--accent2));
+    color: white;
+    font-family: 'Space Mono', monospace;
+    font-size: 11px; font-weight: 700;
+    padding: 4px 8px; border-radius: 6px;
+    letter-spacing: 1px;
+  }
+  .logo-title { font-size: 18px; font-weight: 800; letter-spacing: -0.3px; }
+  .logo-title span { color: var(--accent2); }
+
+  .header-right { display: flex; align-items: center; gap: 12px; }
+
+  .theme-toggle {
+    background: var(--bg3); border: 1px solid var(--border);
+    border-radius: 50px; padding: 6px 14px;
+    cursor: pointer; font-size: 13px; font-family: 'Syne', sans-serif;
+    color: var(--text2); display: flex; align-items: center; gap: 6px;
+    transition: all 0.2s;
+  }
+  .theme-toggle:hover { border-color: var(--accent); color: var(--text); }
+
+  .main { max-width: 1100px; margin: 0 auto; padding: 28px 20px 0; }
+
+  .section-title {
+    font-size: 11px; font-weight: 700; letter-spacing: 2px; text-transform: uppercase;
+    color: var(--text3); margin-bottom: 12px;
+    display: flex; align-items: center; gap: 8px;
+  }
+  .section-title::after { content: ''; flex: 1; height: 1px; background: var(--border); }
+
+  .cgpa-row {
+    display: grid; grid-template-columns: 1fr 1fr; gap: 16px;
+    margin-bottom: 28px;
+  }
+  .input-group {
+    background: var(--card-bg); border: 1px solid var(--border);
+    border-radius: var(--radius); padding: 16px 20px;
+    transition: border-color 0.2s;
+  }
+  .input-group:focus-within { border-color: var(--accent); }
+  .input-label {
+    font-size: 11px; font-weight: 700; letter-spacing: 1.5px; text-transform: uppercase;
+    color: var(--text3); margin-bottom: 8px;
+  }
+  .input-group input {
+    width: 100%; background: transparent; border: none; outline: none;
+    font-family: 'Space Mono', monospace; font-size: 22px; font-weight: 700;
+    color: var(--text);
+  }
+  .input-group input::placeholder { color: var(--text3); }
+  .input-hint { font-size: 11px; color: var(--text3); margin-top: 4px; }
+
+  .elective-toggle-row {
+    display: flex; align-items: center; justify-content: space-between;
+    background: var(--card-bg); border: 1px solid var(--border);
+    border-radius: var(--radius); padding: 14px 20px;
+    margin-bottom: 28px;
+  }
+  .elective-label { font-size: 14px; font-weight: 600; }
+  .elective-credit { font-size: 12px; color: var(--text3); margin-top: 2px; }
+  .toggle-switch {
+    position: relative; width: 48px; height: 26px; cursor: pointer;
+  }
+  .toggle-switch input { opacity: 0; width: 0; height: 0; }
+  .toggle-track {
+    position: absolute; inset: 0;
+    background: var(--border2); border-radius: 50px;
+    transition: background 0.25s;
+  }
+  .toggle-switch input:checked + .toggle-track { background: var(--accent); }
+  .toggle-thumb {
+    position: absolute; top: 3px; left: 3px;
+    width: 20px; height: 20px; background: white;
+    border-radius: 50%; transition: transform 0.25s;
+  }
+  .toggle-switch input:checked ~ .toggle-thumb { transform: translateX(22px); }
+
+  .subjects-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+    gap: 16px; margin-bottom: 28px;
+  }
+
+  .subject-card {
+    background: var(--card-bg); border: 1px solid var(--border);
+    border-radius: var(--radius); padding: 20px;
+    transition: border-color 0.25s, background 0.25s, box-shadow 0.25s;
+    position: relative; overflow: hidden;
+  }
+  .subject-card:hover { border-color: var(--border2); background: var(--card-hover); }
+  .subject-card.fail {
+    border-color: var(--red) !important;
+    background: color-mix(in srgb, var(--card-bg) 85%, var(--red) 15%) !important;
+    box-shadow: 0 0 24px var(--fail-glow);
+  }
+  .subject-card.fail::before {
+    content: '⚠ FAIL RISK';
+    position: absolute; top: 10px; right: 12px;
+    font-size: 10px; font-weight: 700; letter-spacing: 1px;
+    color: var(--red); opacity: 0.9;
+  }
+
+  .card-header { display: flex; align-items: flex-start; justify-content: space-between; margin-bottom: 14px; }
+  .card-title { font-size: 16px; font-weight: 800; }
+  .card-meta { display: flex; gap: 6px; align-items: center; margin-top: 3px; }
+  .badge {
+    font-size: 10px; font-weight: 700; letter-spacing: 1px; text-transform: uppercase;
+    padding: 2px 8px; border-radius: 50px;
+  }
+  .badge-endsem { background: color-mix(in srgb, var(--accent) 20%, transparent); color: var(--accent2); }
+  .badge-internal { background: color-mix(in srgb, var(--green) 20%, transparent); color: var(--green); }
+  .badge-credit { background: var(--bg3); color: var(--text3); }
+
+  .grade-display { text-align: right; }
+  .grade-letter {
+    font-family: 'Space Mono', monospace;
+    font-size: 26px; font-weight: 700;
+    line-height: 1;
+  }
+  .grade-point { font-size: 11px; color: var(--text3); margin-top: 2px; }
+
+  .card-inputs { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 14px; }
+  .mini-label {
+    font-size: 10px; font-weight: 700; letter-spacing: 1px; text-transform: uppercase;
+    color: var(--text3); margin-bottom: 5px;
+  }
+  .mini-input-inner {
+    background: var(--bg3); border: 1px solid var(--border);
+    border-radius: 10px; padding: 8px 12px;
+    display: flex; align-items: center; gap: 6px;
+    transition: border-color 0.2s;
+  }
+  .mini-input-inner:focus-within { border-color: var(--accent); }
+  .mini-input-inner input {
+    background: transparent; border: none; outline: none;
+    font-family: 'Space Mono', monospace; font-size: 15px; font-weight: 700;
+    color: var(--text); width: 100%;
+  }
+  .mini-input-inner input::placeholder { color: var(--text3); font-size: 13px; }
+  .mini-denom { font-size: 11px; color: var(--text3); white-space: nowrap; }
+
+  .total-bar {
+    height: 6px; background: var(--bg3); border-radius: 3px;
+    margin-bottom: 12px; overflow: hidden;
+  }
+  .total-fill {
+    height: 100%; border-radius: 3px;
+    background: linear-gradient(90deg, var(--accent), var(--accent2));
+    transition: width 0.4s ease, background 0.3s;
+  }
+  .total-text {
+    font-size: 11px; color: var(--text3); margin-bottom: 10px; display: flex; justify-content: space-between;
+  }
+  .total-text strong { color: var(--text); font-family: 'Space Mono', monospace; font-size: 12px; }
+
+  .predictor-label {
+    font-size: 10px; font-weight: 700; letter-spacing: 1px; text-transform: uppercase;
+    color: var(--text3); margin-bottom: 7px;
+  }
+  .predictor-pills { display: flex; flex-wrap: wrap; gap: 7px; }
+  .pred-pill {
+    display: flex; flex-direction: column; align-items: center;
+    padding: 6px 12px; border-radius: 10px;
+    border: 1px solid var(--border2);
+    cursor: pointer; transition: all 0.2s;
+    min-width: 80px;
+  }
+  .pred-pill:hover { border-color: var(--accent); background: color-mix(in srgb, var(--accent) 10%, transparent); }
+  .pred-pill.selected { border-color: var(--accent2); background: color-mix(in srgb, var(--accent2) 15%, transparent); }
+  .pred-pill.relative { border-style: dashed; }
+  .pred-grade { font-size: 13px; font-weight: 800; }
+  .pred-marks { font-family: 'Space Mono', monospace; font-size: 10px; color: var(--text3); }
+  .pred-note { font-size: 9px; color: var(--amber); margin-top: 1px; }
+
+  .grade-row { display: flex; align-items: center; gap: 8px; }
+  .grade-chip {
+    padding: 4px 10px; border-radius: 8px;
+    border: 1px solid var(--border2);
+    font-size: 11px; font-weight: 700;
+    color: var(--text2); cursor: pointer; transition: all 0.2s;
+    white-space: nowrap;
+  }
+  .grade-chip:hover, .grade-chip.selected {
+    border-color: var(--accent); background: color-mix(in srgb, var(--accent) 12%, transparent);
+    color: var(--accent2);
+  }
+
+  .sticky-dash {
+    position: fixed; bottom: 0; left: 0; right: 0; z-index: 200;
+    background: var(--bg2);
+    border-top: 1px solid var(--border);
+    padding: 14px 24px;
+    backdrop-filter: blur(16px);
+    display: flex; align-items: center; justify-content: center;
+  }
+  .dash-inner {
+    max-width: 1100px; width: 100%;
+    display: flex; align-items: center;
+    justify-content: space-between;
+  }
+  .dash-stat {
+    display: flex; flex-direction: column; align-items: center;
+    flex: 1;
+  }
+  .dash-divider { width: 1px; height: 44px; background: var(--border); }
+  .dash-label {
+    font-size: 9px; font-weight: 700; letter-spacing: 2px; text-transform: uppercase;
+    color: var(--text3); margin-bottom: 4px;
+  }
+  .dash-value {
+    font-family: 'Space Mono', monospace;
+    font-size: 24px; font-weight: 700;
+    background: linear-gradient(135deg, var(--accent), var(--accent2));
+    -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+    line-height: 1;
+  }
+  .dash-sub { font-size: 10px; color: var(--text3); margin-top: 2px; }
+
+  .dash-reset {
+    background: var(--bg3); border: 1px solid var(--border);
+    border-radius: 10px; padding: 8px 16px;
+    cursor: pointer; font-family: 'Syne', sans-serif;
+    font-size: 12px; font-weight: 700; color: var(--text3);
+    transition: all 0.2s;
+  }
+  .dash-reset:hover { border-color: var(--red); color: var(--red); }
+
+  @media (max-width: 600px) {
+    .cgpa-row { grid-template-columns: 1fr; }
+    .subjects-grid { grid-template-columns: 1fr; }
+    .dash-value { font-size: 18px; }
+    .logo-title { font-size: 15px; }
+    header { padding: 12px 16px; }
+    .main { padding: 20px 14px 0; }
+  }
+
+  .subject-card { animation: fadeUp 0.3s ease both; }
+  @keyframes fadeUp {
+    from { opacity:0; transform: translateY(12px); }
+    to { opacity:1; transform: translateY(0); }
+  }
+  .subject-card:nth-child(1){animation-delay:0.05s}
+  .subject-card:nth-child(2){animation-delay:0.1s}
+  .subject-card:nth-child(3){animation-delay:0.15s}
+  .subject-card:nth-child(4){animation-delay:0.2s}
+  .subject-card:nth-child(5){animation-delay:0.25s}
+  .subject-card:nth-child(6){animation-delay:0.3s}
+  .subject-card:nth-child(7){animation-delay:0.35s}
+
+  .grade-color-O  { color: #10b981; }
+  .grade-color-Ap { color: #6c63ff; }
+  .grade-color-A  { color: #a78bfa; }
+  .grade-color-Bp { color: #f59e0b; }
+  .grade-color-B  { color: #fb923c; }
+  .grade-color-C  { color: #ef4444; }
+  .grade-color-F  { color: #ef4444; }
+  .grade-color-na { color: var(--text3); }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="logo">
+    <div class="logo-badge">SRM</div>
+    <div class="logo-title">GPA &amp; CGPA <span>Predictor</span></div>
+  </div>
+  <div class="header-right">
+    <button class="theme-toggle" onclick="toggleTheme()" id="themeBtn">☀ Light</button>
+  </div>
+</header>
+
+<div class="main">
+
+  <div class="section-title">Previous Semester Data</div>
+  <div class="cgpa-row">
+    <div class="input-group">
+      <div class="input-label">Past CGPA</div>
+      <input type="number" id="pastCGPA" min="0" max="10" step="0.01" placeholder="0.00" oninput="save();compute()">
+      <div class="input-hint">Your CGPA before this semester</div>
+    </div>
+    <div class="input-group">
+      <div class="input-label">Completed Credits</div>
+      <input type="number" id="pastCredits" min="0" placeholder="66" value="66" oninput="save();compute()">
+      <div class="input-hint">Total credits earned so far (default 66)</div>
+    </div>
+  </div>
+
+  <div class="elective-toggle-row">
+    <div>
+      <div class="elective-label">Elective Subject <span style="font-size:11px;color:var(--text3);font-weight:400">(always counted in GPA)</span></div>
+      <div class="elective-credit" id="electiveHint">Elective (3 Cr) — appears in <strong>Internal</strong> section</div>
+    </div>
+    <div style="display:flex;flex-direction:column;align-items:center;gap:4px">
+      <span id="electiveModeLabel" style="font-size:9px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:var(--text3)">INTERNAL</span>
+      <label class="toggle-switch">
+        <input type="checkbox" id="electiveToggle" onchange="onElectiveToggle()">
+        <div class="toggle-track"></div>
+        <div class="toggle-thumb"></div>
+      </label>
+      <span style="font-size:9px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:var(--text3)">END-SEM</span>
+    </div>
+  </div>
+
+  <div class="section-title">End-Semester Subjects</div>
+  <div class="subjects-grid" id="endSemGrid"></div>
+
+  <div class="section-title">Internal Assessment Subjects</div>
+  <div class="subjects-grid" id="internalGrid"></div>
+
+</div>
+
+<div class="sticky-dash">
+  <div class="dash-inner">
+    <div class="dash-stat">
+      <div class="dash-label">Semester GPA</div>
+      <div class="dash-value" id="dashGPA">—</div>
+      <div class="dash-sub">out of 10.0</div>
+    </div>
+    <div class="dash-divider"></div>
+    <div class="dash-stat">
+      <div class="dash-label">Overall CGPA</div>
+      <div class="dash-value" id="dashCGPA">—</div>
+      <div class="dash-sub">cumulative</div>
+    </div>
+    <div class="dash-divider"></div>
+    <div class="dash-stat">
+      <div class="dash-label">Total Credits</div>
+      <div class="dash-value" id="dashCredits">—</div>
+      <div class="dash-sub">this semester</div>
+    </div>
+    <button class="dash-reset" onclick="resetAll()">↺ Reset</button>
+  </div>
+</div>
+
+<script>
+const GRADE_SCALE = [
+  { grade:'O',  point:10, min:91 },
+  { grade:'A+', point:9,  min:81 },
+  { grade:'A',  point:8,  min:71 },
+  { grade:'B+', point:7,  min:61 },
+  { grade:'B',  point:6,  min:56 },
+  { grade:'C',  point:5,  min:50 },
+];
+
+const SUBJECTS = {
+  endSem: [
+    { id:'pqt',  name:'PQT',  credits:4 },
+    { id:'daa',  name:'DAA',  credits:4 },
+    { id:'ai',   name:'AI',   credits:3 },
+  ],
+  internal: [
+    { id:'dbms', name:'DBMS', credits:4 },
+    { id:'dtm',  name:'DTM',  credits:3 },
+    { id:'se',   name:'SE',   credits:2 },
+  ],
+  elective: [
+    { id:'elec', name:'Elective', credits:3 },
+  ]
+};
+
+let state = {};
+
+function renderGrade(g) {
+  if (!g || g === '—') return g;
+  if (g === 'O') return '<span style="font-family:Georgia,serif;font-style:italic;font-weight:900">O</span>';
+  return g;
+}
+
+function getGradeFromTotal(total) {
+  if (isNaN(total) || total === null) return null;
+  for (const g of GRADE_SCALE) if (total >= g.min) return g;
+  return { grade:'F', point:0, min:0 };
+}
+
+function calcEndSemTotal(internal, endSem) {
+  if (isNaN(internal) || isNaN(endSem)) return null;
+  return parseFloat(internal) + parseFloat(endSem) * 40 / 75;
+}
+
+function requiredEndSem(internal, targetTotal) {
+  return (targetTotal - parseFloat(internal)) * 75 / 40;
+}
+
+function save() {
+  const d = {
+    pastCGPA: document.getElementById('pastCGPA').value,
+    pastCredits: document.getElementById('pastCredits').value,
+    electiveOn: document.getElementById('electiveToggle').checked,
+    subjects: state
+  };
+  localStorage.setItem('srmgpa', JSON.stringify(d));
+}
+
+function load() {
+  const raw = localStorage.getItem('srmgpa');
+  if (!raw) return;
+  try {
+    const d = JSON.parse(raw);
+    if (d.pastCGPA) document.getElementById('pastCGPA').value = d.pastCGPA;
+    if (d.pastCredits) document.getElementById('pastCredits').value = d.pastCredits;
+    document.getElementById('electiveToggle').checked = d.electiveOn === true;
+    if (d.subjects) state = d.subjects;
+  } catch(e){}
+}
+
+function buildCards() {
+  buildEndSem();
+  buildInternal();
+  buildElective();
+}
+
+function buildEndSem() {
+  const grid = document.getElementById('endSemGrid');
+  grid.innerHTML = '';
+  SUBJECTS.endSem.forEach((sub, i) => {
+    const s = state[sub.id] || {};
+    grid.appendChild(makeEndSemCard(sub, s, i * 0.05));
+  });
+}
+
+function buildInternal() {
+  const grid = document.getElementById('internalGrid');
+  grid.innerHTML = '';
+  SUBJECTS.internal.forEach((sub, i) => {
+    const s = state[sub.id] || {};
+    grid.appendChild(makeInternalCard(sub, s, i * 0.05));
+  });
+}
+
+function buildElective() {
+  const electiveEndSem = document.getElementById('electiveToggle').checked;
+  const targetGrid = document.getElementById(electiveEndSem ? 'endSemGrid' : 'internalGrid');
+  document.querySelectorAll('.elective-card').forEach(c => c.remove());
+  SUBJECTS.elective.forEach((sub, i) => {
+    const s = state[sub.id] || {};
+    const card = electiveEndSem
+      ? makeEndSemCard(sub, s, i * 0.05)
+      : makeInternalCard(sub, s, i * 0.05);
+    card.classList.add('elective-card');
+    targetGrid.appendChild(card);
+  });
+}
+
+function onElectiveToggle() {
+  const isEndSem = document.getElementById('electiveToggle').checked;
+  document.getElementById('electiveModeLabel').style.color = isEndSem ? 'var(--accent2)' : 'var(--text3)';
+  document.getElementById('electiveHint').innerHTML = isEndSem
+    ? 'Elective (3 Cr) — appears in <strong>End-Sem</strong> section'
+    : 'Elective (3 Cr) — appears in <strong>Internal</strong> section';
+  if (state['elec']) state['elec'] = {};
+  save(); buildElective(); compute();
+}
+
+function makeEndSemCard(sub, s, delay) {
+  const internal = parseFloat(s.internal) || 0;
+  const endSemRaw = s.endSem !== undefined ? parseFloat(s.endSem) : NaN;
+  const selectedPred = s.selectedPred;
+  const hasEndSem = !isNaN(endSemRaw) && endSemRaw !== '';
+
+  let total = null, gradeObj = null;
+  if (!isNaN(internal) && hasEndSem) {
+    total = calcEndSemTotal(internal, endSemRaw);
+    gradeObj = getGradeFromTotal(total);
+  } else if (selectedPred) {
+    const pg = GRADE_SCALE.find(g => g.grade === selectedPred);
+    gradeObj = pg || null;
+    total = pg ? pg.min : null;
+  }
+
+  const isFail = total !== null && total < 50;
+  const preds = buildPredictions(internal);
+
+  const card = document.createElement('div');
+  card.className = 'subject-card' + (isFail ? ' fail' : '');
+  card.style.animationDelay = delay + 's';
+  card.id = 'card-' + sub.id;
+
+  const gradeClass = gradeColorClass(gradeObj);
+  const gradeDisplay = gradeObj ? gradeObj.grade : '—';
+  const pointDisplay = gradeObj ? gradeObj.point.toFixed(1) : '—';
+  const totalPct = total !== null ? Math.min(100, Math.max(0, (total / 100) * 100)) : 0;
+  const totalColor = isFail ? 'var(--red)' : total >= 71 ? 'var(--green)' : total >= 56 ? 'var(--amber)' : 'var(--accent)';
+  const totalStr = total !== null ? total.toFixed(1) : '—';
+
+  const predPills = preds.map(p => {
+    const isSel = selectedPred === p.grade && !hasEndSem;
+    const isRelative = p.required > 75;
+    return `<div class="pred-pill${isSel ? ' selected' : ''}${isRelative ? ' relative' : ''}"
+      onclick="selectPred('${sub.id}','${p.grade}')"
+      title="${p.grade}: need ${p.required.toFixed(1)}/75 in End-Sem">
+      <div class="pred-grade">${p.grade}</div>
+      <div class="pred-marks">${p.required > 75 ? '>75' : p.required.toFixed(1)}/75</div>
+      ${isRelative ? '<div class="pred-note">Relative</div>' : ''}
+    </div>`;
+  }).join('');
+
+  card.innerHTML = `
+    <div class="card-header">
+      <div>
+        <div class="card-title">${sub.name}</div>
+        <div class="card-meta">
+          <span class="badge badge-endsem">End-Sem</span>
+          <span class="badge badge-credit">${sub.credits} Cr</span>
+        </div>
+      </div>
+      <div class="grade-display">
+        <div class="grade-letter ${gradeClass}">${renderGrade(gradeDisplay)}</div>
+        <div class="grade-point">${pointDisplay} pts</div>
+      </div>
+    </div>
+    <div class="card-inputs">
+      <div class="mini-input-wrap">
+        <div class="mini-label">Internal</div>
+        <div class="mini-input-inner">
+          <input type="number" min="0" max="60" placeholder="0"
+            value="${s.internal !== undefined ? s.internal : ''}"
+            oninput="updateSubject('${sub.id}','internal',this.value)">
+          <span class="mini-denom">/60</span>
+        </div>
+      </div>
+      <div class="mini-input-wrap">
+        <div class="mini-label">End-Sem</div>
+        <div class="mini-input-inner">
+          <input type="number" min="0" max="75" placeholder="—"
+            value="${s.endSem !== undefined ? s.endSem : ''}"
+            oninput="updateSubject('${sub.id}','endSem',this.value)">
+          <span class="mini-denom">/75</span>
+        </div>
+      </div>
+    </div>
+    <div class="total-bar"><div class="total-fill" id="fill-${sub.id}" style="width:${totalPct}%;background:${totalColor}"></div></div>
+    <div class="total-text">
+      <span>Total</span>
+      <strong id="totalText-${sub.id}">${totalStr}/100</strong>
+    </div>
+    <div class="predictor-label">Grade Predictor — click to apply</div>
+    <div class="predictor-pills" id="preds-${sub.id}">${predPills}</div>
+  `;
+  return card;
+}
+
+function buildPredictions(internal) {
+  internal = parseFloat(internal) || 0;
+  let firstAchievableIdx = -1;
+  for (let i = 0; i < GRADE_SCALE.length; i++) {
+    const req = requiredEndSem(internal, GRADE_SCALE[i].min);
+    if (req <= 75) { firstAchievableIdx = i; break; }
+  }
+  let slots;
+  if (firstAchievableIdx <= 0) {
+    slots = [0, 1, 2];
+  } else {
+    slots = [firstAchievableIdx - 1, firstAchievableIdx, firstAchievableIdx + 1];
+    slots = slots.filter(i => i >= 0 && i < GRADE_SCALE.length);
+    while (slots.length < 3) slots.push(slots[slots.length - 1] + 1);
+    slots = slots.filter(i => i < GRADE_SCALE.length);
+  }
+  return slots.map(i => {
+    const g = GRADE_SCALE[i];
+    const req = requiredEndSem(internal, g.min);
+    return { grade: g.grade, required: req, relative: req > 75 };
+  });
+}
+
+function makeInternalCard(sub, s, delay) {
+  const total = parseFloat(s.total) || 0;
+  const hasTotal = s.total !== undefined && s.total !== '';
+  const gradeObj = hasTotal ? getGradeFromTotal(total) : null;
+  const isFail = hasTotal && total < 50;
+
+  const card = document.createElement('div');
+  card.className = 'subject-card' + (isFail ? ' fail' : '');
+  card.style.animationDelay = delay + 's';
+  card.id = 'card-' + sub.id;
+
+  const gradeClass = gradeColorClass(gradeObj);
+  const gradeDisplay = gradeObj ? gradeObj.grade : '—';
+  const pointDisplay = gradeObj ? gradeObj.point.toFixed(1) : '—';
+  const totalPct = hasTotal ? Math.min(100, Math.max(0, (total / 100) * 100)) : 0;
+  const totalColor = isFail ? 'var(--red)' : total >= 71 ? 'var(--green)' : total >= 56 ? 'var(--amber)' : 'var(--accent)';
+
+  const chips = GRADE_SCALE.map(g => {
+    const sel = gradeObj && gradeObj.grade === g.grade;
+    return `<div class="grade-chip${sel ? ' selected' : ''}" onclick="setInternalGrade('${sub.id}',${g.min})">${g.grade}</div>`;
+  }).join('');
+
+  card.innerHTML = `
+    <div class="card-header">
+      <div>
+        <div class="card-title">${sub.name}</div>
+        <div class="card-meta">
+          <span class="badge badge-internal">Internal</span>
+          <span class="badge badge-credit">${sub.credits} Cr</span>
+        </div>
+      </div>
+      <div class="grade-display">
+        <div class="grade-letter ${gradeClass}">${renderGrade(gradeDisplay)}</div>
+        <div class="grade-point">${pointDisplay} pts</div>
+      </div>
+    </div>
+    <div class="card-inputs">
+      <div class="mini-input-wrap" style="grid-column:1/-1">
+        <div class="mini-label">Total Marks</div>
+        <div class="mini-input-inner">
+          <input type="number" min="0" max="100" placeholder="0"
+            value="${s.total !== undefined ? s.total : ''}"
+            oninput="updateSubject('${sub.id}','total',this.value)">
+          <span class="mini-denom">/100</span>
+        </div>
+      </div>
+    </div>
+    <div class="total-bar"><div class="total-fill" id="fill-${sub.id}" style="width:${totalPct}%;background:${totalColor}"></div></div>
+    <div class="total-text"><span>Quick grade select:</span></div>
+    <div class="grade-row">${chips}</div>
+  `;
+  return card;
+}
+
+function gradeColorClass(g) {
+  if (!g) return 'grade-color-na';
+  const map = { 'O':'grade-color-O','A+':'grade-color-Ap','A':'grade-color-A','B+':'grade-color-Bp','B':'grade-color-B','C':'grade-color-C','F':'grade-color-F' };
+  return map[g.grade] || 'grade-color-na';
+}
+
+function updateSubject(id, field, val) {
+  if (!state[id]) state[id] = {};
+  state[id][field] = val;
+  if (field === 'endSem' && val !== '') state[id].selectedPred = null;
+  save(); compute(); refreshCard(id);
+}
+
+function selectPred(id, grade) {
+  if (!state[id]) state[id] = {};
+  if (state[id].selectedPred === grade) {
+    state[id].selectedPred = null;
+  } else {
+    state[id].selectedPred = grade;
+    state[id].endSem = '';
+    const inputs = document.querySelectorAll('#card-' + id + ' input[type=number]');
+    if (inputs[1]) inputs[1].value = '';
+  }
+  save(); compute(); refreshCard(id);
+}
+
+function setInternalGrade(id, minMark) {
+  if (!state[id]) state[id] = {};
+  state[id].total = minMark;
+  const inp = document.querySelector('#card-' + id + ' input[type=number]');
+  if (inp) inp.value = minMark;
+  save(); compute(); refreshCard(id);
+}
+
+function refreshCard(id) {
+  const sub =
+    SUBJECTS.endSem.find(s=>s.id===id) ||
+    SUBJECTS.internal.find(s=>s.id===id) ||
+    SUBJECTS.elective.find(s=>s.id===id);
+  if (!sub) return;
+
+  const s = state[id] || {};
+  const electiveEndSem = document.getElementById('electiveToggle').checked;
+  const isEndSem = SUBJECTS.endSem.some(x=>x.id===id) ||
+    (SUBJECTS.elective.some(x=>x.id===id) && electiveEndSem);
+
+  const card = document.getElementById('card-' + id);
+  if (!card) return;
+
+  if (isEndSem) {
+    const internal = parseFloat(s.internal) || 0;
+    const endSemRaw = s.endSem !== undefined && s.endSem !== '' ? parseFloat(s.endSem) : NaN;
+    const hasEndSem = !isNaN(endSemRaw);
+    const selectedPred = s.selectedPred;
+
+    let total = null, gradeObj = null;
+    if (hasEndSem) {
+      total = calcEndSemTotal(internal, endSemRaw);
+      gradeObj = getGradeFromTotal(total);
+    } else if (selectedPred) {
+      const pg = GRADE_SCALE.find(g => g.grade === selectedPred);
+      gradeObj = pg || null;
+      total = pg ? pg.min : null;
+    }
+    const isFail = total !== null && total < 50;
+    card.className = 'subject-card' + (isFail ? ' fail' : '');
+
+    const gradeClass = gradeColorClass(gradeObj);
+    card.querySelector('.grade-letter').className = 'grade-letter ' + gradeClass;
+    card.querySelector('.grade-letter').innerHTML = gradeObj ? renderGrade(gradeObj.grade) : '—';
+    card.querySelector('.grade-point').textContent = gradeObj ? gradeObj.point.toFixed(1) + ' pts' : '— pts';
+
+    const totalPct = total !== null ? Math.min(100, Math.max(0, (total/100)*100)) : 0;
+    const totalColor = isFail ? 'var(--red)' : total >= 71 ? 'var(--green)' : total >= 56 ? 'var(--amber)' : 'var(--accent)';
+    const fillEl = document.getElementById('fill-' + id);
+    if (fillEl) { fillEl.style.width = totalPct + '%'; fillEl.style.background = totalColor; }
+    const totalTextEl = document.getElementById('totalText-' + id);
+    if (totalTextEl) totalTextEl.textContent = (total !== null ? total.toFixed(1) : '—') + '/100';
+
+    const preds = buildPredictions(internal);
+    const container = document.getElementById('preds-' + id);
+    if (container) {
+      container.innerHTML = preds.map(p => {
+        const isSel = selectedPred === p.grade && !hasEndSem;
+        const isRelative = p.required > 75;
+        return `<div class="pred-pill${isSel ? ' selected' : ''}${isRelative ? ' relative' : ''}"
+          onclick="selectPred('${id}','${p.grade}')"
+          title="${p.grade}: need ${p.required.toFixed(1)}/75">
+          <div class="pred-grade">${p.grade}</div>
+          <div class="pred-marks">${p.required > 75 ? '>75' : p.required.toFixed(1)}/75</div>
+          ${isRelative ? '<div class="pred-note">Relative</div>' : ''}
+        </div>`;
+      }).join('');
+    }
+  } else {
+    const total = parseFloat(s.total) || 0;
+    const hasTotal = s.total !== undefined && s.total !== '';
+    const gradeObj = hasTotal ? getGradeFromTotal(total) : null;
+    const isFail = hasTotal && total < 50;
+    card.className = 'subject-card' + (isFail ? ' fail' : '');
+    const gradeClass = gradeColorClass(gradeObj);
+    card.querySelector('.grade-letter').className = 'grade-letter ' + gradeClass;
+    card.querySelector('.grade-letter').innerHTML = gradeObj ? renderGrade(gradeObj.grade) : '—';
+    card.querySelector('.grade-point').textContent = gradeObj ? gradeObj.point.toFixed(1) + ' pts' : '— pts';
+    const fillEl = document.getElementById('fill-' + id);
+    const totalPct = hasTotal ? Math.min(100, Math.max(0, (total/100)*100)) : 0;
+    const totalColor = isFail ? 'var(--red)' : total >= 71 ? 'var(--green)' : total >= 56 ? 'var(--amber)' : 'var(--accent)';
+    if (fillEl) { fillEl.style.width = totalPct + '%'; fillEl.style.background = totalColor; }
+
+    const gradeRow = card.querySelector('.grade-row');
+    if (gradeRow) {
+      gradeRow.innerHTML = GRADE_SCALE.map(g => {
+        const sel = gradeObj && gradeObj.grade === g.grade;
+        return `<div class="grade-chip${sel ? ' selected' : ''}" onclick="setInternalGrade('${id}',${g.min})">${g.grade}</div>`;
+      }).join('');
+    }
+  }
+}
+
+function compute() {
+  const electiveEndSem = document.getElementById('electiveToggle').checked;
+  const allSubs = [
+    ...SUBJECTS.endSem,
+    ...SUBJECTS.internal,
+    ...SUBJECTS.elective,
+  ];
+
+  let totalWeighted = 0, hasAny = false;
+
+  for (const sub of allSubs) {
+    const s = state[sub.id] || {};
+    const isEndSemType =
+      SUBJECTS.endSem.some(x => x.id === sub.id) ||
+      (SUBJECTS.elective.some(x => x.id === sub.id) && electiveEndSem);
+
+    let gradeObj = null;
+
+    if (isEndSemType) {
+      const internal = parseFloat(s.internal) || 0;
+      const endSemRaw = (s.endSem !== undefined && s.endSem !== '') ? parseFloat(s.endSem) : NaN;
+      if (!isNaN(endSemRaw)) {
+        const total = calcEndSemTotal(internal, endSemRaw);
+        gradeObj = getGradeFromTotal(total);
+      } else if (s.selectedPred) {
+        gradeObj = GRADE_SCALE.find(g => g.grade === s.selectedPred) || null;
+      }
+    } else {
+      const total = parseFloat(s.total);
+      if (!isNaN(total) && s.total !== undefined && s.total !== '') {
+        gradeObj = getGradeFromTotal(total);
+      }
+    }
+
+    if (gradeObj) {
+      totalWeighted += gradeObj.point * sub.credits;
+      hasAny = true;
+    }
+  }
+
+  const semCredits = allSubs.reduce((a, s) => a + s.credits, 0);
+  const gpa = hasAny && semCredits > 0 ? totalWeighted / semCredits : null;
+
+  const pastCGPA = parseFloat(document.getElementById('pastCGPA').value);
+  const pastCredits = parseFloat(document.getElementById('pastCredits').value) || 66;
+  let cgpa = null;
+  if (gpa !== null && !isNaN(pastCGPA)) {
+    cgpa = (pastCGPA * pastCredits + gpa * semCredits) / (pastCredits + semCredits);
+  } else if (gpa !== null) {
+    cgpa = gpa;
+  }
+
+  document.getElementById('dashGPA').textContent = gpa !== null ? gpa.toFixed(2) : '—';
+  document.getElementById('dashCGPA').textContent = cgpa !== null ? cgpa.toFixed(2) : '—';
+  document.getElementById('dashCredits').textContent = semCredits;
+}
+
+function toggleTheme() {
+  const html = document.documentElement;
+  const isDark = html.getAttribute('data-theme') === 'dark';
+  html.setAttribute('data-theme', isDark ? 'light' : 'dark');
+  document.getElementById('themeBtn').textContent = isDark ? '☾ Dark' : '☀ Light';
+  localStorage.setItem('srmTheme', isDark ? 'light' : 'dark');
+}
+
+function resetAll() {
+  if (!confirm('Reset all inputs?')) return;
+  state = {};
+  document.getElementById('pastCGPA').value = '';
+  document.getElementById('pastCredits').value = '66';
+  document.getElementById('electiveToggle').checked = false;
+  document.getElementById('electiveHint').innerHTML = 'Elective (3 Cr) — appears in <strong>Internal</strong> section';
+  localStorage.removeItem('srmgpa');
+  buildCards(); compute();
+}
+
+(function init() {
+  const theme = localStorage.getItem('srmTheme');
+  if (theme) {
+    document.documentElement.setAttribute('data-theme', theme);
+    document.getElementById('themeBtn').textContent = theme === 'light' ? '☾ Dark' : '☀ Light';
+  }
+  load();
+  const isEndSem = document.getElementById('electiveToggle').checked;
+  document.getElementById('electiveHint').innerHTML = isEndSem
+    ? 'Elective (3 Cr) — appears in <strong>End-Sem</strong> section'
+    : 'Elective (3 Cr) — appears in <strong>Internal</strong> section';
+  buildCards();
+  compute();
+})();
+</script>
+</body>
+</html>
