@@ -4,12 +4,14 @@
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
 <title>Company-Wise DSA Tracker</title>
-<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700&family=Syne:wght@400;600;700;800&display=swap" rel="stylesheet"/>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700&family=Inter:wght@400;500;600;700;800&family=Plus+Jakarta+Sans:wght@600;700;800&display=swap" rel="stylesheet"/>
 <style>
 :root{--bg-base:#0a0b0f;--bg-card:#0f1117;--bg-elevated:#151822;--border:#1e2130;--border-bright:#2a2f45;--text-primary:#e8eaf6;--text-muted:#6b7280;--emerald:#10b981;--amber:#f59e0b;--violet:#8b5cf6;--indigo:#6366f1;--cyan:#06b6d4;--rose:#f43f5e;}
 *{box-sizing:border-box;margin:0;padding:0;}html{scroll-behavior:smooth;}
-body{font-family:'Syne',sans-serif;background:var(--bg-base);color:var(--text-primary);min-height:100vh;background-image:radial-gradient(ellipse at 20% 0%,rgba(99,102,241,.07) 0%,transparent 50%),radial-gradient(ellipse at 80% 0%,rgba(139,92,246,.05) 0%,transparent 50%);}
+body{font-family:'Inter',-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;background:var(--bg-base);color:var(--text-primary);min-height:100vh;background-image:radial-gradient(ellipse at 20% 0%,rgba(99,102,241,.07) 0%,transparent 50%),radial-gradient(ellipse at 80% 0%,rgba(139,92,246,.05) 0%,transparent 50%);-webkit-font-smoothing:antialiased;}
 code,.mono{font-family:'JetBrains Mono',monospace;}
+h1,h2,h3,.heading-font{font-family:'Plus Jakarta Sans','Inter',sans-serif;letter-spacing:-.01em;}
 ::-webkit-scrollbar{width:6px;height:6px;}::-webkit-scrollbar-track{background:var(--bg-base);}::-webkit-scrollbar-thumb{background:var(--border-bright);border-radius:3px;}
 #main-header{position:sticky;top:0;z-index:100;background:rgba(10,11,15,.92);backdrop-filter:blur(20px);border-bottom:1px solid var(--border);}
 .nav-tab{cursor:pointer;padding:10px 18px;border-bottom:2px solid transparent;font-size:13px;font-weight:700;color:var(--text-muted);transition:all .2s;font-family:'JetBrains Mono',monospace;white-space:nowrap;background:none;border-top:none;border-left:none;border-right:none;}
@@ -68,7 +70,7 @@ select.sel:focus{outline:none;border-color:var(--violet);}
     <div class="flex items-center justify-between gap-4 flex-wrap" style="display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap">
       <div style="display:flex;align-items:center;gap:12px">
         <div style="width:34px;height:34px;border-radius:9px;background:linear-gradient(135deg,#7c3aed,#4f46e5);display:flex;align-items:center;justify-content:center;color:#fff;font-weight:900;font-size:15px">🏢</div>
-        <div><div style="font-size:14px;font-weight:800;color:#fff">Company-Wise DSA Tracker</div><div style="font-size:10px;color:#6b7280" class="mono" id="hdr-sub">Loading dataset…</div></div>
+        <div><div class="heading-font" style="font-size:15px;font-weight:800;color:#fff">Company-Wise DSA Tracker</div><div style="font-size:10px;color:#6b7280" class="mono" id="hdr-sub">Loading dataset…</div></div>
       </div>
       <div class="search-wrap" style="flex:1;max-width:340px;min-width:180px">
         <span class="search-icon">🔍</span>
@@ -106,7 +108,7 @@ select.sel:focus{outline:none;border-color:var(--violet);}
     <div id="panel-company" class="tab-panel active">
       <div style="display:flex;align-items:center;gap:12px;margin-bottom:14px;flex-wrap:wrap">
         <div id="company-icon" style="width:40px;height:40px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-weight:900;font-size:16px;flex-shrink:0"></div>
-        <div><h2 id="company-title" style="font-size:20px;font-weight:800;color:#fff"></h2><p id="company-desc" style="font-size:11px;color:#6b7280" class="mono"></p></div>
+        <div><h2 id="company-title" class="heading-font" style="font-size:20px;font-weight:800;color:#fff"></h2><p id="company-desc" style="font-size:11px;color:#6b7280" class="mono"></p></div>
         <div style="margin-left:auto;text-align:right">
           <div id="company-progress-text" style="font-size:16px;font-weight:800;font-family:'JetBrains Mono',monospace;color:#c4b5fd"></div>
           <div class="prog-bar-outer" style="width:100px;margin-top:4px"><div id="company-progress-bar" class="prog-bar-inner" style="width:0%;background:linear-gradient(90deg,#7c3aed,#6366f1)"></div></div>
@@ -133,18 +135,17 @@ select.sel:focus{outline:none;border-color:var(--violet);}
     </div>
 
     <div id="panel-browse" class="tab-panel">
-      <div style="display:flex;align-items:center;gap:10px;margin-bottom:4px">
+      <div style="display:flex;align-items:center;gap:10px;margin-bottom:14px">
         <div style="font-size:20px">🌐</div>
-        <div><h2 style="font-size:20px;font-weight:800;color:#fff">All Companies</h2><p style="font-size:11px;color:#6b7280" class="mono">Click a company to jump into its question list</p></div>
+        <div><h2 class="heading-font" style="font-size:20px;font-weight:800;color:#fff">All Companies</h2></div>
       </div>
-      <p style="font-size:11px;color:#4b5563" class="mono" style="margin-bottom:14px">Sorted by number of questions tracked.</p>
-      <div id="browse-grid" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:10px;margin-top:14px"></div>
+      <div id="browse-grid" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:10px"></div>
     </div>
 
     <div id="panel-stats" class="tab-panel">
       <div style="display:flex;align-items:center;gap:10px;margin-bottom:16px">
         <div style="font-size:20px">📊</div>
-        <div><h2 style="font-size:20px;font-weight:800;color:#fff">Your Stats</h2><p style="font-size:11px;color:#6b7280" class="mono">Progress across the entire dataset</p></div>
+        <div><h2 class="heading-font" style="font-size:20px;font-weight:800;color:#fff">Your Stats</h2><p style="font-size:11px;color:#6b7280" class="mono">Progress across the entire dataset</p></div>
       </div>
       <div id="stats-grid" style="display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:12px;margin-bottom:20px"></div>
       <div class="section-heading" style="margin-bottom:10px">🔥 Top 15 Most-Asked Questions (by companies tracking them)</div>
@@ -164,6 +165,122 @@ const TOTAL_UNIQUE = (()=>{const s=new Set();for(const c of COMPANIES)for(const 
 const COLORS=['#8b5cf6','#06b6d4','#10b981','#f59e0b','#f43f5e','#a78bfa','#22c55e','#6366f1','#ec4899','#f97316'];
 function colorFor(name){let h=0;for(let i=0;i<name.length;i++)h=name.charCodeAt(i)+((h<<5)-h);return COLORS[Math.abs(h)%COLORS.length];}
 function initials(name){const parts=name.replace(/[^a-zA-Z0-9 .]/g,'').split(' ').filter(Boolean);if(parts.length===1)return parts[0].slice(0,2).toUpperCase();return (parts[0][0]+ (parts[1]?parts[1][0]:'')).toUpperCase();}
+
+// Curated domains for well-known companies so logos resolve correctly.
+const DOMAIN_MAP={
+"Google":"google.com","Amazon":"amazon.com","Microsoft":"microsoft.com","Meta":"meta.com","Apple":"apple.com",
+"Netflix":"netflix.com","Uber":"uber.com","Airbnb":"airbnb.com","LinkedIn":"linkedin.com","Adobe":"adobe.com",
+"Salesforce":"salesforce.com","Oracle":"oracle.com","IBM":"ibm.com","Intel":"intel.com","Nvidia":"nvidia.com",
+"Tesla":"tesla.com","Goldman Sachs":"goldmansachs.com","Visa":"visa.com","Mastercard":"mastercard.com","PayPal":"paypal.com",
+"Stripe":"stripe.com","Spotify":"spotify.com","Twitch":"twitch.tv","Snap":"snap.com","Pinterest":"pinterest.com",
+"Dropbox":"dropbox.com","Slack":"slack.com","Zoom":"zoom.us","Atlassian":"atlassian.com","ServiceNow":"servicenow.com",
+"Workday":"workday.com","Shopify":"shopify.com","Block":"block.xyz","Coinbase":"coinbase.com","Robinhood":"robinhood.com",
+"DoorDash":"doordash.com","Instacart":"instacart.com","Lyft":"lyft.com","Walmart Labs":"walmart.com","Target":"target.com",
+"eBay":"ebay.com","Booking.com":"booking.com","Expedia":"expedia.com","Cisco":"cisco.com","VMware":"vmware.com",
+"SAP":"sap.com","Samsung":"samsung.com","Sony":"sony.com","Huawei":"huawei.com","Tencent":"tencent.com",
+"Alibaba":"alibaba.com","ByteDance":"bytedance.com","TikTok":"tiktok.com","X":"x.com","Flipkart":"flipkart.com",
+"Swiggy":"swiggy.com","Zomato":"zomato.com","Paytm":"paytm.com","PhonePe":"phonepe.com","razorpay":"razorpay.com",
+"Ola Cabs":"olacabs.com","Infosys":"infosys.com","tcs":"tcs.com","Wipro":"wipro.com","HCL":"hcltech.com",
+"Accenture":"accenture.com","Deloitte":"deloitte.com","Cognizant":"cognizant.com","Capgemini":"capgemini.com",
+"J.P. Morgan":"jpmorganchase.com","Morgan Stanley":"morganstanley.com","Bank of America":"bankofamerica.com",
+"Wells Fargo":"wellsfargo.com","Citigroup":"citigroup.com","American Express":"americanexpress.com","Bloomberg":"bloomberg.com",
+"Snowflake":"snowflake.com","MongoDB":"mongodb.com","Databricks":"databricks.com","Palantir Technologies":"palantir.com",
+"Roblox":"roblox.com","Unity":"unity.com","Zillow":"zillow.com","Wayfair":"wayfair.com","Chewy":"chewy.com",
+"Reddit":"reddit.com","Quora":"quora.com","Yelp":"yelp.com","Indeed":"indeed.com","Nike":"nike.com","Disney":"disney.com",
+"Warnermedia":"warnermedia.com","Comcast":"comcast.com","Qualcomm":"qualcomm.com","AMD":"amd.com",
+"Texas Instruments":"ti.com","HP":"hp.com","Dell":"dell.com","OpenAI":"openai.com","Rakuten":"rakuten.com",
+"Grab":"grab.com","Gojek":"gojek.com","Coupang":"coupang.com","Yandex":"yandex.com","Baidu":"baidu.com",
+"NetEase":"netease.com","Kakao":"kakao.com","LINE":"line.me","Grammarly":"grammarly.com","Notion":"notion.so",
+"Asana":"asana.com","Hubspot":"hubspot.com","Zendesk":"zendesk.com","Twilio":"twilio.com","Okta":"okta.com",
+"CrowdStrike":"crowdstrike.com","Palo Alto Networks":"paloaltonetworks.com","Fortinet":"fortinet.com","Splunk":"splunk.com",
+"Datadog":"datadoghq.com","GitHub":"github.com","Docker":"docker.com","Broadcom":"broadcom.com","Micron":"micron.com",
+"Western Digital":"westerndigital.com","Garmin":"garmin.com","Peloton":"onepeloton.com","Docusign":"docusign.com",
+"Intuit":"intuit.com","Autodesk":"autodesk.com","Synopsys":"synopsys.com","Cadence":"cadence.com",
+"Arista Networks":"arista.com","Juniper Networks":"juniper.net","NetApp":"netapp.com","Pure Storage":"purestorage.com",
+"Nutanix":"nutanix.com","Cloudera":"cloudera.com","Teradata":"teradata.com","Zoho":"zoho.com","MakeMyTrip":"makemytrip.com",
+"Cloudflare":"cloudflare.com","Confluent":"confluent.io","Nokia":"nokia.com","Siemens":"siemens.com","Bosch":"bosch.com",
+"HSBC":"hsbc.com","Barclays":"barclays.com","UBS":"ubs.com","Deutsche Bank":"db.com","BlackRock":"blackrock.com",
+"BlackStone":"blackstone.com","Citadel":"citadel.com","Jane Street":"janestreet.com","Two Sigma":"twosigma.com",
+"Optiver":"optiver.com","DE Shaw":"deshaw.com","Point72":"point72.com","AQR Capital Management":"aqr.com",
+"Vanguard":"vanguard.com","Fidelity":"fidelity.com","Capital One":"capitalone.com","American Express":"americanexpress.com",
+"Nordstrom":"nordstrom.com","GoDaddy":"godaddy.com","Squarespace":"squarespace.com","Wix":"wix.com","Toast":"toasttab.com",
+"Chime":"chime.com","SoFi":"sofi.com","Affirm":"affirm.com","Upstart":"upstart.com","Brex":"brex.com","Ripple":"ripple.com",
+"Circle":"circle.com","BitGo":"bitgo.com","Sentry":"sentry.io","Elastic":"elastic.co","HashiCorp":"hashicorp.com",
+"Red Hat":"redhat.com","Canonical":"canonical.com","Mapbox":"mapbox.com","Figma":"figma.com","Miro":"miro.com",
+"Airtable":"airtable.com","Monday.com":"monday.com","Trilogy":"trilogy.com","ThoughtWorks":"thoughtworks.com",
+"Epic Systems":"epic.com","athenahealth":"athenahealth.com","Guidewire":"guidewire.com","Qualtrics":"qualtrics.com",
+"Zscaler":"zscaler.com","ZScaler":"zscaler.com","Netskope":"netskope.com","Tanium":"tanium.com","Rubrik":"rubrik.com",
+"Cohesity":"cohesity.com","Druva":"druva.com","Veritas":"veritas.com","Commvault":"commvault.com","Informatica":"informatica.com",
+"UiPath":"uipath.com","Samsara":"samsara.com","Verkada":"verkada.com","Duolingo":"duolingo.com","Coursera":"coursera.org",
+"Udemy":"udemy.com","Whatnot":"whatnot.com","Poshmark":"poshmark.com","Wish":"wish.com","Groupon":"groupon.com",
+"Etsy":"etsy.com","Tripadvisor":"tripadvisor.com","Agoda":"agoda.com","Airbus SE":"airbus.com","Boeing":"boeing.com",
+"General Motors":"gm.com","Rivian":"rivian.com","Lucid":"lucidmotors.com","Waymo":"waymo.com","Cruise":"getcruise.com",
+"Zoox":"zoox.com","Aurora":"aurora.tech","Mobileye":"mobileye.com","TuSimple":"tusimple.com","Toyota":"toyota.com",
+"Honda":"honda.com","Ford":"ford.com","BMW":"bmw.com","Mercedes-Benz":"mercedes-benz.com","Volkswagen":"vw.com",
+"Whatsapp":"whatsapp.com","Yahoo":"yahoo.com","AOL":"aol.com","Twitter":"twitter.com","Pandora":"pandora.com",
+"SoundCloud":"soundcloud.com","SoundHound":"soundhound.com","Vimeo":"vimeo.com","Hulu":"hulu.com","Roku":"roku.com",
+"Paramount":"paramount.com","Comcast":"comcast.com","Verizon":"verizon.com","T-Mobile":"t-mobile.com","AT&T":"att.com",
+"Ericsson":"ericsson.com","Motorola":"motorola.com","Lenovo":"lenovo.com","Xiaomi":"mi.com","OnePlus":"oneplus.com",
+"Panasonic":"panasonic.com","LG":"lg.com","Philips":"philips.com","GE Digital":"ge.com","GE Healthcare":"gehealthcare.com",
+"Honeywell":"honeywell.com","3M":"3m.com","Caterpillar":"caterpillar.com","John Deere":"deere.com","Lockheed Martin":"lockheedmartin.com",
+"Raytheon":"rtx.com","Northrop Grumman":"northropgrumman.com","SpaceX":"spacex.com","Blue Origin":"blueorigin.com",
+"Anduril":"anduril.com","Palantir Technologies":"palantir.com","Scale AI":"scale.com","Databricks":"databricks.com",
+"Anthropic":"anthropic.com","DeepMind":"deepmind.com","Waze":"waze.com","Booking.com":"booking.com","Trivago":"trivago.com",
+"Kayak":"kayak.com","Priceline":"priceline.com","Marriott":"marriott.com","Hilton":"hilton.com","Airbnb":"airbnb.com",
+"Compass":"compass.com","Opendoor":"opendoor.com","Redfin":"redfin.com","Zillow":"zillow.com","CoStar":"costar.com",
+"Klarna":"klarna.com","Revolut":"revolut.com","Wise":"wise.com","N26":"n26.com","Monzo":"monzo.com","Adyen":"adyen.com",
+"Square":"squareup.com","Venmo":"venmo.com","Plaid":"plaid.com","Chime":"chime.com","Marqeta":"marqeta.com",
+"Discover":"discover.com","Synchrony":"synchrony.com","USAA":"usaa.com","Progressive":"progressive.com","Geico":"geico.com",
+"Allstate":"allstate.com","State Farm":"statefarm.com","MetLife":"metlife.com","Prudential":"prudential.com",
+"Chubb":"chubb.com","AIG":"aig.com","AXA":"axa.com","Zurich":"zurich.com","Allianz":"allianz.com","Aon":"aon.com",
+"Marsh McLennan":"marshmclennan.com","WTW":"wtwco.com","EY":"ey.com","Pwc":"pwc.com","KPMG":"kpmg.com","McKinsey":"mckinsey.com",
+"Bain":"bain.com","BCG":"bcg.com","Roche":"roche.com","Pfizer":"pfizer.com","Moderna":"modernatx.com","Merck":"merck.com",
+"Johnson & Johnson":"jnj.com","AstraZeneca":"astrazeneca.com","Novartis":"novartis.com","GSK":"gsk.com","Sanofi":"sanofi.com",
+"Illumina":"illumina.com","23andMe":"23andme.com","Verily":"verily.com","Optum":"optum.com","UnitedHealth":"uhc.com",
+"Cigna":"cigna.com","Anthem":"anthem.com","CVS Health":"cvshealth.com","Walgreens":"walgreens.com","Costco":"costco.com",
+"Kroger":"kroger.com","Home Depot":"homedepot.com","Lowe's":"lowes.com","Best Buy":"bestbuy.com","Macy's":"macys.com",
+"Gap":"gap.com","H&M":"hm.com","Zara":"zara.com","Nike":"nike.com","Adidas":"adidas.com","Under Armour":"underarmour.com",
+"Puma":"puma.com","Lululemon":"lululemon.com","IKEA":"ikea.com","Wayfair":"wayfair.com","Overstock":"overstock.com",
+"Chewy":"chewy.com","Petco":"petco.com","Sephora":"sephora.com","Ulta":"ulta.com","Sephora":"sephora.com",
+"Nykaa":"nykaa.com","Myntra":"myntra.com","Meesho":"meesho.com","Snapdeal":"snapdeal.com","Lenskart":"lenskart.com",
+"Delhivery":"delhivery.com","Blinkit":"blinkit.com","blinkit":"blinkit.com","Zepto":"zeptonow.com","BigBasket":"bigbasket.com",
+"Cred":"cred.club","CRED":"cred.club","Groww":"groww.in","Zerodha":"zerodha.com","Upstox":"upstox.com","INDmoney":"indmoney.com",
+"Navi":"navi.com","Slice":"sliceit.com","BharatPe":"bharatpe.com","Cashfree":"cashfree.com","Freecharge":"freecharge.in",
+"Dream11":"dream11.com","Gameskraft":"gameskraft.com","Urban Company":"urbancompany.com","Dunzo":"dunzo.com",
+"Ninjacart":"ninjacart.com","NinjaCart":"ninjacart.com","Licious":"licious.in","CarDekho":"cardekho.com","carwale":"carwale.com",
+"CARS24":"cars24.com","OYO":"oyorooms.com","oyo":"oyorooms.com","redBus":"redbus.in","redbus":"redbus.in","MakeMyTrip":"makemytrip.com",
+"Cleartrip":"cleartrip.com","Yatra":"yatra.com","Ixigo":"ixigo.com","PolicyBazaar":"policybazaar.com","Acko":"acko.com",
+"ShareChat":"sharechat.com","Hotstar":"hotstar.com","Jio":"jio.com","jio":"jio.com","Airtel":"airtel.in","Vodafone":"vodafone.com",
+"HDFC Bank":"hdfcbank.com","ICICI Bank":"icicibank.com","Axis Bank":"axisbank.com","Kotak":"kotak.com",
+"National Payments Corporation of India":"npci.org.in","Tata Consultancy Services":"tcs.com","Tech Mahindra":"techmahindra.com",
+"Mindtree":"mindtree.com","MindTree":"mindtree.com","Mphasis":"mphasis.com","LTI":"ltimindtree.com","L&T":"larsentoubro.com",
+"Larsen & Toubro":"larsentoubro.com","Bajaj Finserv":"bajajfinserv.in","Persistent Systems":"persistent.com",
+"persistent systems":"persistent.com","Hexaware":"hexaware.com","Zensar":"zensar.com","Coforge":"coforge.com",
+"Mphasis":"mphasis.com","Genpact":"genpact.com","WNS":"wns.com","Sutherland":"sutherlandglobal.com","EXL":"exlservice.com",
+"Publicis Sapient":"publicissapient.com","Virtusa":"virtusa.com","Nagarro":"nagarro.com","Wissen Technology":"wissen.com",
+"HashedIn":"hashedin.com","Josh Technology":"joshtechnologygroup.com","josh technology":"joshtechnologygroup.com",
+"Turing":"turing.com","Toptal":"toptal.com","Grab":"grab.com","Sea Limited":"seagroup.com","JD.com":"jd.com",
+"Meituan":"meituan.com","Didi":"didiglobal.com","Xiaohongshu":"xiaohongshu.com","Naver":"navercorp.com","Coupang":"coupang.com",
+"Line":"line.me","PayPay":"paypay.ne.jp","Rakuten":"rakuten.com","SoftBank":"softbank.jp","Mercari":"mercari.com",
+"Zalando":"zalando.com","Delivery Hero":"deliveryhero.com","Just Eat":"justeattakeaway.com","Deliveroo":"deliveroo.com",
+"Ocado":"ocadogroup.com","Tesco":"tesco.com","Sainsbury's":"sainsburys.co.uk","Asda":"asda.com","Aldi":"aldi.com",
+"Lidl":"lidl.com","Carrefour":"carrefour.com","OKX":"okx.com","Binance":"binance.com","Kraken":"kraken.com",
+"Gemini":"gemini.com","FTX":"ftx.com","Robinhood":"robinhood.com","eToro":"etoro.com","IBKR":"interactivebrokers.com",
+"Charles Schwab":"schwab.com","TD Ameritrade":"tdameritrade.com","E*TRADE":"etrade.com","Nasdaq":"nasdaq.com",
+"NYSE":"nyse.com","CME Group":"cmegroup.com","ICE":"ice.com","Bloomberg":"bloomberg.com","Refinitiv":"refinitiv.com",
+"Thomson Reuters":"thomsonreuters.com","FactSet":"factset.com","MSCI":"msci.com","S&P Global":"spglobal.com",
+"Moody's":"moodys.com","Fitch":"fitchratings.com"
+};
+function domainFor(name){
+  if(DOMAIN_MAP[name])return DOMAIN_MAP[name];
+  const n=name.toLowerCase().replace(/\./g,'').replace(/&/g,'and').replace(/'/g,'').replace(/[^a-z0-9]+/g,'');
+  return n+'.com';
+}
+function logoUrl(name){return `https://logo.clearbit.com/${domainFor(name)}?size=80`;}
+function logoImgHtml(name,size){
+  const c=colorFor(name);
+  return `<img src="${logoUrl(name)}" loading="lazy" alt="" style="width:100%;height:100%;object-fit:contain;border-radius:8px;background:#fff;padding:${Math.max(2,Math.round(size*0.12))}px" onerror="this.style.display='none';this.nextElementSibling.style.display='flex';"/><span style="display:none;width:100%;height:100%;align-items:center;justify-content:center;color:${c};font-weight:800;font-size:${Math.round(size*0.36)}px;background:${c}22;border:1px solid ${c}55;border-radius:8px">${initials(name)}</span>`;
+}
 
 const LEVELS=[
   {name:'LVL 1',min:0,max:500},{name:'LVL 2',min:501,max:1500},
@@ -231,7 +348,8 @@ function switchMainTab(tab){
 let companySearchTerm='';
 function onCompanySearch(){
   companySearchTerm=document.getElementById('company-search').value.trim().toLowerCase();
-  renderNav();
+  if(currentMainTab==='browse')renderBrowse();
+  else renderNav();
 }
 
 function renderNav(){
@@ -241,12 +359,12 @@ function renderNav(){
   if(companySearchTerm)list=list.filter(c=>c.toLowerCase().includes(companySearchTerm));
   document.getElementById('sidebar-count').textContent=`${list.length} COMPANIES`;
   const frag=document.createDocumentFragment();
-  for(const name of list.slice(0,400)){
+  for(const name of list){
     const s=computeCompanyStats(name);
     const btn=document.createElement('div');
     btn.className=`company-row${name===currentCompany?' active':''}`;
     const full=s.completed===s.total&&s.total>0;
-    btn.innerHTML=`<span style="overflow:hidden;text-overflow:ellipsis;white-space:nowrap;flex:1">${name}</span><span class="mono" style="font-size:10px;color:${full?'#10b981':'#4b5563'};flex-shrink:0">${s.completed}/${s.total}</span>`;
+    btn.innerHTML=`<span style="width:16px;height:16px;border-radius:4px;overflow:hidden;flex-shrink:0">${logoImgHtml(name,16)}</span><span style="overflow:hidden;text-overflow:ellipsis;white-space:nowrap;flex:1">${name}</span><span class="mono" style="font-size:10px;color:${full?'#10b981':'#4b5563'};flex-shrink:0">${s.completed}/${s.total}</span>`;
     btn.onclick=()=>{currentCompany=name;renderNav();renderCompanyPanel();window.scrollTo({top:0,behavior:'smooth'});};
     frag.appendChild(btn);
   }
@@ -270,10 +388,9 @@ function renderCompanyPanel(){
   const name=currentCompany;
   const rows=DATA[name]||[];
   const s=computeCompanyStats(name);
-  document.getElementById('company-icon').textContent=initials(name);
-  document.getElementById('company-icon').style.background=colorFor(name)+'22';
-  document.getElementById('company-icon').style.color=colorFor(name);
-  document.getElementById('company-icon').style.border=`1px solid ${colorFor(name)}55`;
+  document.getElementById('company-icon').innerHTML=logoImgHtml(name,40);
+  document.getElementById('company-icon').style.background='transparent';
+  document.getElementById('company-icon').style.border='none';
   document.getElementById('company-title').textContent=name;
   document.getElementById('company-desc').textContent=`${rows.length} tracked questions · asked at ${name}`;
   document.getElementById('company-progress-text').textContent=`${s.completed}/${s.total}`;
@@ -372,17 +489,21 @@ function setQState(slug,newState){
 
 function renderBrowse(){
   const grid=document.getElementById('browse-grid');
-  const sorted=COMPANIES.slice().sort((a,b)=>(DATA[b]?.length||0)-(DATA[a]?.length||0));
+  let sorted=COMPANIES.slice().sort((a,b)=>a.localeCompare(b));
+  if(companySearchTerm)sorted=sorted.filter(c=>c.toLowerCase().includes(companySearchTerm));
   grid.innerHTML='';
+  if(!sorted.length){
+    grid.innerHTML=`<div style="grid-column:1/-1;text-align:center;padding:30px;color:#4b5563;font-family:'JetBrains Mono',monospace;font-size:12px">No companies match "${esc(companySearchTerm)}".</div>`;
+    return;
+  }
   const frag=document.createDocumentFragment();
   for(const name of sorted){
     const s=computeCompanyStats(name);
-    const c=colorFor(name);
     const pill=document.createElement('div');
     pill.className='company-pill';
     pill.onclick=()=>{currentCompany=name;switchMainTab('company');renderNav();renderCompanyPanel();window.scrollTo({top:0,behavior:'smooth'});};
     pill.innerHTML=`
-      <div class="top-badge" style="background:${c}22;color:${c};border:1px solid ${c}55">${initials(name)}</div>
+      <div class="top-badge" style="width:30px;height:30px;border-radius:8px;overflow:hidden">${logoImgHtml(name,30)}</div>
       <div style="flex:1;min-width:0">
         <div style="font-size:12px;font-weight:700;color:#fff;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${name}</div>
         <div class="mono" style="font-size:10px;color:#6b7280">${s.total} qs · ${s.completed} done</div>
@@ -407,24 +528,32 @@ function renderStats(){
   ];
   grid.innerHTML=cards.map(c=>`<div class="stat-card"><div class="section-heading" style="margin-bottom:6px">${c.label}</div><div class="mono" style="font-size:22px;font-weight:800;color:${c.color}">${c.val}</div></div>`).join('');
 
-  // top questions by number of companies referencing them
+  // top questions by number of companies referencing them, with the actual company list
   const freqMap={};
   for(const c of COMPANIES)for(const r of DATA[c]||[]){
-    if(!freqMap[r.s])freqMap[r.s]={title:r.t,diff:r.d,count:0,slug:r.s};
-    freqMap[r.s].count++;
+    if(!freqMap[r.s])freqMap[r.s]={title:r.t,diff:r.d,slug:r.s,companies:[]};
+    freqMap[r.s].companies.push(c);
   }
-  const top=Object.values(freqMap).sort((a,b)=>b.count-a.count).slice(0,15);
+  const top=Object.values(freqMap).sort((a,b)=>b.companies.length-a.companies.length).slice(0,15);
   const box=document.getElementById('stats-top-questions');
   box.innerHTML=top.map((q,i)=>{
     const qs=getState(q.slug);
     const done=qs==='completed';
-    return `<div class="q-card" style="padding:10px 14px;display:flex;align-items:center;gap:10px">
-      <span class="mono" style="width:22px;color:#4b5563;font-size:11px">#${i+1}</span>
-      <span style="flex:1;font-size:13px;font-weight:700;color:#fff">${esc(q.title)}</span>
-      <span class="mono ${diffClass(q.diff)}" style="font-size:10px;font-weight:700;padding:2px 8px;border-radius:5px">${diffLabel(q.diff)}</span>
-      <span class="mono" style="font-size:10px;color:#6b7280">${q.count} companies</span>
-      <a href="https://leetcode.com/problems/${q.slug}/" target="_blank" class="lc-link">↗</a>
-      <button class="state-btn state-btn-completed${done?' active':''}" onclick="setQState('${q.slug}','${done?'unattempted':'completed'}');renderStats();">✓</button>
+    const sortedCompanies=q.companies.slice().sort((a,b)=>a.localeCompare(b));
+    const shown=sortedCompanies.slice(0,6);
+    const extra=sortedCompanies.length-shown.length;
+    const chipsHtml=shown.map(c=>`<span class="mono" style="font-size:9px;color:#9ca3af;background:var(--bg-elevated);border:1px solid var(--border);border-radius:5px;padding:2px 7px">${esc(c)}</span>`).join('')
+      + (extra>0?`<span class="mono" style="font-size:9px;color:#6b7280">+${extra} more</span>`:'');
+    return `<div class="q-card" style="padding:10px 14px">
+      <div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap">
+        <span class="mono" style="width:22px;color:#4b5563;font-size:11px">#${i+1}</span>
+        <span style="flex:1;font-size:13px;font-weight:700;color:#fff;min-width:120px">${esc(q.title)}</span>
+        <span class="mono ${diffClass(q.diff)}" style="font-size:10px;font-weight:700;padding:2px 8px;border-radius:5px">${diffLabel(q.diff)}</span>
+        <span class="mono" style="font-size:10px;color:#6b7280">${q.companies.length} companies</span>
+        <a href="https://leetcode.com/problems/${q.slug}/" target="_blank" class="lc-link">↗</a>
+        <button class="state-btn state-btn-completed${done?' active':''}" onclick="setQState('${q.slug}','${done?'unattempted':'completed'}');renderStats();">✓</button>
+      </div>
+      <div style="display:flex;gap:5px;flex-wrap:wrap;margin-top:8px">${chipsHtml}</div>
     </div>`;
   }).join('');
 }
