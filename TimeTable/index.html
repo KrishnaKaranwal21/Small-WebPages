@@ -232,7 +232,7 @@ body::before{content:'';position:fixed;inset:0;pointer-events:none;z-index:9999;
 
 <script>
 /* ═══════════════════════════════════════════════════
-   TIMELINE MATRIX — June 5 to July 14, 2026 (40 days)
+   TIMELINE MATRIX — August 3 to September 11, 2026 (40 days)
    Full DSA curriculum compressed into 40 days.
    Topics: Arrays → Strings → Linked Lists → Stacks/Queues
            → Binary Search → Trees → Backtracking
@@ -240,9 +240,9 @@ body::before{content:'';position:fixed;inset:0;pointer-events:none;z-index:9999;
 ═══════════════════════════════════════════════════ */
 const TIMELINE_MATRIX = [
 
-  /* ══════ WEEK 1 (June 5–11): Arrays Foundation + Advanced ══════ */
+  /* ══════ WEEK 1 (Aug 3–9): Arrays Foundation + Advanced ══════ */
   {
-    id:"2026-06-05",date:"June 5",week:1,weekTitle:"Arrays — Foundation",
+    id:"2026-08-03",date:"Aug 3",week:1,weekTitle:"Arrays — Foundation",
     type:"prereq",label:"📚 Arrays — Prerequisite Study Day",phase:1,
     focus:"Arrays Theory: Two-Pointers, Sliding Window, Hash Maps",
     summary:"Day 1 of the plan. Before writing any code, solidify the structural tools that power every Array problem. This foundation recurs across all future topics.",
@@ -294,7 +294,7 @@ for (int i = 0; i < arr.size(); i++) {
 for (auto& v : arr) { ... } // range-for`,gotcha:"C++ has no enumerate(). Track index manually with i or use a separate counter. In range-for, use auto& (reference) to avoid copying large objects."}]
   },
   {
-    id:"2026-06-06",date:"June 6",week:1,weekTitle:"Arrays — Foundation",
+    id:"2026-08-04",date:"Aug 4",week:1,weekTitle:"Arrays — Foundation",
     type:"problem",label:"LC #1 Two Sum + LC #217 Contains Duplicate",phase:2,
     focus:"Hash Map & Hash Set Fundamentals",
     summary:"Two hash-based array problems that establish the fundamental O(n) lookup pattern used everywhere.",
@@ -335,7 +335,7 @@ pair<int,int> twoSum(...) {
 auto [a, b] = twoSum(...); // C++17 structured binding`,gotcha:"C++ functions must declare return type. Use vector<int> for variable-size returns, pair<T,T> for exactly 2 values. Structured bindings (auto [a,b]) require C++17."}]
   },
   {
-    id:"2026-06-07",date:"June 7",week:1,weekTitle:"Arrays — Foundation",
+    id:"2026-08-05",date:"Aug 5",week:1,weekTitle:"Arrays — Foundation",
     type:"problem",label:"LC #121 Best Time to Buy/Sell Stock + LC #238 Product Except Self",phase:2,
     focus:"Greedy Running Min & Prefix/Suffix Scanning",
     summary:"Two key algorithmic patterns: greedy tracking and prefix-suffix accumulation.",
@@ -374,7 +374,7 @@ max(a, b);
 max_element(v.begin(),v.end(),[](auto& a,auto& b){return a[1]<b[1];});`,gotcha:"std::min(a,b) requires BOTH to be the exact same type. min(int, long) won't compile \u2014 cast first: min((long)a, b). Python coerces types automatically."}]
   },
   {
-    id:"2026-06-08",date:"June 8",week:1,weekTitle:"Arrays — Foundation",
+    id:"2026-08-06",date:"Aug 6",week:1,weekTitle:"Arrays — Foundation",
     type:"problem",label:"LC #88 Merge Sorted Array + LC #53 Maximum Subarray",phase:2,
     focus:"Two Pointers from Back + Kadane's Algorithm",
     summary:"Back-fill two-pointer pattern and the classic Kadane's DP/greedy for maximum subarray.",
@@ -409,7 +409,7 @@ reverse(arr.begin(), arr.end());
 string sub = s.substr(l, r-l+1); // (start, length)`,gotcha:"Python s[l:r+1] uses [start, stop) \u2014 stop is exclusive. C++ substr(start, LENGTH) uses length, not end index! Common off-by-one bug: s.substr(l, r-l+1) for range [l,r]."}]
   },
   {
-    id:"2026-06-09",date:"June 9",week:1,weekTitle:"Arrays — Foundation",
+    id:"2026-08-07",date:"Aug 7",week:1,weekTitle:"Arrays — Foundation",
     type:"problem",label:"LC #56 Merge Intervals + LC #11 Container With Most Water",phase:2,
     focus:"Coordinate Sorting & Two-Pointer Convergence",
     summary:"Interval merging with greedy sorting and the classic two-pointer water problem.",
@@ -449,7 +449,7 @@ int rows = m.size();
 int cols = m[0].size();`,gotcha:"Python [[0]*cols]*rows creates rows that ALL point to the same inner list \u2014 mutating one mutates all! Always use list comprehension. C++ vector<vector<int>>(r, vector<int>(c)) creates independent rows."}]
   },
   {
-    id:"2026-06-10",date:"June 10",week:1,weekTitle:"Arrays — Foundation",
+    id:"2026-08-08",date:"Aug 8",week:1,weekTitle:"Arrays — Foundation",
     type:"problem",label:"LC #48 Rotate Image + LC #20 Valid Parentheses",phase:2,
     focus:"Matrix Transposition + LIFO Stack Pairing",
     summary:"In-place matrix rotation and the foundational stack problem bridging Arrays into Strings.",
@@ -489,7 +489,7 @@ char c = 'A';
 c - 'A';           // → 0 (int arithmetic)`,gotcha:"C++ strings are mutable (s[i]='x' works). Python strings are immutable \u2014 build with list then ''.join(). C++ tolower/toupper/isalnum work on individual chars, not whole strings."}]
   },
   {
-    id:"2026-06-11",date:"June 11",week:1,weekTitle:"Arrays — Foundation",
+    id:"2026-08-09",date:"Aug 9",week:1,weekTitle:"Arrays — Foundation",
     type:"revision",label:"🔄 Arrays — Topic Completion Revision",phase:3,
     focus:"Arrays Foundation + Advanced — All Patterns Locked",
     summary:"Topic complete. 8 problems across Two-Pointer, HashMap, Greedy, Prefix/Suffix, Kadane's, Matrix, and Stack patterns. Reconstruct solutions from memory — no peeking.",
@@ -505,9 +505,9 @@ c - 'A';           // → 0 (int arithmetic)`,gotcha:"C++ strings are mutable (s
     revision:"Active recall sprint: code #1 Two Sum, #53 Maximum Subarray, and #48 Rotate Image consecutively from scratch."
   },
 
-  /* ══════ WEEK 2 (June 12–18): Strings + Linked Lists ══════ */
+  /* ══════ WEEK 2 (Aug 10–16): Strings + Linked Lists ══════ */
   {
-    id:"2026-06-12",date:"June 12",week:2,weekTitle:"Strings Dominance",
+    id:"2026-08-10",date:"Aug 10",week:2,weekTitle:"Strings Dominance",
     type:"prereq",label:"📚 Strings — Prerequisite Study Day",phase:1,
     focus:"String Fundamentals, ASCII Hashing, Sliding Window Templates",
     summary:"Strings are immutable sequences. Master the frequency-tracking and sliding window tools before coding.",
@@ -556,7 +556,7 @@ result.reserve(n);
 stringstream ss;
 ss << token1 << token2;
 string out = ss.str();`,gotcha:"Unlike Python, C++ string += is actually O(n) amortized (similar to vector) due to exponential growth strategy. Python str += is O(n\u00b2) because strings are immutable and each += creates a new object. Always use ''.join() in Python."},
-      {concept:"String \u2194 int conversion",tag:"Type Conversion",py:`# Python
+      {concept:"String ↔ int conversion",tag:"Type Conversion",py:`# Python
 n = int('42')       # str → int
 s = str(42)         # int → str
 n = int('0xff', 16)  # hex string
@@ -569,7 +569,7 @@ sscanf("42", "%d", &n);
 char buf[20]; sprintf(buf, "%d", n);`,gotcha:"C++ stoi() throws std::invalid_argument on bad input. Python int() also throws ValueError. C++17 has std::from_chars (no exception, fastest). to_string(n) is the clean C++11 way \u2014 avoid sprintf in modern code."}]
   },
   {
-    id:"2026-06-13",date:"June 13",week:2,weekTitle:"Strings Dominance",
+    id:"2026-08-11",date:"Aug 11",week:2,weekTitle:"Strings Dominance",
     type:"problem",label:"LC #125 Valid Palindrome + LC #242 Valid Anagram + LC #49 Group Anagrams",phase:2,
     focus:"Frequency Arrays & Sorted-Key Bucketing",
     summary:"Three string problems establishing frequency-counting and the canonical anagram detection patterns.",
@@ -610,7 +610,7 @@ mp[key].push_back(word);
 // (advanced: define hash<tuple<int,int>>)`,gotcha:"C++ unordered_map supports string keys natively. For pair/tuple keys you must provide a custom hasher \u2014 it doesn't work out of the box unlike Python. Use sorted string as key instead of tuple(sorted()) for anagram problems."}]
   },
   {
-    id:"2026-06-14",date:"June 14",week:2,weekTitle:"Strings Dominance",
+    id:"2026-08-12",date:"Aug 12",week:2,weekTitle:"Strings Dominance",
     type:"problem",label:"LC #5 Longest Palindromic Substring + LC #76 Minimum Window Substring",phase:2,
     focus:"Center Expansion + Variable Sliding Window",
     summary:"Two advanced string problems — center-outward palindrome expansion and the complex have/need sliding window.",
@@ -650,7 +650,7 @@ s.rfind("sub")          // last occurrence
 // Check: s.find("sub") != s.npos`,gotcha:"C++ s.find() returns string::npos (a huge value, not -1) when not found. Always check != string::npos, not != -1 (though often they're equal due to unsigned wrap). Python find() returns -1, index() throws."}]
   },
   {
-    id:"2026-06-15",date:"June 15",week:2,weekTitle:"Strings Dominance",
+    id:"2026-08-13",date:"Aug 13",week:2,weekTitle:"Strings Dominance",
     type:"problem",label:"LC #28 First Occurrence + LC #14 Longest Common Prefix + LC #459 Repeated Substring",phase:2,
     focus:"String Search, Prefix Matching & Periodicity",
     summary:"Three string manipulation problems covering search, prefix extraction, and periodicity detection.",
@@ -695,7 +695,7 @@ sort(key.begin(), key.end());
 // char* == compares pointer addresses!`,gotcha:"C++ std::string == compares content correctly. But char* (C-strings) == compares POINTER addresses \u2014 always use strcmp() for C-strings. In LeetCode use std::string everywhere to avoid this trap."}]
   },
   {
-    id:"2026-06-16",date:"June 16",week:2,weekTitle:"Strings Dominance",
+    id:"2026-08-14",date:"Aug 14",week:2,weekTitle:"Strings Dominance",
     type:"revision",label:"🔄 Strings — Topic Completion Revision",phase:3,
     focus:"Sliding Window & String Pattern Mastery",
     summary:"Topic complete. Cross-compare all string patterns — frequency arrays, sliding window, center expansion, and string manipulation.",
@@ -724,7 +724,7 @@ int l=0, r=s.size()-1;
 while(l<r) { swap(s[l++],s[r--]); }`,gotcha:"C++ strings ARE mutable \u2014 reverse(s.begin(), s.end()) modifies s directly. Python strings are immutable so s[::-1] always creates a new string. For C++ reversed copy use rbegin/rend iterators."}]
   },
   {
-    id:"2026-06-17",date:"June 17",week:2,weekTitle:"Linked Lists",
+    id:"2026-08-15",date:"Aug 15",week:2,weekTitle:"Linked Lists",
     type:"prereq",label:"📚 Linked Lists — Prerequisite Study Day",phase:1,
     focus:"Node Architecture, Dummy Heads & Pointer Safety",
     summary:"Linked Lists require a different mental model. Master pointer manipulation on paper before touching code.",
@@ -767,7 +767,7 @@ ListNode* nxt = node ? node->next : nullptr;
 // Never: if (node == 0) — use nullptr`,gotcha:"C++ nullptr is typed (nullptr_t), safer than the old NULL macro (which is just integer 0). Using NULL can cause ambiguous overload resolution. Always use nullptr in modern C++. Dereferencing nullptr = segfault."}]
   },
   {
-    id:"2026-06-18",date:"June 18",week:2,weekTitle:"Linked Lists",
+    id:"2026-08-16",date:"Aug 16",week:2,weekTitle:"Linked Lists",
     type:"problem",label:"LC #206 Reverse Linked List + LC #21 Merge Two Sorted Lists + LC #141 Linked List Cycle",phase:2,
     focus:"Reversal, Dummy Node Stitching & Floyd's Detection",
     summary:"Three foundational Linked List patterns — reversal, merge, and cycle detection.",
@@ -783,9 +783,9 @@ ListNode* nxt = node ? node->next : nullptr;
     ]
   },
 
-  /* ══════ WEEK 3 (June 19–25): Linked Lists + Stacks/Queues ══════ */
+  /* ══════ WEEK 3 (Aug 17–23): Linked Lists + Stacks/Queues ══════ */
   {
-    id:"2026-06-19",date:"June 19",week:3,weekTitle:"Linked Lists",
+    id:"2026-08-17",date:"Aug 17",week:3,weekTitle:"Linked Lists",
     type:"problem",label:"LC #19 Remove Nth From End + LC #2 Add Two Numbers + LC #234 Palindrome Linked List",phase:2,
     focus:"Gap Tracking, Carry Arithmetic & Midpoint Reversal",
     summary:"Three problems covering the gap-pointer technique, node arithmetic, and the midpoint+reverse combo.",
@@ -841,7 +841,7 @@ val   = sum % 10;
 // For circular index: ((i%n)+n)%n to ensure positive`,gotcha:"Python's % always returns a non-negative result (modulo). C++ % truncates toward zero \u2014 can return negative. For circular array indices, use ((i%n)+n)%n in C++ to guarantee positive result."}]
   },
   {
-    id:"2026-06-20",date:"June 20",week:3,weekTitle:"Linked Lists",
+    id:"2026-08-18",date:"Aug 18",week:3,weekTitle:"Linked Lists",
     type:"problem",label:"LC #160 Intersection of Two Lists + LC #25 Reverse Nodes in k-Group",phase:2,
     focus:"Length Alignment & Modular Batch Reversal",
     summary:"Length-equalization intersection technique and the hard k-group reversal problem.",
@@ -865,7 +865,7 @@ void fn(ListNode* node)  // pointer — can be null, can be changed
 ListNode* prev = nullptr;  // pointer to ListNode`,gotcha:"References (T&) cannot be null and cannot be reseated \u2014 they always refer to their initial target. Pointers (T*) can be null and can point elsewhere. For linked list problems always use pointers (T*). Use references for function parameters where you want to avoid copy but don't want null."}]
   },
   {
-    id:"2026-06-21",date:"June 21",week:3,weekTitle:"Linked Lists",
+    id:"2026-08-19",date:"Aug 19",week:3,weekTitle:"Linked Lists",
     type:"revision",label:"🔄 Linked Lists — Topic Completion Revision",phase:3,
     focus:"All Linked List Patterns Consolidated",
     summary:"Topic complete. Revisit every pointer pattern before advancing to Stacks & Queues.",
@@ -889,7 +889,7 @@ ListNode* curr = &dummy;  // pointer to stack object
 return dummy.next;        // safe, dummy still alive`,gotcha:"Stack-allocated objects live until the enclosing } closes. Using them as dummy head in a function is safe as long as you return dummy.next (the value it points to) rather than the address of dummy itself."}]
   },
   {
-    id:"2026-06-22",date:"June 22",week:3,weekTitle:"Stacks & Queues",
+    id:"2026-08-20",date:"Aug 20",week:3,weekTitle:"Stacks & Queues",
     type:"prereq",label:"📚 Stacks & Queues — Prerequisite Study Day",phase:1,
     focus:"LIFO/FIFO Architecture, Monotonic Stacks, Circular Queues",
     summary:"Deepen Stack and Queue mental models before diving into design and optimization problems.",
@@ -934,7 +934,7 @@ for (int i = 0; i < temps.size(); i++) {
 }`,gotcha:"In C++: read st.top() to get the index, THEN call st.pop() to remove. Combining them into one expression is undefined behaviour. Also temps[st.top()] \u2014 you must dereference through temps[], the stack stores raw int indices."}]
   },
   {
-    id:"2026-06-23",date:"June 23",week:3,weekTitle:"Stacks & Queues",
+    id:"2026-08-21",date:"Aug 21",week:3,weekTitle:"Stacks & Queues",
     type:"problem",label:"LC #232 Queue via Stacks + LC #155 Min Stack + LC #739 Daily Temperatures",phase:2,
     focus:"Auxiliary History Stacks + Monotonic Stack Index Logic",
     summary:"Three structural Stack problems — queue design, constant-time minimum, and the canonical monotonic stack.",
@@ -980,7 +980,7 @@ public:
 };`,gotcha:"C++ class members default to private. Use 'public:' before methods that LeetCode calls. In Python everything is public by default. C++ constructor uses initializer list syntax: MinStack() : st(), mn() {} for explicit init."}]
   },
   {
-    id:"2026-06-24",date:"June 24",week:3,weekTitle:"Stacks & Queues",
+    id:"2026-08-22",date:"Aug 22",week:3,weekTitle:"Stacks & Queues",
     type:"problem",label:"LC #150 Evaluate RPN + LC #496 Next Greater I + LC #503 Next Greater II + LC #622 Circular Queue",phase:2,
     focus:"Operator Evaluation, Circular Arrays & Queue Design",
     summary:"Completing Stacks & Queues with RPN evaluation, circular array monotonic stacks, and circular queue implementation.",
@@ -1014,7 +1014,7 @@ struct Node {
 priority_queue<int, vector<int>, greater<int>> minHeap;`,gotcha:"C++ priority_queue is a MAX-heap by default (largest on top). Python heapq is a MIN-heap. For a min-heap in C++: priority_queue<int, vector<int>, greater<int>>. The comparator logic is INVERTED \u2014 confusing!"}]
   },
   {
-    id:"2026-06-25",date:"June 25",week:3,weekTitle:"Stacks & Queues",
+    id:"2026-08-23",date:"Aug 23",week:3,weekTitle:"Stacks & Queues",
     type:"revision",label:"🔄 Stacks & Queues — Topic Completion Revision",phase:3,
     focus:"Stack & Queue Pattern Taxonomy",
     summary:"Topic complete. All Stack and Queue patterns consolidated before Binary Search.",
@@ -1029,9 +1029,9 @@ priority_queue<int, vector<int>, greater<int>> minHeap;`,gotcha:"C++ priority_qu
     revision:"From memory: code #155 Min Stack and #739 Daily Temperatures back-to-back."
   },
 
-  /* ══════ WEEK 4 (June 26–July 2): Binary Search + Trees ══════ */
+  /* ══════ WEEK 4 (Aug 24–30): Binary Search + Trees ══════ */
   {
-    id:"2026-06-26",date:"June 26",week:4,weekTitle:"Binary Search",
+    id:"2026-08-24",date:"Aug 24",week:4,weekTitle:"Binary Search",
     type:"prereq",label:"📚 Binary Search — Prerequisite Study Day",phase:1,
     focus:"Inclusive Boundary Templates, Invariants & Search Space Reduction",
     summary:"Binary Search is deceptively subtle — off-by-one errors are everywhere. Master one template, then variations.",
@@ -1079,7 +1079,7 @@ bool found = binary_search(v.begin(),v.end(),x);
 v.insert(lower_bound(v.begin(),v.end(),x), x);`,gotcha:"C++ lower_bound returns an iterator, not an index. Subtract begin() to get index. lower_bound finds first position >= x (like bisect_left). upper_bound finds first position > x (like bisect_right)."}]
   },
   {
-    id:"2026-06-27",date:"June 27",week:4,weekTitle:"Binary Search",
+    id:"2026-08-25",date:"Aug 25",week:4,weekTitle:"Binary Search",
     type:"problem",label:"LC #704 Binary Search + LC #34 First/Last Position + LC #74 Search 2D Matrix",phase:2,
     focus:"Standard Bisection + Upper/Lower Bounds + 1D-to-2D Mapping",
     summary:"Core binary search — the base template, both bound variants, and the elegant virtual-index 2D matrix search.",
@@ -1109,7 +1109,7 @@ while(lo<=hi){
 // mid/n is integer division — both int, safe`,gotcha:"mid/n in C++ is integer division (floors toward zero) \u2014 same as Python's //. But if n is 0, this is division by zero! Always guarantee n > 0 before calling this. In the problem, n = matrix[0].size() which is always >= 1."}]
   },
   {
-    id:"2026-06-28",date:"June 28",week:4,weekTitle:"Binary Search",
+    id:"2026-08-26",date:"Aug 26",week:4,weekTitle:"Binary Search",
     type:"problem",label:"LC #33 Search Rotated Array + LC #81 Search Rotated II + LC #162 Find Peak Element",phase:2,
     focus:"Sorted Half Identification + Gradient Search",
     summary:"Rotated array search and peak finding — both require identifying structural properties at the midpoint.",
@@ -1135,7 +1135,7 @@ for (size_t i = 0; i < v.size(); i++) { ... }
 for (int i = 0; i < v.size(); ++i) { ... } // ok in practice`,gotcha:"vector::size() returns size_t (unsigned). Comparing int i < v.size() when i might be -1 is dangerous \u2014 unsigned comparison wraps -1 to UINT_MAX (huge). Always cast: (int)v.size() when doing signed arithmetic."}]
   },
   {
-    id:"2026-06-29",date:"June 29",week:4,weekTitle:"Binary Search",
+    id:"2026-08-27",date:"Aug 27",week:4,weekTitle:"Binary Search",
     type:"revision",label:"🔄 Binary Search — Topic Completion Revision",phase:3,
     focus:"Binary Search Template Mastery",
     summary:"Topic complete. Instant pattern recognition is the goal — which template does each problem call for?",
@@ -1162,7 +1162,7 @@ for (auto& x : views::reverse(v)) { ... }
 for (int i=(int)v.size()-1; i>=0; i--) process(v[i]);`,gotcha:"C++ rbegin()/rend() give reverse iterators \u2014 ++ moves backward. *it dereferences to value. For index-based loops, cast size()-1 to int before comparing >= 0, or use signed int loop variable to avoid unsigned underflow."}]
   },
   {
-    id:"2026-06-30",date:"June 30",week:4,weekTitle:"Trees",
+    id:"2026-08-28",date:"Aug 28",week:4,weekTitle:"Trees",
     type:"prereq",label:"📚 Trees — Prerequisite Study Day",phase:1,
     focus:"Tree Node Structure, All Four Traversals & Balanced Tree Properties",
     summary:"Trees demand both recursive intuition and iterative stack simulation. Build both mental models today.",
@@ -1211,7 +1211,7 @@ int dfs(TreeNode* node) {
 }`,gotcha:"C++ functions with non-void return type MUST return a value on all paths \u2014 missing return is undefined behaviour (often compiles but crashes or returns garbage). Python functions return None implicitly. Always trace all code paths."}]
   },
   {
-    id:"2026-07-01",date:"July 1",week:4,weekTitle:"Trees",
+    id:"2026-08-29",date:"Aug 29",week:4,weekTitle:"Trees",
     type:"problem",label:"LC #104 Max Depth + LC #100 Same Tree + LC #101 Symmetric Tree + LC #110 Balanced Binary Tree",phase:2,
     focus:"Top-Down Recursion, Mirror Traversal & Bottom-Up Sentinel",
     summary:"Four tree recursion problems establishing the core structural recursive patterns.",
@@ -1251,7 +1251,7 @@ bool solve(TreeNode* root) {
 }`,gotcha:"C++ recursive lambdas need std::function<RetType(Args)> to declare the type before use \u2014 you can't use 'auto' for a lambda that refers to itself. Always use [&] capture for recursive lambdas so they can call themselves."}]
   },
   {
-    id:"2026-07-02",date:"July 2",week:4,weekTitle:"Trees",
+    id:"2026-08-30",date:"Aug 30",week:4,weekTitle:"Trees",
     type:"problem",label:"LC #144 Preorder + LC #94 Inorder + LC #145 Postorder + LC #102 Level Order Traversal",phase:2,
     focus:"Iterative Stack Simulation & BFS Level Grouping",
     summary:"All four traversals implemented iteratively — a complete mastery of tree traversal mechanics.",
@@ -1268,9 +1268,9 @@ bool solve(TreeNode* root) {
     ]
   },
 
-  /* ══════ WEEK 5 (July 3–9): Backtracking + Dynamic Programming ══════ */
+  /* ══════ WEEK 5 (Aug 31–Sep 6): Backtracking + Dynamic Programming ══════ */
   {
-    id:"2026-07-03",date:"July 3",week:5,weekTitle:"Trees + Backtracking",
+    id:"2026-08-31",date:"Aug 31",week:5,weekTitle:"Trees + Backtracking",
     type:"revision",label:"🔄 Trees — Topic Completion Revision",phase:3,
     focus:"Tree Traversal Decision Map",
     summary:"Topic complete. Build the mental decision tree: which traversal, which direction (top-down vs. bottom-up)?",
@@ -1317,7 +1317,7 @@ auto it = s.end();   // past end
 // Use unordered_set for pure membership test`,gotcha:"C++ has TWO set types: set (red-black tree, sorted, O(log n)) and unordered_set (hash table, O(1) avg). Python's set is always unordered. Use C++ set when you need min/max/ordered traversal. Otherwise use unordered_set for speed."}]
   },
   {
-    id:"2026-07-04",date:"July 4",week:5,weekTitle:"Recursion & Backtracking",
+    id:"2026-09-01",date:"Sep 1",week:5,weekTitle:"Recursion & Backtracking",
     type:"prereq",label:"📚 Backtracking — Prerequisite Study Day",phase:1,
     focus:"State-Space Trees, Base Cases & The Choice-Recurse-Undo Framework",
     summary:"Backtracking is systematic exhaustive search with early termination. Master the canonical 3-step framework before writing any solution.",
@@ -1347,7 +1347,7 @@ while(!stk.empty()){
 }`,gotcha:"C++ has a fixed call stack (typically 1-8MB). Deep recursion on a skewed tree (10^4 nodes) can cause stack overflow. Python is more forgiving but also limited. For competitive C++, iterative solutions using explicit stack<> are safer for tree/graph problems."}]
   },
   {
-    id:"2026-07-05",date:"July 5",week:5,weekTitle:"Recursion & Backtracking",
+    id:"2026-09-02",date:"Sep 2",week:5,weekTitle:"Recursion & Backtracking",
     type:"problem",label:"LC #39 Combination Sum + LC #46 Permutations + LC #78 Subsets + LC #90 Subsets II",phase:2,
     focus:"Reuse Forks, Position Swapping & Index Pruning",
     summary:"Four backtracking problems covering the core paradigm variants: combinations, permutations, and subsets.",
@@ -1385,7 +1385,7 @@ set<int> cols, diag, anti;  // sorted
 unordered_set<int> cols, diag, anti;`,gotcha:"C++ set::erase(val) silently does nothing if val is not present \u2014 safe for backtracking undo. Python's discard() is the same. Avoid remove() in Python (throws) and don't assume erase is slow \u2014 it's O(log n) for set, O(1) avg for unordered_set."}]
   },
   {
-    id:"2026-07-06",date:"July 6",week:5,weekTitle:"Recursion & Backtracking",
+    id:"2026-09-03",date:"Sep 3",week:5,weekTitle:"Recursion & Backtracking",
     type:"problem",label:"LC #51 N-Queens + LC #17 Letter Combinations + LC #37 Sudoku Solver",phase:2,
     focus:"Safe Configuration Validation, Multi-Choice Trees & Grid Backtracking",
     summary:"Three harder backtracking problems — constraint satisfaction on boards and multi-choice branching.",
@@ -1413,7 +1413,7 @@ b[row][col] = 'Q';
 result.push_back(b);`,gotcha:"For N-Queens in C++, vector<string> is idiomatic \u2014 each string is a row and chars are mutable. board[row][col]='Q' works directly. For Sudoku the board is passed as vector<vector<char>>& \u2014 modify in-place, it's already a reference."}]
   },
   {
-    id:"2026-07-07",date:"July 7",week:5,weekTitle:"Recursion & Backtracking",
+    id:"2026-09-04",date:"Sep 4",week:5,weekTitle:"Recursion & Backtracking",
     type:"revision",label:"🔄 Backtracking — Topic Completion Revision",phase:3,
     focus:"Backtracking Pattern Taxonomy",
     summary:"Topic complete. Build a mental taxonomy of backtracking problem types and their structural differences.",
@@ -1455,7 +1455,7 @@ vector<vector<int>> combinationSum(...) {
 }`,gotcha:"std::function<void(int,int)> has overhead vs regular function \u2014 for competitive programming, prefer a private class method. But for LeetCode readability, function<> + lambda [&] capturing the result/path is the cleanest equivalent to Python's nested def."}]
   },
   {
-    id:"2026-07-08",date:"July 8",week:5,weekTitle:"Dynamic Programming",
+    id:"2026-09-05",date:"Sep 5",week:5,weekTitle:"Dynamic Programming",
     type:"prereq",label:"📚 Dynamic Programming — Prerequisite Study Day",phase:1,
     focus:"Optimal Substructure, Overlapping Subproblems, Memoization vs. Tabulation",
     summary:"DP transforms exponential recursion into polynomial solutions. The two core properties and two implementation strategies.",
@@ -1491,7 +1491,7 @@ int dp(int i) {
 }`,gotcha:"For dense integer keys (0 to n), use vector<int> memo(n+1,-1) \u2014 much faster than unordered_map. Use -1 as 'uncomputed' sentinel only if valid results can't be -1. If results can be negative, use a separate bool vector or memo with optional<int>."}]
   },
   {
-    id:"2026-07-09",date:"July 9",week:5,weekTitle:"Dynamic Programming",
+    id:"2026-09-06",date:"Sep 6",week:5,weekTitle:"Dynamic Programming",
     type:"problem",label:"LC #70 Climbing Stairs + LC #198 House Robber + LC #322 Coin Change + LC #300 LIS",phase:2,
     focus:"1D State Dependency, Unbounded Knapsack & Nested Conditions",
     summary:"Four core 1D DP problems covering Fibonacci-style, unbounded DP, and nested condition DP.",
@@ -1508,9 +1508,9 @@ int dp(int i) {
     ]
   },
 
-  /* ══════ WEEK 6 (July 10–14): DP Completion + Graphs + Bitwise ══════ */
+  /* ══════ WEEK 6 (Sep 7–11): DP Completion + Graphs + Bitwise ══════ */
   {
-    id:"2026-07-10",date:"July 10",week:6,weekTitle:"Dynamic Programming",
+    id:"2026-09-07",date:"Sep 7",week:6,weekTitle:"Dynamic Programming",
     type:"problem",label:"LC #1143 LCS + LC #62 Unique Paths + LC #416 Partition Sum + LC #5 Palindrome DP",phase:2,
     focus:"2D Grid DP, 0/1 Knapsack & Interval DP",
     summary:"Completing DP with 2D accumulation, 0/1 knapsack, and interval DP — the three remaining DP paradigms.",
@@ -1573,7 +1573,7 @@ for (int num : nums)
 // (unbounded knapsack) — coin change uses forward!`,gotcha:"The backwards loop is the ONLY difference between 0/1 knapsack (each item once) and unbounded knapsack (items reusable). Coin Change iterates FORWARD. Partition Equal Subset Sum iterates BACKWARD. Mix them up = wrong answer."}]
   },
   {
-    id:"2026-07-11",date:"July 11",week:6,weekTitle:"Dynamic Programming",
+    id:"2026-09-08",date:"Sep 8",week:6,weekTitle:"Dynamic Programming",
     type:"revision",label:"🔄 Dynamic Programming — Topic Completion Revision",phase:3,
     focus:"DP Pattern Recognition & Transition Mastery",
     summary:"Topic complete. The key skill is instant recognition of which DP paradigm applies — without deliberation.",
@@ -1602,7 +1602,7 @@ for(int i=0;i<n;i++)
 partial_sum(nums.begin(),nums.end(),prefix.begin()+1);`,gotcha:"C++ accumulate's third argument is the INITIAL VALUE and determines the type. accumulate(v.begin(),v.end(),0) uses int \u2014 will overflow for large sums! Use 0LL (long long) for large sums: accumulate(v.begin(),v.end(),0LL)."}]
   },
   {
-    id:"2026-07-12",date:"July 12",week:6,weekTitle:"Graphs & Bitwise",
+    id:"2026-09-09",date:"Sep 9",week:6,weekTitle:"Graphs & Bitwise",
     type:"prereq",label:"📚 Graphs & Bitwise — Prerequisite Study Day",phase:1,
     focus:"Graph Theory, BFS/DFS/Topo Sort & Bitwise Operator Toolkit",
     summary:"Graphs generalize trees. Master representations, traversal strategies, and the bitwise toolkit in one focused session.",
@@ -1639,7 +1639,7 @@ vector<int> state(n, 0);
 // 0=unvisited, 1=visiting(in stack), 2=done`,gotcha:"vector<bool> in C++ is space-optimised (1 bit per element) but has quirks \u2014 it doesn't return real bool references. For most graph problems it works fine. For cycle detection, use vector<int> with 3 states (0/1/2) rather than two separate bool vectors."}]
   },
   {
-    id:"2026-07-13",date:"July 13",week:6,weekTitle:"Graphs & Bitwise",
+    id:"2026-09-10",date:"Sep 10",week:6,weekTitle:"Graphs & Bitwise",
     type:"problem",label:"LC #200 Number of Islands + LC #207 Course Schedule + LC #994 Rotting Oranges + LC #133 Clone Graph",phase:2,
     focus:"Grid DFS, Topological Sort, Multi-Source BFS & Deep Cloning",
     summary:"Four graph problems covering the full range of graph algorithm patterns.",
@@ -1756,7 +1756,7 @@ for(auto& d : dirs){
 vector<pair<int,int>> dirs={{1,0},{-1,0},{0,1},{0,-1}};`,gotcha:"Both styles work. The int[4][2] array is slightly faster (stack allocation, cache-friendly). In competitive programming, a global const dirs array is idiomatic. Always bounds-check ALL four: nr>=0 && nr<R && nc>=0 && nc<C."}]
   },
   {
-    id:"2026-07-14",date:"July 14",week:6,weekTitle:"Graphs & Bitwise",
+    id:"2026-09-11",date:"Sep 11",week:6,weekTitle:"Graphs & Bitwise",
     type:"milestone",label:"👑 FINAL DAY — Bitwise + Grand Revision + MILESTONE",phase:4,
     focus:"Bitwise Mastery + Full Curriculum Integration + 🏆 COMPLETE",
     summary:"The final day. Four bitwise problems, then a cross-topic synthesis session, then the milestone. You did it.",
