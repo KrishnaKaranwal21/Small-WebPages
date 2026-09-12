@@ -67,13 +67,13 @@
 
   /* ---------- top bar ---------- */
   .topbar{
-    position:sticky; top:0; z-index:20;
+    position:sticky; top:0; z-index:30;
     background:var(--surface);
     border-bottom:1px solid var(--line);
     transition:background .35s ease, border-color .35s ease;
   }
   .topbar-inner{
-    max-width:820px; margin:0 auto;
+    max-width:900px; margin:0 auto;
     padding:.85rem 1.25rem;
     display:flex; align-items:center; justify-content:space-between; gap:1rem;
     flex-wrap:wrap;
@@ -81,8 +81,18 @@
   .brand{font-family:'IBM Plex Mono',monospace; font-size:.72rem; letter-spacing:.04em; color:var(--muted);}
   .brand b{color:var(--ink);}
 
+  .pagenav{display:flex; gap:.4rem; flex-wrap:wrap;}
+  .pagenav-btn{
+    font-family:'IBM Plex Mono',monospace; font-size:.72rem; letter-spacing:.02em;
+    padding:.5rem .85rem; border-radius:99px; border:1px solid var(--line);
+    background:var(--bg); color:var(--muted); cursor:pointer;
+    transition:all .2s ease;
+  }
+  .pagenav-btn.active{background:var(--accent); border-color:var(--accent); color:var(--accent-ink); font-weight:600;}
+  .pagenav-btn:hover:not(.active){border-color:var(--accent-2); color:var(--ink);}
+
   .progress-chip{display:flex; align-items:center; gap:.6rem; font-family:'IBM Plex Mono',monospace; font-size:.72rem; color:var(--muted);}
-  .progress-track{width:90px; height:6px; border-radius:99px; background:var(--ring-track); overflow:hidden;}
+  .progress-track{width:70px; height:6px; border-radius:99px; background:var(--ring-track); overflow:hidden;}
   .progress-fill{height:100%; width:0%; background:var(--accent); transition:width .4s ease;}
 
   .theme-toggle{
@@ -104,7 +114,9 @@
   .toggle-label.active-label{ color:var(--ink); }
 
   /* ---------- layout ---------- */
-  main{max-width:820px; margin:0 auto; padding:0 1.25rem;}
+  main{max-width:900px; margin:0 auto; padding:0 1.25rem;}
+  .page{display:none;}
+  .page.active{display:block;}
   .sheet{
     padding:3.2rem 0;
     border-bottom:1px solid var(--line);
@@ -226,10 +238,11 @@
   details.day summary{
     padding:1rem 1.2rem; cursor:pointer; font-weight:600; list-style:none;
     display:flex; justify-content:space-between; align-items:center; font-size:.95rem;
+    gap:1rem;
   }
   details.day summary::-webkit-details-marker{display:none;}
   details.day summary::after{
-    content:"+"; font-family:'IBM Plex Mono',monospace; color:var(--accent-2); font-size:1.1rem;
+    content:"+"; font-family:'IBM Plex Mono',monospace; color:var(--accent-2); font-size:1.1rem; flex-shrink:0;
   }
   details.day[open] summary::after{content:"–";}
   details.day .day-body{padding:0 1.2rem 1.2rem;}
@@ -246,8 +259,48 @@
   .signoff{text-align:left; padding-bottom:4rem;}
   .signoff h2{font-style:italic;}
 
+  /* ---------- reference tables (DBMS study page) ---------- */
+  .table-wrap{overflow-x:auto; margin:1rem 0 1.4rem; border:1px solid var(--line); border-radius:8px;}
+  table.ref{width:100%; border-collapse:collapse; font-size:.82rem; min-width:520px;}
+  table.ref th{
+    background:var(--bg); font-family:'IBM Plex Mono',monospace; font-size:.65rem;
+    letter-spacing:.03em; color:var(--muted); text-align:left; padding:.6rem .7rem;
+    border-bottom:1px solid var(--line); white-space:nowrap;
+  }
+  table.ref td{
+    padding:.6rem .7rem; border-bottom:1px solid var(--line); vertical-align:top;
+    background:var(--surface); color:var(--ink);
+  }
+  table.ref tr:last-child td{border-bottom:none;}
+  table.ref code{font-family:'IBM Plex Mono',monospace; font-size:.78rem; color:var(--accent-ink); background:var(--ring-track); padding:.1em .35em; border-radius:4px;}
+  html[data-theme="dark"] table.ref code{color:var(--accent-2); background:rgba(255,255,255,.08);}
+
+  .code-block{
+    font-family:'IBM Plex Mono',monospace; font-size:.78rem; line-height:1.55;
+    background:var(--surface); border:1px solid var(--line); border-radius:8px;
+    padding:.9rem 1.1rem; overflow-x:auto; white-space:pre; margin:.9rem 0; color:var(--ink);
+  }
+
+  .viva{
+    margin:.9rem 0; padding:.8rem 1rem; border-radius:6px;
+    border-left:3px solid var(--accent); background:transparent; font-size:.87rem;
+  }
+  .viva b{color:var(--ink); font-family:'IBM Plex Mono',monospace; font-size:.68rem; letter-spacing:.04em; display:block; margin-bottom:.35em;}
+
+  .exp-jump{display:flex; flex-wrap:wrap; gap:.4rem; margin:0 0 1.6rem;}
+  .exp-jump a{
+    font-family:'IBM Plex Mono',monospace; font-size:.68rem; text-decoration:none;
+    padding:.4rem .7rem; border:1px solid var(--line); border-radius:99px; color:var(--muted);
+    transition:all .15s ease;
+  }
+  .exp-jump a:hover{border-color:var(--accent); color:var(--ink);}
+
   @media (prefers-reduced-motion: reduce){
     *{transition:none !important; scroll-behavior:auto !important;}
+  }
+
+  @media (max-width:600px){
+    table.ref{min-width:440px;}
   }
 </style>
 </head>
@@ -256,6 +309,11 @@
 <header class="topbar">
   <div class="topbar-inner">
     <span class="brand"><b>BUILT ENVIRONMENT LAB</b> — Intake Review</span>
+    <nav class="pagenav" role="tablist" aria-label="Page navigation">
+      <button class="pagenav-btn active" data-page="interview">Interview</button>
+      <button class="pagenav-btn" data-page="resume">Resume Guide</button>
+      <button class="pagenav-btn" data-page="dbms">DBMS Study</button>
+    </nav>
     <div class="progress-chip">
       <span id="progressText">0/0 prepped</span>
       <div class="progress-track"><div class="progress-fill" id="progressFill"></div></div>
@@ -269,6 +327,11 @@
 </header>
 
 <main>
+
+<!-- ============================================================ -->
+<!-- PAGE 1 — INTERVIEW TIPS + ABOUT PROF. CHANI                  -->
+<!-- ============================================================ -->
+<div class="page active" id="page-interview">
 
   <section class="sheet hero" id="cover">
     <p class="sheet-tag">SHEET A–00 · COVER</p>
@@ -293,8 +356,18 @@
     <label class="task"><input type="checkbox" class="task-check" data-id="pitch-2"><span>I have one honest sentence for "why architecture, not a pure CS lab?"</span></label>
   </section>
 
+  <section class="sheet" id="chani">
+    <p class="sheet-tag">SHEET A–02 · WHO YOU'RE MEETING</p>
+    <h2>Prof. P.S. Chani, in one page.</h2>
+    <p class="section-intro">Don't walk in only knowing "the professor." Knowing the person on the other side of the call changes how you answer everything else.</p>
+    <div class="tip-box"><b>Role:</b> Professor at the Department of Architecture &amp; Planning, IIT Roorkee, and head of the Built Environment Lab. His original doctoral work was in embodied energy and lifecycle carbon of building materials — that thread still anchors the lab today, even as it's expanded into sensor-driven and cognitive research.</div>
+    <div class="tip-box"><b>How he evaluates people:</b> he's reading your resume and SOP as a set of claims, not an introduction — expect him to pick one line and ask you to go a level deeper, rather than working through a script of generic questions.</div>
+    <div class="tip-box"><b>What impresses him:</b> based on how the lab runs, precision over polish. Saying "I don't know, but here's how I'd think about it" reads better to a researcher than a confident, vague answer.</div>
+    <label class="task"><input type="checkbox" class="task-check" data-id="chani-1"><span>I can describe who he is and what the lab does in two sentences, unscripted</span></label>
+  </section>
+
   <section class="sheet" id="lab">
-    <p class="sheet-tag">SHEET A–02 · THE LAB</p>
+    <p class="sheet-tag">SHEET A–03 · THE LAB</p>
     <h2>Three threads. Know all three, lead with one.</h2>
     <p class="section-intro">Don't recite these as a list if he asks "what do you know about our research" — that reads as rehearsed. Pick the thread closest to something you've built, lead with that connection, then mention the other two briefly.</p>
 
@@ -324,77 +397,123 @@
     <label class="task"><input type="checkbox" class="task-check" data-id="lab-2"><span>I've decided which thread I'm leading with</span></label>
   </section>
 
-  <section class="sheet" id="dbms">
-    <p class="sheet-tag">SHEET S–01 · DBMS AMMUNITION</p>
-    <h2>The exam score has to survive a conversation.</h2>
-    <p class="section-intro">Click a card to flip it. The question's on the front — rehearse your answer out loud before you check the back.</p>
+  <section class="sheet" id="schedule">
+    <p class="sheet-tag">SHEET T–01 · TWO-DAY TIMELINE</p>
+    <h2>Saturday to Monday, laid flat.</h2>
 
-    <div class="flip-grid">
-      <div class="flip-card" data-card="1">
-        <div class="flip-inner">
-          <div class="flip-face flip-front">
-            <span class="face-label">NORMALIZATION</span>
-            <p>Walk me through 1NF → 3NF. When would over-normalizing hurt you?</p>
-            <span class="flip-hint">tap to check your answer</span>
-          </div>
-          <div class="flip-face flip-back">
-            <span class="face-label">YOUR ANSWER</span>
-            <p>Walk a concrete table example through each normal form. Then flip it: over-normalizing hurts read-heavy analytical workloads, because every read now needs more joins — directly relevant to time-series sensor data, which is written once and read in bulk for analysis.</p>
-          </div>
-        </div>
+    <details class="day" open>
+      <summary><span><span class="day-tag">SAT · AM</span>Know the lab cold</span></summary>
+      <div class="day-body">
+        <p class="muted">Read the Built Environment Lab page and Google Scholar profile. Note 2–3 specific papers or projects across the three threads.</p>
+        <ul class="task-list">
+          <li class="task"><input type="checkbox" class="task-check" data-id="sat-am-1"><span>Skimmed his Scholar/ResearchGate page for real titles</span></li>
+        </ul>
       </div>
+    </details>
 
-      <div class="flip-card" data-card="2">
-        <div class="flip-inner">
-          <div class="flip-face flip-front">
-            <span class="face-label">ACID</span>
-            <p>Explain isolation levels. Give a real race condition your transactions prevented.</p>
-            <span class="flip-hint">tap to check your answer</span>
-          </div>
-          <div class="flip-face flip-back">
-            <span class="face-label">YOUR ANSWER</span>
-            <p>Name the isolation levels and what anomaly each one blocks. Then land on a concrete moment from Online Bookstore or PayStream where a transaction boundary stopped two operations from corrupting the same row.</p>
-          </div>
-        </div>
+    <details class="day">
+      <summary><span><span class="day-tag">SAT · MIDDAY</span>Rebuild your SOP pitch, out loud</span></summary>
+      <div class="day-body">
+        <p class="muted">Practice explaining — unscripted — how your DB and agentic AI background applies to their EEG, facade, and carbon data. Not reading from the SOP.</p>
+        <ul class="task-list">
+          <li class="task"><input type="checkbox" class="task-check" data-id="sat-mid-1"><span>Said the SOP pitch out loud, unscripted, at least twice</span></li>
+        </ul>
       </div>
+    </details>
 
-      <div class="flip-card" data-card="3">
-        <div class="flip-inner">
-          <div class="flip-face flip-front">
-            <span class="face-label">SQL OPTIMIZATION</span>
-            <p>How do you decide on an indexing strategy? Why SQL over a document store here?</p>
-            <span class="flip-hint">tap to check your answer</span>
-          </div>
-          <div class="flip-face flip-back">
-            <span class="face-label">YOUR ANSWER</span>
-            <p>Indexing follows query patterns, not table shape — index what you filter and sort on, watch write-cost trade-offs. Choose SQL when relationships and integrity matter more than write throughput or schema flexibility.</p>
-          </div>
-        </div>
+    <details class="day">
+      <summary><span><span class="day-tag">SAT · PM</span>DBMS refresh — normalization &amp; ACID</span></summary>
+      <div class="day-body">
+        <p class="muted">Redo normalization examples and transaction isolation levels. Connect each one to a project you actually built. Full reference is on the DBMS Study page.</p>
+        <ul class="task-list">
+          <li class="task"><input type="checkbox" class="task-check" data-id="sat-pm-1"><span>Redid 1NF→3NF and isolation levels from memory</span></li>
+        </ul>
       </div>
+    </details>
 
-      <div class="flip-card" data-card="4">
-        <div class="flip-inner">
-          <div class="flip-face flip-front">
-            <span class="face-label">SQL vs NoSQL — THE ONE TO BET ON</span>
-            <p>Would you use SQL or MongoDB for continuous EEG or facade sensor readings? Why?</p>
-            <span class="flip-hint">tap to check your answer</span>
-          </div>
-          <div class="flip-face flip-back">
-            <span class="face-label">YOUR ANSWER</span>
-            <p>Data shape → decision → hybrid. High-volume, schema-flexible, write-heavy sensor streams push toward MongoDB or a time-series store. Derived metrics, subject metadata, and experiment design are relational — push toward SQL. Land on a hybrid architecture, and tie it to CharityDash, since you've already built both sides.</p>
-          </div>
-        </div>
+    <details class="day">
+      <summary><span><span class="day-tag">SAT · EVE</span>SQL vs NoSQL scenario practice</span></summary>
+      <div class="day-body">
+        <p class="muted">Draft your answer for "how would you store continuous sensor or EEG data" and practice saying it in under 90 seconds.</p>
+        <ul class="task-list">
+          <li class="task"><input type="checkbox" class="task-check" data-id="sat-eve-1"><span>Drafted and timed the hybrid-storage answer</span></li>
+        </ul>
       </div>
+    </details>
+
+    <details class="day">
+      <summary><span><span class="day-tag">SUN · EVE</span>Light review, not cramming</span></summary>
+      <div class="day-body">
+        <p class="muted">Skim your notes for 20–30 minutes, don't re-study. Re-read your own SOP and resume once, slowly — you should be able to defend every line, including the ones you didn't emphasize.</p>
+        <ul class="task-list">
+          <li class="task"><input type="checkbox" class="task-check" data-id="sun-eve-1"><span>Re-read my own SOP and resume, once, slowly</span></li>
+          <li class="task"><input type="checkbox" class="task-check" data-id="sun-eve-2"><span>Tested join link, camera, mic, and internet backup</span></li>
+        </ul>
+      </div>
+    </details>
+
+    <details class="day">
+      <summary><span><span class="day-tag">MON</span>Before you join</span></summary>
+      <div class="day-body">
+        <p class="muted">Join the waiting room 3–5 minutes early. Keep a notepad nearby — not to read answers off, but to jot down anything specific he says about the lab's current work, so you can reference it naturally later.</p>
+        <ul class="task-list">
+          <li class="task"><input type="checkbox" class="task-check" data-id="mon-1"><span>Notepad and pen within reach</span></li>
+        </ul>
+      </div>
+    </details>
+  </section>
+
+  <section class="sheet" id="final">
+    <p class="sheet-tag">SHEET F–01 · FINAL KEYNOTES</p>
+    <h2>Five things, right before you join.</h2>
+    <ol class="keynotes">
+      <li><b>Your one-line pitch:</b> backend and data engineering skills, applied to your lab's sensor and research data problems. Everything else traces back to it.</li>
+      <li><b>Your default technical answer:</b> for any "how would you handle X data" question — data shape → decision → hybrid tradeoff. One structure covers EEG, facades, and energy data.</li>
+      <li><b>Your default project:</b> CharityDash's aggregation pipeline — the closest thing you've built to turning raw research data into something readable.</li>
+      <li><b>The three threads, one line each:</b> neuroarchitecture (EEG → stress and cognition), kinetic facades (self-conscious, self-powered), embodied energy (his original PhD area, occupant energy studies). Lead with embodied energy.</li>
+      <li><b>Your honest gap:</b> you're a CS student, not an architecture student — own that directly if it comes up, don't dodge it.</li>
+    </ol>
+
+    <h3>On delivery</h3>
+    <ul class="plain">
+      <li>Pace over polish — a confident pause beats a rushed, over-rehearsed answer.</li>
+      <li>The moment you hit unfamiliar territory, say so: "I don't know, but here's how I'd think about it." Never bluff to a subject-matter expert.</li>
+      <li>Keep answers to 45–90 seconds. Past two minutes, wrap up.</li>
+      <li>Have one or two real questions ready for him — about the current data pipeline, or what an intern's week looks like.</li>
+    </ul>
+
+    <label class="task"><input type="checkbox" class="task-check" data-id="final-1"><span>I have 1–2 real questions ready to ask him</span></label>
+  </section>
+
+  <section class="sheet signoff">
+    <h2>Walk in as someone qualified, having a conversation.</h2>
+    <p>You already cleared round 1 on merit — the DBMS topper rank is real. Not someone auditioning for a favour. Good luck on the 14th.</p>
+  </section>
+
+</div>
+
+<!-- ============================================================ -->
+<!-- PAGE 2 — RESUME GUIDE + CROSS-QUESTIONING                    -->
+<!-- ============================================================ -->
+<div class="page" id="page-resume">
+
+  <section class="sheet hero" id="resume-cover">
+    <p class="sheet-tag">SHEET R–00 · RESUME GUIDE</p>
+    <h1>Line by line, question by question.</h1>
+    <p class="lede">He has your resume and SOP open in front of him. Every line here is fair game — this page is the full cross-questioning drill.</p>
+    <div class="exp-jump">
+      <a href="#resume">R–01 · Resume line by line</a>
+      <a href="#sop-check">R–02 · Your SOP phrases</a>
+      <a href="#techstack">R–03 · Tech stack, topic by topic</a>
+      <a href="#dbms-ammo">R–04 · DBMS cross-questioning</a>
+      <a href="#timer">R–05 · Stress test</a>
     </div>
-
-    <label class="task"><input type="checkbox" class="task-check" data-id="dbms-1"><span>I can defend normalization and ACID without notes</span></label>
-    <label class="task"><input type="checkbox" class="task-check" data-id="dbms-2"><span>I can say the SQL-vs-NoSQL hybrid answer in under 90 seconds</span></label>
   </section>
 
   <section class="sheet" id="resume">
     <p class="sheet-tag">SHEET R–01 · RESUME, LINE BY LINE</p>
-    <h2>He has it open in front of him. Every line is fair game.</h2>
-    <p class="section-intro">Not "could this come up" — assume it will. Where I've flagged <span class="flag">needs your real story</span>, that's a spot I can't fill in for you honestly — the number is on your resume, but only you know what actually changed to produce it. Have the concrete before/after ready.</p>
+    <h2>Assume every line gets a follow-up.</h2>
+    <p class="section-intro">Where I've flagged <span class="flag">needs your real story</span>, that's a spot I can't fill in for you honestly — the number is on your resume, but only you know what actually changed to produce it. Have the concrete before/after ready.</p>
 
     <h3>Education</h3>
     <details class="day">
@@ -492,7 +611,7 @@
     <details class="day">
       <summary><span><span class="day-tag">HONORS</span>NPTEL DBMS (Top 5%), NPTEL Java (Elite 87%), Parenthesis 1.0 (1st Prize), AWS GenAI</span></summary>
       <div class="day-body">
-        <p class="muted">The DBMS topper rank is the headline claim of this whole application — it's covered in depth on Sheet S–01, so make sure that's solid.</p>
+        <p class="muted">The DBMS topper rank is the headline claim of this whole application — the full technical drill-down for it is on the DBMS Study page.</p>
         <p class="muted"><b>Likely question:</b> "Multithreading came up in your Java course — where has that mattered in a real project?"</p>
         <p class="muted"><b>Your angle:</b> tie it to concurrent writes — the same concurrency thinking behind your bookstore's ACID testing, or a future case of many sensors writing simultaneously.</p>
         <p class="muted"><b>Likely question:</b> "What did you build for the Parenthesis 1.0 hackathon, and what was the hardest part under time pressure?"</p>
@@ -529,15 +648,280 @@
       <summary><span><span class="day-tag">SOP QUOTE</span>"...I specialized in architecting both relational (SQL) and non-relational (MongoDB) databases from the ground up."</span></summary>
       <div class="day-body">
         <p class="muted"><b>Likely question:</b> "Give me one project where you chose SQL, and one where you chose Mongo, and explain the difference in reasoning."</p>
-        <p class="muted"><b>Your angle:</b> Online Bookstore (MySQL, for strict transactional integrity on orders and inventory) versus PayStream (MongoDB, for schema flexibility across varying expense-claim types) — the same hybrid framework as Sheet S–01's SQL-vs-NoSQL card, now anchored to two real projects instead of a hypothetical.</p>
+        <p class="muted"><b>Your angle:</b> Online Bookstore (MySQL, for strict transactional integrity on orders and inventory) versus PayStream (MongoDB, for schema flexibility across varying expense-claim types) — the same hybrid framework as the SQL-vs-NoSQL card below, now anchored to two real projects instead of a hypothetical.</p>
       </div>
     </details>
 
     <label class="task"><input type="checkbox" class="task-check" data-id="sop-1"><span>I can go one level deeper on all three SOP phrases without bluffing</span></label>
   </section>
 
+  <section class="sheet" id="techstack">
+    <p class="sheet-tag">SHEET R–03 · TECH STACK, TOPIC BY TOPIC</p>
+    <h2>Every technology on your resume, one card each.</h2>
+    <p class="section-intro">This is built from every technology named across your resume and SOP as reflected on this page. If your actual resume file has extra tools not covered here, send it over and I'll add cards for those too. Each card: what it actually is, where it sits on your resume, and the one question likely to follow it.</p>
+
+    <h3>Languages &amp; core paradigms</h3>
+    <details class="day">
+      <summary><span><span class="day-tag">LANGUAGE</span>Swift / iOS, with MVVM</span></summary>
+      <div class="day-body">
+        <p class="muted"><b>What it is:</b> Swift is Apple's language for iOS apps. MVVM (Model-View-ViewModel) is an architecture pattern that separates data (Model), UI (View), and the logic that connects them (ViewModel) — the ViewModel exposes observable state, and the View reacts to it automatically.</p>
+        <p class="muted"><b>Where it's on your resume:</b> your current iOS Developer role, Apple &amp; Infosys Program.</p>
+        <p class="muted"><b>Likely question:</b> "Give me a concrete example of a ViewModel reacting to a state change." <b>Your angle:</b> pick one real screen — describe the observable property, and the one line of View code that updates automatically when it changes.</p>
+      </div>
+    </details>
+
+    <details class="day">
+      <summary><span><span class="day-tag">LANGUAGE</span>Java, incl. multithreading</span></summary>
+      <div class="day-body">
+        <p class="muted"><b>What it is:</b> a statically-typed, object-oriented language. Multithreading lets multiple sequences of instructions run concurrently within one program — relevant here because concurrent threads touching shared data is exactly what causes the race conditions you tested for in Online Bookstore.</p>
+        <p class="muted"><b>Where it's on your resume:</b> NPTEL Java (Elite 87%), and underlying the Online Bookstore Management System.</p>
+        <p class="muted"><b>Likely question:</b> "Where has multithreading mattered in a real project of yours?" <b>Your angle:</b> tie it to concurrent writes on the same inventory row — the same concurrency thinking behind your ACID testing.</p>
+      </div>
+    </details>
+
+    <details class="day">
+      <summary><span><span class="day-tag">LANGUAGE</span>Python (Flask backend)</span></summary>
+      <div class="day-body">
+        <p class="muted"><b>What it is:</b> a general-purpose scripting language; Flask is a lightweight Python web framework used to expose HTTP routes and connect them to a database or business logic without much boilerplate.</p>
+        <p class="muted"><b>Where it's on your resume:</b> SDE Intern, Bluestock Fintech.</p>
+        <p class="muted"><b>Likely question:</b> "Walk me through the 25% latency reduction — what was slow, and what did you change?" <span class="flag">Needs your real story — have a genuine before/after ready (index, query rewrite, caching, N+1 elimination).</span></p>
+      </div>
+    </details>
+
+    <h3>Backend frameworks &amp; APIs</h3>
+    <details class="day">
+      <summary><span><span class="day-tag">FRAMEWORK</span>FastAPI</span></summary>
+      <div class="day-body">
+        <p class="muted"><b>What it is:</b> a modern Python web framework built for speed and automatic request validation, using Python type hints to generate input validation and interactive API docs automatically.</p>
+        <p class="muted"><b>Where it's on your resume:</b> PayStream — Payroll &amp; Expense Architecture.</p>
+        <p class="muted"><b>Likely question:</b> "Flask here, FastAPI in PayStream — why the difference?" <b>Your angle:</b> a true, simple reason (existing team stack at Bluestock vs. your own choice on PayStream) beats implying it was a deliberate architectural decision both times.</p>
+      </div>
+    </details>
+
+    <details class="day">
+      <summary><span><span class="day-tag">SECURITY</span>JWT (JSON Web Tokens)</span></summary>
+      <div class="day-body">
+        <p class="muted"><b>What it is:</b> a signed token carrying claims (like user ID and role) that's verified per request without needing a server-side session — the server checks the signature, not a database lookup, to confirm the token's authentic.</p>
+        <p class="muted"><b>Where it's on your resume:</b> PayStream's auth layer.</p>
+        <p class="muted"><b>Likely question:</b> "Explain your JWT + RBAC setup in one breath." <b>Your angle:</b> JWT authenticates who the user is; RBAC (below) decides what they're allowed to do next.</p>
+      </div>
+    </details>
+
+    <details class="day">
+      <summary><span><span class="day-tag">SECURITY</span>RBAC (Role-Based Access Control)</span></summary>
+      <div class="day-body">
+        <p class="muted"><b>What it is:</b> an authorization model where permissions are attached to roles (admin, employee, manager), not individual users — a request checks the caller's role against a permission table before the endpoint runs.</p>
+        <p class="muted"><b>Where it's on your resume:</b> PayStream.</p>
+        <p class="muted"><b>Likely question:</b> "How did you measure '0% unauthorized access attempts'?" <b>Your angle:</b> be candid if this was a simulated attack scenario rather than a formal audit — that's still an honest, impressive framing.</p>
+      </div>
+    </details>
+
+    <details class="day">
+      <summary><span><span class="day-tag">TESTING</span>JMeter / k6 (load testing)</span></summary>
+      <div class="day-body">
+        <p class="muted"><b>What it is:</b> tools that simulate many concurrent users or requests hitting your system at once, used to test performance and concurrency behaviour under load rather than one request at a time.</p>
+        <p class="muted"><b>Where it's on your resume:</b> implied by Online Bookstore's ACID/concurrency testing.</p>
+        <p class="muted"><b>Likely question:</b> "How did you actually simulate high concurrency to test ACID compliance?" <span class="flag">Needs your real story — did you use a load-testing tool, or manually fire concurrent threads at the same row? Know which, and which isolation level you were testing against.</span></p>
+      </div>
+    </details>
+
+    <details class="day">
+      <summary><span><span class="day-tag">UI</span>Swing (Java desktop UI)</span></summary>
+      <div class="day-body">
+        <p class="muted"><b>What it is:</b> Java's built-in desktop GUI toolkit — windows, forms, and tables rendered natively, no browser or web server involved.</p>
+        <p class="muted"><b>Where it's on your resume:</b> Online Bookstore Management System.</p>
+        <p class="muted"><b>Likely question:</b> "Why a Swing desktop UI instead of a web frontend?" <b>Your angle:</b> give the real reason (project scope, backend focus, or a course constraint), not a deliberate product decision.</p>
+      </div>
+    </details>
+
+    <h3>Databases</h3>
+    <details class="day">
+      <summary><span><span class="day-tag">DATABASE</span>MySQL</span></summary>
+      <div class="day-body">
+        <p class="muted"><b>What it is:</b> a relational database — data lives in strictly-typed tables connected by foreign keys, with full ACID transaction guarantees.</p>
+        <p class="muted"><b>Where it's on your resume:</b> Online Bookstore Management System, NPTEL DBMS.</p>
+        <p class="muted"><b>Likely question:</b> "Why SQL over a document store for a bookstore's orders and inventory?" <b>Your angle:</b> orders and inventory are relational by nature and need strict transactional integrity — the exact case where SQL's guarantees matter most.</p>
+      </div>
+    </details>
+
+    <details class="day">
+      <summary><span><span class="day-tag">DATABASE</span>MongoDB, incl. aggregation pipelines</span></summary>
+      <div class="day-body">
+        <p class="muted"><b>What it is:</b> a document (NoSQL) database — records are flexible JSON-like documents rather than fixed table rows. Its aggregation pipeline processes documents through ordered stages (match → group → sort → project) to produce summarized results, similar in spirit to SQL's GROUP BY but expressed as a pipeline.</p>
+        <p class="muted"><b>Where it's on your resume:</b> PayStream (payroll/expense data) and CharityDash (donation aggregation).</p>
+        <p class="muted"><b>Likely question (the sharpest one on your resume):</b> "Payroll and expense data is naturally relational — why MongoDB?" <b>Your angle:</b> Mongo gave schema flexibility early on across varying expense-claim shapes, but in hindsight employee master data and payslips would sit better in a relational store — showing you'd design it differently today is stronger than defending the original choice.</p>
+        <p class="muted"><b>Likely question:</b> "Walk me through one actual aggregation pipeline stage by stage." <b>Your angle:</b> match the relevant donations, group and sum by category or time period, sort, then project only the fields the chart needs — your strongest, most concrete answer.</p>
+      </div>
+    </details>
+
+    <h3>Data visualization</h3>
+    <details class="day">
+      <summary><span><span class="day-tag">LIBRARY</span>Recharts</span></summary>
+      <div class="day-body">
+        <p class="muted"><b>What it is:</b> a React charting library built on D3, used to render line, bar, and area charts declaratively as React components.</p>
+        <p class="muted"><b>Where it's on your resume:</b> CharityDash's dashboard.</p>
+        <p class="muted"><b>Likely question:</b> "Why Recharts, and which chart types for donation data specifically?" <b>Your angle:</b> name the actual chart types you used (trend lines, category breakdowns) and why they fit financial trend data specifically — not just "it looked good."</p>
+      </div>
+    </details>
+
+    <h3>Agentic AI</h3>
+    <details class="day">
+      <summary><span><span class="day-tag">FRAMEWORK</span>LangChain</span></summary>
+      <div class="day-body">
+        <p class="muted"><b>What it is:</b> a general framework for building LLM applications — chains (sequences of prompt/model calls), tool integrations, and memory management, all composable.</p>
+        <p class="muted"><b>Where it's on your resume:</b> Agentic AI Intern, StudAI One.</p>
+        <p class="muted"><b>Likely question:</b> "What's the difference between LangChain and CrewAI, and why use both?" <b>Your angle:</b> LangChain is the general-purpose toolkit; CrewAI (below) sits a level higher.</p>
+      </div>
+    </details>
+
+    <details class="day">
+      <summary><span><span class="day-tag">FRAMEWORK</span>CrewAI</span></summary>
+      <div class="day-body">
+        <p class="muted"><b>What it is:</b> a framework for defining role-based agents that collaborate — e.g. a researcher agent handing off to a writer agent — rather than one agent doing everything alone.</p>
+        <p class="muted"><b>Where it's on your resume:</b> StudAI One internship.</p>
+        <p class="muted"><b>Likely question:</b> same as LangChain above — know which framework did what in your actual pipeline.</p>
+      </div>
+    </details>
+
+    <details class="day">
+      <summary><span><span class="day-tag">TECHNIQUE</span>ReAct / Chain-of-Thought (CoT) reasoning</span></summary>
+      <div class="day-body">
+        <p class="muted"><b>What it is:</b> CoT is the model reasoning step-by-step before answering. ReAct interleaves that reasoning with tool-call actions and observations, so the model can act, observe the result, and reason again before its next step.</p>
+        <p class="muted"><b>Where it's on your resume:</b> StudAI One internship.</p>
+        <p class="muted"><b>Likely question:</b> "What did 'optimizing' the reasoning loop actually mean?" <b>Your angle:</b> tightening prompts so the loop doesn't wander or repeat, and adding memory so context survives across turns.</p>
+      </div>
+    </details>
+
+    <details class="day">
+      <summary><span><span class="day-tag">TECHNIQUE</span>Agentic RAG</span></summary>
+      <div class="day-body">
+        <p class="muted"><b>What it is:</b> plain RAG (Retrieval-Augmented Generation) retrieves once, then generates. Agentic RAG lets the agent decide when and what to retrieve, and re-query if the first pass wasn't sufficient — fewer hallucinated answers because it can check its own work.</p>
+        <p class="muted"><b>Where it's on your resume:</b> the 35% factual-accuracy improvement at StudAI One.</p>
+        <p class="tip-box"><b>Bridge to the lab:</b> an agent that iteratively queries a sensor or embodied-carbon dataset until it can answer "which housing type has the highest lifecycle carbon" is a direct application of what you already built.</p>
+      </div>
+    </details>
+
+    <h3>Open source &amp; tooling</h3>
+    <details class="day">
+      <summary><span><span class="day-tag">PLATFORM</span>Git / GitHub, GSSoC &amp; Hacktoberfest</span></summary>
+      <div class="day-body">
+        <p class="muted"><b>What it is:</b> Git is the version control system underneath every PR you opened; GSSoC and Hacktoberfest are open-source contribution programs that track merged pull requests across public repositories.</p>
+        <p class="muted"><b>Where it's on your resume:</b> Open-Source Contributor, Sep–Oct 2025.</p>
+        <p class="muted"><b>Likely question:</b> "Name a specific PR you contributed to. What did the bug actually do?" <span class="flag">Needs your real story — pull up one or two actual PRs before Monday so you can describe the bug and the fix in a sentence each.</span></p>
+      </div>
+    </details>
+
+    <h3>Certifications &amp; courses</h3>
+    <details class="day">
+      <summary><span><span class="day-tag">CERT</span>AWS GenAI</span></summary>
+      <div class="day-body">
+        <p class="muted"><b>What it is:</b> AWS's generative AI track, typically covering foundation models, prompt engineering, and deploying LLM-backed applications on AWS infrastructure (e.g. Bedrock).</p>
+        <p class="muted"><b>Where it's on your resume:</b> Certificates &amp; honors.</p>
+        <p class="muted"><b>Likely question:</b> "How does AWS's GenAI stack differ from what you used at StudAI One?" <b>Your angle:</b> be honest about which parts were coursework/conceptual versus hands-on production use — don't blur the two.</p>
+      </div>
+    </details>
+
+    <label class="task"><input type="checkbox" class="task-check" data-id="tech-1"><span>I can explain every technology above in one breath, without notes</span></label>
+    <label class="task"><input type="checkbox" class="task-check" data-id="tech-2"><span>I've matched each tool to the specific project it belongs to, not just the general theme</span></label>
+  </section>
+
+  <section class="sheet" id="dbms-ammo">
+    <p class="sheet-tag">SHEET R–04 · DBMS CROSS-QUESTIONING</p>
+    <h2>The exam score has to survive a conversation.</h2>
+    <p class="section-intro">Click a card to flip it. The question's on the front — rehearse your answer out loud before you check the back. Full topic-by-topic notes live on the DBMS Study page.</p>
+
+    <div class="flip-grid">
+      <div class="flip-card" data-card="1">
+        <div class="flip-inner">
+          <div class="flip-face flip-front">
+            <span class="face-label">NORMALIZATION</span>
+            <p>Walk me through 1NF → 3NF. When would over-normalizing hurt you?</p>
+            <span class="flip-hint">tap to check your answer</span>
+          </div>
+          <div class="flip-face flip-back">
+            <span class="face-label">YOUR ANSWER</span>
+            <p>Walk a concrete table example through each normal form. Then flip it: over-normalizing hurts read-heavy analytical workloads, because every read now needs more joins — directly relevant to time-series sensor data, which is written once and read in bulk for analysis.</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="flip-card" data-card="2">
+        <div class="flip-inner">
+          <div class="flip-face flip-front">
+            <span class="face-label">ACID</span>
+            <p>Explain isolation levels. Give a real race condition your transactions prevented.</p>
+            <span class="flip-hint">tap to check your answer</span>
+          </div>
+          <div class="flip-face flip-back">
+            <span class="face-label">YOUR ANSWER</span>
+            <p>Name the isolation levels and what anomaly each one blocks. Then land on a concrete moment from Online Bookstore or PayStream where a transaction boundary stopped two operations from corrupting the same row.</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="flip-card" data-card="3">
+        <div class="flip-inner">
+          <div class="flip-face flip-front">
+            <span class="face-label">SQL OPTIMIZATION</span>
+            <p>How do you decide on an indexing strategy? Why SQL over a document store here?</p>
+            <span class="flip-hint">tap to check your answer</span>
+          </div>
+          <div class="flip-face flip-back">
+            <span class="face-label">YOUR ANSWER</span>
+            <p>Indexing follows query patterns, not table shape — index what you filter and sort on, watch write-cost trade-offs. Choose SQL when relationships and integrity matter more than write throughput or schema flexibility.</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="flip-card" data-card="4">
+        <div class="flip-inner">
+          <div class="flip-face flip-front">
+            <span class="face-label">SQL vs NoSQL — THE ONE TO BET ON</span>
+            <p>Would you use SQL or MongoDB for continuous EEG or facade sensor readings? Why?</p>
+            <span class="flip-hint">tap to check your answer</span>
+          </div>
+          <div class="flip-face flip-back">
+            <span class="face-label">YOUR ANSWER</span>
+            <p>Data shape → decision → hybrid. High-volume, schema-flexible, write-heavy sensor streams push toward MongoDB or a time-series store. Derived metrics, subject metadata, and experiment design are relational — push toward SQL. Land on a hybrid architecture, and tie it to CharityDash, since you've already built both sides.</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="flip-card" data-card="5">
+        <div class="flip-inner">
+          <div class="flip-face flip-front">
+            <span class="face-label">JOINS vs SUBQUERIES</span>
+            <p>When would you use a correlated subquery instead of a join, and why is it usually slower?</p>
+            <span class="flip-hint">tap to check your answer</span>
+          </div>
+          <div class="flip-face flip-back">
+            <span class="face-label">YOUR ANSWER</span>
+            <p>Use a correlated subquery when the check is genuinely row-by-row and existence-based (EXISTS/NOT EXISTS) rather than a set you can precompute. It's usually slower because it can re-run once per outer row instead of the optimizer doing one combined pass, which a join or a rewritten semi-join often allows.</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="flip-card" data-card="6">
+        <div class="flip-inner">
+          <div class="flip-face flip-front">
+            <span class="face-label">TRIGGERS &amp; CONCURRENCY</span>
+            <p>Would you use a trigger to enforce a business rule on incoming sensor writes? What's the risk?</p>
+            <span class="flip-hint">tap to check your answer</span>
+          </div>
+          <div class="flip-face flip-back">
+            <span class="face-label">YOUR ANSWER</span>
+            <p>Yes for simple, row-local rules (like clamping an out-of-range reading), same idea as the BEFORE INSERT salary-floor trigger. The risk is hidden logic and write-time overhead at high-frequency ingestion — for sensor-scale volume, you'd weigh that against validating in the application layer instead.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <label class="task"><input type="checkbox" class="task-check" data-id="dbms-1"><span>I can defend normalization and ACID without notes</span></label>
+    <label class="task"><input type="checkbox" class="task-check" data-id="dbms-2"><span>I can say the SQL-vs-NoSQL hybrid answer in under 90 seconds</span></label>
+  </section>
+
   <section class="sheet" id="timer">
-    <p class="sheet-tag">SHEET S–02 · STRESS TEST</p>
+    <p class="sheet-tag">SHEET R–05 · STRESS TEST</p>
     <h2>Say it out loud. Keep it under 90 seconds.</h2>
     <p class="section-intro">Pick any answer above and actually speak it — pace over polish. A confident pause beats a rushed, over-rehearsed answer.</p>
     <div class="timer-wrap">
@@ -557,98 +941,511 @@
     <label class="task"><input type="checkbox" class="task-check" data-id="timer-1"><span>I've timed at least one full answer out loud</span></label>
   </section>
 
-  <section class="sheet" id="schedule">
-    <p class="sheet-tag">SHEET T–01 · TWO-DAY TIMELINE</p>
-    <h2>Saturday to Monday, laid flat.</h2>
+</div>
 
-    <details class="day" open>
-      <summary><span><span class="day-tag">SAT · AM</span>Know the lab cold</span></summary>
-      <div class="day-body">
-        <p class="muted">Read the Built Environment Lab page and Google Scholar profile. Note 2–3 specific papers or projects across the three threads.</p>
-        <ul class="task-list">
-          <li class="task"><input type="checkbox" class="task-check" data-id="sat-am-1"><span>Skimmed his Scholar/ResearchGate page for real titles</span></li>
-        </ul>
-      </div>
-    </details>
+<!-- ============================================================ -->
+<!-- PAGE 3 — DBMS FULL STUDY REFERENCE                            -->
+<!-- ============================================================ -->
+<div class="page" id="page-dbms">
 
-    <details class="day">
-      <summary><span><span class="day-tag">SAT · MIDDAY</span>Rebuild your SOP pitch, out loud</span></summary>
-      <div class="day-body">
-        <p class="muted">Practice explaining — unscripted — how your DB and agentic AI background applies to their EEG, facade, and carbon data. Not reading from the SOP.</p>
-        <ul class="task-list">
-          <li class="task"><input type="checkbox" class="task-check" data-id="sat-mid-1"><span>Said the SOP pitch out loud, unscripted, at least twice</span></li>
-        </ul>
-      </div>
-    </details>
-
-    <details class="day">
-      <summary><span><span class="day-tag">SAT · PM</span>DBMS refresh — normalization &amp; ACID</span></summary>
-      <div class="day-body">
-        <p class="muted">Redo normalization examples and transaction isolation levels. Connect each one to a project you actually built.</p>
-        <ul class="task-list">
-          <li class="task"><input type="checkbox" class="task-check" data-id="sat-pm-1"><span>Redid 1NF→3NF and isolation levels from memory</span></li>
-        </ul>
-      </div>
-    </details>
-
-    <details class="day">
-      <summary><span><span class="day-tag">SAT · EVE</span>SQL vs NoSQL scenario practice</span></summary>
-      <div class="day-body">
-        <p class="muted">Draft your answer for "how would you store continuous sensor or EEG data" and practice saying it in under 90 seconds.</p>
-        <ul class="task-list">
-          <li class="task"><input type="checkbox" class="task-check" data-id="sat-eve-1"><span>Drafted and timed the hybrid-storage answer</span></li>
-        </ul>
-      </div>
-    </details>
-
-    <details class="day">
-      <summary><span><span class="day-tag">SUN · EVE</span>Light review, not cramming</span></summary>
-      <div class="day-body">
-        <p class="muted">Skim your notes for 20–30 minutes, don't re-study. Re-read your own SOP and resume once, slowly — you should be able to defend every line, including the ones you didn't emphasize.</p>
-        <ul class="task-list">
-          <li class="task"><input type="checkbox" class="task-check" data-id="sun-eve-1"><span>Re-read my own SOP and resume, once, slowly</span></li>
-          <li class="task"><input type="checkbox" class="task-check" data-id="sun-eve-2"><span>Tested join link, camera, mic, and internet backup</span></li>
-        </ul>
-      </div>
-    </details>
-
-    <details class="day">
-      <summary><span><span class="day-tag">MON</span>Before you join</span></summary>
-      <div class="day-body">
-        <p class="muted">Join the waiting room 3–5 minutes early. Keep a notepad nearby — not to read answers off, but to jot down anything specific he says about the lab's current work, so you can reference it naturally later.</p>
-        <ul class="task-list">
-          <li class="task"><input type="checkbox" class="task-check" data-id="mon-1"><span>Notepad and pen within reach</span></li>
-        </ul>
-      </div>
-    </details>
+  <section class="sheet hero" id="dbms-cover">
+    <p class="sheet-tag">SHEET D–00 · DBMS STUDY</p>
+    <h1>The full lab workbook, as a reference.</h1>
+    <p class="lede">Every experiment from the 21CSC205P DBMS Laboratory Workbook, reorganized as a study reference — commands, syntax, worked examples, and a viva-style question at the end of each topic.</p>
+    <div class="exp-jump">
+      <a href="#d1">1 · DDL &amp; DML</a>
+      <a href="#d2">2 · DQL</a>
+      <a href="#d3">3 · TCL &amp; DCL</a>
+      <a href="#d3b">3b · ER Diagram</a>
+      <a href="#d4a">4a · Relational Algebra &amp; TRC</a>
+      <a href="#d4b">4b · Aggregates, Constraints, Sets</a>
+      <a href="#d5">5 · Subqueries, Joins, Views</a>
+      <a href="#d6">6 · PL/SQL</a>
+      <a href="#d7a">7a · Normalization 1–3NF</a>
+      <a href="#d7b">7b · Normalization 4–5NF</a>
+      <a href="#d8">8 · Transactions &amp; Concurrency</a>
+      <a href="#d9">9 · DB Connectivity</a>
+    </div>
   </section>
 
-  <section class="sheet" id="final">
-    <p class="sheet-tag">SHEET F–01 · FINAL KEYNOTES</p>
-    <h2>Five things, right before you join.</h2>
-    <ol class="keynotes">
-      <li><b>Your one-line pitch:</b> backend and data engineering skills, applied to your lab's sensor and research data problems. Everything else traces back to it.</li>
-      <li><b>Your default technical answer:</b> for any "how would you handle X data" question — data shape → decision → hybrid tradeoff. One structure covers EEG, facades, and energy data.</li>
-      <li><b>Your default project:</b> CharityDash's aggregation pipeline — the closest thing you've built to turning raw research data into something readable.</li>
-      <li><b>The three threads, one line each:</b> neuroarchitecture (EEG → stress and cognition), kinetic facades (self-conscious, self-powered), embodied energy (his original PhD area, occupant energy studies). Lead with embodied energy.</li>
-      <li><b>Your honest gap:</b> you're a CS student, not an architecture student — own that directly if it comes up, don't dodge it.</li>
-    </ol>
+  <section class="sheet" id="d1">
+    <p class="sheet-tag">EXPT 1 · DDL &amp; DML COMMANDS</p>
+    <h2>Defining structure, then filling it in.</h2>
+    <p class="section-intro">DDL (Data Definition Language) shapes the database and its tables. DML (Data Manipulation Language) adds, changes, and removes the data inside them. DDL statements auto-commit in MySQL; DML statements don't, until you COMMIT.</p>
 
-    <h3>On delivery</h3>
+    <h3>DDL commands</h3>
+    <div class="table-wrap"><table class="ref">
+      <tr><th>Command</th><th>Purpose</th><th>Syntax</th><th>Example</th></tr>
+      <tr><td>CREATE DATABASE</td><td>Creates a new database</td><td><code>CREATE DATABASE db_name;</code></td><td><code>CREATE DATABASE College;</code></td></tr>
+      <tr><td>USE</td><td>Selects a database to work in</td><td><code>USE db_name;</code></td><td><code>USE College;</code></td></tr>
+      <tr><td>CREATE TABLE</td><td>Creates a new table</td><td><code>CREATE TABLE t (col type, ...);</code></td><td><code>CREATE TABLE Student (RollNo INT, Name VARCHAR(20), Age INT);</code></td></tr>
+      <tr><td>SHOW TABLES</td><td>Lists all tables in a DB</td><td><code>SHOW TABLES;</code></td><td>—</td></tr>
+      <tr><td>DESC</td><td>Shows a table's structure</td><td><code>DESC t;</code></td><td><code>DESC Student;</code></td></tr>
+      <tr><td>ALTER ... ADD</td><td>Adds a new column</td><td><code>ALTER TABLE t ADD col type;</code></td><td><code>ALTER TABLE Student ADD Email VARCHAR(30);</code></td></tr>
+      <tr><td>ALTER ... MODIFY</td><td>Changes a column's datatype</td><td><code>ALTER TABLE t MODIFY col type;</code></td><td><code>ALTER TABLE Student MODIFY Name VARCHAR(40);</code></td></tr>
+      <tr><td>ALTER ... DROP</td><td>Removes a column</td><td><code>ALTER TABLE t DROP col;</code></td><td><code>ALTER TABLE Student DROP Age;</code></td></tr>
+      <tr><td>RENAME TABLE</td><td>Renames a table</td><td><code>RENAME TABLE old TO new;</code></td><td><code>RENAME TABLE Student TO Student_Details;</code></td></tr>
+      <tr><td>TRUNCATE TABLE</td><td>Deletes all records, keeps structure</td><td><code>TRUNCATE TABLE t;</code></td><td><code>TRUNCATE TABLE Student_Details;</code></td></tr>
+      <tr><td>DROP TABLE</td><td>Deletes a table entirely</td><td><code>DROP TABLE t;</code></td><td><code>DROP TABLE Student_Details;</code></td></tr>
+      <tr><td>DROP DATABASE</td><td>Deletes a database entirely</td><td><code>DROP DATABASE db;</code></td><td><code>DROP DATABASE College;</code></td></tr>
+    </table></div>
+
+    <h3>DML commands</h3>
+    <div class="table-wrap"><table class="ref">
+      <tr><th>Command</th><th>Purpose</th><th>Syntax</th><th>Example</th></tr>
+      <tr><td>INSERT (full row)</td><td>Adds a new record with all columns</td><td><code>INSERT INTO t VALUES (...);</code></td><td><code>INSERT INTO Student VALUES (1, 'Arun', 20);</code></td></tr>
+      <tr><td>INSERT (selected cols)</td><td>Adds a record for specific columns only</td><td><code>INSERT INTO t (c1, c2) VALUES (...);</code></td><td><code>INSERT INTO Student (RollNo, Name) VALUES (2, 'Kumar');</code></td></tr>
+      <tr><td>UPDATE</td><td>Modifies existing records</td><td><code>UPDATE t SET col=val WHERE cond;</code></td><td><code>UPDATE Student SET Age=21 WHERE RollNo=1;</code></td></tr>
+      <tr><td>DELETE</td><td>Removes matching records</td><td><code>DELETE FROM t WHERE cond;</code></td><td><code>DELETE FROM Student WHERE RollNo=2;</code></td></tr>
+    </table></div>
+
+    <div class="viva"><b>VIVA POINT</b>DELETE removes rows and can be rolled back (DML, logged row-by-row); TRUNCATE removes all rows fast and resets identity, but is DDL-like and can't be rolled back in most engines; DROP removes the table structure itself. Always know which one a question is really asking about.</div>
+  </section>
+
+  <section class="sheet" id="d2">
+    <p class="sheet-tag">EXPT 2 · DQL COMMANDS</p>
+    <h2>Asking questions of the data.</h2>
+    <p class="section-intro">DQL (Data Query Language) is really just SELECT, with clauses that filter, sort, group, and limit what comes back.</p>
+
+    <div class="table-wrap"><table class="ref">
+      <tr><th>Form</th><th>Purpose</th><th>Example</th></tr>
+      <tr><td>SELECT *</td><td>All columns</td><td><code>SELECT * FROM Student;</code></td></tr>
+      <tr><td>SELECT col1, col2</td><td>Selected columns only</td><td><code>SELECT Name, Age FROM Student;</code></td></tr>
+      <tr><td>SELECT ... WHERE</td><td>Filters rows by condition</td><td><code>SELECT * FROM Student WHERE Age &gt; 20;</code></td></tr>
+    </table></div>
+
+    <h3>Clauses</h3>
+    <div class="table-wrap"><table class="ref">
+      <tr><th>Clause</th><th>Purpose</th><th>Example</th></tr>
+      <tr><td>LIKE</td><td>Pattern matching</td><td><code>SELECT * FROM Student WHERE Name LIKE 'A%';</code></td></tr>
+      <tr><td>ORDER BY</td><td>Sorts the result</td><td><code>SELECT * FROM Student ORDER BY Age;</code></td></tr>
+      <tr><td>DISTINCT</td><td>Removes duplicate rows</td><td><code>SELECT DISTINCT Age FROM Student;</code></td></tr>
+      <tr><td>LIMIT</td><td>Restricts row count</td><td><code>SELECT * FROM Student LIMIT 5;</code></td></tr>
+      <tr><td>GROUP BY</td><td>Groups rows for aggregation</td><td><code>SELECT Age, COUNT(*) FROM Student GROUP BY Age;</code></td></tr>
+      <tr><td>HAVING</td><td>Filters grouped results</td><td><code>... GROUP BY Age HAVING COUNT(*) &gt; 1;</code></td></tr>
+    </table></div>
+
+    <h3>Arithmetic operators</h3>
+    <div class="table-wrap"><table class="ref">
+      <tr><th>Op</th><th>Meaning</th><th>Example</th></tr>
+      <tr><td>+</td><td>Addition</td><td><code>SELECT name, marks + 5 AS bonus_marks FROM students;</code></td></tr>
+      <tr><td>-</td><td>Subtraction</td><td><code>SELECT name, marks - 10 AS reduced_marks FROM students;</code></td></tr>
+      <tr><td>*</td><td>Multiplication</td><td><code>SELECT name, marks * 2 AS double_marks FROM students;</code></td></tr>
+      <tr><td>/</td><td>Division</td><td><code>SELECT name, marks / 2 AS half_marks FROM students;</code></td></tr>
+      <tr><td>%</td><td>Modulus</td><td><code>SELECT name, marks % 2 AS remainder FROM students;</code></td></tr>
+    </table></div>
+
+    <h3>Logical operators</h3>
+    <div class="table-wrap"><table class="ref">
+      <tr><th>Op</th><th>Meaning</th><th>Example</th></tr>
+      <tr><td>AND</td><td>Both conditions must be true</td><td><code>WHERE Age &gt; 18 AND Name = 'Arun';</code></td></tr>
+      <tr><td>OR</td><td>Either condition true</td><td><code>WHERE Age &gt; 20 OR Name = 'Kumar';</code></td></tr>
+      <tr><td>NOT</td><td>Negates a condition</td><td><code>WHERE NOT marks &gt; 70;</code></td></tr>
+    </table></div>
+
+    <h3>Relational operators</h3>
+    <div class="table-wrap"><table class="ref">
+      <tr><th>Op</th><th>Meaning</th></tr>
+      <tr><td>=</td><td>Equal to</td></tr>
+      <tr><td>!= or &lt;&gt;</td><td>Not equal to</td></tr>
+      <tr><td>&gt; / &lt;</td><td>Greater / less than</td></tr>
+      <tr><td>&gt;= / &lt;=</td><td>Greater or equal / less or equal</td></tr>
+    </table></div>
+
+    <div class="viva"><b>VIVA POINT</b>Logical execution order of a SELECT is FROM → WHERE → GROUP BY → HAVING → SELECT → ORDER BY → LIMIT — which is why WHERE can't filter on an aggregate, but HAVING can.</div>
+  </section>
+
+  <section class="sheet" id="d3">
+    <p class="sheet-tag">EXPT 3A · TCL &amp; DCL COMMANDS</p>
+    <h2>Controlling transactions and access.</h2>
+
+    <h3>TCL — Transaction Control Language</h3>
+    <div class="table-wrap"><table class="ref">
+      <tr><th>Command</th><th>Purpose</th><th>Example</th></tr>
+      <tr><td>BEGIN TRANSACTION</td><td>Starts a new transaction</td><td><code>BEGIN TRANSACTION;</code></td></tr>
+      <tr><td>COMMIT</td><td>Saves the transaction permanently</td><td><code>COMMIT;</code></td></tr>
+      <tr><td>ROLLBACK</td><td>Cancels the transaction</td><td><code>ROLLBACK;</code></td></tr>
+      <tr><td>SAVEPOINT</td><td>Marks a point to roll back to</td><td><code>SAVEPOINT sp1;</code></td></tr>
+      <tr><td>ROLLBACK TO</td><td>Rolls back to a named savepoint</td><td><code>ROLLBACK TO sp1;</code></td></tr>
+    </table></div>
+
+    <h3>DCL — Data Control Language</h3>
+    <div class="table-wrap"><table class="ref">
+      <tr><th>Command</th><th>Purpose</th><th>Example</th></tr>
+      <tr><td>GRANT</td><td>Gives a specific privilege to a user</td><td><code>GRANT SELECT ON Student TO user1;</code></td></tr>
+      <tr><td>GRANT ALL</td><td>Gives all privileges to a user</td><td><code>GRANT ALL ON Student TO user1;</code></td></tr>
+      <tr><td>REVOKE</td><td>Removes a privilege from a user</td><td><code>REVOKE SELECT ON Student FROM user1;</code></td></tr>
+    </table></div>
+
+    <div class="viva"><b>VIVA POINT</b>Four SQL sub-languages, one line each: DDL defines structure (auto-commits), DML manipulates data, DQL retrieves data, TCL controls transactions, DCL controls permissions. (Some curricula count DQL as part of DML — know both framings.)</div>
+  </section>
+
+  <section class="sheet" id="d3b">
+    <p class="sheet-tag">EXPT 3B · ENTITY-RELATIONSHIP DIAGRAM</p>
+    <h2>Modeling the data before you build the tables.</h2>
+    <p class="section-intro">An ER diagram is a visual model of entities, their attributes, and how they relate — drawn before any table is created.</p>
+
+    <h3>Components</h3>
     <ul class="plain">
-      <li>Pace over polish — a confident pause beats a rushed, over-rehearsed answer.</li>
-      <li>The moment you hit unfamiliar territory, say so: "I don't know, but here's how I'd think about it." Never bluff to a subject-matter expert.</li>
-      <li>Keep answers to 45–90 seconds. Past two minutes, wrap up.</li>
-      <li>Have one or two real questions ready for him — about the current data pipeline, or what an intern's week looks like.</li>
+      <li><b>Entity</b> — strong (independently identifiable) or weak (depends on a strong entity for identity)</li>
+      <li><b>Attribute</b> — key, composite, multivalued, or derived</li>
+      <li><b>Relationship</b> — one-to-one, one-to-many, many-to-one, many-to-many</li>
     </ul>
 
-    <label class="task"><input type="checkbox" class="task-check" data-id="final-1"><span>I have 1–2 real questions ready to ask him</span></label>
+    <h3>Shapes and their meaning</h3>
+    <div class="table-wrap"><table class="ref">
+      <tr><th>Shape</th><th>Represents</th><th>Definition</th></tr>
+      <tr><td>Rectangle</td><td>Entity</td><td>A real-world object with independent existence, uniquely identifiable.</td></tr>
+      <tr><td>Double rectangle</td><td>Weak entity</td><td>Cannot be uniquely identified by its own attributes; depends on a strong entity.</td></tr>
+      <tr><td>Ellipse</td><td>Attribute</td><td>A property describing an entity or relationship.</td></tr>
+      <tr><td>Ellipse, underlined</td><td>Key attribute</td><td>Uniquely identifies an entity (e.g. RollNo).</td></tr>
+      <tr><td>Ellipse of ellipses</td><td>Composite attribute</td><td>Can be split into smaller sub-attributes (e.g. Address → Pin, State, Country).</td></tr>
+      <tr><td>Double ellipse</td><td>Multivalued attribute</td><td>Can hold more than one value for a single entity (e.g. Stu_Phone).</td></tr>
+      <tr><td>Dashed ellipse</td><td>Derived attribute</td><td>Calculated from other attributes (e.g. Age from date_of_birth).</td></tr>
+      <tr><td>Diamond</td><td>Relationship</td><td>An association between two or more entities.</td></tr>
+      <tr><td>Double diamond</td><td>Identifying relationship</td><td>Connects a weak entity to its owner entity.</td></tr>
+      <tr><td>Line</td><td>Connector</td><td>Links attributes to entities, and entities to relationships.</td></tr>
+      <tr><td>Double line</td><td>Total participation</td><td>Every entity instance must participate in the relationship.</td></tr>
+    </table></div>
+
+    <h3>Cardinalities</h3>
+    <div class="table-wrap"><table class="ref">
+      <tr><th>Cardinality</th><th>Meaning</th><th>Example</th></tr>
+      <tr><td>One to One (1:1)</td><td>One entity relates to exactly one in another set</td><td>Person – has – Passport</td></tr>
+      <tr><td>One to Many (1:M)</td><td>One entity relates to many in another set</td><td>Customer – placed – Order</td></tr>
+      <tr><td>Many to One (M:1)</td><td>Many entities relate to one in another set</td><td>Student – Study – College</td></tr>
+      <tr><td>Many to Many (M:N)</td><td>Many relate to many</td><td>Student – Assigned – Project</td></tr>
+    </table></div>
+
+    <h3>Extended features</h3>
+    <ul class="plain">
+      <li><b>Overlapping specialization/generalization</b> — an entity from a superclass can belong to more than one subclass at once.</li>
+      <li><b>Disjoint specialization/generalization</b> — an entity can belong to only one subclass at a time.</li>
+      <li><b>Aggregation</b> — a relationship set is treated as a higher-level entity set, so it can itself take part in another relationship.</li>
+    </ul>
+
+    <p class="muted"><b>Worked example (from the workbook):</b> Student (Register Number, Name, Dept, Semester) — Enrolls (M:N) — Course (Faculty ID, Code, Title, Date); Faculty (Faculty ID, Name, Mobile No [derived], Location) — Teach — Course, and Faculty — Mentor — Student.</p>
+
+    <div class="viva"><b>VIVA POINT</b>A weak entity has no key of its own strong enough to identify it alone — it borrows the strong entity's key plus a partial key of its own, connected via an identifying relationship (double diamond).</div>
+  </section>
+
+  <section class="sheet" id="d4a">
+    <p class="sheet-tag">EXPT 4A · RELATIONAL ALGEBRA &amp; TUPLE/DOMAIN CALCULUS</p>
+    <h2>The theory underneath every SQL query.</h2>
+    <p class="section-intro">Schema used throughout: STUDENT(Sid, Sname, Dept, Age), COURSE(Cid, Cname, Credits, Dept), ENROLLMENT(Sid, Cid, Grade).</p>
+
+    <h3>Basic operators</h3>
+    <div class="table-wrap"><table class="ref">
+      <tr><th>Operator</th><th>Meaning</th><th>Example</th><th>SQL equivalent</th></tr>
+      <tr><td>Selection (σ)</td><td>Selects rows by condition</td><td><code>σ Dept='CSE'(STUDENT)</code></td><td><code>SELECT * FROM STUDENT WHERE Dept='CSE';</code></td></tr>
+      <tr><td>Projection (π)</td><td>Selects columns, drops duplicates</td><td><code>π Name,Dept(STUDENT)</code></td><td><code>SELECT DISTINCT Name, Dept FROM STUDENT;</code></td></tr>
+      <tr><td>Rename (ρ)</td><td>Renames a relation/attributes</td><td><code>ρ(S(SID,Name,Dept,Age))(STUDENT)</code></td><td><code>STUDENT AS S</code></td></tr>
+    </table></div>
+
+    <h3>Set operations</h3>
+    <div class="table-wrap"><table class="ref">
+      <tr><th>Operator</th><th>Meaning</th><th>SQL equivalent</th></tr>
+      <tr><td>Union (∪)</td><td>Combines tuples from both relations</td><td><code>SELECT SID FROM CSE UNION SELECT SID FROM ECE;</code></td></tr>
+      <tr><td>Intersection (∩)</td><td>Common tuples in both</td><td><code>... INTERSECT ...</code></td></tr>
+      <tr><td>Set difference (−)</td><td>Tuples in R not in S</td><td><code>... EXCEPT ...</code></td></tr>
+    </table></div>
+
+    <h3>Cartesian &amp; join operators</h3>
+    <div class="table-wrap"><table class="ref">
+      <tr><th>Operator</th><th>Meaning</th><th>SQL equivalent</th></tr>
+      <tr><td>Cartesian Product (×)</td><td>All combinations of tuples</td><td><code>SELECT * FROM STUDENT, COURSE;</code></td></tr>
+      <tr><td>Theta Join (⋈θ)</td><td>Join with an arbitrary condition</td><td><code>JOIN ... ON condition</code></td></tr>
+      <tr><td>Equi Join</td><td>Join using an equality condition</td><td><code>JOIN ... ON A.id = B.id</code></td></tr>
+      <tr><td>Natural Join (⋈)</td><td>Join automatically on common attributes</td><td><code>NATURAL JOIN</code></td></tr>
+    </table></div>
+
+    <h3>Division &amp; aggregation</h3>
+    <div class="table-wrap"><table class="ref">
+      <tr><th>Operator</th><th>Meaning</th><th>Example</th></tr>
+      <tr><td>Division (÷)</td><td>Finds tuples related to ALL tuples in another relation</td><td><code>ENROLLMENT ÷ π Cid(σ Dept='CSE'(COURSE))</code> → students enrolled in every CSE course</td></tr>
+      <tr><td>Grouping (γ)</td><td>Aggregation with grouping</td><td><code>γ Dept, COUNT(Sid)(STUDENT)</code> → <code>GROUP BY Dept</code></td></tr>
+    </table></div>
+
+    <h3>Tuple Relational Calculus (TRC)</h3>
+    <div class="table-wrap"><table class="ref">
+      <tr><th>Concept</th><th>Notation</th><th>Example</th></tr>
+      <tr><td>Tuple variable</td><td>t</td><td><code>STUDENT(t)</code></td></tr>
+      <tr><td>Attribute access</td><td>t.attribute</td><td><code>t.Dept = 'CSE'</code></td></tr>
+      <tr><td>Logical AND</td><td>∧</td><td><code>STUDENT(t) ∧ t.Age &gt; 20</code></td></tr>
+      <tr><td>Logical OR</td><td>∨</td><td><code>t.Dept='CSE' ∨ t.Dept='ECE'</code></td></tr>
+      <tr><td>Logical NOT</td><td>¬</td><td><code>¬(t.Age &lt; 18)</code></td></tr>
+      <tr><td>Existential quantifier</td><td>∃</td><td><code>∃ e (ENROLLMENT(e))</code></td></tr>
+      <tr><td>Universal quantifier</td><td>∀</td><td><code>∀ c (COURSE(c))</code></td></tr>
+      <tr><td>Implication</td><td>→</td><td><code>t.Dept='CSE' → t.Age&gt;18</code></td></tr>
+    </table></div>
+
+    <p class="muted"><b>Domain Relational Calculus (DRC):</b> instead of a tuple variable, DRC uses domain variables bound to individual attribute values — a query is expressed as <code>{&lt;x1,...,xn&gt; | condition(x1,...,xn)}</code>, listing one variable per attribute rather than one variable per whole tuple.</p>
+
+    <div class="viva"><b>VIVA POINT</b>Relational algebra is procedural (you specify the sequence of operations); tuple and domain relational calculus are declarative (you specify what you want, not how) — the three are provably equivalent in expressive power, which is why SQL query planners can convert one form into another.</div>
+  </section>
+
+  <section class="sheet" id="d4b">
+    <p class="sheet-tag">EXPT 4B · AGGREGATE FUNCTIONS, CONSTRAINTS &amp; SET OPERATIONS</p>
+    <h2>Summarizing data and enforcing its rules.</h2>
+
+    <h3>Aggregate functions</h3>
+    <div class="table-wrap"><table class="ref">
+      <tr><th>Function</th><th>Returns</th><th>Example</th></tr>
+      <tr><td>COUNT()</td><td>Number of matching rows</td><td><code>SELECT COUNT(*) FROM Student;</code></td></tr>
+      <tr><td>SUM()</td><td>Total of a numeric column</td><td><code>SELECT SUM(Marks) FROM Student;</code></td></tr>
+      <tr><td>AVG()</td><td>Average value</td><td><code>SELECT AVG(Marks) FROM Student;</code></td></tr>
+      <tr><td>MIN()</td><td>Smallest value</td><td><code>SELECT MIN(Marks) FROM Student;</code></td></tr>
+      <tr><td>MAX()</td><td>Largest value</td><td><code>SELECT MAX(Marks) FROM Student;</code></td></tr>
+      <tr><td>VARIANCE()</td><td>Population variance</td><td><code>SELECT VARIANCE(Marks) FROM Student;</code></td></tr>
+      <tr><td>STDDEV()</td><td>Population standard deviation</td><td><code>SELECT STDDEV(Marks) FROM Student;</code></td></tr>
+    </table></div>
+
+    <h3>Constraints</h3>
+    <div class="table-wrap"><table class="ref">
+      <tr><th>Constraint</th><th>Purpose</th><th>Example</th></tr>
+      <tr><td>PRIMARY KEY</td><td>Uniquely identifies a record</td><td><code>student_id INT PRIMARY KEY</code></td></tr>
+      <tr><td>NOT NULL</td><td>Prevents NULL values</td><td><code>name VARCHAR(20) NOT NULL</code></td></tr>
+      <tr><td>UNIQUE</td><td>Ensures no duplicate values</td><td><code>email VARCHAR(50) UNIQUE</code></td></tr>
+      <tr><td>CHECK</td><td>Restricts allowed values</td><td><code>marks INT CHECK(marks&gt;=0)</code></td></tr>
+      <tr><td>DEFAULT</td><td>Assigns a default value</td><td><code>dept VARCHAR(10) DEFAULT 'CSE'</code></td></tr>
+      <tr><td>FOREIGN KEY</td><td>References another table's key</td><td><code>dept_id REFERENCES DEPT(id)</code></td></tr>
+    </table></div>
+
+    <h3>Set operations</h3>
+    <div class="table-wrap"><table class="ref">
+      <tr><th>Operation</th><th>Purpose</th><th>Example</th></tr>
+      <tr><td>UNION</td><td>Combines results, removes duplicates</td><td><code>SELECT name FROM CSE UNION SELECT name FROM ECE;</code></td></tr>
+      <tr><td>UNION ALL</td><td>Combines results, keeps duplicates</td><td><code>SELECT name FROM CSE UNION ALL SELECT name FROM ECE;</code></td></tr>
+      <tr><td>INTERSECT*</td><td>Common records (MySQL workaround via IN)</td><td><code>WHERE name IN (SELECT name FROM ECE);</code></td></tr>
+      <tr><td>MINUS*</td><td>Records in first, not in second</td><td><code>WHERE name NOT IN (SELECT name FROM ECE);</code></td></tr>
+    </table></div>
+
+    <div class="viva"><b>VIVA POINT</b>UNION drops duplicate rows (implicit sort/dedup cost); UNION ALL keeps everything and is cheaper — use UNION ALL whenever you already know the two sets are disjoint or duplicates don't matter.</div>
+  </section>
+
+  <section class="sheet" id="d5">
+    <p class="sheet-tag">EXPT 5 · SUBQUERIES, JOINS &amp; VIEWS</p>
+    <h2>Combining and reusing queries.</h2>
+
+    <h3>Subquery operators</h3>
+    <div class="table-wrap"><table class="ref">
+      <tr><th>Operator</th><th>Purpose</th><th>Example</th></tr>
+      <tr><td>=, &gt;, &lt;, &gt;=, &lt;=</td><td>Compares with a single-row subquery result</td><td><code>WHERE Age = (SELECT MIN(Age) FROM STUDENT);</code></td></tr>
+      <tr><td>IN</td><td>Matches any value in a multi-row result</td><td><code>WHERE Sid IN (SELECT Sid FROM ENROLLMENT);</code></td></tr>
+      <tr><td>NOT IN</td><td>Excludes values in a multi-row result</td><td><code>WHERE Sid NOT IN (SELECT Sid FROM ENROLLMENT);</code></td></tr>
+      <tr><td>ANY</td><td>True if the condition holds for at least one row</td><td><code>WHERE Age &gt; ANY (SELECT Age FROM STUDENT WHERE Dept='CSE');</code></td></tr>
+      <tr><td>ALL</td><td>True if the condition holds for every row</td><td><code>WHERE Age &gt; ALL (SELECT Age FROM STUDENT WHERE Dept='ECE');</code></td></tr>
+      <tr><td>EXISTS</td><td>True if the subquery returns any rows</td><td><code>WHERE EXISTS (SELECT * FROM ENROLLMENT E WHERE E.Sid=STUDENT.Sid);</code></td></tr>
+      <tr><td>NOT EXISTS</td><td>True if the subquery returns no rows</td><td><code>WHERE NOT EXISTS (...);</code></td></tr>
+      <tr><td>Nested subquery</td><td>A subquery inside another subquery</td><td><code>SELECT Dept, AVG(Age) FROM (SELECT Dept, Age FROM STUDENT) T GROUP BY Dept;</code></td></tr>
+    </table></div>
+
+    <h3>Joins</h3>
+    <div class="table-wrap"><table class="ref">
+      <tr><th>Join type</th><th>Description</th><th>Result</th></tr>
+      <tr><td>INNER JOIN</td><td>Only matching rows in both tables</td><td>Matched records</td></tr>
+      <tr><td>LEFT JOIN</td><td>All left rows + matched right rows</td><td>Includes NULL for unmatched right side</td></tr>
+      <tr><td>RIGHT JOIN</td><td>All right rows + matched left rows</td><td>Includes NULL for unmatched left side</td></tr>
+      <tr><td>CROSS JOIN</td><td>Cartesian product of both tables</td><td>All possible combinations</td></tr>
+      <tr><td>SELF JOIN</td><td>A table joined with itself, via alias</td><td>e.g. same-department student pairs</td></tr>
+    </table></div>
+
+    <h3>Views</h3>
+    <div class="table-wrap"><table class="ref">
+      <tr><th>Command</th><th>Purpose</th><th>Example</th></tr>
+      <tr><td>CREATE VIEW</td><td>Creates a virtual table from a query</td><td><code>CREATE VIEW CSE_VIEW AS SELECT name FROM STUDENT WHERE dept_id=1;</code></td></tr>
+      <tr><td>SELECT view</td><td>Reads from the view like a table</td><td><code>SELECT * FROM CSE_VIEW;</code></td></tr>
+      <tr><td>UPDATE view</td><td>Writes through to the underlying table</td><td><code>UPDATE CSE_VIEW SET name='Raj';</code></td></tr>
+      <tr><td>DROP VIEW</td><td>Deletes the view</td><td><code>DROP VIEW CSE_VIEW;</code></td></tr>
+    </table></div>
+
+    <div class="viva"><b>VIVA POINT</b>A view is updatable only if MySQL can trace each output row back to exactly one row in exactly one base table — views built with joins, GROUP BY, DISTINCT, or aggregates are generally read-only.</div>
+  </section>
+
+  <section class="sheet" id="d6">
+    <p class="sheet-tag">EXPT 6 · PL/SQL — PROCEDURES, FUNCTIONS, CURSORS, TRIGGERS, EXCEPTIONS</p>
+    <h2>Programs that live inside the database.</h2>
+
+    <h3>Procedures</h3>
+    <div class="code-block">DELIMITER $$
+CREATE PROCEDURE procedure_name ()
+BEGIN
+  statements;
+END$$
+DELIMITER ;</div>
+    <p class="muted">Called with <code>CALL procedure_name();</code>. Example: <code>update_salary(IN p_emp_id INT, IN p_new_salary INT)</code> runs <code>UPDATE employee SET salary=p_new_salary WHERE emp_id=p_emp_id;</code></p>
+
+    <h3>Functions</h3>
+    <div class="code-block">DELIMITER $$
+CREATE FUNCTION function_name (parameter datatype)
+RETURNS datatype
+DETERMINISTIC
+BEGIN
+  RETURN value;
+END$$
+DELIMITER ;</div>
+    <p class="muted">A function always <b>returns a value</b> and can be used inline in a SELECT — e.g. <code>SELECT emp_id, salary, calculate_bonus(salary) AS bonus FROM employee;</code> — which a procedure cannot do.</p>
+
+    <h3>Cursors</h3>
+    <p class="muted">A cursor processes a multi-row query result one row at a time; used only inside stored procedures. <b>Implicit cursors</b> are created automatically for INSERT/UPDATE/DELETE; <b>explicit cursors</b> are declared by the programmer for a SELECT returning multiple rows. Lifecycle: <b>Declare → Open → Fetch → Close.</b></p>
+    <div class="code-block">DECLARE cursor_name CURSOR FOR SELECT_statement;
+DECLARE CONTINUE HANDLER FOR NOT FOUND SET done = 1;
+OPEN cursor_name;
+read_loop: LOOP
+  FETCH cursor_name INTO variables;
+  IF done = 1 THEN LEAVE read_loop; END IF;
+  -- process row
+END LOOP;
+CLOSE cursor_name;</div>
+
+    <h3>Triggers</h3>
+    <p class="muted">A trigger auto-executes on a table event. Events: <b>INSERT, UPDATE, DELETE</b>. Types: <b>BEFORE</b> (runs before the change), <b>AFTER</b> (runs after), and row-level (default — runs once per affected row). MySQL allows only one event per trigger.</p>
+    <div class="code-block">DELIMITER $$
+CREATE TRIGGER trigger_name
+BEFORE | AFTER INSERT | UPDATE | DELETE
+ON table_name
+FOR EACH ROW
+BEGIN
+  trigger_body;
+END$$
+DELIMITER ;</div>
+    <p class="muted"><b>Example 1 (BEFORE INSERT):</b> clamps any new salary below 10000 up to 10000 using <code>SET NEW.salary = 10000;</code></p>
+    <p class="muted"><b>Example 2 (AFTER UPDATE, audit log):</b> writes <code>OLD.salary</code>, <code>NEW.salary</code>, and <code>NOW()</code> into a salary_log table whenever salary changes.</p>
+
+    <h3>Exception handling</h3>
+    <p class="muted">Lets a program handle runtime errors gracefully instead of terminating abruptly.</p>
+    <div class="table-wrap"><table class="ref">
+      <tr><th>Handler type</th><th>Behaviour</th></tr>
+      <tr><td>CONTINUE</td><td>Continues execution after handling the error</td></tr>
+      <tr><td>EXIT</td><td>Exits the block after handling the error</td></tr>
+    </table></div>
+    <div class="table-wrap"><table class="ref">
+      <tr><th>Condition</th><th>Fires on</th></tr>
+      <tr><td>NOT FOUND</td><td>Cursor fetch reaches the end</td></tr>
+      <tr><td>SQLEXCEPTION</td><td>Any SQL error</td></tr>
+      <tr><td>SQLWARNING</td><td>A SQL warning</td></tr>
+      <tr><td>Error code</td><td>A specific error number, e.g. 1062 (duplicate key)</td></tr>
+    </table></div>
+    <p class="muted"><b>Worked example:</b> <code>DECLARE EXIT HANDLER FOR SQLEXCEPTION</code> catches a duplicate-key insert into a student table and returns "Error: Duplicate ID or SQL Error" instead of crashing the procedure.</p>
+
+    <div class="viva"><b>VIVA POINT</b>Function vs procedure, one line: a function must return exactly one value and can be used inside a SELECT expression; a procedure may return nothing (or multiple result sets/OUT params) and is invoked with CALL, not embedded in a query.</div>
+  </section>
+
+  <section class="sheet" id="d7a">
+    <p class="sheet-tag">EXPT 7A · NORMALIZATION — 1NF, 2NF, 3NF</p>
+    <h2>Removing redundancy, one dependency at a time.</h2>
+    <p class="section-intro">Normalization reduces redundancy and eliminates update/insertion/deletion anomalies by splitting large tables into smaller, well-structured ones, following a sequence of normal forms.</p>
+
+    <h3>1NF — First Normal Form</h3>
+    <p class="muted">Every field holds an atomic (indivisible) value — no multi-valued attributes, no repeating groups.</p>
+    <p class="muted"><b>Violation example:</b> a Subjects column holding "DBMS, OS" for one student. <b>Fix:</b> split into one row per (StudentID, Subject) pair.</p>
+
+    <h3>2NF — Second Normal Form</h3>
+    <p class="muted">Already in 1NF, and no <b>partial dependency</b> — every non-key attribute depends on the <i>whole</i> composite primary key, not just part of it. Only relevant when the primary key is composite.</p>
+    <p class="muted"><b>Violation example:</b> ORDER(OrderID, ProductID, CustomerName, Price) with key (OrderID, ProductID) — CustomerName depends only on OrderID, Price depends only on ProductID. <b>Fix:</b> split into ORDER(OrderID, CustomerName), PRODUCT(ProductID, Price), and a junction table ORDER_PRODUCT(OrderID, ProductID).</p>
+
+    <h3>3NF — Third Normal Form</h3>
+    <p class="muted">Already in 2NF, and no <b>transitive dependency</b> — a non-key attribute must not depend on another non-key attribute.</p>
+    <p class="muted"><b>Violation example:</b> EMPLOYEE(EmpID, EmpName, DeptName, DeptLocation) — DeptLocation depends on DeptName, which depends on EmpID (EmpID → DeptName → DeptLocation). <b>Fix:</b> split into EMPLOYEE(EmpID, EmpName, DeptName) and DEPARTMENT(DeptName, DeptLocation).</p>
+
+    <div class="viva"><b>VIVA POINT</b>Partial dependency needs a composite key to even exist (2NF); transitive dependency is about a chain between two non-key attributes (3NF) — mixing these two up is the single most common viva slip.</div>
+  </section>
+
+  <section class="sheet" id="d7b">
+    <p class="sheet-tag">EXPT 7B · NORMALIZATION — 4NF, 5NF</p>
+    <h2>Beyond 3NF — multi-valued and join dependencies.</h2>
+
+    <h3>4NF — Fourth Normal Form</h3>
+    <p class="muted">Already in BCNF, and no non-trivial <b>multi-valued dependency (MVD)</b> — one attribute determining multiple independent values of another, unrelated attribute.</p>
+    <p class="muted"><b>Violation example:</b> EMP_SKILL_PROJECT(EmpID, Skill, Project) where an employee's skills and projects vary independently of each other (EmpID →→ Skill, EmpID →→ Project) — every combination of skill × project gets repeated. <b>Fix:</b> split into EMP_SKILL(EmpID, Skill) and EMP_PROJECT(EmpID, Project).</p>
+
+    <h3>5NF — Fifth Normal Form (Project-Join Normal Form)</h3>
+    <p class="muted">Already in 4NF, with no <b>join dependency</b> — the table can't be losslessly reconstructed from smaller decomposed tables, so it can't be broken down any further without losing information.</p>
+    <p class="muted"><b>Violation example:</b> SUPPLIER_PART_PROJECT(Supplier, Part, Project), where the relationship only holds when all three attributes are combined together. <b>Fix:</b> split into SUPPLIER_PART(Supplier, Part), SUPPLIER_PROJECT(Supplier, Project), and PART_PROJECT(Part, Project) — the original table is recoverable only by joining all three back together.</p>
+
+    <div class="viva"><b>VIVA POINT</b>Often asked alongside this pair: BCNF (Boyce-Codd Normal Form) sits between 3NF and 4NF — a table is in BCNF if, for every functional dependency X→Y, X is a superkey. It's a stricter version of 3NF that closes a loophole 3NF leaves open when a table has multiple overlapping candidate keys.</div>
+  </section>
+
+  <section class="sheet" id="d8">
+    <p class="sheet-tag">EXPT 8 · TRANSACTIONS &amp; CONCURRENCY CONTROL</p>
+    <h2>Keeping data correct when many things happen at once.</h2>
+
+    <h3>Transaction control</h3>
+    <div class="table-wrap"><table class="ref">
+      <tr><th>Command</th><th>Purpose</th></tr>
+      <tr><td>START TRANSACTION / BEGIN</td><td>Starts a transaction block; changes aren't permanent yet</td></tr>
+      <tr><td>COMMIT</td><td>Permanently saves all changes in the transaction</td></tr>
+      <tr><td>ROLLBACK</td><td>Undoes all changes in the current transaction</td></tr>
+      <tr><td>SAVEPOINT</td><td>Marks a point within a transaction to roll back to</td></tr>
+      <tr><td>ROLLBACK TO SAVEPOINT</td><td>Undoes changes made after a specific savepoint only</td></tr>
+      <tr><td>RELEASE SAVEPOINT</td><td>Deletes a savepoint that's no longer needed</td></tr>
+    </table></div>
+    <div class="code-block">BEGIN;
+INSERT INTO account VALUES (101, 'Asha', 5000);
+SAVEPOINT sp1;
+UPDATE account SET balance = balance - 1000 WHERE acc_no = 101;
+ROLLBACK TO sp1;
+COMMIT;</div>
+
+    <h3>Concurrency control — locks</h3>
+    <div class="table-wrap"><table class="ref">
+      <tr><th>Lock type</th><th>Purpose</th><th>Effect</th></tr>
+      <tr><td>Shared Lock (READ)</td><td>Many transactions can read, none can write</td><td><code>LOCK TABLES account READ;</code> — SELECT allowed, writes blocked</td></tr>
+      <tr><td>Exclusive Lock (WRITE)</td><td>Only one transaction can read or write</td><td><code>LOCK TABLES account WRITE;</code> — all others blocked</td></tr>
+      <tr><td>Row-Level Lock</td><td>Locks only the needed row</td><td><code>SELECT * FROM account WHERE acc_no=101 FOR UPDATE;</code> — other rows stay accessible</td></tr>
+      <tr><td>Table-Level Lock</td><td>Locks the whole table</td><td>Entire table unavailable to others until released</td></tr>
+      <tr><td>Predicate Lock (SERIALIZABLE)</td><td>Prevents phantom reads under the strictest isolation level</td><td>A second transaction inserting a row matching the first's WHERE clause is blocked</td></tr>
+    </table></div>
+
+    <p class="muted"><b>Isolation levels, low to high strictness:</b> Read Uncommitted (allows dirty reads) → Read Committed (blocks dirty reads) → Repeatable Read (blocks dirty + non-repeatable reads) → Serializable (also blocks phantom reads, at the cost of concurrency).</p>
+
+    <div class="viva"><b>VIVA POINT</b>Three classic anomalies: a <b>dirty read</b> sees another transaction's uncommitted change; a <b>non-repeatable read</b> gets a different value re-reading the same row mid-transaction; a <b>phantom read</b> sees new rows appear that match a repeated query's condition. Each stricter isolation level blocks one more of these, at the cost of concurrency.</div>
+  </section>
+
+  <section class="sheet" id="d9">
+    <p class="sheet-tag">EXPT 9 · DATABASE CONNECTIVITY WITH FRONT-END TOOLS</p>
+    <h2>Getting user input into the database and back out.</h2>
+    <p class="section-intro">The general flow, independent of stack: user submits a form → server-side script receives it → driver connects to the DB → query executes → result returns to the front end.</p>
+
+    <h3>Steps involved</h3>
+    <ol class="keynotes">
+      <li><b>Load the driver</b> — e.g. <code>mysql-connector</code> (Python), <code>mysql</code> (Node.js), JDBC (Java).</li>
+      <li><b>Provide connection details</b> — host, database name, username, password.</li>
+      <li><b>Establish the connection</b> using the driver.</li>
+      <li><b>Select the database</b> to work with.</li>
+      <li><b>Create a statement/cursor object</b> to send SQL commands.</li>
+      <li><b>Select the target table.</b></li>
+      <li><b>Execute the SQL query</b> — INSERT, SELECT, UPDATE, DELETE.</li>
+      <li><b>Process the result</b> — rows retrieved, or execution status.</li>
+      <li><b>Commit or rollback</b> the transaction.</li>
+      <li><b>Close the connection</b> to release resources.</li>
+      <li><b>Return the result</b> to the server, then display it on the front end.</li>
+    </ol>
+
+    <h3>Minimal example (Python/Flask)</h3>
+    <div class="code-block">db = mysql.connector.connect(host="localhost", user="root", password="", database="bankdb")
+cursor = db.cursor()
+
+@app.route('/insert', methods=['POST'])
+def insert():
+    acc_no = request.form['acc_no']
+    name = request.form['name']
+    balance = request.form['balance']
+    sql = "INSERT INTO account VALUES (%s, %s, %s)"
+    cursor.execute(sql, (acc_no, name, balance))
+    db.commit()
+    return "Record inserted successfully"</div>
+    <p class="muted">The same pattern repeats in Node.js (<code>mysql.createConnection</code> + <code>db.query</code>) and Java (JDBC's <code>DriverManager.getConnection</code> + <code>PreparedStatement</code>).</p>
+
+    <div class="viva"><b>VIVA POINT</b>Always use parameterized queries / prepared statements (the <code>%s</code> / <code>?</code> placeholders above) instead of string-concatenating user input into SQL — that's what prevents SQL injection.</div>
   </section>
 
   <section class="sheet signoff">
-    <h2>Walk in as someone qualified, having a conversation.</h2>
-    <p>You already cleared round 1 on merit — the DBMS topper rank is real. Not someone auditioning for a favour. Good luck on the 14th.</p>
+    <h2>That's the full workbook, structured for recall.</h2>
+    <p>Every experiment above traces back to your resume and this lab's data problems — use the Resume Guide page to see exactly where each topic gets cross-questioned.</p>
   </section>
+
+</div>
 
 </main>
 
@@ -677,7 +1474,20 @@
     applyThemeLabels(next);
   });
 
-  // ---------- tabs ----------
+  // ---------- page navigator ----------
+  const pageBtns = document.querySelectorAll('.pagenav-btn');
+  const pages = document.querySelectorAll('.page');
+  pageBtns.forEach(btn => {
+    btn.addEventListener('click', () => {
+      pageBtns.forEach(b => b.classList.remove('active'));
+      pages.forEach(p => p.classList.remove('active'));
+      btn.classList.add('active');
+      document.getElementById('page-' + btn.dataset.page).classList.add('active');
+      window.scrollTo({top:0, behavior:'instant'});
+    });
+  });
+
+  // ---------- in-page tabs (lab threads) ----------
   document.querySelectorAll('.tabs').forEach(tabGroup => {
     const tabs = tabGroup.querySelectorAll('.tab');
     const panels = tabGroup.parentElement.querySelectorAll('.tab-panel');
@@ -700,7 +1510,7 @@
     });
   });
 
-  // ---------- progress tracker ----------
+  // ---------- progress tracker (counts tasks across all 3 pages) ----------
   const checks = document.querySelectorAll('.task-check');
   const progressText = document.getElementById('progressText');
   const progressFill = document.getElementById('progressFill');
