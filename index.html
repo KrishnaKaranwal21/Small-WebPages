@@ -16,6 +16,7 @@
             --p2-color: #f59e0b; /* Amber */
             --p3-color: #0071e3; /* Classic Blue */
             --p4-color: #8b5cf6; /* Violet */
+            --p5-color: #14b8a6; /* Teal */
         }
 
         /* LIGHT MODE VARIABLES */
@@ -33,6 +34,7 @@
             --p2-glow: rgba(245, 158, 11, 0.12);
             --p3-glow: rgba(0, 113, 227, 0.12);
             --p4-glow: rgba(139, 92, 246, 0.12);
+            --p5-glow: rgba(20, 184, 166, 0.12);
             
             --bg-gradient: 
                 radial-gradient(circle at 0% 0%, rgba(0, 113, 227, 0.04) 0%, transparent 35%),
@@ -54,6 +56,7 @@
             --p2-glow: rgba(245, 158, 11, 0.08);
             --p3-glow: rgba(0, 113, 227, 0.08);
             --p4-glow: rgba(139, 92, 246, 0.08);
+            --p5-glow: rgba(20, 184, 166, 0.08);
             
             --bg-gradient: 
                 radial-gradient(circle at 10% 20%, rgba(56, 189, 248, 0.03) 0%, transparent 40%),
@@ -203,6 +206,7 @@
         .apps-grid .app-card:nth-child(2) { animation-delay: 0.12s; }
         .apps-grid .app-card:nth-child(3) { animation-delay: 0.19s; }
         .apps-grid .app-card:nth-child(4) { animation-delay: 0.26s; }
+        .apps-grid .app-card:nth-child(5) { animation-delay: 0.33s; }
 
         /* Fluid Cursor Follow Aura */
         .app-card::before {
@@ -234,6 +238,7 @@
         .app-card.p2 { --app-color: var(--p2-color); --card-glow: var(--p2-glow); }
         .app-card.p3 { --app-color: var(--p3-color); --card-glow: var(--p3-glow); }
         .app-card.p4 { --app-color: var(--p4-color); --card-glow: var(--p4-glow); }
+        .app-card.p5 { --app-color: var(--p5-color); --card-glow: var(--p5-glow); }
 
         .app-info {
             z-index: 2;
@@ -408,12 +413,36 @@
 
         <main class="apps-grid">
 
-            <!-- 1. LeetCode Company Wise (New - First) -->
+            <!-- 0. NPTEL Interview Prep (New - First) -->
+            <a href="./NPTEL%20Interview%20Prep/" class="app-card p5">
+                <div class="app-info">
+                    <div class="app-meta">
+                        <span class="app-badge">INTERNSHIP</span>
+                        <span class="app-badge new-badge">NEW</span>
+                    </div>
+                    <div class="app-title">NPTEL Interview Prep</div>
+                    <div class="app-desc">Round-2 briefing for the Built Environment Lab, IIT Roorkee — lab research threads, DBMS ammunition, resume line-by-line defense, and a 90-second answer timer.</div>
+
+                    <div class="app-visual">
+                        <div class="visual-text">
+                            <span>Interview</span>
+                            <span>Mon, 14 Sept — Prof. P.S. Chani</span>
+                        </div>
+                        <div class="progress-bar-bg">
+                            <div class="progress-bar-fill" style="width: 100%;"></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="app-action">
+                    <svg viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+                </div>
+            </a>
+
+            <!-- 1. LeetCode Company Wise -->
             <a href="./Leetcode%20Company%20Wise%20Question%20/" class="app-card p4">
                 <div class="app-info">
                     <div class="app-meta">
                         <span class="app-badge">INTERVIEW PREP</span>
-                        <span class="app-badge new-badge">NEW</span>
                     </div>
                     <div class="app-title">Company-Wise LeetCode Questions</div>
                     <div class="app-desc">Targeted algorithmic problem sets organized by company frequency and patterns to streamline interview readiness.</div>
@@ -481,7 +510,7 @@
                 </div>
             </a>
 
-            <!-- 4. GPA Calculator Sem 4 (Shifted to Last) -->
+            <!-- 4. GPA Calculator Sem 4 -->
             <a href="./GPA%20Sem%204/" class="app-card p1">
                 <div class="app-info">
                     <div class="app-meta">
