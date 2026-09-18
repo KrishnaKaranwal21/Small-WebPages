@@ -1,0 +1,850 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>STEP Assessment · 25 Sep Prep Tracker</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet"/>
+<style>
+:root{
+  --ink:#060a13;
+  --card:#0c1322;
+  --elev:#131d33;
+  --line:#1d2a45;
+  --line-hi:#2c3f63;
+  --fg:#e9eefa;
+  --fg-dim:#9aa9c4;
+  --mute:#64748b;
+  --teal:#2dd4bf;
+  --sky:#38bdf8;
+  --lime:#a3e635;
+  --amber:#f7b955;
+  --coral:#fb7185;
+  --violet:#a78bfa;
+  --r:14px;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{
+  font-family:'Outfit',system-ui,sans-serif;
+  background:var(--ink);color:var(--fg);min-height:100vh;
+  background-image:
+    radial-gradient(900px 400px at 15% -5%,rgba(45,212,191,.10),transparent 60%),
+    radial-gradient(800px 380px at 88% -8%,rgba(56,189,248,.09),transparent 60%);
+  background-attachment:fixed;
+  -webkit-font-smoothing:antialiased;
+}
+.mono{font-family:'JetBrains Mono',ui-monospace,monospace}
+::-webkit-scrollbar{width:7px;height:7px}
+::-webkit-scrollbar-track{background:var(--ink)}
+::-webkit-scrollbar-thumb{background:var(--line-hi);border-radius:4px}
+:focus-visible{outline:2px solid var(--teal);outline-offset:2px;border-radius:6px}
+@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+
+.wrap{max-width:1140px;margin:0 auto;padding:0 18px}
+
+/* ---------- header ---------- */
+header{position:sticky;top:0;z-index:60;background:rgba(6,10,19,.9);backdrop-filter:blur(18px);border-bottom:1px solid var(--line)}
+.hdr-top{display:flex;align-items:center;gap:18px;flex-wrap:wrap;padding:12px 0}
+.brand{display:flex;align-items:baseline;gap:10px;flex-shrink:0}
+.brand h1{font-size:17px;font-weight:700;letter-spacing:-.01em}
+.brand span{font-size:11px;color:var(--mute)}
+.hdr-right{margin-left:auto;display:flex;align-items:center;gap:20px;flex-wrap:wrap}
+.lvl{display:flex;align-items:center;gap:9px}
+.lvl-pill{background:linear-gradient(120deg,var(--teal),var(--sky));color:#04121a;border-radius:999px;padding:3px 11px;font-size:11px;font-weight:700;letter-spacing:.03em}
+.xp-wrap{min-width:150px}
+.xp-row{display:flex;justify-content:space-between;align-items:baseline;gap:10px;margin-bottom:5px}
+.xp-row b{font-size:13px;color:var(--teal);font-weight:600}
+.xp-row i{font-style:normal;font-size:10px;color:var(--mute)}
+.bar{height:6px;border-radius:99px;background:var(--elev);overflow:hidden}
+.bar>span{display:block;height:100%;border-radius:99px;background:linear-gradient(90deg,var(--teal),var(--sky),var(--lime));transition:width .55s cubic-bezier(.34,1.4,.64,1)}
+.badge-count{font-size:12px;color:var(--fg-dim)}
+.badge-count b{color:var(--violet);font-weight:700}
+
+/* countdown */
+.countdown{display:flex;gap:7px;align-items:center}
+.cd-unit{background:var(--elev);border:1px solid var(--line);border-radius:10px;padding:5px 9px;min-width:54px;text-align:center}
+.cd-unit b{display:block;font-family:'JetBrains Mono',monospace;font-size:17px;font-weight:700;line-height:1.1;color:var(--fg)}
+.cd-unit small{font-size:9px;letter-spacing:.09em;color:var(--mute)}
+.cd-urgent .cd-unit b{color:var(--coral)}
+.cd-note{font-size:11px;color:var(--mute)}
+
+nav{display:flex;gap:4px;overflow-x:auto;padding-bottom:2px}
+.tab{background:none;border:none;border-bottom:2px solid transparent;padding:9px 15px;font-family:'JetBrains Mono',monospace;font-size:12px;font-weight:600;color:var(--mute);cursor:pointer;white-space:nowrap;transition:color .2s,border-color .2s}
+.tab:hover{color:var(--fg)}
+.tab.on{color:var(--teal);border-bottom-color:var(--teal)}
+.tab em{font-style:normal;color:var(--line-hi);margin-left:6px;font-size:11px}
+.tab.on em{color:var(--teal);opacity:.7}
+
+/* ---------- panels ---------- */
+main{padding:26px 0 80px}
+.panel{display:none}
+.panel.on{display:block;animation:in .28s ease}
+@keyframes in{from{opacity:0;transform:translateY(7px)}to{opacity:1;transform:none}}
+
+.hero{border:1px solid var(--line);border-radius:18px;padding:26px;background:
+  linear-gradient(135deg,rgba(45,212,191,.08),rgba(56,189,248,.04) 45%,transparent 75%),var(--card);margin-bottom:24px}
+.hero h2{font-size:26px;font-weight:700;letter-spacing:-.02em;margin-bottom:6px}
+.hero p{color:var(--fg-dim);font-size:14px;max-width:62ch;line-height:1.6}
+.hero-meta{display:flex;gap:10px;flex-wrap:wrap;margin-top:16px}
+.chip{font-family:'JetBrains Mono',monospace;font-size:11px;padding:5px 11px;border-radius:99px;border:1px solid var(--line-hi);color:var(--fg-dim);background:var(--elev)}
+.chip.hot{color:var(--teal);border-color:rgba(45,212,191,.4);background:rgba(45,212,191,.08)}
+
+.grid3{display:grid;grid-template-columns:repeat(auto-fit,minmax(272px,1fr));gap:16px}
+.sec-h{display:flex;align-items:center;gap:12px;margin:30px 0 14px}
+.sec-h h3{font-size:16px;font-weight:700;letter-spacing:-.01em}
+.sec-h .rule{flex:1;height:1px;background:var(--line)}
+.sec-h .tally{font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--mute)}
+
+.part{border:1px solid var(--line);border-radius:var(--r);background:var(--card);padding:18px;display:flex;flex-direction:column;gap:12px;transition:border-color .25s}
+.part:hover{border-color:var(--line-hi)}
+.part-top{display:flex;align-items:flex-start;gap:11px}
+.part-ico{font-size:22px;line-height:1}
+.part h4{font-size:15px;font-weight:700}
+.part .sub{font-size:11.5px;color:var(--mute);margin-top:2px}
+.part .pct{margin-left:auto;font-family:'JetBrains Mono',monospace;font-size:19px;font-weight:700}
+.part .breakdown{font-size:12px;color:var(--fg-dim);line-height:1.7}
+.part .breakdown span{color:var(--fg)}
+.go{align-self:flex-start;background:var(--elev);border:1px solid var(--line-hi);color:var(--fg-dim);font-family:'JetBrains Mono',monospace;font-size:11px;font-weight:600;padding:6px 13px;border-radius:8px;cursor:pointer;transition:all .2s}
+.go:hover{color:var(--teal);border-color:var(--teal);background:rgba(45,212,191,.08)}
+
+.two-col{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+@media(max-width:760px){.two-col{grid-template-columns:1fr}}
+.list-card{border:1px solid var(--line);border-radius:var(--r);background:var(--card);padding:16px}
+.list-card h4{font-size:13px;font-weight:700;margin-bottom:11px;display:flex;align-items:center;gap:7px}
+.list-card ul{list-style:none;display:flex;flex-direction:column;gap:6px;max-height:320px;overflow-y:auto}
+.list-card li{font-size:12.5px;color:var(--fg-dim);display:flex;gap:8px;align-items:baseline;line-height:1.5}
+.list-card li b{font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--mute);flex-shrink:0;min-width:34px}
+.empty{font-size:12.5px;color:var(--mute);font-style:italic;padding:8px 0}
+
+/* ---------- item cards ---------- */
+.item{border:1px solid var(--line);border-radius:var(--r);background:var(--card);overflow:hidden;transition:border-color .25s,box-shadow .25s}
+.item + .item{margin-top:10px}
+.item:hover{border-color:var(--line-hi)}
+.item.st-working{border-color:rgba(247,185,85,.42);box-shadow:0 0 22px rgba(247,185,85,.06)}
+.item.st-done{border-color:rgba(45,212,191,.42);box-shadow:0 0 22px rgba(45,212,191,.06)}
+.item-head{padding:14px 16px;display:flex;align-items:flex-start;gap:12px;cursor:pointer}
+.tick{flex-shrink:0;width:21px;height:21px;border-radius:7px;border:1.5px solid var(--line-hi);background:var(--elev);display:grid;place-items:center;font-size:12px;color:transparent;margin-top:1px;transition:all .22s;cursor:pointer}
+.tick:hover{border-color:var(--teal)}
+.item.st-done .tick{background:var(--teal);border-color:var(--teal);color:#04121a}
+.item.st-working .tick{border-color:var(--amber);color:var(--amber)}
+.item-body{flex:1;min-width:0}
+.item-title{font-size:14.5px;font-weight:600;line-height:1.35;display:flex;align-items:center;gap:9px;flex-wrap:wrap}
+.item.st-done .item-title{color:var(--fg-dim)}
+.item-sub{font-size:12px;color:var(--mute);margin-top:4px;line-height:1.55}
+.item-actions{display:flex;gap:7px;flex-wrap:wrap;margin-top:10px;align-items:center}
+.caret{flex-shrink:0;color:var(--line-hi);font-size:11px;margin-top:5px;font-family:'JetBrains Mono',monospace}
+
+.lnum{font-family:'JetBrains Mono',monospace;font-size:10px;font-weight:700;color:var(--sky);background:rgba(56,189,248,.1);border:1px solid rgba(56,189,248,.25);border-radius:6px;padding:2px 7px;flex-shrink:0}
+.pill{font-family:'JetBrains Mono',monospace;font-size:10px;font-weight:700;padding:2px 8px;border-radius:99px}
+.d-easy{color:var(--lime);background:rgba(163,230,53,.1);border:1px solid rgba(163,230,53,.25)}
+.d-med{color:var(--amber);background:rgba(247,185,85,.1);border:1px solid rgba(247,185,85,.25)}
+.d-hard{color:var(--coral);background:rgba(251,113,133,.1);border:1px solid rgba(251,113,133,.25)}
+
+.btn{font-family:'JetBrains Mono',monospace;font-size:11px;font-weight:600;padding:5px 11px;border-radius:8px;border:1px solid var(--line);background:var(--elev);color:var(--fg-dim);cursor:pointer;text-decoration:none;display:inline-flex;align-items:center;gap:5px;transition:all .2s}
+.btn:hover{color:var(--fg);border-color:var(--line-hi)}
+.btn-yt{color:var(--coral);border-color:rgba(251,113,133,.28);background:rgba(251,113,133,.07)}
+.btn-yt:hover{color:#ffd0d8;border-color:var(--coral);background:rgba(251,113,133,.15)}
+.btn-lc{color:var(--sky);border-color:rgba(56,189,248,.28);background:rgba(56,189,248,.07)}
+.btn-lc:hover{color:#bfe7ff;border-color:var(--sky);background:rgba(56,189,248,.15)}
+.btn-wip{color:var(--amber);border-color:rgba(247,185,85,.3);background:rgba(247,185,85,.07)}
+.btn-wip:hover,.btn-wip.on{background:rgba(247,185,85,.18);border-color:var(--amber)}
+
+.drawer{max-height:0;opacity:0;overflow:hidden;transition:max-height .35s ease,opacity .25s ease}
+.drawer.open{max-height:1400px;opacity:1}
+.drawer-in{padding:0 16px 16px;border-top:1px solid var(--line);padding-top:14px;margin-top:2px}
+.lbl{font-family:'JetBrains Mono',monospace;font-size:10px;font-weight:700;letter-spacing:.1em;color:var(--mute);margin-bottom:7px;display:block}
+textarea{width:100%;background:var(--ink);border:1px solid var(--line);border-radius:10px;padding:11px 13px;color:var(--fg);font-family:'JetBrains Mono',monospace;font-size:12px;line-height:1.65;resize:vertical;min-height:92px;transition:border-color .2s,box-shadow .2s}
+textarea:focus{outline:none;border-color:var(--teal);box-shadow:0 0 0 3px rgba(45,212,191,.12)}
+.ta-foot{display:flex;justify-content:space-between;align-items:center;margin-top:7px;font-size:10px;color:#3d4c66;font-family:'JetBrains Mono',monospace}
+.focus-box{background:var(--elev);border-left:2px solid var(--teal);border-radius:0 10px 10px 0;padding:11px 14px;font-size:12.5px;line-height:1.7;color:var(--fg-dim);margin-bottom:14px}
+.focus-box b{color:var(--fg);font-weight:600}
+
+/* ---------- badges ---------- */
+.badges{display:grid;grid-template-columns:repeat(auto-fill,minmax(146px,1fr));gap:12px}
+.bdg{border:1px solid var(--line);border-radius:var(--r);background:var(--card);padding:18px 12px;text-align:center;transition:all .35s}
+.bdg.locked{opacity:.3;filter:grayscale(1)}
+.bdg.unlocked{border-color:var(--violet);box-shadow:0 0 26px rgba(167,139,250,.24),inset 0 0 30px rgba(167,139,250,.05)}
+.bdg .ico{font-size:28px;display:block;margin-bottom:8px}
+.bdg .nm{font-size:12.5px;font-weight:700;margin-bottom:4px}
+.bdg .ds{font-size:10.5px;color:var(--mute);line-height:1.5}
+.pop{animation:pop .6s cubic-bezier(.34,1.56,.64,1)}
+@keyframes pop{from{transform:scale(.5) rotate(-12deg);opacity:0}to{transform:none;opacity:1}}
+
+/* toast */
+#toast{position:fixed;bottom:22px;right:22px;z-index:200;display:flex;flex-direction:column;gap:8px;align-items:flex-end}
+.toast{background:var(--elev);border:1px solid var(--line-hi);border-radius:11px;padding:11px 16px;font-size:13px;box-shadow:0 10px 34px rgba(0,0,0,.55);animation:slide .3s ease}
+@keyframes slide{from{opacity:0;transform:translateX(18px)}to{opacity:1;transform:none}}
+
+/* misc */
+.subtabs{display:flex;gap:7px;flex-wrap:wrap;margin-bottom:16px}
+.stab{font-family:'JetBrains Mono',monospace;font-size:11.5px;font-weight:600;padding:7px 13px;border-radius:9px;border:1px solid transparent;background:var(--card);color:var(--mute);cursor:pointer;transition:all .2s}
+.stab:hover{color:var(--fg);background:var(--elev)}
+.stab.on{color:var(--teal);border-color:rgba(45,212,191,.45);background:rgba(45,212,191,.1)}
+.blank{border:1px dashed var(--line-hi);border-radius:18px;padding:52px 26px;text-align:center;background:var(--card)}
+.blank .ico{font-size:40px;display:block;margin-bottom:14px;opacity:.65}
+.blank h3{font-size:19px;font-weight:700;margin-bottom:8px}
+.blank p{color:var(--fg-dim);font-size:14px;max-width:48ch;margin:0 auto;line-height:1.65}
+.danger{background:none;border:1px solid var(--line);color:var(--mute);font-family:'JetBrains Mono',monospace;font-size:10.5px;padding:5px 11px;border-radius:8px;cursor:pointer}
+.danger:hover{color:var(--coral);border-color:rgba(251,113,133,.4)}
+footer{border-top:1px solid var(--line);margin-top:44px;padding:18px 0;display:flex;justify-content:space-between;align-items:center;gap:14px;flex-wrap:wrap;font-size:11.5px;color:var(--mute)}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="wrap">
+    <div class="hdr-top">
+      <div class="brand">
+        <h1>STEP Assessment</h1>
+        <span class="mono">25 Sep 2026 · 1:30 PM</span>
+      </div>
+      <div class="hdr-right">
+        <div class="countdown" id="cd">
+          <div class="cd-unit"><b id="cd-d">--</b><small class="mono">DAYS</small></div>
+          <div class="cd-unit"><b id="cd-h">--</b><small class="mono">HRS</small></div>
+          <div class="cd-unit"><b id="cd-m">--</b><small class="mono">MIN</small></div>
+          <div class="cd-unit"><b id="cd-s">--</b><small class="mono">SEC</small></div>
+        </div>
+        <div class="lvl">
+          <span class="lvl-pill mono" id="lvl">LVL 1</span>
+          <div class="xp-wrap">
+            <div class="xp-row"><b class="mono" id="xp">0 XP</b><i class="mono" id="xp-next">400 to next</i></div>
+            <div class="bar"><span id="xp-bar" style="width:0%"></span></div>
+          </div>
+        </div>
+        <div class="badge-count mono">Badges <b id="bdg-n">0/10</b></div>
+      </div>
+    </div>
+    <nav>
+      <button class="tab on" data-p="syllabus">Syllabus</button>
+      <button class="tab" data-p="apt">Part A · Aptitude<em id="t-apt">0/8</em></button>
+      <button class="tab" data-p="oop">Part B · OOP<em>—</em></button>
+      <button class="tab" data-p="dsa">Part C · DSA<em id="t-dsa">0/0</em></button>
+      <button class="tab" data-p="trophy">Trophy Room</button>
+    </nav>
+  </div>
+</header>
+
+<main class="wrap">
+
+<!-- =============== SYLLABUS =============== -->
+<section class="panel on" id="p-syllabus">
+  <div class="hero">
+    <h2>Everything you need to clear it, in one place.</h2>
+    <p id="hero-line">120 minutes, three parts, one sitting. Tick things off as you go — the bars below always show what's left.</p>
+    <div class="hero-meta">
+      <span class="chip mono">Part A · 30 min</span>
+      <span class="chip mono">Part B · 45 min</span>
+      <span class="chip mono">Part C · 45 min</span>
+      <span class="chip hot mono" id="chip-overall">0% complete</span>
+    </div>
+  </div>
+
+  <div class="grid3" id="parts"></div>
+
+  <div class="sec-h"><h3>Where you stand</h3><div class="rule"></div></div>
+  <div class="two-col">
+    <div class="list-card">
+      <h4>🔴 Still pending</h4>
+      <ul id="pending"></ul>
+    </div>
+    <div class="list-card">
+      <h4>🟢 Done</h4>
+      <ul id="done"></ul>
+    </div>
+  </div>
+
+  <div class="sec-h"><h3>Exam-day rules</h3><div class="rule"></div></div>
+  <div class="list-card">
+    <ul style="max-height:none">
+      <li><b>01</b><span>Attendance is mandatory — pick one slot and finish inside it.</span></li>
+      <li><b>02</b><span>No excuses for lack of prep, unavailability or last-minute commitments.</span></li>
+      <li><b>03</b><span>Be set up and ready before your slot begins, not at the start of it.</span></li>
+      <li><b>04</b><span>This counts as a major assessment in your STEP evaluation.</span></li>
+      <li><b>05</b><span>Don't leave it to the last day. Book the slot early, prepare backwards from it.</span></li>
+    </ul>
+  </div>
+</section>
+
+<!-- =============== APTITUDE =============== -->
+<section class="panel" id="p-apt">
+  <div class="hero">
+    <h2>Part A · Aptitude</h2>
+    <p>30 minutes for eight topics, so speed matters more than depth. Watch the video, tick the box, and drop your shortcuts in the notes so you can re-read all eight in ten minutes the night before.</p>
+    <div class="hero-meta"><span class="chip mono">8 topics</span><span class="chip hot mono" id="chip-apt">0/8 done</span></div>
+  </div>
+  <div id="apt-list"></div>
+</section>
+
+<!-- =============== OOP =============== -->
+<section class="panel" id="p-oop">
+  <div class="hero">
+    <h2>Part B · Object-Oriented Programming</h2>
+    <p>45 minutes. Questions come from the System Design Saturday classes held up to and including 19 September 2026.</p>
+  </div>
+  <div class="blank">
+    <span class="ico">🧩</span>
+    <h3>Nothing here yet</h3>
+    <p>Add your Saturday class topics, diagrams and notes when you have them. Until then this part stays out of the progress count.</p>
+  </div>
+  <div style="margin-top:16px" class="list-card">
+    <span class="lbl">SCRATCHPAD</span>
+    <textarea id="oop-scratch" placeholder="Paste class topics, links or rough notes here for now…"></textarea>
+    <div class="ta-foot"><span>Saved automatically</span><span id="oop-saved"></span></div>
+  </div>
+</section>
+
+<!-- =============== DSA =============== -->
+<section class="panel" id="p-dsa">
+  <div class="hero">
+    <h2>Part C · DSA</h2>
+    <p>Arrays, two pointers and sliding window. Work through Striver's 12 lectures first — each one has its own notes box — then grind the LeetCode list underneath, easy to hard.</p>
+    <div class="hero-meta">
+      <span class="chip hot mono" id="chip-lec">0/12 lectures</span>
+      <span class="chip mono" id="chip-lc">0 problems solved</span>
+    </div>
+  </div>
+
+  <div class="subtabs">
+    <button class="stab on" data-d="lectures">📺 Lectures</button>
+    <button class="stab" data-d="arrays">📊 Arrays</button>
+    <button class="stab" data-d="twop">👉 Two Pointer</button>
+    <button class="stab" data-d="window">🪟 Sliding Window</button>
+  </div>
+  <div id="dsa-body"></div>
+</section>
+
+<!-- =============== TROPHY =============== -->
+<section class="panel" id="p-trophy">
+  <div class="hero">
+    <h2>Trophy Room</h2>
+    <p>Ten badges. Each one is a real milestone, not a participation sticker — you'll have the whole set only if you're genuinely ready on the 25th.</p>
+    <div class="hero-meta"><span class="chip hot mono" id="chip-bdg">0/10 unlocked</span></div>
+  </div>
+  <div class="badges" id="badges"></div>
+</section>
+
+<footer>
+  <span>Progress lives in this browser only. Same browser, same device — it'll be here when you come back.</span>
+  <button class="danger" onclick="resetAll()">Reset all progress</button>
+</footer>
+</main>
+
+<div id="toast"></div>
+
+<script>
+/* ============ DATA ============ */
+const EXAM = new Date('2026-09-25T13:30:00+05:30');
+const YT = id => 'https://www.youtube.com/watch?v=' + id;
+const PL_APT = '&list=PLpyc33gOcbVADMKqylI__O_O_RMeHTyNK';
+const PL_DSA = '&list=PLgUwDviBIf0q7vrFA_HEWcqRqMpCXzYAL';
+
+const APT = [
+  {id:'apt-syl', name:'Syllogism', video:YT('knFLfSr35wU')+PL_APT+'&index=13',
+   focus:'Draw Venn diagrams every single time — never answer from intuition. Learn the four statement types (All / No / Some / Some-not) and which conclusions are <b>definitely</b> true versus <b>possibly</b> true. Watch for "either-or" cases.'},
+  {id:'apt-pct', name:'Percentage', video:YT('RWdNhJWwzSs')+PL_APT,
+   focus:'Memorise the fraction↔percentage table up to 1/15. Master successive percentage change (a + b + ab/100) and the increase↔decrease reversal trick. Most placement questions are one substitution away from the answer.'},
+  {id:'apt-pnc', name:'Permutation & Combination', video:YT('ETiRE7N7pEI')+PL_APT,
+   focus:'Get the arrangement-vs-selection distinction right first — that single decision settles most questions. Then: repeated letters, circular arrangements, at-least/at-most cases, and the gap method for "no two together".'},
+  {id:'apt-prob', name:'Probability', video:YT('ximxxERGSUc')+PL_APT,
+   focus:'Sample spaces for a coin, a die, a deck and a bag of balls should be automatic. Know when to add (mutually exclusive) versus multiply (independent), and always check whether the complement is faster.'},
+  {id:'apt-dir', name:'Direction Sense', video:YT('x0WkptLF6oE')+PL_APT+'&index=1',
+   focus:'Always sketch it, always fix north at the top of your page. Shortest distance is just Pythagoras on the net displacement. Handle left/right turns relative to the facing direction, plus shadow questions at dawn and dusk.'},
+  {id:'apt-blood', name:'Blood Relations', video:YT('LRdLhfDupMU')+PL_APT+'&index=2',
+   focus:'Build a family tree with a fixed notation (+ male, − female, = spouse, | child). Read coded relations right-to-left. The classic trap is "the only son of my mother\'s father" — parse it slowly, one clause at a time.'},
+  {id:'apt-code', name:'Coding & Decoding', video:YT('wwN3mJ-b4FY')+PL_APT+'&index=9',
+   focus:'Write out A=1…Z=26 and the reverse before you start. Check letter-shift, opposite-letter (EJOTY), number coding, substitution and conditional coding. Difference patterns usually appear within two letters.'},
+  {id:'apt-series', name:'Number Series', video:YT('gXBuL_FyahE')+PL_APT+'&index=12',
+   focus:'Only the <b>number series</b> section of this video is on your syllabus — skip the letter and alphanumeric parts. Check in order: differences, second differences, ratios, squares/cubes ±1, primes, and alternating series.'},
+];
+
+const LEC = [
+  {n:1,  id:'lec1',  t:'Introduction to Sliding Window and 2 Pointers', v:'9kdHxplyl5I', note:'Templates and patterns — the four window types. Watch this one twice.'},
+  {n:2,  id:'lec2',  t:'Maximum Points You Can Obtain from Cards', v:'pBWCOCS636U', note:'Fixed-size window taken from both ends.'},
+  {n:3,  id:'lec3',  t:'Longest Substring Without Repeating Characters', v:'-zSxTJkcdAo', note:'Variable window with a last-seen index map.'},
+  {n:4,  id:'lec4',  t:'Max Consecutive Ones III', v:'3E4JBHSLpYk', note:'Longest window with at most K zeroes.'},
+  {n:5,  id:'lec5',  t:'Fruit Into Baskets', v:'e3bs0uA1NhQ', note:'Longest window with at most 2 distinct values.'},
+  {n:6,  id:'lec6',  t:'Longest Substring With At Most K Distinct Characters', v:'teM9ZsVRQyc', note:'The general form of lecture 5.'},
+  {n:7,  id:'lec7',  t:'Number of Substrings Containing All Three Characters', v:'xtqN4qlgr8s', note:'Counting windows instead of measuring them.'},
+  {n:8,  id:'lec8',  t:'Longest Repeating Character Replacement', v:'_eNhaDCr6P0', note:'Window length − max frequency ≤ k.'},
+  {n:9,  id:'lec9',  t:'Binary Subarrays With Sum', v:'XnMdNUkX6VM', note:'The atMost(k) − atMost(k−1) trick. Very important.'},
+  {n:10, id:'lec10', t:'Count Number of Nice Subarrays', v:'j_QOv9OT9Og', note:'Same trick as lecture 9, mapped onto odd/even.'},
+  {n:11, id:'lec11', t:'Subarray with K Different Integers', v:'7wYGbV_LsX4', note:'atMost again, this time with distinct counts.'},
+  {n:12, id:'lec12', t:'Minimum Window Substring', v:'WJaij9ffOIY', note:'The hardest one. Shrinking window with a need-map.'},
+];
+
+const P = (num,title,diff,slug,why) => ({num,title,diff,slug,why});
+const LC = {
+  arrays: {
+    label:'Arrays', icon:'📊',
+    blurb:'The base layer. If a question in Part C isn\'t two-pointer or window, it will be one of these patterns — prefix sums, hashing, in-place rearrangement.',
+    easy:[
+      P(1,'Two Sum','Easy','two-sum','Hash map complement. The single most-asked warm-up.'),
+      P(121,'Best Time to Buy and Sell Stock','Easy','best-time-to-buy-and-sell-stock','Track the minimum so far — a one-pass window in disguise.'),
+      P(217,'Contains Duplicate','Easy','contains-duplicate','Hash set in one line.'),
+      P(268,'Missing Number','Easy','missing-number','Sum formula or XOR. Know both.'),
+      P(169,'Majority Element','Easy','majority-element','Boyer–Moore voting, O(1) space.'),
+      P(66,'Plus One','Easy','plus-one','Carry propagation and the all-nines edge case.'),
+      P(1929,'Concatenation of Array','Easy','concatenation-of-array','Trivial, but good for index arithmetic warm-up.'),
+    ],
+    medium:[
+      P(53,'Maximum Subarray','Medium','maximum-subarray','Kadane. Must be automatic.'),
+      P(238,'Product of Array Except Self','Medium','product-of-array-except-self','Prefix × suffix, no division.'),
+      P(56,'Merge Intervals','Medium','merge-intervals','Sort by start, then merge overlaps.'),
+      P(189,'Rotate Array','Medium','rotate-array','Reverse three times.'),
+      P(560,'Subarray Sum Equals K','Medium','subarray-sum-equals-k','Prefix sum + hash map. Negatives kill sliding window here — know why.'),
+      P(287,'Find the Duplicate Number','Medium','find-the-duplicate-number','Floyd cycle detection on indices.'),
+      P(31,'Next Permutation','Medium','next-permutation','Pivot, swap, reverse suffix.'),
+      P(73,'Set Matrix Zeroes','Medium','set-matrix-zeroes','Use row 0 and column 0 as your markers.'),
+      P(152,'Maximum Product Subarray','Medium','maximum-product-subarray','Track min and max together because of negatives.'),
+    ],
+    hard:[
+      P(41,'First Missing Positive','Hard','first-missing-positive','Cyclic sort in place, O(1) space.'),
+      P(84,'Largest Rectangle in Histogram','Hard','largest-rectangle-in-histogram','Monotonic stack. Do this last.'),
+    ],
+  },
+  twop: {
+    label:'Two Pointer', icon:'👉',
+    blurb:'Two indices, one pass. Either converging from both ends of a sorted array, or a slow writer chasing a fast reader. Ask yourself: does the data between the pointers matter? If no, it\'s two-pointer, not a window.',
+    easy:[
+      P(125,'Valid Palindrome','Easy','valid-palindrome','Converging pointers, skip non-alphanumerics.'),
+      P(167,'Two Sum II - Input Array Is Sorted','Easy','two-sum-ii-input-array-is-sorted','The canonical converging pair. Learn why moving left raises the sum.'),
+      P(88,'Merge Sorted Array','Easy','merge-sorted-array','Fill from the back to avoid overwriting.'),
+      P(283,'Move Zeroes','Easy','move-zeroes','Writer pointer, stable order.'),
+      P(26,'Remove Duplicates from Sorted Array','Easy','remove-duplicates-from-sorted-array','Classic slow/fast writer.'),
+      P(27,'Remove Element','Easy','remove-element','Same skeleton as 26.'),
+      P(977,'Squares of a Sorted Array','Easy','squares-of-a-sorted-array','Largest absolute value lives at an end. Fill the result backwards.'),
+      P(392,'Is Subsequence','Easy','is-subsequence','Two independent forward pointers.'),
+      P(344,'Reverse String','Easy','reverse-string','Thirty seconds. Just confirm the skeleton.'),
+    ],
+    medium:[
+      P(15,'3Sum','Medium','3sum','Sort, fix one, two-pointer the rest. Duplicate skipping is where people lose marks.'),
+      P(16,'3Sum Closest','Medium','3sum-closest','Same loop, different objective.'),
+      P(18,'4Sum','Medium','4sum','Two fixed indices plus a pair. Mind the overflow.'),
+      P(11,'Container With Most Water','Medium','container-with-most-water','Always move the shorter side. Be able to justify that.'),
+      P(75,'Sort Colors','Medium','sort-colors','Dutch national flag, three pointers, one pass.'),
+      P(80,'Remove Duplicates from Sorted Array II','Medium','remove-duplicates-from-sorted-array-ii','Writer pointer with an allowance of two.'),
+      P(881,'Boats to Save People','Medium','boats-to-save-people','Sort, then pair lightest with heaviest.'),
+      P(763,'Partition Labels','Medium','partition-labels','Last-occurrence map plus an expanding boundary.'),
+      P(986,'Interval List Intersections','Medium','interval-list-intersections','Two pointers across two arrays.'),
+    ],
+    hard:[
+      P(42,'Trapping Rain Water','Hard','trapping-rain-water','Converging pointers with running max on each side. A favourite in interviews.'),
+    ],
+  },
+  window: {
+    label:'Sliding Window', icon:'🪟',
+    blurb:'A contiguous chunk that grows at the right and shrinks at the left. Fixed size when the question gives you K; variable when it asks for longest, shortest, or a count. For "exactly K", compute atMost(K) − atMost(K−1).',
+    easy:[
+      P(643,'Maximum Average Subarray I','Easy','maximum-average-subarray-i','The plain fixed-size window.'),
+      P(219,'Contains Duplicate II','Easy','contains-duplicate-ii','Window of size k held in a set.'),
+      P(1876,'Substrings of Size Three with Distinct Characters','Easy','substrings-of-size-three-with-distinct-characters','Fixed window, distinct check.'),
+    ],
+    medium:[
+      P(3,'Longest Substring Without Repeating Characters','Medium','longest-substring-without-repeating-characters','The one everyone asks. Lecture 3.'),
+      P(1423,'Maximum Points You Can Obtain from Cards','Medium','maximum-points-you-can-obtain-from-cards','Lecture 2 — window from both ends.'),
+      P(1004,'Max Consecutive Ones III','Medium','max-consecutive-ones-iii','Lecture 4 — at most K zeroes.'),
+      P(904,'Fruit Into Baskets','Medium','fruit-into-baskets','Lecture 5 — at most 2 distinct.'),
+      P(340,'Longest Substring with At Most K Distinct Characters','Medium','longest-substring-with-at-most-k-distinct-characters','Lecture 6. Premium on LeetCode — GeeksforGeeks has it free.'),
+      P(424,'Longest Repeating Character Replacement','Medium','longest-repeating-character-replacement','Lecture 8 — length − maxFreq ≤ k.'),
+      P(930,'Binary Subarrays With Sum','Medium','binary-subarrays-with-sum','Lecture 9 — the atMost trick.'),
+      P(1248,'Count Number of Nice Subarrays','Medium','count-number-of-nice-subarrays','Lecture 10 — same trick, odd counts.'),
+      P(1358,'Number of Substrings Containing All Three Characters','Medium','number-of-substrings-containing-all-three-characters','Lecture 7 — counting valid windows.'),
+      P(209,'Minimum Size Subarray Sum','Medium','minimum-size-subarray-sum','Shortest window ≥ target. Shrink aggressively.'),
+      P(567,'Permutation in String','Medium','permutation-in-string','Fixed window with a frequency match.'),
+      P(438,'Find All Anagrams in a String','Medium','find-all-anagrams-in-a-string','Same as 567, collect every start index.'),
+      P(1456,'Maximum Number of Vowels in a Substring of Given Length','Medium','maximum-number-of-vowels-in-a-substring-of-given-length','Easy fixed window — use it to build speed.'),
+    ],
+    hard:[
+      P(76,'Minimum Window Substring','Hard','minimum-window-substring','Lecture 12. Learn it properly, it comes up everywhere.'),
+      P(992,'Subarrays with K Different Integers','Hard','subarrays-with-k-different-integers','Lecture 11 — atMost(k) − atMost(k−1).'),
+      P(239,'Sliding Window Maximum','Hard','sliding-window-maximum','Monotonic deque. Different tool, same window.'),
+    ],
+  },
+};
+
+const BADGES = [
+  {id:'b-first', ico:'🎯', nm:'First Move',       ds:'Finish your first item'},
+  {id:'b-apt',   ico:'🧠', nm:'Aptitude Ace',     ds:'All 8 aptitude topics'},
+  {id:'b-lec',   ico:'📺', nm:'Lecture Complete', ds:'All 12 DSA lectures'},
+  {id:'b-arr',   ico:'📊', nm:'Array Assassin',   ds:'Every array problem'},
+  {id:'b-two',   ico:'👉', nm:'Pointer Pro',      ds:'Every two-pointer problem'},
+  {id:'b-win',   ico:'🪟', nm:'Window Wizard',    ds:'Every sliding-window problem'},
+  {id:'b-hard',  ico:'🔥', nm:'Hard Mode',        ds:'All 6 hard problems'},
+  {id:'b-note',  ico:'✍️', nm:'Scribe',           ds:'Notes on 12 different items'},
+  {id:'b-half',  ico:'⚡', nm:'Halfway There',    ds:'50% of everything done'},
+  {id:'b-all',   ico:'👑', nm:'Exam Ready',       ds:'100% of everything done'},
+];
+
+const LEVELS = [
+  {n:'LVL 1', min:0,    max:400},
+  {n:'LVL 2', min:400,  max:1100},
+  {n:'LVL 3', min:1100, max:2100},
+  {n:'LVL 4', min:2100, max:3400},
+  {n:'LVL 5', min:3400, max:5000},
+  {n:'LVL 6', min:5000, max:Infinity},
+];
+
+/* ============ REGISTRY ============ */
+const ITEMS = {};                     // id -> {kind, label, group, xpDone}
+APT.forEach(a => ITEMS[a.id] = {kind:'apt', label:a.name, group:'Aptitude', xpDone:120});
+LEC.forEach(l => ITEMS[l.id] = {kind:'lec', label:'L'+l.n+' · '+l.t, group:'Lectures', xpDone:80});
+const XP_BY_DIFF = {Easy:35, Medium:70, Hard:120};
+Object.keys(LC).forEach(k => {
+  ['easy','medium','hard'].forEach(lvl => LC[k][lvl].forEach(p => {
+    p.id = 'lc-' + k + '-' + p.num;
+    ITEMS[p.id] = {kind:'lc', label:'#'+p.num+' '+p.title, group:LC[k].label, xpDone:XP_BY_DIFF[p.diff]};
+  }));
+});
+const ALL_IDS = Object.keys(ITEMS);
+const TOTAL = ALL_IDS.length;
+const XP_WORKING = 10;
+
+/* ============ STATE ============ */
+const KEY = 'stepPrep_v1';
+let S = {items:{}, notes:{}, xp:0, badges:{}, oop:''};
+try{
+  const raw = localStorage.getItem(KEY);
+  if(raw){ const p = JSON.parse(raw); S = Object.assign(S, p||{}); }
+}catch(e){ /* storage unavailable or corrupt — carry on with defaults */ }
+S.items = S.items || {}; S.notes = S.notes || {}; S.badges = S.badges || {}; S.xp = S.xp || 0;
+
+function save(){ try{ localStorage.setItem(KEY, JSON.stringify(S)); }catch(e){} }
+const st = id => S.items[id] || 'todo';
+const isDone = id => st(id) === 'done';
+
+/* ============ HELPERS ============ */
+const esc = s => String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+const el = id => document.getElementById(id);
+function countDone(ids){ return ids.filter(isDone).length; }
+
+function toast(msg){
+  const box = el('toast');
+  const t = document.createElement('div');
+  t.className = 'toast'; t.textContent = msg;
+  box.appendChild(t);
+  setTimeout(()=>{ t.style.opacity='0'; t.style.transition='opacity .35s'; setTimeout(()=>t.remove(),360); }, 2600);
+}
+function levelOf(xp){ for(let i=LEVELS.length-1;i>=0;i--) if(xp>=LEVELS[i].min) return LEVELS[i]; return LEVELS[0]; }
+
+/* ============ COUNTDOWN ============ */
+function tickClock(){
+  const diff = EXAM - new Date();
+  const cd = el('cd');
+  if(diff <= 0){
+    el('cd-d').textContent='00'; el('cd-h').textContent='00';
+    el('cd-m').textContent='00'; el('cd-s').textContent='00';
+    cd.classList.add('cd-urgent');
+    el('hero-line').textContent = 'The assessment window has started. Good luck — you prepared for this.';
+    return;
+  }
+  const s = Math.floor(diff/1000);
+  const pad = n => String(n).padStart(2,'0');
+  el('cd-d').textContent = pad(Math.floor(s/86400));
+  el('cd-h').textContent = pad(Math.floor(s%86400/3600));
+  el('cd-m').textContent = pad(Math.floor(s%3600/60));
+  el('cd-s').textContent = pad(s%60);
+  cd.classList.toggle('cd-urgent', diff < 48*3600*1000);
+}
+
+/* ============ STATE CHANGES ============ */
+function setState(id, next){
+  const prev = st(id);
+  if(prev === next) return;
+  const meta = ITEMS[id];
+  if(prev === 'working') S.xp -= XP_WORKING;
+  if(prev === 'done')    S.xp -= meta.xpDone;
+  if(next === 'working') S.xp += XP_WORKING;
+  if(next === 'done')    S.xp += meta.xpDone;
+  if(S.xp < 0) S.xp = 0;
+  S.items[id] = next;
+  save();
+  if(next === 'done') toast('✓ ' + meta.label + '  +' + meta.xpDone + ' XP');
+  const card = el('it-' + id);
+  if(card) card.className = 'item st-' + next;
+  const wip = card && card.querySelector('.btn-wip');
+  if(wip){
+    wip.classList.toggle('on', next === 'working');
+    wip.textContent = next === 'working' ? '⟳ In progress' : '⟳ Mark in progress';
+  }
+  renderAll();
+  checkBadges();
+}
+function toggleDone(id){ setState(id, isDone(id) ? 'todo' : 'done'); }
+function toggleWorking(id){ setState(id, st(id)==='working' ? 'todo' : 'working'); }
+function toggleDrawer(id){
+  const d = el('dr-'+id), c = el('ca-'+id);
+  if(!d) return;
+  d.classList.toggle('open');
+  if(c) c.textContent = d.classList.contains('open') ? '▲' : '▼';
+}
+function resetAll(){
+  if(!confirm('Clear every tick, note and badge? This cannot be undone.')) return;
+  S = {items:{}, notes:{}, xp:0, badges:{}, oop:''};
+  save(); buildAll(); renderAll(); renderBadges();
+  toast('Progress cleared. Fresh start.');
+}
+
+/* ============ BADGES ============ */
+function checkBadges(){
+  const aptIds  = APT.map(a=>a.id);
+  const lecIds  = LEC.map(l=>l.id);
+  const gIds = k => ['easy','medium','hard'].flatMap(l => LC[k][l].map(p=>p.id));
+  const hardIds = Object.keys(LC).flatMap(k => LC[k].hard.map(p=>p.id));
+  const doneN = countDone(ALL_IDS);
+  const notesN = Object.values(S.notes).filter(v => v && v.trim().length > 3).length;
+
+  const tests = {
+    'b-first': doneN >= 1,
+    'b-apt'  : countDone(aptIds) === aptIds.length,
+    'b-lec'  : countDone(lecIds) === lecIds.length,
+    'b-arr'  : countDone(gIds('arrays')) === gIds('arrays').length,
+    'b-two'  : countDone(gIds('twop'))   === gIds('twop').length,
+    'b-win'  : countDone(gIds('window')) === gIds('window').length,
+    'b-hard' : countDone(hardIds) === hardIds.length,
+    'b-note' : notesN >= 12,
+    'b-half' : doneN >= Math.ceil(TOTAL/2),
+    'b-all'  : doneN === TOTAL,
+  };
+  let fresh = null;
+  BADGES.forEach(b => {
+    if(tests[b.id] && !S.badges[b.id]){ S.badges[b.id] = true; fresh = b; }
+  });
+  if(fresh){
+    save(); renderBadges(fresh.id);
+    toast('🏆 Badge unlocked — ' + fresh.nm);
+  } else renderBadges();
+}
+
+/* ============ BUILDERS ============ */
+function stateBtns(id){
+  const s = st(id);
+  return '<button class="btn btn-wip'+(s==='working'?' on':'')+'" onclick="event.stopPropagation();toggleWorking(\''+id+'\')">'+
+         (s==='working'?'⟳ In progress':'⟳ Mark in progress')+'</button>';
+}
+function notesBlock(id, placeholder){
+  return '<span class="lbl">YOUR NOTES</span>'+
+    '<textarea data-note="'+id+'" placeholder="'+esc(placeholder)+'">'+esc(S.notes[id]||'')+'</textarea>'+
+    '<div class="ta-foot"><span>Saved automatically</span><span data-saved="'+id+'"></span></div>';
+}
+
+function buildApt(){
+  el('apt-list').innerHTML = APT.map(a => {
+    const s = st(a.id);
+    return '<div class="item st-'+s+'" id="it-'+a.id+'">'+
+      '<div class="item-head" onclick="toggleDrawer(\''+a.id+'\')">'+
+        '<div class="tick" onclick="event.stopPropagation();toggleDone(\''+a.id+'\')" title="Mark complete">✓</div>'+
+        '<div class="item-body">'+
+          '<div class="item-title">'+esc(a.name)+'</div>'+
+          '<div class="item-actions">'+
+            '<a class="btn btn-yt" target="_blank" rel="noopener" href="'+a.video+'" onclick="event.stopPropagation()">▶ Watch</a>'+
+            stateBtns(a.id)+
+          '</div>'+
+        '</div>'+
+        '<span class="caret" id="ca-'+a.id+'">▼</span>'+
+      '</div>'+
+      '<div class="drawer" id="dr-'+a.id+'"><div class="drawer-in">'+
+        '<div class="focus-box">'+a.focus+'</div>'+
+        notesBlock(a.id, 'Shortcuts, formulas, the one trick you keep forgetting…')+
+      '</div></div>'+
+    '</div>';
+  }).join('');
+}
+
+function buildLectures(){
+  return '<div class="focus-box" style="margin-bottom:16px">Striver\'s <b>Two Pointer and Sliding Window</b> playlist — 12 lectures, roughly 6 hours end to end. Watch in order; lectures 9 to 11 all reuse the same counting trick, so don\'t skip 9.</div>'+
+    LEC.map(l => {
+      const s = st(l.id);
+      const url = YT(l.v) + PL_DSA + '&index=' + l.n;
+      return '<div class="item st-'+s+'" id="it-'+l.id+'">'+
+        '<div class="item-head" onclick="toggleDrawer(\''+l.id+'\')">'+
+          '<div class="tick" onclick="event.stopPropagation();toggleDone(\''+l.id+'\')" title="Mark watched">✓</div>'+
+          '<div class="item-body">'+
+            '<div class="item-title"><span class="lnum">L'+l.n+'</span>'+esc(l.t)+'</div>'+
+            '<div class="item-sub">'+esc(l.note)+'</div>'+
+            '<div class="item-actions">'+
+              '<a class="btn btn-yt" target="_blank" rel="noopener" href="'+url+'" onclick="event.stopPropagation()">▶ Watch</a>'+
+              stateBtns(l.id)+
+            '</div>'+
+          '</div>'+
+          '<span class="caret" id="ca-'+l.id+'">▼</span>'+
+        '</div>'+
+        '<div class="drawer" id="dr-'+l.id+'"><div class="drawer-in">'+
+          notesBlock(l.id, 'Intuition, the template, the edge case that broke your first attempt…')+
+        '</div></div>'+
+      '</div>';
+    }).join('');
+}
+
+function buildProblems(key){
+  const g = LC[key];
+  const diffClass = {Easy:'d-easy', Medium:'d-med', Hard:'d-hard'};
+  let html = '<div class="focus-box" style="margin-bottom:18px">'+esc(g.blurb)+'</div>';
+  [['easy','Easy'],['medium','Medium'],['hard','Hard']].forEach(([k,label]) => {
+    const list = g[k]; if(!list.length) return;
+    const n = countDone(list.map(p=>p.id));
+    html += '<div class="sec-h"><h3>'+label+'</h3><div class="rule"></div><span class="tally" data-tally="'+key+'.'+k+'">'+n+'/'+list.length+'</span></div>';
+    html += list.map(p => {
+      const s = st(p.id);
+      const url = 'https://leetcode.com/problems/'+p.slug+'/';
+      return '<div class="item st-'+s+'" id="it-'+p.id+'">'+
+        '<div class="item-head" onclick="toggleDrawer(\''+p.id+'\')">'+
+          '<div class="tick" onclick="event.stopPropagation();toggleDone(\''+p.id+'\')" title="Mark solved">✓</div>'+
+          '<div class="item-body">'+
+            '<div class="item-title"><span class="lnum">#'+p.num+'</span>'+esc(p.title)+'<span class="pill '+diffClass[p.diff]+'">'+p.diff+'</span></div>'+
+            '<div class="item-sub">'+esc(p.why)+'</div>'+
+            '<div class="item-actions">'+
+              '<a class="btn btn-lc" target="_blank" rel="noopener" href="'+url+'" onclick="event.stopPropagation()">Open on LeetCode</a>'+
+              stateBtns(p.id)+
+            '</div>'+
+          '</div>'+
+          '<span class="caret" id="ca-'+p.id+'">▼</span>'+
+        '</div>'+
+        '<div class="drawer" id="dr-'+p.id+'"><div class="drawer-in">'+
+          notesBlock(p.id, 'Approach, complexity, and what you would do differently next time…')+
+        '</div></div>'+
+      '</div>';
+    }).join('');
+  });
+  return html;
+}
+
+let dsaView = 'lectures';
+function buildDsa(){
+  el('dsa-body').innerHTML = dsaView === 'lectures' ? buildLectures() : buildProblems(dsaView);
+  wireNotes();
+}
+
+function renderBadges(freshId){
+  const n = BADGES.filter(b => S.badges[b.id]).length;
+  el('badges').innerHTML = BADGES.map(b => {
+    const on = !!S.badges[b.id];
+    return '<div class="bdg '+(on?'unlocked':'locked')+(freshId===b.id?' pop':'')+'">'+
+      '<span class="ico">'+b.ico+'</span>'+
+      '<div class="nm">'+esc(b.nm)+'</div>'+
+      '<div class="ds">'+esc(b.ds)+'</div>'+
+    '</div>';
+  }).join('');
+  el('bdg-n').textContent = n + '/10';
+  el('chip-bdg').textContent = n + '/10 unlocked';
+}
+
+/* ============ RENDER ============ */
+function renderAll(){
+  // xp + level
+  const lv = levelOf(S.xp);
+  const pct = lv.max === Infinity ? 100 : Math.min(100, Math.round((S.xp - lv.min) / (lv.max - lv.min) * 100));
+  el('lvl').textContent = lv.n;
+  el('xp').textContent = S.xp.toLocaleString() + ' XP';
+  el('xp-bar').style.width = pct + '%';
+  el('xp-next').textContent = lv.max === Infinity ? 'max level' : (lv.max - S.xp).toLocaleString() + ' to next';
+
+  // per-group counts
+  const aptIds = APT.map(a=>a.id), lecIds = LEC.map(l=>l.id);
+  const gIds = k => ['easy','medium','hard'].flatMap(l => LC[k][l].map(p=>p.id));
+  const lcIds = Object.keys(LC).flatMap(gIds);
+  const aptD = countDone(aptIds), lecD = countDone(lecIds), lcD = countDone(lcIds);
+  const doneN = aptD + lecD + lcD;
+  const overall = Math.round(doneN / TOTAL * 100);
+
+  el('t-apt').textContent = aptD + '/' + aptIds.length;
+  el('t-dsa').textContent = (lecD + lcD) + '/' + (lecIds.length + lcIds.length);
+  el('chip-apt').textContent = aptD + '/' + aptIds.length + ' done';
+  el('chip-lec').textContent = lecD + '/12 lectures';
+  el('chip-lc').textContent  = lcD + ' problems solved';
+  el('chip-overall').textContent = overall + '% complete';
+
+  // syllabus part cards
+  const partData = [
+    {ico:'🧮', h:'Part A · Aptitude', sub:'30 minutes · 8 topics', pane:'apt', d:aptD, t:aptIds.length, c:'var(--teal)',
+     lines:['<span>'+aptD+'</span> of '+aptIds.length+' topics watched and ticked', (aptIds.length-aptD)+' still to go']},
+    {ico:'🧩', h:'Part B · OOP', sub:'45 minutes · not filled in yet', pane:'oop', d:0, t:0, c:'var(--violet)',
+     lines:['Based on System Design Saturday classes','up to and including 19 Sep 2026']},
+    {ico:'⚙️', h:'Part C · DSA', sub:'45 minutes · arrays, two pointer, window', pane:'dsa', d:lecD+lcD, t:lecIds.length+lcIds.length, c:'var(--sky)',
+     lines:['<span>'+lecD+'</span> of 12 lectures watched','<span>'+lcD+'</span> of '+lcIds.length+' problems solved']},
+  ];
+  el('parts').innerHTML = partData.map(p => {
+    const pc = p.t ? Math.round(p.d/p.t*100) : 0;
+    return '<div class="part">'+
+      '<div class="part-top">'+
+        '<span class="part-ico">'+p.ico+'</span>'+
+        '<div><h4>'+p.h+'</h4><div class="sub">'+p.sub+'</div></div>'+
+        '<div class="pct mono" style="color:'+(p.t?p.c:'var(--mute)')+'">'+(p.t?pc+'%':'—')+'</div>'+
+      '</div>'+
+      '<div class="bar"><span style="width:'+pc+'%;background:'+p.c+'"></span></div>'+
+      '<div class="breakdown">'+p.lines.join('<br>')+'</div>'+
+      '<button class="go" onclick="goto(\''+p.pane+'\')">Open →</button>'+
+    '</div>';
+  }).join('');
+
+  // pending / done lists
+  const rows = ALL_IDS.map(id => ({id, ...ITEMS[id]}));
+  const fmt = r => '<li><b>'+esc(r.group)+'</b><span>'+esc(r.label)+'</span></li>';
+  const pend = rows.filter(r => !isDone(r.id));
+  const dn   = rows.filter(r =>  isDone(r.id));
+  document.querySelectorAll('[data-tally]').forEach(sp => {
+    const [gk, lvl] = sp.dataset.tally.split('.');
+    const list = LC[gk][lvl];
+    sp.textContent = countDone(list.map(p => p.id)) + '/' + list.length;
+  });
+
+  el('pending').innerHTML = pend.length ? pend.map(fmt).join('') : '<div class="empty">Nothing left. You are done.</div>';
+  el('done').innerHTML    = dn.length   ? dn.map(fmt).join('')   : '<div class="empty">Nothing ticked off yet — start with one aptitude video.</div>';
+}
+
+/* ============ NOTES WIRING ============ */
+function wireNotes(){
+  document.querySelectorAll('textarea[data-note]').forEach(ta => {
+    if(ta.dataset.wired) return;
+    ta.dataset.wired = '1';
+    let timer;
+    ta.addEventListener('input', () => {
+      const id = ta.dataset.note;
+      S.notes[id] = ta.value;
+      clearTimeout(timer);
+      timer = setTimeout(() => {
+        save();
+        const flag = document.querySelector('[data-saved="'+id+'"]');
+        if(flag){ flag.textContent = 'saved'; setTimeout(()=>{ if(flag) flag.textContent=''; }, 1400); }
+        checkBadges();
+      }, 500);
+    });
+  });
+}
+
+/* ============ NAV ============ */
+function goto(pane){
+  document.querySelectorAll('.tab').forEach(t => t.classList.toggle('on', t.dataset.p === pane));
+  document.querySelectorAll('.panel').forEach(p => p.classList.toggle('on', p.id === 'p-' + pane));
+  window.scrollTo({top:0, behavior:'smooth'});
+}
+document.querySelectorAll('.tab').forEach(t => t.addEventListener('click', () => goto(t.dataset.p)));
+document.querySelectorAll('.stab').forEach(b => b.addEventListener('click', () => {
+  dsaView = b.dataset.d;
+  document.querySelectorAll('.stab').forEach(x => x.classList.toggle('on', x === b));
+  buildDsa();
+}));
+
+/* ============ OOP SCRATCHPAD ============ */
+const scratch = el('oop-scratch');
+scratch.value = S.oop || '';
+let sTimer;
+scratch.addEventListener('input', () => {
+  S.oop = scratch.value;
+  clearTimeout(sTimer);
+  sTimer = setTimeout(() => { save(); el('oop-saved').textContent='saved'; setTimeout(()=>el('oop-saved').textContent='',1400); }, 500);
+});
+
+/* ============ BOOT ============ */
+function buildAll(){ buildApt(); buildDsa(); wireNotes(); }
+buildAll();
+renderAll();
+renderBadges();
+tickClock();
+setInterval(tickClock, 1000);
+</script>
+</body>
+</html>
