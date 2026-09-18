@@ -90,7 +90,7 @@
             max-width: 840px;
         }
 
-        /* Premium Header Architecture */
+        /* Header Architecture */
         header {
             margin-bottom: 48px;
             display: flex;
@@ -137,7 +137,7 @@
             animation: pulse 2s infinite;
         }
 
-        /* Ultra-Sleek Switch Toggle Styles */
+        /* Switch Toggle Styles */
         .theme-toggle-btn {
             background: var(--badge-bg);
             border: 1px solid var(--border-color);
@@ -165,7 +165,6 @@
             stroke-width: 2;
         }
 
-        /* Hide specific icon states cleanly */
         [data-theme="light"] .sun-icon,
         [data-theme="dark"] .moon-icon {
             display: none;
@@ -202,11 +201,12 @@
                         background-color var(--transition-speed) var(--transition-curve);
         }
 
-        .apps-grid .app-card:nth-child(1) { animation-delay: 0.05s; }
-        .apps-grid .app-card:nth-child(2) { animation-delay: 0.12s; }
-        .apps-grid .app-card:nth-child(3) { animation-delay: 0.19s; }
-        .apps-grid .app-card:nth-child(4) { animation-delay: 0.26s; }
-        .apps-grid .app-card:nth-child(5) { animation-delay: 0.33s; }
+        .apps-grid .app-card:nth-child(1) { animation-delay: 0.04s; }
+        .apps-grid .app-card:nth-child(2) { animation-delay: 0.10s; }
+        .apps-grid .app-card:nth-child(3) { animation-delay: 0.16s; }
+        .apps-grid .app-card:nth-child(4) { animation-delay: 0.22s; }
+        .apps-grid .app-card:nth-child(5) { animation-delay: 0.28s; }
+        .apps-grid .app-card:nth-child(6) { animation-delay: 0.34s; }
 
         /* Fluid Cursor Follow Aura */
         .app-card::before {
@@ -413,12 +413,36 @@
 
         <main class="apps-grid">
 
-            <!-- 0. NPTEL Interview Prep (New - First) -->
-            <a href="./NPTEL%20Interview%20Prep/" class="app-card p5">
+            <!-- 0. STEP Major Assessment Prep Tracker (Latest Addition) -->
+            <a href="./Small-WebPages/STEP%20Major%20Assessment/index.html" class="app-card p5">
+                <div class="app-info">
+                    <div class="app-meta">
+                        <span class="app-badge">ASSESSMENT</span>
+                        <span class="app-badge new-badge">NEW</span>
+                    </div>
+                    <div class="app-title">STEP Major Assessment</div>
+                    <div class="app-desc">Comprehensive 120-minute prep hub: Part A Aptitude, Part B Object-Oriented Programming, and Part C DSA (Arrays, Two Pointer, Sliding Window) with live XP, notes, and milestones.</div>
+
+                    <div class="app-visual">
+                        <div class="visual-text">
+                            <span>Exam Target</span>
+                            <span>25 Sep 2026 · 1:30 PM</span>
+                        </div>
+                        <div class="progress-bar-bg">
+                            <div class="progress-bar-fill" style="width: 100%;"></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="app-action">
+                    <svg viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+                </div>
+            </a>
+
+            <!-- 1. NPTEL Interview Prep -->
+            <a href="./NPTEL%20Interview%20Prep/" class="app-card p1">
                 <div class="app-info">
                     <div class="app-meta">
                         <span class="app-badge">INTERNSHIP</span>
-                        <span class="app-badge new-badge">NEW</span>
                     </div>
                     <div class="app-title">NPTEL Interview Prep</div>
                     <div class="app-desc">Round-2 briefing for the Built Environment Lab, IIT Roorkee — lab research threads, DBMS ammunition, resume line-by-line defense, and a 90-second answer timer.</div>
@@ -438,7 +462,7 @@
                 </div>
             </a>
 
-            <!-- 1. LeetCode Company Wise -->
+            <!-- 2. LeetCode Company Wise -->
             <a href="./Leetcode%20Company%20Wise%20Question%20/" class="app-card p4">
                 <div class="app-info">
                     <div class="app-meta">
@@ -462,7 +486,7 @@
                 </div>
             </a>
 
-            <!-- 2. LeetCode Analytics Tracker -->
+            <!-- 3. LeetCode Analytics Tracker -->
             <a href="./Leetcode%20Target/" class="app-card p2">
                 <div class="app-info">
                     <div class="app-meta">
@@ -486,7 +510,7 @@
                 </div>
             </a>
 
-            <!-- 3. DSA Timetable Plan -->
+            <!-- 4. DSA Timetable Plan -->
             <a href="./TimeTable/" class="app-card p3">
                 <div class="app-info">
                     <div class="app-meta">
@@ -510,7 +534,7 @@
                 </div>
             </a>
 
-            <!-- 4. GPA Calculator Sem 4 -->
+            <!-- 5. GPA Calculator Sem 4 -->
             <a href="./GPA%20Sem%204/" class="app-card p1">
                 <div class="app-info">
                     <div class="app-meta">
@@ -553,14 +577,12 @@
         /* Dynamic Theme State Alternator Script */
         const toggleBtn = document.getElementById('themeToggle');
         
-        // Detect initial saved state or user default preference
         const currentSavedTheme = localStorage.getItem('hub-theme');
         const systemPrefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
         
         let activeTheme = currentSavedTheme || (systemPrefersDark ? 'dark' : 'light');
         document.documentElement.setAttribute('data-theme', activeTheme);
 
-        // Toggle state functionality
         toggleBtn.addEventListener('click', () => {
             activeTheme = (activeTheme === 'light') ? 'dark' : 'light';
             document.documentElement.setAttribute('data-theme', activeTheme);
