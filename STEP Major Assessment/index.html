@@ -152,8 +152,8 @@ main{padding:26px 0 80px}
 .btn-wip{color:var(--amber);border-color:rgba(247,185,85,.3);background:rgba(247,185,85,.07)}
 .btn-wip:hover,.btn-wip.on{background:rgba(247,185,85,.18);border-color:var(--amber)}
 
-.drawer{max-height:0;opacity:0;overflow:hidden;transition:max-height .35s ease,opacity .25s ease}
-.drawer.open{max-height:1400px;opacity:1}
+.drawer{max-height:0;opacity:0;overflow:hidden;transition:max-height .45s ease,opacity .3s ease}
+.drawer.open{opacity:1}
 .drawer-in{padding:0 16px 16px;border-top:1px solid var(--line);padding-top:14px;margin-top:2px}
 .lbl{font-family:'JetBrains Mono',monospace;font-size:10px;font-weight:700;letter-spacing:.1em;color:var(--mute);margin-bottom:7px;display:block}
 textarea{width:100%;background:var(--ink);border:1px solid var(--line);border-radius:10px;padding:11px 13px;color:var(--fg);font-family:'JetBrains Mono',monospace;font-size:12px;line-height:1.65;resize:vertical;min-height:92px;transition:border-color .2s,box-shadow .2s}
@@ -183,6 +183,65 @@ textarea:focus{outline:none;border-color:var(--teal);box-shadow:0 0 0 3px rgba(4
 .stab{font-family:'JetBrains Mono',monospace;font-size:11.5px;font-weight:600;padding:7px 13px;border-radius:9px;border:1px solid transparent;background:var(--card);color:var(--mute);cursor:pointer;transition:all .2s}
 .stab:hover{color:var(--fg);background:var(--elev)}
 .stab.on{color:var(--teal);border-color:rgba(45,212,191,.45);background:rgba(45,212,191,.1)}
+pre.code{background:var(--ink);border:1px solid var(--line);border-radius:10px;padding:13px 15px;font-family:'JetBrains Mono',monospace;font-size:11.5px;line-height:1.75;color:#a8d8e8;overflow-x:auto;white-space:pre;margin-top:4px}
+pre.code .k{color:var(--violet)}
+.steps{list-style:none;counter-reset:s;display:flex;flex-direction:column;gap:7px}
+.steps li{counter-increment:s;font-size:12.5px;color:var(--fg-dim);line-height:1.6;padding-left:28px;position:relative}
+.steps li::before{content:counter(s);position:absolute;left:0;top:1px;width:19px;height:19px;border-radius:6px;background:var(--elev);border:1px solid var(--line);color:var(--mute);font-family:'JetBrains Mono',monospace;font-size:10px;display:grid;place-items:center}
+.keys{list-style:none;display:flex;flex-direction:column;gap:6px}
+.keys li{font-size:12.5px;color:var(--fg-dim);line-height:1.6;padding-left:16px;position:relative}
+.keys li::before{content:'▸';position:absolute;left:0;color:var(--teal)}
+.files{display:flex;flex-wrap:wrap;gap:6px}
+.files code{font-family:'JetBrains Mono',monospace;font-size:10.5px;color:var(--lime);background:rgba(163,230,53,.08);border:1px solid rgba(163,230,53,.2);border-radius:6px;padding:3px 8px}
+.dsec{margin-bottom:16px}
+.whybox{border:1px solid var(--line-hi);border-radius:12px;padding:14px 16px;margin-bottom:14px;background:var(--elev);display:flex;flex-direction:column;gap:10px}
+.why-row{display:flex;gap:11px;align-items:flex-start;font-size:13px;line-height:1.65;color:var(--fg-dim)}
+.why-tag{flex-shrink:0;font-family:'JetBrains Mono',monospace;font-size:9.5px;font-weight:700;letter-spacing:.06em;padding:3px 8px;border-radius:6px;margin-top:1px}
+.why-before{color:var(--coral);background:rgba(251,113,133,.1);border:1px solid rgba(251,113,133,.25)}
+.why-after{color:var(--lime);background:rgba(163,230,53,.1);border:1px solid rgba(163,230,53,.25)}
+.why-next{color:var(--sky);background:rgba(56,189,248,.1);border:1px solid rgba(56,189,248,.25)}
+.plainbox{background:linear-gradient(120deg,rgba(56,189,248,.09),rgba(45,212,191,.04));border:1px solid rgba(56,189,248,.24);border-radius:12px;padding:14px 16px;font-size:13.5px;line-height:1.75;color:var(--fg);margin-bottom:16px}
+.plainbox b{display:block;font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:.11em;color:var(--sky);margin-bottom:7px;font-weight:700}
+.day{border:1px solid var(--line);border-radius:var(--r);background:var(--card);padding:16px 18px;margin-bottom:10px;transition:border-color .25s}
+.day.today{border-color:var(--teal);box-shadow:0 0 24px rgba(45,212,191,.08);background:linear-gradient(120deg,rgba(45,212,191,.06),transparent 60%)}
+.day.past{opacity:.45}
+.day-top{display:flex;align-items:baseline;gap:11px;flex-wrap:wrap;margin-bottom:10px}
+.day-top b{font-size:14px;font-weight:700}
+.day-top i{font-style:normal;font-size:12.5px;color:var(--fg-dim)}
+.day-top .now{margin-left:auto;font-family:'JetBrains Mono',monospace;font-size:10px;font-weight:700;color:#04121a;background:var(--teal);border-radius:99px;padding:2px 9px}
+.day-top .pg{margin-left:auto;font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--mute)}
+.day ul{list-style:none;display:flex;flex-direction:column;gap:6px}
+.day li{font-size:12.5px;color:var(--fg-dim);line-height:1.6;padding-left:17px;position:relative}
+.day li::before{content:'·';position:absolute;left:4px;color:var(--teal);font-weight:700}
+#modal{position:fixed;inset:0;z-index:300;background:rgba(3,6,12,.82);backdrop-filter:blur(6px);display:none;place-items:center;padding:22px}
+#modal.on{display:grid}
+.modal-box{background:var(--card);border:1px solid var(--line-hi);border-radius:16px;padding:24px;max-width:560px;width:100%}
+.modal-box h4{font-size:16px;font-weight:700;margin-bottom:8px}
+.modal-box p{font-size:13px;color:var(--fg-dim);line-height:1.65;margin-bottom:14px}
+.modal-actions{display:flex;gap:9px;flex-wrap:wrap;margin-top:12px}
+
+.dl{display:flex;flex-direction:column;gap:10px}
+.dl .row{display:grid;grid-template-columns:168px 1fr;gap:14px;align-items:baseline}
+@media(max-width:640px){.dl .row{grid-template-columns:1fr;gap:3px}}
+.dl .row b{font-size:12px;font-weight:700;color:var(--teal);font-family:'JetBrains Mono',monospace;line-height:1.5}
+.dl .row span{font-size:13px;color:var(--fg-dim);line-height:1.65}
+.concept{border:1px solid var(--line);border-radius:var(--r);background:var(--card);padding:20px;margin-bottom:14px}
+.concept h4{font-size:15.5px;font-weight:700;margin-bottom:14px;display:flex;align-items:center;gap:9px}
+.qa{border-bottom:1px solid var(--line)}
+.qa:last-child{border-bottom:none}
+.qa-q{padding:13px 2px;cursor:pointer;display:flex;gap:11px;align-items:flex-start;font-size:13.5px;font-weight:600;line-height:1.5}
+.qa-q:hover{color:var(--teal)}
+.qa-q i{font-style:normal;font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--sky);background:rgba(56,189,248,.1);border:1px solid rgba(56,189,248,.22);border-radius:5px;padding:2px 7px;flex-shrink:0;margin-top:2px}
+.qa-q em{margin-left:auto;font-style:normal;color:var(--line-hi);font-size:11px;flex-shrink:0}
+.qa-a{display:none;padding:0 2px 15px 44px;font-size:13px;line-height:1.75;color:var(--fg-dim);border-left:2px solid var(--teal);margin-left:13px}
+.qa.open .qa-a{display:block}
+.ask{list-style:none;display:flex;flex-direction:column;gap:6px}
+.ask li{font-size:12.5px;color:var(--amber);line-height:1.6;padding-left:17px;position:relative}
+.ask li::before{content:'?';position:absolute;left:0;font-weight:700;font-family:'JetBrains Mono',monospace}
+.phase-head{border:1px solid rgba(45,212,191,.22);background:linear-gradient(120deg,rgba(45,212,191,.08),transparent 70%);border-radius:var(--r);padding:16px 18px;margin-bottom:16px}
+.phase-head h4{font-size:15px;font-weight:700;display:flex;align-items:center;gap:9px;margin-bottom:6px}
+.phase-head h4 span{margin-left:auto;font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--mute);font-weight:500}
+.phase-head p{font-size:13px;color:var(--fg-dim);line-height:1.65;max-width:76ch}
 .blank{border:1px dashed var(--line-hi);border-radius:18px;padding:52px 26px;text-align:center;background:var(--card)}
 .blank .ico{font-size:40px;display:block;margin-bottom:14px;opacity:.65}
 .blank h3{font-size:19px;font-weight:700;margin-bottom:8px}
@@ -215,13 +274,13 @@ footer{border-top:1px solid var(--line);margin-top:44px;padding:18px 0;display:f
             <div class="bar"><span id="xp-bar" style="width:0%"></span></div>
           </div>
         </div>
-        <div class="badge-count mono">Badges <b id="bdg-n">0/10</b></div>
+        <div class="badge-count mono">Badges <b id="bdg-n">0/18</b></div>
       </div>
     </div>
     <nav>
       <button class="tab on" data-p="syllabus">Syllabus</button>
       <button class="tab" data-p="apt">Part A · Aptitude<em id="t-apt">0/8</em></button>
-      <button class="tab" data-p="oop">Part B · OOP<em>—</em></button>
+      <button class="tab" data-p="oop">Part B · OOP<em id="t-oop">0/20</em></button>
       <button class="tab" data-p="dsa">Part C · DSA<em id="t-dsa">0/0</em></button>
       <button class="tab" data-p="trophy">Trophy Room</button>
     </nav>
@@ -257,6 +316,9 @@ footer{border-top:1px solid var(--line);margin-top:44px;padding:18px 0;display:f
     </div>
   </div>
 
+  <div class="sec-h"><h3>Six days, day by day</h3><div class="rule"></div><span class="tally" id="plan-left"></span></div>
+  <div id="plan"></div>
+
   <div class="sec-h"><h3>Exam-day rules</h3><div class="rule"></div></div>
   <div class="list-card">
     <ul style="max-height:none">
@@ -282,19 +344,17 @@ footer{border-top:1px solid var(--line);margin-top:44px;padding:18px 0;display:f
 <!-- =============== OOP =============== -->
 <section class="panel" id="p-oop">
   <div class="hero">
-    <h2>Part B · Object-Oriented Programming</h2>
-    <p>45 minutes. Questions come from the System Design Saturday classes held up to and including 19 September 2026.</p>
+    <h2>Part B &middot; Object-Oriented Programming</h2>
+    <p>45 minutes on the System Design Saturday classes up to 19 September 2026 &mdash; the 20-activity banking system build. Five phases take one Account class all the way to a layered application — the exact build from your Saturday classes. Every activity says what problem existed before it, what it fixes, and what it unlocks next, plus a plain-English explanation and every technical word defined.</p>
+    <div class="hero-meta">
+      <span class="chip hot mono" id="chip-oop">0/20 activities</span>
+      <span class="chip mono">6 patterns</span>
+      <span class="chip mono">55 practice questions</span>
+      <span class="chip mono">plain-English glossary</span>
+    </div>
   </div>
-  <div class="blank">
-    <span class="ico">🧩</span>
-    <h3>Nothing here yet</h3>
-    <p>Add your Saturday class topics, diagrams and notes when you have them. Until then this part stays out of the progress count.</p>
-  </div>
-  <div style="margin-top:16px" class="list-card">
-    <span class="lbl">SCRATCHPAD</span>
-    <textarea id="oop-scratch" placeholder="Paste class topics, links or rough notes here for now…"></textarea>
-    <div class="ta-foot"><span>Saved automatically</span><span id="oop-saved"></span></div>
-  </div>
+  <div class="subtabs" id="oop-tabs"></div>
+  <div id="oop-body"></div>
 </section>
 
 <!-- =============== DSA =============== -->
@@ -321,16 +381,32 @@ footer{border-top:1px solid var(--line);margin-top:44px;padding:18px 0;display:f
 <section class="panel" id="p-trophy">
   <div class="hero">
     <h2>Trophy Room</h2>
-    <p>Ten badges. Each one is a real milestone, not a participation sticker — you'll have the whole set only if you're genuinely ready on the 25th.</p>
-    <div class="hero-meta"><span class="chip hot mono" id="chip-bdg">0/10 unlocked</span></div>
+    <p>Eighteen badges spread across all three parts. Each one is a real milestone, not a participation sticker — you will hold the whole set only if you are actually ready on the 25th.</p>
+    <div class="hero-meta"><span class="chip hot mono" id="chip-bdg">0/18 unlocked</span></div>
   </div>
   <div class="badges" id="badges"></div>
 </section>
 
 <footer>
-  <span>Progress lives in this browser only. Same browser, same device — it'll be here when you come back.</span>
-  <button class="danger" onclick="resetAll()">Reset all progress</button>
+  <span>Progress lives in this browser only. Use Backup before switching device, or you will start from zero.</span>
+  <div style="display:flex;gap:8px;flex-wrap:wrap">
+    <button class="btn" onclick="openBackup()">Backup / restore</button>
+    <button class="danger" onclick="resetAll()">Reset all progress</button>
+  </div>
 </footer>
+
+<div id="modal" onclick="if(event.target===this)closeBackup()">
+  <div class="modal-box">
+    <h4>Backup and restore</h4>
+    <p>Your progress lives only in this browser. Copy the text below somewhere safe — a note to yourself, an email draft — and you can paste it back here on any device to restore everything.</p>
+    <textarea id="backup-ta" style="min-height:170px" spellcheck="false"></textarea>
+    <div class="modal-actions">
+      <button class="btn btn-lc" onclick="copyBackup()">Select all &amp; copy</button>
+      <button class="btn btn-wip" onclick="restoreBackup()">Restore from pasted text</button>
+      <button class="btn" onclick="closeBackup()">Close</button>
+    </div>
+  </div>
+</div>
 </main>
 
 <div id="toast"></div>
@@ -466,6 +542,1393 @@ const LC = {
   },
 };
 
+/* ============ PART B · OOP ============ */
+const PHASES = [
+  {id:'ph1', label:'Foundations',            icon:'🧱', range:'Activities 1–6',   blurb:'Encapsulation, defensive validation and a custom checked-exception hierarchy. Everything later is built on the Account class you write here.'},
+  {id:'ph2', label:'Inheritance & Polymorphism', icon:'🌳', range:'Activities 7–10', blurb:'Four account subclasses, overridden withdrawal rules, then an abstract base class that locks the withdrawal sequence with the Template Method pattern.'},
+  {id:'ph3', label:'Interfaces & Factory',    icon:'🏭', range:'Activities 11–13', blurb:'Program to an interface, centralise object creation in a factory, and pull hardcoded business numbers into a rules engine.'},
+  {id:'ph4', label:'Config & Services',       icon:'⚙️', range:'Activities 14–16', blurb:'Rules move into .properties files, a TransferService enforces daily limits, and every money movement becomes an immutable Transaction record.'},
+  {id:'ph5', label:'Patterns & Architecture', icon:'🏛️', range:'Activities 17–20', blurb:'Command pattern with serialization, Bridge pattern for pluggable log destinations, a service layer that orchestrates everything, and a console UI on top.'},
+];
+
+const OOP = [
+{
+  n:1, id:'oop1', ph:'ph1', title:'Basic Account Class',
+  obj:'Model a bank account as a class: private data, a constructor, and deposit/withdraw behaviour that guards its own state.',
+  files:['src/com/gdb/domain/Account.java'],
+  steps:[
+    'Declare 6 private fields: accountNumber (String), name (String), age (int), balance (double), accountType (String), status (String).',
+    'Write a public constructor taking all 6 values in order, assigning each with the this keyword.',
+    'deposit(double) returns boolean — add to balance and return true only if amount > 0, otherwise leave balance untouched and return false.',
+    'withdraw(double) returns boolean — succeed only if amount > 0 AND amount <= balance.',
+    'displayAccountInfo() — void, prints all six details.',
+    'Standard getters and setters for all six fields.',
+  ],
+  key:['Encapsulation: private fields + public accessors','this keyword disambiguates field vs parameter','Boolean return as a primitive error signal (replaced by exceptions in Activity 5)','Guard clauses before mutating state'],
+  code:`public class Account {
+    private String accountNumber, name, accountType, status;
+    private int age;
+    private double balance;
+
+    public Account(String accountNumber, String name, int age,
+                   double balance, String accountType, String status) {
+        this.accountNumber = accountNumber;
+        this.name = name;
+        this.age = age;
+        this.balance = balance;
+        this.accountType = accountType;
+        this.status = status;
+    }
+
+    public boolean deposit(double amount) {
+        if (amount > 0) { this.balance += amount; return true; }
+        return false;
+    }
+
+    public boolean withdraw(double amount) {
+        if (amount > 0 && amount <= this.balance) {
+            this.balance -= amount; return true;
+        }
+        return false;
+    }
+
+    public double getBalance() { return balance; }
+}`,
+  ask:['Why must balance be private instead of public?','What does deposit(-500) return and what happens to the balance?','What is the difference between this.balance and balance inside the constructor?'],
+},
+{
+  n:2, id:'oop2', ph:'ph1', title:'Testing the Account Class',
+  obj:'Hand-write a test driver that verifies both the happy path and the edge cases, printing [PASS] / [FAIL] for each.',
+  files:['src/com/gdb/tests/TestAccount.java'],
+  steps:[
+    'Create an Account with balance 5000.0 and assert getBalance() == 5000.0.',
+    'Deposit 2000.0 — expect true and balance 7000.0.',
+    'Deposit -500.0 — expect false and balance still 7000.0.',
+    'Withdraw 3000.0 — expect true and balance 4000.0.',
+    'Withdraw 10000.0 (more than balance) — expect false, balance unchanged.',
+    'Withdraw -100.0 — expect false, balance unchanged.',
+  ],
+  key:['Edge-case testing: zero, negative, boundary, over-limit','Every test checks both the return value AND the resulting state','Comparing doubles — prefer a tolerance in real tests','Test naming and readable output'],
+  code:`public class TestAccount {
+    public static void main(String[] args) {
+        Account a = new Account("ACC1001", "Rajesh", 25, 5000.0, "SAVINGS", "ACTIVE");
+
+        check("Initial balance", a.getBalance() == 5000.0);
+        check("Valid deposit",   a.deposit(2000.0) && a.getBalance() == 7000.0);
+        check("Negative deposit", !a.deposit(-500.0) && a.getBalance() == 7000.0);
+        check("Valid withdraw",  a.withdraw(3000.0) && a.getBalance() == 4000.0);
+        check("Over-withdraw",  !a.withdraw(10000.0) && a.getBalance() == 4000.0);
+    }
+    static void check(String name, boolean ok) {
+        System.out.println(name + ": " + (ok ? "[PASS]" : "[FAIL]"));
+    }
+}`,
+  ask:['Why test negative amounts separately from over-limit amounts?','What is wrong with asserting balance == 7000.0 on doubles in production code?'],
+},
+{
+  n:3, id:'oop3', ph:'ph1', title:'Enhanced Account — Validation & PIN Security',
+  obj:'Add defensive programming: age limits, non-negative opening balance, a 4-digit PIN, PIN-protected withdrawal and status management.',
+  files:['src/com/gdb/domain/Account.java'],
+  steps:[
+    'Add a private String pin field.',
+    'Constructor validations — age >= 18, balance >= 0, pin matches exactly 4 digits. Each failure throws IllegalArgumentException with a clear message.',
+    'validatePin(String) — returns true only when the entered PIN equals the stored PIN (null-safe).',
+    'changePin(oldPin, newPin) — old PIN must validate AND new PIN must be 4 digits, then update and return true.',
+    'withdraw(double amount, String pin) — check PIN, then status == "ACTIVE", then amount positive and within balance.',
+    'suspend() / activate() / close() set status to SUSPENDED / ACTIVE / CLOSED.',
+  ],
+  key:['IllegalArgumentException is unchecked (extends RuntimeException) — no throws clause needed','Fail fast in the constructor: an object should never exist in an invalid state','Regex "\\\\d{4}" for exactly four digits','Method overloading: withdraw(double) vs withdraw(double, String)','Order of checks matters — PIN first, then status, then amount'],
+  code:`public Account(String accountNumber, String name, int age, double balance,
+               String accountType, String status, String pin) {
+    if (age < 18)
+        throw new IllegalArgumentException("Customer age must be 18 or above");
+    if (balance < 0)
+        throw new IllegalArgumentException("Initial balance cannot be negative");
+    if (pin == null || !pin.matches("\\\\d{4}"))
+        throw new IllegalArgumentException("PIN must be 4 digits");
+    // ... assignments
+}
+
+public boolean validatePin(String entered) {
+    return this.pin != null && this.pin.equals(entered);
+}
+
+public boolean withdraw(double amount, String enteredPin) {
+    if (!validatePin(enteredPin))            return false;
+    if (!"ACTIVE".equalsIgnoreCase(status))  return false;
+    if (amount <= 0 || amount > balance)     return false;
+    balance -= amount;
+    return true;
+}`,
+  ask:['Why is IllegalArgumentException thrown rather than returning false from the constructor?','Why use "ACTIVE".equalsIgnoreCase(status) instead of status.equals("ACTIVE")?','Is adding withdraw(double, String) overloading or overriding?'],
+},
+{
+  n:4, id:'oop4', ph:'ph1', title:'Enhanced Account Testing Suite',
+  obj:'Test the security layer: underage rejection, wrong PIN, PIN change invalidating the old PIN, and suspension blocking withdrawals.',
+  files:['src/com/gdb/tests/TestAccount.java'],
+  steps:[
+    'Try creating an account with age 16 inside try-catch; expect IllegalArgumentException.',
+    'Withdraw with PIN "9999" on an account whose PIN is "1234" — expect false, balance unchanged.',
+    'Withdraw with the correct PIN — expect true, balance drops.',
+    'changePin("1234","5678") returns true; old PIN now fails, new PIN succeeds.',
+    'suspend() then withdraw with the correct PIN — must fail. activate() then retry — must succeed.',
+  ],
+  key:['Testing that an exception IS thrown: put the call in try, fail if you reach the line after it','Security state transitions (ACTIVE → SUSPENDED → ACTIVE)','Negative testing is as important as positive testing'],
+  code:`try {
+    new Account("ACC9", "Minor", 16, 1000.0, "SAVINGS", "ACTIVE", "1234");
+    System.out.println("Test 1: [FAIL] - no exception thrown");
+} catch (IllegalArgumentException e) {
+    System.out.println("Test 1: [PASS] - " + e.getMessage());
+}`,
+  ask:['How do you write a test that passes only when an exception is thrown?','After changePin succeeds, why must the old PIN stop working?'],
+},
+{
+  n:5, id:'oop5', ph:'ph1', title:'Custom Exception Hierarchy',
+  obj:'Replace boolean error signalling with a structured tree of custom checked exceptions.',
+  files:['src/com/gdb/exceptions/AccountException.java','InvalidAmountException.java','InsufficientBalanceException.java','MinimumBalanceViolationException.java','InactiveAccountException.java','InvalidPinException.java','src/com/gdb/domain/Account.java'],
+  steps:[
+    'AccountException extends Exception — a constructor that passes the message up with super(message).',
+    'Five subclasses, each extending AccountException: InvalidAmountException, InsufficientBalanceException, MinimumBalanceViolationException, InactiveAccountException, InvalidPinException.',
+    'Rewrite withdraw so it throws instead of returning false: wrong PIN → InvalidPinException, non-active → InactiveAccountException, amount <= 0 → InvalidAmountException, amount > balance → InsufficientBalanceException.',
+    'Declare throws AccountException on withdraw — the single base type covers all five.',
+  ],
+  key:['Checked (extends Exception) vs unchecked (extends RuntimeException)','One base type in the throws clause covers the whole subtree','Exceptions carry context; a boolean carries none','Exception chaining with super(message) and super(message, cause)'],
+  code:`public class AccountException extends Exception {
+    public AccountException(String message) { super(message); }
+}
+
+public class InvalidPinException extends AccountException {
+    public InvalidPinException(String message) { super(message); }
+}
+
+public void withdraw(double amount, String enteredPin) throws AccountException {
+    if (!validatePin(enteredPin))
+        throw new InvalidPinException("Invalid PIN entered");
+    if (!"ACTIVE".equalsIgnoreCase(status))
+        throw new InactiveAccountException("Account is not active");
+    if (amount <= 0)
+        throw new InvalidAmountException("Withdrawal amount must be positive");
+    if (amount > balance)
+        throw new InsufficientBalanceException("Insufficient funds in account");
+    balance -= amount;
+}`,
+  ask:['Why extend Exception rather than RuntimeException here?','If withdraw declares throws AccountException, can it still throw InvalidPinException? Why?','What advantage does a custom exception have over returning false?'],
+},
+{
+  n:6, id:'oop6', ph:'ph1', title:'Exception Handling & Recovery',
+  obj:'Catch the custom exceptions with structured try-catch, show friendly messages, and demonstrate polymorphic catching through the base type.',
+  files:['src/com/gdb/tests/TestAccountExceptions.java'],
+  steps:[
+    'try { withdraw with wrong PIN } catch (InvalidPinException e) → print message, [PASS].',
+    'Suspend the account, then try a correct-PIN withdrawal → catch InactiveAccountException.',
+    'Try a negative amount → catch InvalidAmountException.',
+    'Try withdrawing more than the balance → catch InsufficientBalanceException.',
+    'Close the account, attempt an operation, and catch the base AccountException — proving one catch block handles every subclass.',
+  ],
+  key:['Catch order: most specific subclass first, base class last, or the compiler rejects unreachable blocks','Polymorphic catch — catch (AccountException e) catches all five subtypes','Multi-catch syntax: catch (A | B e)','finally always runs; try-with-resources for closeable resources'],
+  code:`try {
+    account.withdraw(1000.0, "9999");
+} catch (InvalidPinException e) {
+    System.out.println("[Test 1] Caught Invalid PIN: " + e.getMessage() + " [PASS]");
+} catch (InactiveAccountException e) {
+    System.out.println("Account inactive: " + e.getMessage());
+} catch (AccountException e) {          // base case, must come LAST
+    System.out.println("Banking error: " + e.getMessage());
+} finally {
+    System.out.println("Balance is still Rs " + account.getBalance());
+}`,
+  ask:['What happens if you put catch(AccountException) before catch(InvalidPinException)?','Name one situation where finally does not run.','How does polymorphism apply to catch blocks?'],
+},
+{
+  n:7, id:'oop7', ph:'ph2', title:'Account Subclasses (Inheritance)',
+  obj:'Create four specialised account types extending Account, each with its own fields and its own constructor calling super().',
+  files:['SavingsAccount.java','CurrentAccount.java','FixedDepositAccount.java','SalaryAccount.java'],
+  steps:[
+    'SavingsAccount — fields minBalance (1000.0) and interestRate (4.0); super(..., "SAVINGS", ...); applyInterest() adds balance * rate / 100.',
+    'CurrentAccount — field overdraftLimit (25000.0); super(..., "CURRENT", ...); getter and setter.',
+    'FixedDepositAccount — fields tenureMonths (12) and interestRate (6.5); super(..., "FIXED_DEPOSIT", ...); calculateMaturityAmount() using compound interest.',
+    'SalaryAccount — fields employerName and inactiveMonths; super(..., "SALARY", ...).',
+  ],
+  key:['extends creates an IS-A relationship','super(...) must be the first statement in the subclass constructor','Subclass adds state and behaviour; it does not copy the parent','Constructor chaining runs parent-first, top down'],
+  code:`public class SavingsAccount extends Account {
+    private double minBalance = 1000.0;
+    private double interestRate = 4.0;
+
+    public SavingsAccount(String accNum, String name, int age, double balance,
+                          String status, String pin, double minBalance, double rate) {
+        super(accNum, name, age, balance, "SAVINGS", status, pin);  // must be first
+        this.minBalance = minBalance;
+        this.interestRate = rate;
+    }
+
+    public void applyInterest() {
+        this.balance += this.balance * (interestRate / 100.0);
+    }
+}
+
+public class FixedDepositAccount extends Account {
+    private int tenureMonths = 12;
+    private double interestRate = 6.5;
+
+    public double calculateMaturityAmount() {
+        double years = tenureMonths / 12.0;
+        return balance * Math.pow(1 + interestRate / 100.0, years);
+    }
+}`,
+  ask:['Why must super(...) be the first statement in a constructor?','What is the difference between the IS-A and HAS-A relationships? Give one example from this codebase.','If the parent has no no-arg constructor, what happens when the child omits super(...)?'],
+},
+{
+  n:8, id:'oop8', ph:'ph2', title:'Polymorphism & Dynamic Method Dispatch',
+  obj:'Override withdraw in each subclass so the same call runs different business rules depending on the actual object at runtime.',
+  files:['SavingsAccount.java','CurrentAccount.java','FixedDepositAccount.java'],
+  steps:[
+    'SavingsAccount.withdraw — if (balance - amount) < minBalance, throw MinimumBalanceViolationException; otherwise delegate to super.withdraw(...).',
+    'CurrentAccount.withdraw — validate PIN, status and amount, then allow the balance to go negative down to -overdraftLimit; beyond that throw InsufficientBalanceException.',
+    'FixedDepositAccount.withdraw — always throw AccountException: premature withdrawal is not permitted before maturity.',
+    'Hold all of them in an Account[] and call withdraw on each — the JVM picks the override at runtime.',
+  ],
+  key:['Overriding = same signature, subclass version wins at runtime','Dynamic method dispatch / late binding — decided by the OBJECT, not the reference type','Overriding rules: cannot widen the checked exceptions, cannot reduce visibility','@Override is a compile-time safety net','Overloading is resolved at compile time; overriding at runtime'],
+  code:`@Override
+public void withdraw(double amount, String pin) throws AccountException {
+    if ((balance - amount) < minBalance)
+        throw new MinimumBalanceViolationException(
+            "Cannot breach minimum balance of Rs " + minBalance);
+    super.withdraw(amount, pin);      // reuse the parent's checks
+}
+
+// Runtime polymorphism in action:
+Account[] portfolio = {
+    new SavingsAccount(...), new CurrentAccount(...), new FixedDepositAccount(...)
+};
+for (Account a : portfolio) {
+    try { a.withdraw(5000, "1234"); }   // three different behaviours, one call
+    catch (AccountException e) { System.out.println(e.getMessage()); }
+}`,
+  ask:['Overloading vs overriding — give the four differences.','An Account reference holds a SavingsAccount. Which withdraw runs and why?','Can an overriding method throw a broader checked exception than the parent?','Why can a Current account balance go negative but a Savings one cannot?'],
+},
+{
+  n:9, id:'oop9', ph:'ph2', title:'Abstract Classes & the Template Method Pattern',
+  obj:'Pull shared state and the fixed withdrawal sequence into an abstract AbstractAccount, leaving only the debit step for subclasses.',
+  files:['AbstractAccount.java','SavingsAccount.java','CurrentAccount.java','FixedDepositAccount.java','SalaryAccount.java'],
+  steps:[
+    'Declare AbstractAccount as abstract; move accountNumber, name, age, balance, accountType, status and pin into it as protected fields.',
+    'Implement the shared concrete methods there: deposit, validatePin, changePin, displayAccountInfo.',
+    'Declare abstract void processDebit(double amount) throws AccountException — no body.',
+    'Write the template method withdraw: validate PIN → validate status → validate amount → call processDebit(amount). The sequence is fixed and cannot be changed by subclasses.',
+    'Each subclass implements only processDebit: Savings checks minBalance, Current checks overdraft, Salary checks balance, FixedDeposit throws.',
+  ],
+  key:['Abstract class cannot be instantiated; it can hold state and constructors','Template Method: parent fixes the ALGORITHM, subclasses fill in the STEPS','Hollywood principle — do not call us, we will call you','protected gives subclass access without going public','Any class with one abstract method must itself be abstract'],
+  code:`public abstract class AbstractAccount {
+    protected double balance;
+    protected String status, pin;
+
+    // TEMPLATE METHOD - the sequence is locked
+    public void withdraw(double amount, String enteredPin) throws AccountException {
+        if (!validatePin(enteredPin))
+            throw new InvalidPinException("Invalid PIN entered");
+        if (!"ACTIVE".equalsIgnoreCase(status))
+            throw new InactiveAccountException("Account is not active");
+        if (amount <= 0)
+            throw new InvalidAmountException("Withdrawal amount must be positive");
+        processDebit(amount);              // the varying step
+    }
+
+    public abstract void processDebit(double amount) throws AccountException;
+}
+
+// Subclass supplies only the step:
+@Override
+public void processDebit(double amount) throws AccountException {
+    if ((balance - amount) < minBalance)
+        throw new MinimumBalanceViolationException("...");
+    balance -= amount;
+}`,
+  ask:['Abstract class vs interface — when do you pick each?','Which method here is the template method and which is the hook?','Can an abstract class have a constructor? Why would it need one?','What is the compile error if SavingsAccount does not implement processDebit?'],
+},
+{
+  n:10, id:'oop10', ph:'ph2', title:'Banking Operations with Abstract Accounts',
+  obj:'Work with a heterogeneous AbstractAccount[] portfolio: transfer funds atomically and run a monthly maintenance cycle.',
+  files:['src/com/gdb/tests/TestAbstractAccount.java'],
+  steps:[
+    'Build an AbstractAccount[] holding Savings, Current and Salary accounts.',
+    'transfer(from, to, amount, pin) — withdraw from the source first; only if that succeeds, deposit into the destination. If withdrawal throws, the destination must NOT be credited.',
+    'Monthly cycle — loop the array, use instanceof to detect SavingsAccount and call applyInterest(); detect SalaryAccount and check its credit history.',
+  ],
+  key:['Heterogeneous collections via the common supertype','Atomicity — debit before credit so a failure leaves both sides untouched','instanceof plus a cast, and why heavy instanceof use hints at a missing abstraction','Pattern-matching instanceof in modern Java: if (a instanceof SavingsAccount s)'],
+  code:`public static boolean transfer(AbstractAccount from, AbstractAccount to,
+                               double amount, String pin) {
+    try {
+        from.withdraw(amount, pin);   // may throw - nothing has moved yet
+        to.deposit(amount);           // only reached when the debit succeeded
+        return true;
+    } catch (AccountException e) {
+        System.out.println("Transfer failed: " + e.getMessage());
+        return false;                 // destination untouched
+    }
+}
+
+for (AbstractAccount a : portfolio) {
+    if (a instanceof SavingsAccount) {
+        ((SavingsAccount) a).applyInterest();
+    }
+}`,
+  ask:['Why withdraw before deposit and not the other way round?','What goes wrong if deposit throws after a successful withdraw?','Why is a long chain of instanceof checks considered a design smell?'],
+},
+{
+  n:11, id:'oop11', ph:'ph3', title:'Interface & Factory Pattern',
+  obj:'Define the IAccount contract, make AbstractAccount implement it, and centralise all object creation inside AccountFactory.',
+  files:['src/com/gdb/domain/IAccount.java','src/com/gdb/domain/AccountFactory.java'],
+  steps:[
+    'IAccount declares: getAccountNumber, getName, getAge, getBalance, getAccountType, getStatus, validatePin, changePin, deposit(double) throws InvalidAmountException, withdraw(double, String) throws AccountException, displayAccountInfo().',
+    'AbstractAccount implements IAccount — it already has every method, so no code changes are needed beyond the implements clause.',
+    'AccountFactory.createAccount(type, accNum, name, age, balance, status, pin) is static and returns IAccount.',
+    'switch on type.toUpperCase(): SAVINGS, CURRENT, FIXED_DEPOSIT or FD, SALARY. Unknown type → throw IllegalArgumentException.',
+  ],
+  key:['Interface = a pure contract; a class can implement many, but extend only one','Factory pattern removes new from client code — callers ask for a type, not a class','Return the interface type so callers never depend on the concrete class','Adding a new account type touches only the factory (Open/Closed Principle)','A String switch falls through, so FD and FIXED_DEPOSIT can share one branch'],
+  code:`public interface IAccount {
+    String getAccountNumber();
+    double getBalance();
+    String getAccountType();
+    void deposit(double amount) throws InvalidAmountException;
+    void withdraw(double amount, String enteredPin) throws AccountException;
+    void displayAccountInfo();
+}
+
+public class AccountFactory {
+    public static IAccount createAccount(String type, String accNum, String name,
+            int age, double balance, String status, String pin) {
+        if (type == null) return null;
+        switch (type.toUpperCase()) {
+            case "SAVINGS":
+                return new SavingsAccount(accNum, name, age, balance, status, pin, 1000.0, 4.0);
+            case "CURRENT":
+                return new CurrentAccount(accNum, name, age, balance, status, pin, 25000.0);
+            case "FIXED_DEPOSIT":
+            case "FD":
+                return new FixedDepositAccount(accNum, name, age, balance, status, pin, 12, 6.5);
+            case "SALARY":
+                return new SalaryAccount(accNum, name, age, balance, status, pin, "TechCorp");
+            default:
+                throw new IllegalArgumentException("Unknown account type: " + type);
+        }
+    }
+}`,
+  ask:['Why does createAccount return IAccount instead of AbstractAccount?','Why is createAccount static?','Which SOLID principle does the factory serve, and how?','Can an interface have method bodies in modern Java?'],
+},
+{
+  n:12, id:'oop12', ph:'ph3', title:'Factory-Driven Banking System',
+  obj:'Write a test suite where every account is created by the factory and manipulated only through IAccount — never through a concrete class.',
+  files:['src/com/gdb/tests/TestInterfaceFactory.java'],
+  steps:[
+    'Create Savings, Current and FixedDeposit instances via AccountFactory.createAccount, each assigned to an IAccount reference.',
+    'Deposit and withdraw through those interface variables without downcasting.',
+    'Verify Savings enforces minimum balance, Current allows overdraft up to the limit, FixedDeposit rejects premature withdrawal — all through the interface.',
+    'Verify AccountFactory.createAccount("CRYPTO", ...) throws IllegalArgumentException.',
+  ],
+  key:['Program to an interface, not an implementation','Loose coupling — the test file imports no concrete account class','Behaviour still varies per type thanks to dynamic dispatch','Casting back to a concrete type defeats the purpose'],
+  code:`IAccount savings = AccountFactory.createAccount("SAVINGS",
+        "ACC1001", "Rajesh Sharma", 30, 10000.0, "ACTIVE", "1234");
+IAccount current = AccountFactory.createAccount("CURRENT",
+        "ACC1002", "Priya Patel", 35, 5000.0, "ACTIVE", "5678");
+
+savings.deposit(2000.0);
+try {
+    savings.withdraw(11500.0, "1234");     // breaches min balance
+    System.out.println("[Test] [FAIL]");
+} catch (MinimumBalanceViolationException e) {
+    System.out.println("[Test] [PASS] " + e.getMessage());
+}
+
+try {
+    AccountFactory.createAccount("CRYPTO", "X", "Y", 30, 0, "ACTIVE", "1111");
+} catch (IllegalArgumentException e) {
+    System.out.println("[Test 4] Invalid Type Rejection: [PASS]");
+}`,
+  ask:['What is lost if you declare the variable as SavingsAccount instead of IAccount?','How does this test prove loose coupling?','Why is IllegalArgumentException (unchecked) used here rather than a checked one?'],
+},
+{
+  n:13, id:'oop13', ph:'ph3', title:'Account Rules Engine (13.1 in-memory, 13.2 integration)',
+  obj:'Move hardcoded business numbers into a central AccountRulesEngine keyed by customer relationship tenure, then wire the domain classes to it.',
+  files:['src/com/gdb/domain/AccountRulesEngine.java','SavingsAccount.java','AccountFactory.java'],
+  steps:[
+    '13.1 — Define four tenure buckets. New (0–1 yr): min 10000.0, rate 2.70%. Standard (1–3 yrs): 7500.0, 3.00%. Premium (3–5 yrs): 5000.0, 3.50%. Privilege (5+ yrs): 2500.0, 4.00%.',
+    '13.1 — static getSavingsMinBalance(int tenureYears) and static getSavingsInterestRate(int tenureYears) return the bucket value.',
+    '13.1 — getCurrentOverdraftLimit(double monthlyTurnover) returns 2.5 × turnover with a floor of 25000.0. getFDInterestRate(int months) returns the rate for the tenure (6.5% at 12+ months).',
+    '13.2 — add a tenureYears field to SavingsAccount; in its constructor, pull minBalance and interestRate from the rules engine instead of hardcoding.',
+    '13.2 — AccountFactory.createAccount now accepts tenure and passes it through.',
+    '13.2 — Verify with customers of 0, 2, 4 and 6 years that the rules differ.',
+  ],
+  key:['Separation of concerns — policy lives in the engine, not the entity','A lookup Map or a tiered if-chain both work; order the checks from highest tenure down','Static utility methods versus an injected dependency','This is the step that makes Activity 14 (properties files) possible'],
+  code:`public class AccountRulesEngine {
+    public static double getSavingsMinBalance(int tenureYears) {
+        if (tenureYears >= 5) return 2500.0;    // privilege
+        if (tenureYears >= 3) return 5000.0;    // premium
+        if (tenureYears >= 1) return 7500.0;    // standard
+        return 10000.0;                         // new
+    }
+
+    public static double getSavingsInterestRate(int tenureYears) {
+        if (tenureYears >= 5) return 4.00;
+        if (tenureYears >= 3) return 3.50;
+        if (tenureYears >= 1) return 3.00;
+        return 2.70;
+    }
+
+    public static double getCurrentOverdraftLimit(double monthlyTurnover) {
+        return Math.max(25000.0, monthlyTurnover * 2.5);
+    }
+}
+
+// 13.2 - the account asks the engine instead of hardcoding
+public SavingsAccount(..., int tenureYears) {
+    super(...);
+    this.tenureYears  = tenureYears;
+    this.minBalance   = AccountRulesEngine.getSavingsMinBalance(tenureYears);
+    this.interestRate = AccountRulesEngine.getSavingsInterestRate(tenureYears);
+}`,
+  ask:['Give the min balance and interest rate for a customer with 4 years of tenure.','Why must the tenure checks run from highest to lowest?','What is the overdraft limit for a monthly turnover of Rs 5,000?','Why is a rules engine better than a constant inside SavingsAccount?'],
+},
+{
+  n:14, id:'oop14', ph:'ph4', title:'External Properties Rules Engine',
+  obj:'Move every business rule out of Java and into .properties files, so policy changes need no recompilation.',
+  files:['config/rules/savings.properties','current.properties','fixeddeposit.properties','salary.properties','AccountRulesPropertiesLoader.java','AccountRulesEngine.java'],
+  steps:[
+    'Write key-value pairs in savings.properties for minimum balance and interest rate across the four tenure buckets (new, standard, premium, privilege).',
+    'AccountRulesPropertiesLoader uses java.util.Properties to load the file from disk or the classpath stream.',
+    'Helper methods: getProperty(String key, String defaultValue) for text, getDouble(String key, double defaultValue) for numbers (parse and fall back on failure).',
+    'Refactor AccountRulesEngine so getSavingsMinBalance / getSavingsInterestRate read from the loader instead of in-memory maps.',
+    'The engine is a Singleton — AccountRulesEngine.getInstance().',
+    'Run TestAccountRulesEngineProperties and confirm tenure 0/2/4/6 yrs produce 10000/7500/5000/2500 and 2.70/3.00/3.50/4.00%.',
+  ],
+  key:['java.util.Properties — load(InputStream), getProperty(key, default)','Classpath resource loading: getClass().getResourceAsStream("/config/rules/savings.properties")','Always supply a default so a missing key degrades gracefully instead of crashing','Externalised configuration — change policy without recompiling','Singleton: private constructor + private static instance + public static getInstance()','The .properties files must be copied next to the compiled .class files or the engine silently uses defaults'],
+  code:`# savings.properties
+min.balance.new=10000.0
+min.balance.standard=7500.0
+min.balance.premium=5000.0
+min.balance.privilege=2500.0
+interest.rate.new=2.70
+interest.rate.standard=3.00
+interest.rate.premium=3.50
+interest.rate.privilege=4.00
+
+// AccountRulesPropertiesLoader.java
+private Properties props = new Properties();
+
+public void load(String path) throws IOException {
+    try (InputStream in = new FileInputStream(path)) {
+        props.load(in);
+    }
+}
+
+public double getDouble(String key, double defaultValue) {
+    String raw = props.getProperty(key);
+    if (raw == null) return defaultValue;
+    try { return Double.parseDouble(raw.trim()); }
+    catch (NumberFormatException e) { return defaultValue; }
+}
+
+// Singleton engine
+public class AccountRulesEngine {
+    private static AccountRulesEngine instance;
+    private AccountRulesEngine() { /* load properties */ }
+    public static synchronized AccountRulesEngine getInstance() {
+        if (instance == null) instance = new AccountRulesEngine();
+        return instance;
+    }
+}`,
+  ask:['Write the Singleton pattern for AccountRulesEngine and explain the private constructor.','Why does getDouble take a default value?','What happens at runtime if the properties file is missing from bin/?','Name two advantages of external configuration over hardcoded constants.'],
+},
+{
+  n:15, id:'oop15', ph:'ph4', title:'Funds Transfer with Daily Limits',
+  obj:'Add a TransferService that moves money between accounts, capped by a daily transfer limit that depends on account type and tenure.',
+  files:['src/com/gdb/service/TransferService.java','src/com/gdb/domain/Account.java','AccountRulesEngine.java','tests/TestTransfer.java'],
+  steps:[
+    'TransferService.transfer(from, to, amount, pin) runs eight checks IN ORDER — nothing moves until every check passes.',
+    '1. Null check → AccountException("Source and destination accounts are required").',
+    '2. Both accounts ACTIVE → InactiveAccountException.',
+    '3. from.verifyPin(pin) → InvalidPinException("Incorrect PIN").',
+    '4. from.canWithdraw(amount) → InsufficientBalanceException.',
+    '5. resetDailyTransferIfNeeded() then canTransfer(amount) → AccountException with the remaining limit.',
+    '6. Debit from.withdraw(amount, pin). 7. Credit to.deposit(amount). 8. Record source.updateDailyTransferTotal(amount).',
+    'Account tracks dailyTransferTotal and lastTransferDate; resetDailyTransferIfNeeded() zeroes the total when lastTransferDate.toLocalDate() is not today.',
+    'getRemainingDailyTransferLimit() = Math.max(0.0, limit - dailyTransferTotal).',
+    'AccountRulesEngine.getDailyTransferLimit(type, tenure) reads the dailyTransferLimit feature; returns 0.0 when null.',
+  ],
+  key:['Daily limits by bucket — savings 50k/100k/200k/500k, current 100k/500k/1M/(fallback 0), FD 0 at every tier, salary 100k/500k/1M/2.5M','Validate-then-mutate: all checks before any state change','LocalDate comparison for the day rollover','Service layer holds orchestration; the entity holds its own state','FD daily limit is 0 at every tier, so FD accounts can never transfer'],
+  code:`public void transfer(IAccount from, IAccount to, double amount, int pin)
+        throws AccountException {
+    if (from == null || to == null)
+        throw new AccountException("Source and destination accounts are required");
+    if (!from.isActive() || !to.isActive())
+        throw new InactiveAccountException("Both accounts must be active to transfer funds");
+    if (!from.verifyPin(pin))
+        throw new InvalidPinException("Incorrect PIN");
+    if (!from.canWithdraw(amount))
+        throw new InsufficientBalanceException("Insufficient balance for transfer of Rs. " + amount);
+
+    Account source = (Account) from;
+    source.resetDailyTransferIfNeeded();
+    if (!source.canTransfer(amount))
+        throw new AccountException("Daily transfer limit exceeded. Remaining today: Rs. "
+                                   + source.getRemainingDailyTransferLimit());
+
+    from.withdraw(amount, pin);                 // debit
+    to.deposit(amount);                         // credit
+    source.updateDailyTransferTotal(amount);    // record
+}
+
+public void resetDailyTransferIfNeeded() {
+    if (lastTransferDate == null
+        || !lastTransferDate.toLocalDate().equals(LocalDate.now())) {
+        dailyTransferTotal = 0.0;
+        lastTransferDate = LocalDateTime.now();
+    }
+}`,
+  ask:['List the eight steps of transfer in order and say why the order matters.','Why is the daily total reset lazily rather than by a scheduled job?','What is the daily transfer limit for a Savings account with 4 years of tenure?','Why can a Fixed Deposit account never transfer money?'],
+},
+{
+  n:16, id:'oop16', ph:'ph4', title:'Transaction Model',
+  obj:'Capture every money movement as an immutable Transaction record, backed by a TransactionType enum, without breaking existing method signatures.',
+  files:['TransactionType.java','Transaction.java','Account.java','TransferService.java','tests/TestTransactionModel.java'],
+  steps:[
+    'TransactionType enum: DEPOSIT, WITHDRAW, TRANSFER.',
+    'Transaction fields: transactionId (String), timestamp (LocalDateTime), accountNumber (int), type, amount, balanceAfter, status ("SUCCESS"/"FAILED"), description, fromAccount, toAccount.',
+    'All-args constructor, getters and setters.',
+    'toString() formats as: [TXN-...] TYPE | Rs. amount | Balance After: Rs. bal | Status: SUCCESS | description.',
+    'static generateId() returns "TXN-" + System.currentTimeMillis() + "-" + (++counter).',
+    'Account.depositWithTransaction(amount) calls deposit(amount) then returns a DEPOSIT Transaction.',
+    'Account.withdrawWithTransaction(amount, pin) calls withdraw then returns a WITHDRAW Transaction.',
+    'TransferService.transferWithTransaction(...) calls transfer then returns a TRANSFER Transaction.',
+    'Legacy deposit(1000) still works — backward compatibility is the point of the overload.',
+  ],
+  key:['Java enum is a full class — it can hold fields, constructors and methods','Overloading for backward compatibility: keep the old method, add a richer one','Audit record pattern — who, what, when, how much, resulting balance','Static counter for ID uniqueness within a run; a UUID would be safer across runs','LocalDateTime from java.time, not the legacy Date'],
+  code:`public enum TransactionType { DEPOSIT, WITHDRAW, TRANSFER }
+
+public class Transaction {
+    private static int counter = 0;
+    private String transactionId;
+    private LocalDateTime timestamp;
+    private TransactionType type;
+    private double amount, balanceAfter;
+    private String status, description;
+
+    public static String generateId() {
+        return "TXN-" + System.currentTimeMillis() + "-" + (++counter);
+    }
+
+    @Override
+    public String toString() {
+        return "[" + transactionId + "] " + type + " | Rs. " + amount
+             + " | Balance After: Rs. " + balanceAfter
+             + " | Status: " + status + " | " + description;
+    }
+}
+
+// Backward-compatible overload on Account
+public Transaction depositWithTransaction(double amount) throws Exception {
+    deposit(amount);                    // reuse the legacy method
+    return new Transaction(Transaction.generateId(), LocalDateTime.now(),
+        getAccountNumber(), TransactionType.DEPOSIT, amount, getBalance(),
+        "SUCCESS", "Deposit of Rs. " + amount, 0, 0);
+}`,
+  ask:['Why add depositWithTransaction instead of changing deposit to return a Transaction?','How is a Java enum different from a set of static final int constants?','What would break if generateId used only System.currentTimeMillis()?','Which fields make this record an audit trail rather than just a log line?'],
+},
+{
+  n:17, id:'oop17', ph:'ph5', title:'Command Pattern + File Logging',
+  obj:'Wrap every money movement in a serializable Command object and persist executed commands to a binary file with Java object serialization.',
+  files:['command/TransactionCommand.java','DepositCommand.java','WithdrawCommand.java','TransferCommand.java','logging/TransactionLog.java','tests/TestCommandLogging.java'],
+  steps:[
+    'TransactionCommand interface declares void execute() throws Exception and Transaction getTransaction().',
+    'DepositCommand / WithdrawCommand / TransferCommand store their account references, amount, pin and the resulting Transaction.',
+    'Each execute() calls the matching method (depositWithTransaction, withdrawWithTransaction, transferWithTransaction) and stores the returned Transaction.',
+    'TransactionLog.log(cmd) — make sure data/ exists; if the file does not exist use ObjectOutputStream, if it does use AppendableObjectOutputStream so a second stream header is not written; write, flush, close.',
+    'TransactionLog.readAll() — open ObjectInputStream on data/transactions.ser, loop readObject() until EOFException, return List<TransactionCommand>.',
+    'TransactionLog.clear() — delete data/transactions.ser if present.',
+    'Test: execute and log all three command types, read the history back, verify the count, then open a fresh TransactionLog to prove the file persists.',
+  ],
+  key:['Command pattern: turn a request into an object, so it can be stored, queued, logged, undone or replayed','The invoker (TransactionLog) does not know what the command does','Serializable marker interface + serialVersionUID','The duplicate-header problem — ObjectOutputStream writes a header each time it opens, so appending needs a subclass overriding writeStreamHeader() to do nothing','EOFException is the normal loop terminator when reading an object stream','transient fields are skipped during serialization'],
+  code:`public interface TransactionCommand extends Serializable {
+    void execute() throws Exception;
+    Transaction getTransaction();
+}
+
+public class DepositCommand implements TransactionCommand {
+    private static final long serialVersionUID = 1L;
+    private Account account;
+    private double amount;
+    private Transaction transaction;
+
+    public DepositCommand(Account account, double amount) {
+        this.account = account; this.amount = amount;
+    }
+    @Override public void execute() throws Exception {
+        this.transaction = account.depositWithTransaction(amount);
+    }
+    @Override public Transaction getTransaction() { return transaction; }
+}
+
+// Appending without a second stream header
+class AppendableObjectOutputStream extends ObjectOutputStream {
+    AppendableObjectOutputStream(OutputStream out) throws IOException { super(out); }
+    @Override protected void writeStreamHeader() throws IOException { reset(); }
+}
+
+// Reading until the stream runs out
+public List<TransactionCommand> readAll() {
+    List<TransactionCommand> list = new ArrayList<>();
+    try (ObjectInputStream in = new ObjectInputStream(
+             new FileInputStream("data/transactions.ser"))) {
+        while (true) list.add((TransactionCommand) in.readObject());
+    } catch (EOFException e) {
+        // normal end of stream
+    } catch (Exception e) {
+        e.printStackTrace();
+    }
+    return list;
+}`,
+  ask:['Explain the Command pattern with the four roles and map each to a class here.','Why does appending to an ObjectOutputStream need AppendableObjectOutputStream?','Why is EOFException caught separately and treated as success?','What is serialVersionUID and what breaks without it?','Name two capabilities the Command pattern unlocks that a plain method call cannot.'],
+},
+{
+  n:18, id:'oop18', ph:'ph5', title:'Bridge Pattern (File + Database)',
+  obj:'Separate the TransactionLogger abstraction from its storage backend so destinations can be swapped at runtime.',
+  files:['logging/LogDestination.java','FileLogDestination.java','DatabaseLogDestination.java','TransactionLogger.java','tests/TestBridgeLogging.java'],
+  steps:[
+    'LogDestination interface: void write(TransactionCommand), List<TransactionCommand> readAll(), void clear(), String getDestinationName().',
+    'FileLogDestination holds a TransactionLog, delegates write/readAll/clear to it, and returns "FILE".',
+    'DatabaseLogDestination holds a final SimulatedDatabase; write → db.insert("transaction_log", cmd); readAll → db.selectAll("transaction_log"); clear → db.deleteAll("transaction_log"); name "DATABASE".',
+    'TransactionLogger holds protected LogDestination destination, a constructor taking one, and setDestination(...) for runtime switching. It delegates log/readAll/clear/getDestinationName.',
+    'Test: instantiate File, Database and Memory destinations, log through each via logger.setDestination(...), and verify the data stays isolated per backend.',
+  ],
+  key:['Bridge separates an abstraction hierarchy from an implementation hierarchy so both can vary independently','Composition over inheritance — the logger HAS-A destination instead of extending one','Adding Kafka, S3 or PostgreSQL means one new class and zero changes to TransactionLogger or any caller','Bridge vs Strategy: Bridge is structural and set up front for two dimensions; Strategy is behavioural and swaps an algorithm','Null-safe delegation returns Collections.emptyList() rather than throwing'],
+  code:`// Implementor
+public interface LogDestination {
+    void write(TransactionCommand cmd);
+    List<TransactionCommand> readAll();
+    void clear();
+    String getDestinationName();
+}
+
+// Abstraction - holds a reference to the implementor (the "bridge")
+public class TransactionLogger {
+    protected LogDestination destination;
+
+    public TransactionLogger(LogDestination destination) { this.destination = destination; }
+    public void setDestination(LogDestination destination) { this.destination = destination; }
+
+    public void log(TransactionCommand cmd) {
+        if (destination != null) destination.write(cmd);
+    }
+    public List<TransactionCommand> readAll() {
+        return destination != null ? destination.readAll() : Collections.emptyList();
+    }
+    public String getDestinationName() {
+        return destination != null ? destination.getDestinationName() : "UNKNOWN";
+    }
+}
+
+// Runtime switching
+logger.setDestination(new FileLogDestination());      logger.log(cmd);
+logger.setDestination(new DatabaseLogDestination(db)); logger.log(cmd);`,
+  ask:['Draw the Bridge structure and label Abstraction, Refined Abstraction, Implementor and Concrete Implementor.','How would you add a KafkaLogDestination? Which existing files change?','Bridge vs Strategy vs Adapter — one line each.','Why is setDestination a setter rather than a constructor-only argument?'],
+},
+{
+  n:19, id:'oop19', ph:'ph5', title:'AccountService (Service Layer)',
+  obj:'Make AccountService the single entry point: it owns the account registry, coordinates factory and transfer service, and logs every movement.',
+  files:['service/AccountService.java','tests/TestAccountService.java','Main.java'],
+  steps:[
+    'Fields: Map<Integer, IAccount> accounts, TransactionLogger logger, TransferService transferService, int nextAccountNumber = 1001. Initialise in the constructor.',
+    'openAccount(type, name, age, initialBalance) — generate the next account number, call AccountFactory, store in the map, return the account.',
+    'closeAccount(accountNumber, pin) — look up, verify the PIN, close.',
+    'deposit / withdraw / transfer — look up accounts, build the matching Command, execute it, log it through TransactionLogger, return the Transaction.',
+    'Queries: getAccount(accNo), getAllAccounts(), getTransactionHistory(), getNextAccountNumber().',
+    'Test wiring: MemoryLogDestination → TransactionLogger → AccountService. Verify the full lifecycle, transfers, history retrieval and exception handling.',
+    'Main.java wires FileLogDestination and runs a demo workflow.',
+  ],
+  key:['Service layer = orchestration; the domain layer holds rules; the persistence layer stores','Dependency injection through the constructor makes the service testable with a memory backend','Facade-like single entry point for the UI','Map<Integer, IAccount> gives O(1) lookup by account number','Layered architecture: UI → Service → Domain → Persistence'],
+  code:`public class AccountService {
+    private Map<Integer, IAccount> accounts = new HashMap<>();
+    private TransactionLogger logger;
+    private TransferService transferService;
+    private int nextAccountNumber = 1001;
+
+    public AccountService(TransactionLogger logger) {   // injected dependency
+        this.logger = logger;
+        this.transferService = new TransferService();
+    }
+
+    public IAccount openAccount(String type, String name, int age, double initialBalance) {
+        int accNo = nextAccountNumber++;
+        IAccount account = AccountFactory.createAccount(type, accNo, name, age, initialBalance);
+        accounts.put(accNo, account);
+        return account;
+    }
+
+    public Transaction deposit(int accountNumber, double amount) throws Exception {
+        Account acc = (Account) accounts.get(accountNumber);
+        DepositCommand cmd = new DepositCommand(acc, amount);
+        cmd.execute();
+        logger.log(cmd);                 // Bridge decides where it lands
+        return cmd.getTransaction();
+    }
+}`,
+  ask:['Which four patterns meet inside AccountService? Name each and where it appears.','Why is TransactionLogger passed into the constructor instead of created inside?','Why does the test use MemoryLogDestination while Main uses FileLogDestination?','What responsibility belongs in the service layer and what belongs in the domain?'],
+},
+{
+  n:20, id:'oop20', ph:'ph5', title:'AccountUI (Interactive Console Application)',
+  obj:'Put a menu-driven console interface on top of AccountService — the presentation layer that completes the architecture.',
+  files:['ui/AccountUI.java','tests/TestAccountUI.java','Main.java'],
+  steps:[
+    'AccountUI reads input with Scanner and shows a numbered menu: open account, deposit, withdraw, transfer, view account, view all, view history, close account, exit.',
+    'Each menu option calls exactly one AccountService method — the UI holds no business rules.',
+    'Wrap calls in try-catch so an AccountException prints a friendly message instead of a stack trace, and the menu loops again.',
+    'Validate and re-prompt on bad numeric input rather than crashing.',
+    'Main.java bootstraps: LogDestination → TransactionLogger → AccountService → AccountUI → start().',
+    'TestAccountUI drives the service endpoints the UI depends on.',
+  ],
+  key:['Presentation layer is thin: read input, call the service, format output','Separation of concerns across four layers — the reason every earlier activity exists','Scanner pitfalls: nextInt() leaves the newline, so call nextLine() after it','A menu loop is a simple state machine driven by a switch','The UI could be swapped for a REST API with no change to the service'],
+  code:`public class AccountUI {
+    private final AccountService service;
+    private final Scanner sc = new Scanner(System.in);
+
+    public AccountUI(AccountService service) { this.service = service; }
+
+    public void start() {
+        boolean running = true;
+        while (running) {
+            printMenu();
+            int choice = readInt("Choice: ");
+            try {
+                switch (choice) {
+                    case 1: openAccount();   break;
+                    case 2: deposit();       break;
+                    case 3: withdraw();      break;
+                    case 4: transfer();      break;
+                    case 9: running = false; break;
+                    default: System.out.println("Invalid choice");
+                }
+            } catch (AccountException e) {
+                System.out.println("Error: " + e.getMessage());   // friendly, no stack trace
+            } catch (Exception e) {
+                System.out.println("Unexpected error: " + e.getMessage());
+            }
+        }
+    }
+}
+
+// Main.java - the whole stack wired together
+LogDestination dest = new FileLogDestination();
+TransactionLogger logger = new TransactionLogger(dest);
+AccountService service = new AccountService(logger);
+new AccountUI(service).start();`,
+  ask:['Draw the four layers of this application and name one class in each.','Why must the UI catch AccountException instead of letting it propagate?','What is the Scanner nextInt/nextLine trap and how do you avoid it?','If you replaced the console with a web front end, which classes would change?'],
+},
+];
+
+/* ---------- Plain-English layer for Part B ---------- */
+/* ---------- Why each activity exists ---------- */
+const WHY = {
+oop1:{
+  before:"There is no Account class at all. A bank account is just an idea \u2014 nothing in code holds a balance or knows how to change it safely.",
+  after:"Data and the operations on that data live in one place. Any future code that wants to touch an account has one class to go through instead of scattering balance math across the whole program.",
+  enables:"Every remaining activity assumes an Account class exists. Without this one, nothing else in the project can be built.",
+},
+oop2:{
+  before:"Account exists but you are trusting it blindly. A silent bug in deposit or withdraw would go unnoticed until real money behaved wrongly.",
+  after:"You now have proof, not hope, that the class works \u2014 including the ugly inputs a careless class would get wrong.",
+  enables:"A safety net for every later change. When Activity 3 rewrites Account with PIN logic, this test file (rewritten in Activity 4) is what tells you if you broke something that used to work.",
+},
+oop3:{
+  before:"Any code, anywhere, can create an account with a negative balance, an age of 5, or no PIN, and can withdraw money with nothing checking who is asking.",
+  after:"The class refuses to exist in a broken state and refuses transactions without proof of identity. This is what turns a toy class into something resembling a real banking object.",
+  enables:"PIN and status are the foundation Activity 5 needs to attach a real exception to \u2014 you cannot throw InvalidPinException from a class that has no concept of a PIN yet.",
+},
+oop4:{
+  before:"The security rules from Activity 3 exist but are completely unverified. A bug in validatePin or changePin would sit undiscovered.",
+  after:"Every security rule \u2014 age, wrong PIN, PIN change, suspension \u2014 is proven correct with its own test.",
+  enables:"Confidence to keep building on top of Account. Activity 5 is about to change how failures are reported; you need to know the underlying rules already work.",
+},
+oop5:{
+  before:"A failed withdrawal just returns false. The caller has no idea whether it failed because of a wrong PIN, a closed account, or insufficient funds \u2014 three very different problems that need three very different user messages.",
+  after:"Each failure is now a distinct, named, catchable type carrying its own message. The caller can react differently to each one instead of guessing from a boolean.",
+  enables:"Activity 6 needs these exception types to demonstrate catching. Activity 9's Template Method throws these same exceptions from a shared location, so the whole hierarchy has to exist first.",
+},
+oop6:{
+  before:"You have exception types but no proof anyone can actually catch and use them correctly, including the specific-before-general ordering rule.",
+  after:"A working, tested pattern for handling banking errors gracefully \u2014 the same pattern every later test file in this project reuses without re-explaining it.",
+  enables:"Every test file from Activity 8 onward wraps calls in try-catch using exactly this pattern. Get this activity solid and the rest of the codebase reads itself.",
+},
+oop7:{
+  before:"Only one generic Account type exists. Real banks offer several products with different rules, and copy-pasting Account four times would mean fixing every bug four times.",
+  after:"Four account types share one parent, so a bug fix or new field in Account automatically reaches all four children. Each subclass adds only what makes it different.",
+  enables:"Activity 8 needs these four distinct classes to override withdraw differently. Activity 11's factory needs four types to choose between.",
+},
+oop8:{
+  before:"All four account types would behave identically on withdrawal, which is unrealistic \u2014 a Savings account should protect its minimum balance, a Current account should allow overdraft, and a Fixed Deposit should not allow withdrawal at all.",
+  after:"Each account type enforces its own real-world business rule, while calling code still just says account.withdraw(...) without needing to know which type it is holding.",
+  enables:"This override logic gets promoted into a formal pattern in Activity 9. Without seeing it work here first, the abstract Template Method would feel like magic.",
+},
+oop9:{
+  before:"The PIN, status and amount check sequence from Activity 8 is duplicated inside every subclass's withdraw method. If the bank ever adds a sixth check, you would have to remember to add it in four separate places.",
+  after:"The sequence exists exactly once, in the parent. A subclass can no longer accidentally skip the status check or run the checks out of order \u2014 it physically cannot, because it never writes that part.",
+  enables:"This is the backbone every later activity builds on: AbstractAccount is what Activity 11's IAccount wraps, what Activity 15's TransferService calls into, and what every Command in Activity 17 ultimately triggers.",
+},
+oop10:{
+  before:"You can create four kinds of account, but there is no way to move money between two different accounts of possibly different types, and no batch process for monthly interest.",
+  after:"A single transfer function works across any account type, and a monthly cycle can sweep an entire portfolio without knowing in advance which types it contains.",
+  enables:"This is a rough draft of what becomes the formal TransferService in Activity 15 and the AccountService in Activity 19 \u2014 you are proving the concept works before it gets its own class.",
+},
+oop11:{
+  before:"Test code and any future UI would depend directly on SavingsAccount, CurrentAccount and so on. Adding a fifth account type means finding and updating every place that mentions a concrete class.",
+  after:"Callers depend only on IAccount and a string like SAVINGS. Adding a new account type later touches one switch statement in the factory and nothing else in the rest of the program.",
+  enables:"Activity 19's AccountService is built entirely on this contract \u2014 it stores Map of Integer to IAccount, never a concrete type. This activity is what makes the service layer possible.",
+},
+oop12:{
+  before:"The factory and interface exist but nobody has proven that real banking rules \u2014 minimum balance, overdraft, premature withdrawal \u2014 still work correctly when accessed only through the abstract interface.",
+  after:"Verified proof that abstraction does not lose functionality. The specific rules still fire correctly even though the calling code never mentions the specific class.",
+  enables:"This is the confidence check before the codebase commits to interface-first design for the rest of the project.",
+},
+oop13:{
+  before:"Minimum balance and interest rate are fixed numbers written directly inside SavingsAccount. Every customer gets the same deal regardless of how long they have banked with you, which is not how real banks price accounts.",
+  after:"Rules are computed centrally based on tenure, so a loyal five-year customer automatically gets better terms than someone who opened an account yesterday, without SavingsAccount needing to know the tenure table itself.",
+  enables:"Activity 14 takes this exact logic and moves it into text files \u2014 you cannot externalise a rule until the rule is already isolated in its own class, which is precisely what 13.1 and 13.2 do.",
+},
+oop14:{
+  before:"Changing an interest rate means editing Java source, recompiling, and redeploying \u2014 a multi-hour process for a one-number change a bank might want to make same day.",
+  after:"A rate change is a text-file edit. No programmer needed, no recompilation, no redeployment risk.",
+  enables:"Activity 15's daily transfer limits are read the same way from the same properties files \u2014 this activity builds the plumbing that 15 immediately reuses.",
+},
+oop15:{
+  before:"Activity 10's transfer function moves any amount with no upper bound and no protection against a compromised account being drained in one shot.",
+  after:"Transfers are capped per day, per account type, per tenure, matching how real transfer limits work, and the limit resets automatically at midnight without any scheduled job.",
+  enables:"This is the version of transfer that Activity 16 wraps in a Transaction record, and that Activity 17 wraps again in a TransferCommand.",
+},
+oop16:{
+  before:"A completed deposit or withdrawal leaves no trace. If a customer disputes a transaction, there is nothing to show them \u2014 the balance changed, and that is the entire history.",
+  after:"Every money movement produces a permanent, detailed record: what happened, when, how much, and the resulting balance. This is the beginning of a real audit trail.",
+  enables:"Activity 17's Command objects store exactly this Transaction as their result. Without it, there would be nothing meaningful for a Command to hand back after executing.",
+},
+oop17:{
+  before:"A transaction happens and is gone the moment the method returns. There is no record on disk, no way to review history after the program restarts, and no way to replay what happened.",
+  after:"Every operation is an object that can be logged to a file, read back later, and in principle replayed. The system now has memory that survives a restart.",
+  enables:"Activity 18's Bridge pattern logs these exact Command objects to different backends. Activity 19's service layer builds a Command for every single operation it performs.",
+},
+oop18:{
+  before:"TransactionLog only knows how to write to a file. If the bank later wants logs in a real database, or wants to log to two places at once, the logging code has to be rewritten from scratch.",
+  after:"The logger works with any storage backend interchangeably. Switching from file to database, or adding a new destination entirely, requires zero changes to the logger or to any code that calls it.",
+  enables:"Activity 19's AccountService is handed a TransactionLogger without caring what is behind it \u2014 tests use a fast in-memory version, the real Main.java uses the file version, same service code either way.",
+},
+oop19:{
+  before:"Accounts, the factory, the transfer service and the logger all exist as separate pieces with no single place that ties them together. A UI would have to know about and coordinate all four itself.",
+  after:"One class is the entire banking API. It owns the accounts, talks to the factory, wraps operations in commands, and logs everything \u2014 callers need to know only this one class.",
+  enables:"Activity 20's console UI becomes almost trivial to write, because all the hard coordination work already happened here. The UI just calls one method per menu option.",
+},
+oop20:{
+  before:"The whole banking engine works, but only through hand-written test code. There is no way for an actual person to sit down and open an account or make a transfer.",
+  after:"A real, usable, menu-driven application that a non-programmer can operate, built on every layer the previous nineteen activities constructed.",
+  enables:"This is the finish line \u2014 the moment every earlier activity was building towards, and the proof that all five phases work together as one system.",
+},
+};
+
+const PLAIN = {
+oop1:{
+  plain:'You are writing the blueprint for a bank account. A class is the blueprint; every account a customer opens is one object made from it. You lock the data away inside the object (private) and let the outside world change it only through your own methods, so nobody can set a balance to minus five lakh by accident. deposit and withdraw check the amount first and answer true or false to say whether the change happened.',
+  terms:[
+    ['class','A blueprint. It describes what data an account holds and what it can do. It is not an account by itself.'],
+    ['object / instance','One real account made from the blueprint, with its own balance and name.'],
+    ['field (instance variable)','A piece of data that belongs to each object, like balance.'],
+    ['private','Only code inside this class can read or change it. This is the lock on the data.'],
+    ['public','Anybody can call it. Used for the methods that are meant to be the front door.'],
+    ['constructor','A special method with the class name that runs once when you write new Account(...). It fills the fields.'],
+    ['this','Means "this particular object". this.balance = balance tells Java to put the parameter into the field.'],
+    ['method','A named block of behaviour, like deposit.'],
+    ['return type','What a method hands back. void means nothing, boolean means true or false, double means a decimal number.'],
+    ['getter / setter','Small public methods that read (getBalance) or change (setName) a private field in a controlled way.'],
+    ['encapsulation','Keeping data private and exposing only safe methods. The first pillar of OOP.'],
+  ],
+},
+oop2:{
+  plain:'Now you prove the class actually works. You write a small program that creates an account, does something to it, and prints PASS or FAIL depending on whether the result is what you expected. The important habit here is testing the ugly cases — a negative deposit, a withdrawal bigger than the balance — not just the ones that obviously work.',
+  terms:[
+    ['test driver','A plain main method that runs your class and prints results. No framework, just prints.'],
+    ['main method','Where a Java program starts running: public static void main(String[] args).'],
+    ['happy path','The normal case where everything is valid and succeeds.'],
+    ['edge case','An unusual input at a boundary — zero, negative, exactly equal to the balance.'],
+    ['assertion','A check that a value is what you expected. Here it is just an if that prints PASS or FAIL.'],
+    ['regression','When something that used to work breaks later. Tests catch it.'],
+  ],
+},
+oop3:{
+  plain:'The account becomes defensive. It now refuses to even exist if the data is wrong — under 18, negative opening balance, or a PIN that is not exactly four digits all stop the object from being created. Withdrawal now asks for the PIN as well as the amount, and the account can be suspended or closed so transactions get blocked.',
+  terms:[
+    ['validation','Checking input before you trust it.'],
+    ['guard clause','An if at the top of a method that rejects bad input immediately, so the rest of the method can assume things are fine.'],
+    ['throw','Stop right here and raise an error object.'],
+    ['IllegalArgumentException','A built-in Java error meaning "you passed me a value I cannot accept". It is unchecked, so no throws clause is needed.'],
+    ['unchecked exception','An error the compiler does not force you to handle. Usually a programming mistake.'],
+    ['fail fast','Reject bad data at the earliest moment, so a broken object never exists.'],
+    ['regex','A pattern for matching text. "\\\\d{4}" means exactly four digits.'],
+    ['overloading','Two methods with the same name but different parameters, like withdraw(double) and withdraw(double, String).'],
+    ['state','The current values inside an object — here the balance, the PIN and the status.'],
+  ],
+},
+oop4:{
+  plain:'You test the security features. The trick you learn here is how to test that something fails: put the call inside a try block, and if the next line runs at all, the test failed because no error was thrown. You also walk the account through its states — active, suspended, active again — and check that withdrawals are blocked in the middle.',
+  terms:[
+    ['try-catch','try holds risky code; catch runs if it throws. Without catch, the program stops.'],
+    ['negative test','A test that passes only when the operation is correctly refused.'],
+    ['state transition','Moving an object from one status to another, like ACTIVE to SUSPENDED.'],
+    ['invariant','A rule that must always hold. Here: a suspended account can never be debited.'],
+  ],
+},
+oop5:{
+  plain:'Returning false tells the caller nothing about what went wrong. So you build a family of error types instead. AccountException is the parent; the five specific ones sit under it. Now withdraw throws InsufficientBalanceException with a real message instead of silently answering false, and the caller can react differently to each kind of failure.',
+  terms:[
+    ['exception','An object describing something that went wrong, thrown up to whoever called you.'],
+    ['checked exception','Extends Exception. The compiler forces the caller to either catch it or declare throws. Used here because a caller can reasonably recover.'],
+    ['extends','Inheritance. InvalidPinException extends AccountException means it IS-A AccountException.'],
+    ['hierarchy','The parent-child tree of exception classes.'],
+    ['super(message)','Calls the parent constructor and hands it the error text.'],
+    ['throws','Written in a method signature. Declares what this method might raise, so callers are warned.'],
+    ['base type','The parent, AccountException. Declaring throws AccountException covers all five children at once.'],
+  ],
+},
+oop6:{
+  plain:'You catch the errors you just invented. The big idea is that one catch block written for the parent type will catch every child type, because a child IS-A parent. That is polymorphism showing up in error handling. You also learn that catch blocks are checked top to bottom, so the specific ones must come before the general one.',
+  terms:[
+    ['catch block','Code that runs when a matching exception is thrown.'],
+    ['polymorphic catch','catch (AccountException e) also catches InvalidPinException, because the child fits the parent slot.'],
+    ['catch order','Specific first, general last. Reversing it makes the specific block unreachable and the code will not compile.'],
+    ['multi-catch','catch (A | B e) handles two unrelated types in one block.'],
+    ['finally','A block that runs whether or not an exception happened. Used for cleanup.'],
+    ['getMessage()','Reads the text you passed into the exception constructor.'],
+    ['stack trace','The list of method calls that led to the error. Useful to developers, not to bank customers.'],
+  ],
+},
+oop7:{
+  plain:'Four kinds of account share most of their data, so instead of copying the Account class four times, each one extends it. The child automatically has everything the parent has, and adds only what is special to it — a minimum balance for savings, an overdraft limit for current, a tenure for a fixed deposit. super(...) hands the shared values up to the parent constructor, and it has to be the very first line.',
+  terms:[
+    ['inheritance','A child class reusing a parent class. Written with extends.'],
+    ['superclass / subclass','Parent and child. Account is the superclass; SavingsAccount is the subclass.'],
+    ['IS-A','The inheritance relationship. A SavingsAccount IS-A Account.'],
+    ['HAS-A','The composition relationship. A TransactionLogger HAS-A LogDestination.'],
+    ['super(...)','Calls the parent constructor. Must be the first statement in the child constructor.'],
+    ['constructor chaining','Constructors run parent first, then child, so the parent part is ready before the child touches it.'],
+    ['protected','Visible to this class and its subclasses, but not to the whole program.'],
+    ['compound interest','Interest on interest. Math.pow(1 + rate/100, years) multiplied by the principal.'],
+  ],
+},
+oop8:{
+  plain:'Every account type withdraws money differently, but you want to call withdraw the same way on all of them. So each child rewrites the method with the same name and parameters — that is overriding. At run time Java looks at what the object really is, not what the variable is declared as, and runs that version. One line of code, four different behaviours.',
+  terms:[
+    ['overriding','A child replacing a parent method that has exactly the same name and parameters.'],
+    ['@Override','An annotation. It does nothing at run time but makes the compiler check that you really are overriding something, catching typos.'],
+    ['polymorphism','One name, many forms. The same withdraw call behaves differently per object type.'],
+    ['dynamic method dispatch','Java choosing the method version at run time based on the real object.'],
+    ['late binding','Another name for the same thing — the decision is delayed until run time.'],
+    ['reference type vs object type','Account a = new SavingsAccount(). The reference type is Account; the object type is SavingsAccount, and the object type wins.'],
+    ['super.withdraw(...)','Calls the parent version from inside the override, so you reuse its checks instead of copying them.'],
+    ['overdraft','Permission for the balance to go below zero, down to an agreed limit.'],
+  ],
+},
+oop9:{
+  plain:'The order of checks in a withdrawal must never change — PIN, then status, then amount, then the actual debit. So you put that sequence in the parent as a normal method and leave a hole in the middle called processDebit that each child must fill. The parent controls the recipe; the children supply one ingredient. That is the Template Method pattern, and because the parent has a hole in it, the class has to be abstract.',
+  terms:[
+    ['abstract class','A class you cannot create objects from. It exists to be extended. It can still have fields and a constructor.'],
+    ['abstract method','A method with a name but no body. Any concrete child must implement it.'],
+    ['concrete class','A normal class with no holes, which you can instantiate.'],
+    ['Template Method pattern','The parent writes the fixed steps of an algorithm and delegates the varying step to the child.'],
+    ['hook method','The step the child fills in — here processDebit.'],
+    ['Hollywood principle','Do not call us, we will call you. The child never calls withdraw; the parent calls the child.'],
+    ['refactoring','Rearranging code without changing what it does, to make it cleaner.'],
+    ['protected field','Shared data the children can use directly, without a public getter.'],
+  ],
+},
+oop10:{
+  plain:'Now you treat all accounts as one list, even though they are different types. A transfer is just a withdrawal followed by a deposit, but the order matters enormously: take the money out first, because if that throws, nothing has moved. If you credited first and the debit failed, you would have created money out of thin air.',
+  terms:[
+    ['heterogeneous collection','A list holding different subclasses, all referred to by the common parent type.'],
+    ['atomicity','All of it happens, or none of it does. Never half.'],
+    ['debit / credit','Taking money out of an account and putting money in.'],
+    ['instanceof','Asks whether an object is of a particular type, so you can safely cast it.'],
+    ['casting','Telling the compiler to treat a general reference as a specific type: ((SavingsAccount) a).applyInterest().'],
+    ['downcast','Casting from parent type to child type. Only safe after an instanceof check.'],
+    ['code smell','A sign of weak design. A long chain of instanceof usually means a method is missing from the parent.'],
+  ],
+},
+oop11:{
+  plain:'An interface is a promise with no code behind it: any class that signs it must provide those methods. IAccount lists what every account can do. Then AccountFactory becomes the one place in the whole program that says new. Callers pass the string "SAVINGS" and get back something that behaves like an account, without ever knowing which class it really is.',
+  terms:[
+    ['interface','A contract listing method names with no bodies. A class signs it with implements.'],
+    ['implements','A class promising to provide everything the interface declares.'],
+    ['contract','The set of methods the interface guarantees will exist.'],
+    ['Factory pattern','Putting object creation in one place, so callers ask for a type instead of naming a class.'],
+    ['static method','Belongs to the class, not to an object. You call AccountFactory.createAccount(...) without creating a factory.'],
+    ['loose coupling','Classes knowing as little as possible about each other, so changing one does not break the other.'],
+    ['programming to an interface','Declaring your variable as IAccount rather than SavingsAccount, so you can swap the real type later.'],
+    ['Open/Closed Principle','Open to extension, closed to modification. Add a new account type by adding a case, not by editing callers.'],
+    ['switch fall-through','Two case labels sharing one block, so FD and FIXED_DEPOSIT both build the same object.'],
+  ],
+},
+oop12:{
+  plain:'This activity proves the previous one actually bought you something. The whole test file never mentions SavingsAccount or CurrentAccount by name — it only holds IAccount variables handed out by the factory. The behaviour still differs per type, because dynamic dispatch is doing the work underneath.',
+  terms:[
+    ['dependency','One class needing another. The goal is to depend on the interface, not the concrete class.'],
+    ['decoupling','Removing those direct dependencies.'],
+    ['abstraction','Working with the general idea (an account) instead of a specific implementation.'],
+    ['upcast','Storing a SavingsAccount in an IAccount variable. Always safe.'],
+    ['test suite','A group of related test cases run together.'],
+  ],
+},
+oop13:{
+  plain:'Numbers like the minimum balance were hardcoded inside SavingsAccount, which is bad because the bank changes them. You move them into a rules engine that answers questions like "what is the minimum balance for a customer of four years?". The tricky bit is the order of the if checks: test the highest tenure first, or a six-year customer will match the one-year rule and get the wrong answer.',
+  terms:[
+    ['rules engine','A class that holds business policy separately from the objects that use it.'],
+    ['tenure','How long the customer has banked with you, in years. It decides which tier they get.'],
+    ['bucket / tier','A range of tenure with its own numbers — new, standard, premium, privilege.'],
+    ['lookup table','A Map or if-chain that turns an input into a configured value.'],
+    ['separation of concerns','Each class doing one job. The account holds money, the engine holds policy.'],
+    ['hardcoding','Writing a value directly in the code, so changing it means recompiling.'],
+    ['magic number','An unexplained literal like 1000.0 sitting in the middle of logic.'],
+    ['turnover','Monthly money flow through a current account, used to size the overdraft.'],
+  ],
+},
+oop14:{
+  plain:'The rules move out of Java entirely and into plain text files. Now a manager can change an interest rate by editing savings.properties, with no programmer and no recompiling. The engine becomes a Singleton so the files are read once and shared. Watch out for the classic trap: if the properties files are not copied next to the compiled classes, the program quietly falls back to defaults and prints wrong numbers with no error at all.',
+  terms:[
+    ['properties file','A plain text file of key=value lines, read by java.util.Properties.'],
+    ['externalised configuration','Keeping settings outside the code so they can change without a rebuild.'],
+    ['classpath','The set of folders Java searches for classes and resources at run time.'],
+    ['InputStream','A stream of bytes being read, here from the properties file.'],
+    ['default value','The fallback returned when a key is missing, so the program degrades instead of crashing.'],
+    ['parsing','Turning text into a number. Double.parseDouble("2.70") gives 2.70.'],
+    ['NumberFormatException','Thrown when the text is not a valid number. Catch it and return the default.'],
+    ['Singleton pattern','Exactly one instance for the whole program: private constructor, private static field, public static getInstance().'],
+    ['lazy initialisation','Creating the instance only on the first getInstance() call, not at startup.'],
+    ['try-with-resources','try (InputStream in = ...) closes the stream automatically.'],
+  ],
+},
+oop15:{
+  plain:'A transfer is not just two method calls — it is eight checks that must all pass before a single rupee moves. You also add a daily cap that depends on account type and tenure. The counter resets lazily: instead of a nightly job, you check the stored date each time and zero the total if it belongs to yesterday.',
+  terms:[
+    ['service class','A class that coordinates a workflow across several objects. It owns no data itself.'],
+    ['orchestration','Calling several objects in the right order to complete one business operation.'],
+    ['validate-then-mutate','Run every check first, change state only after all of them pass.'],
+    ['daily limit','A cap on how much can be transferred in one calendar day.'],
+    ['lazy reset','Recomputing on access instead of on a schedule. Cheap and needs no background job.'],
+    ['LocalDate / LocalDateTime','Modern Java date and time types. toLocalDate() strips the time so you can compare days.'],
+    ['running total','dailyTransferTotal, the sum moved so far today.'],
+    ['fallback','What happens when a config key is missing. Current privilege is undefined, so it falls back to 0.'],
+  ],
+},
+oop16:{
+  plain:'Until now a deposit changed a number and vanished. Now every money movement also produces a Transaction — a small record saying what happened, when, how much, and what the balance became afterwards. The clever part is that the old deposit(amount) still exists untouched; you add a second method beside it, so nothing that already worked breaks.',
+  terms:[
+    ['enum','A fixed set of named values. TransactionType has exactly three, and the compiler rejects anything else.'],
+    ['audit record','A permanent note of what happened, kept for later inspection.'],
+    ['immutable','Created once and never changed afterwards. Good for records.'],
+    ['backward compatibility','New code added without breaking existing callers.'],
+    ['overload','Same method name, different signature — here the plain version and the transaction version.'],
+    ['timestamp','The exact moment something happened, stored as LocalDateTime.'],
+    ['toString()','The method Java calls when you print an object. Override it to control the output.'],
+    ['static counter','A variable shared by all objects of the class, used here to keep generated IDs unique.'],
+  ],
+},
+oop17:{
+  plain:'Instead of calling deposit directly, you wrap the whole request in an object: who, how much, and a method called execute that does it when you are ready. Once an action is an object you can store it, replay it, queue it or undo it. Here you write those objects to a file as raw bytes, which brings up the classic trap — an object output stream writes a header every time it opens, so appending needs a subclass that skips the second header.',
+  terms:[
+    ['Command pattern','Turning a request into an object with an execute method.'],
+    ['invoker','The thing that triggers the command without knowing what it does — here the log.'],
+    ['receiver','The object that actually does the work — the Account.'],
+    ['serialization','Converting an object into bytes so it can be saved to a file or sent over a network.'],
+    ['deserialization','Rebuilding the object from those bytes.'],
+    ['Serializable','A marker interface with no methods. It just tells Java this class may be written out.'],
+    ['serialVersionUID','A version stamp. Without it, changing a field makes old saved files unreadable.'],
+    ['transient','A field marked to be skipped during serialization, such as a password.'],
+    ['stream header','A few bytes ObjectOutputStream writes when it opens. A second one mid-file breaks the reader.'],
+    ['EOFException','End of file. When reading objects in a loop this is the normal way to know you are finished.'],
+    ['replay','Re-running stored commands to rebuild state. Only possible because the action is an object.'],
+  ],
+},
+oop18:{
+  plain:'The logger should not care whether logs go to a file, memory or a database. So you split it in two: TransactionLogger is the thing everyone calls, and LogDestination is a plug socket. The logger holds a destination and forwards everything to it. Swapping to a database is one line, and adding a Kafka backend means writing one new class and touching nothing else.',
+  terms:[
+    ['Bridge pattern','Splitting an abstraction from its implementation so both can change independently.'],
+    ['abstraction (Bridge role)','TransactionLogger — what callers use.'],
+    ['implementor (Bridge role)','The LogDestination interface — the plug socket.'],
+    ['concrete implementor','FileLogDestination, MemoryLogDestination, DatabaseLogDestination — the actual plugs.'],
+    ['delegation','Forwarding a call to another object instead of doing the work yourself.'],
+    ['composition over inheritance','Holding an object rather than extending a class. Far more flexible.'],
+    ['runtime switching','Changing behaviour while the program is running via setDestination(...).'],
+    ['Strategy pattern','Looks similar, but it swaps one algorithm. Bridge is set up front to let two dimensions vary.'],
+    ['null-safe','Checking for null before use, and returning an empty list rather than throwing.'],
+  ],
+},
+oop19:{
+  plain:'Everything built so far gets one front door. AccountService keeps the map of accounts, asks the factory to build new ones, wraps each operation in a command, and hands it to the logger. The UI only ever talks to this class. Notice that the logger is passed in rather than created inside — that is what lets tests use a memory backend while the real app uses a file.',
+  terms:[
+    ['service layer','The layer that coordinates. It holds no business rules and no screen code.'],
+    ['registry','The in-memory store of accounts, here a Map keyed by account number.'],
+    ['Map','A key-to-value lookup. HashMap gives you an account by number in roughly constant time.'],
+    ['dependency injection','Passing a collaborator in from outside instead of creating it internally.'],
+    ['facade','A single simple entry point hiding a complicated subsystem behind it.'],
+    ['layered architecture','UI on top, then service, then domain, then persistence. Each layer only talks downward.'],
+    ['orchestrator','The class that puts the steps in order without doing the steps itself.'],
+    ['auto-increment','nextAccountNumber++ hands out 1001, 1002, 1003 and so on.'],
+  ],
+},
+oop20:{
+  plain:'The last piece is the screen. A loop prints a menu, reads a number, calls one service method, prints the result, and loops again. The rule is that this file contains no banking logic at all — if you moved to a website tomorrow, you would delete this class and nothing else would change. Wrap every call in try-catch so a wrong PIN shows a polite line instead of a stack trace.',
+  terms:[
+    ['presentation layer','The part that talks to the human. Thin by design.'],
+    ['Scanner','Java class for reading keyboard input.'],
+    ['nextInt / nextLine trap','nextInt leaves the Enter key in the buffer, so the next nextLine returns empty. Call nextLine once to clear it.'],
+    ['menu loop','A while loop that keeps showing options until the user chooses exit.'],
+    ['state machine','A system that sits in one state and moves to another based on input. A menu is the simplest kind.'],
+    ['graceful degradation','Failing politely with a message instead of crashing.'],
+    ['bootstrapping','The wiring in Main that creates each layer and connects them.'],
+    ['thin client','A UI that holds no logic, only display and input.'],
+  ],
+},
+};
+
+/* ---------- 6-day study plan ---------- */
+const PLAN = [
+  {date:'2026-09-19', label:'Fri 19 Sep', theme:'Quick wins in aptitude, start the DSA lectures',
+   tasks:['Aptitude: Percentage, Number Series, Direction Sense — these three give the fastest marks per minute',
+          'DSA: lectures 1 to 3. Lecture 1 is the template you will reuse eleven times, so do not skip it',
+          'Solve: Two Sum, Best Time to Buy and Sell Stock, Valid Palindrome, Two Sum II']},
+  {date:'2026-09-20', label:'Sat 20 Sep', theme:'OOP foundations + more lectures',
+   tasks:['OOP Phase 1: activities 1 to 6. Read the plain-English box first, then the code',
+          'Be able to draw the exception hierarchy from memory by tonight',
+          'DSA: lectures 4 to 6',
+          'Solve: the remaining easy arrays and easy two-pointer problems']},
+  {date:'2026-09-21', label:'Sun 21 Sep', theme:'Inheritance, polymorphism, counting windows',
+   tasks:['OOP Phase 2: activities 7 to 10. The Template Method in activity 9 is the single most likely written question',
+          'Write out the overloading vs overriding table from memory',
+          'DSA: lectures 7 to 9. Lecture 9 introduces the atMost trick used by 10 and 11',
+          'Solve: 3Sum, Container With Most Water, Sort Colors, Longest Substring Without Repeating Characters']},
+  {date:'2026-09-22', label:'Mon 22 Sep', theme:'Interfaces, factory, finish the lectures',
+   tasks:['OOP Phase 3: activities 11 to 13. Memorise the four tenure buckets and their numbers',
+          'DSA: lectures 10 to 12',
+          'Solve: the sliding window mediums — 1004, 904, 424, 930, 1248, 1358, 209, 567, 438']},
+  {date:'2026-09-23', label:'Tue 23 Sep', theme:'Patterns, architecture, hard problems',
+   tasks:['OOP Phases 4 and 5: activities 14 to 20',
+          'Be able to name all six patterns and say where each one lives in the codebase',
+          'Solve: Minimum Window Substring, Trapping Rain Water, Subarrays with K Different Integers',
+          'Read the Concept notes tab end to end']},
+  {date:'2026-09-24', label:'Wed 24 Sep', theme:'Remaining aptitude + question bank',
+   tasks:['Aptitude: Syllogism, Permutation & Combination, Probability, Blood Relations, Coding & Decoding',
+          'Work through all 55 OOP questions. Answer out loud before revealing',
+          'Redo any DSA problem you marked in progress but never finished',
+          'Book your slot if you have not already']},
+  {date:'2026-09-25', label:'Thu 25 Sep', theme:'Exam day — revision only, nothing new',
+   tasks:['Morning: read only your own notes and the Concept notes tab. No new problems',
+          'Re-read the eight transfer steps and the tenure tables — easy marks, easy to forget',
+          'Set up ten minutes early. Paper starts at 1:30 PM']},
+];
+
+const CONCEPTS = [
+{
+  id:'c-pillars', icon:'🏛️', title:'The four pillars, as used in this project',
+  body:[
+    ['Encapsulation','Private fields with public accessors. Account hides balance and pin so no outside code can set a negative balance or read the PIN. Activities 1 and 3.'],
+    ['Inheritance','SavingsAccount, CurrentAccount, FixedDepositAccount and SalaryAccount all extend Account / AbstractAccount, reusing the shared state and constructor logic through super(...). Activity 7.'],
+    ['Polymorphism','One Account reference, four different withdrawal behaviours, chosen by the JVM at runtime. Also visible in catch blocks, where catch(AccountException) handles all five subtypes. Activities 6 and 8.'],
+    ['Abstraction','AbstractAccount and IAccount expose what an account does without exposing how. Callers depend on the contract, not the class. Activities 9 and 11.'],
+  ],
+},
+{
+  id:'c-abs-vs-int', icon:'⚖️', title:'Abstract class vs interface',
+  body:[
+    ['Instantiation','Neither can be instantiated directly.'],
+    ['State','Abstract class can hold instance fields and constructors. An interface can only hold public static final constants.'],
+    ['Methods','Abstract class mixes abstract and concrete methods. An interface is abstract by default, with default and static methods available in modern Java.'],
+    ['Inheritance','A class extends exactly one abstract class but implements any number of interfaces.'],
+    ['Use it when','Abstract class for a shared base with shared state (AbstractAccount). Interface for a capability contract that unrelated types can sign (IAccount, LogDestination, TransactionCommand).'],
+  ],
+},
+{
+  id:'c-overload', icon:'🔀', title:'Overloading vs overriding',
+  body:[
+    ['Definition','Overloading: same name, different parameter list, same class. Overriding: same signature, subclass replaces the parent version.'],
+    ['Binding','Overloading is resolved at compile time (static binding). Overriding is resolved at run time (dynamic dispatch).'],
+    ['Return type','Overloading may change it freely. Overriding must keep it the same or return a subtype (covariant return).'],
+    ['Exceptions','An overriding method cannot throw broader checked exceptions than the one it overrides.'],
+    ['In this project','withdraw(double) and withdraw(double, String) are overloads. SavingsAccount.processDebit overrides AbstractAccount.processDebit.'],
+  ],
+},
+{
+  id:'c-exceptions', icon:'⚠️', title:'Exception model',
+  body:[
+    ['Throwable','Splits into Error (JVM problems, do not catch) and Exception.'],
+    ['Checked','Extends Exception. The compiler forces you to catch or declare. AccountException and all five subclasses are checked.'],
+    ['Unchecked','Extends RuntimeException. No compiler obligation. IllegalArgumentException from the constructor validations is unchecked.'],
+    ['throw vs throws','throw raises an instance right now; throws declares what a method may raise.'],
+    ['Catch order','Most specific first, base last, or the compiler reports unreachable code.'],
+    ['finally','Runs whether or not an exception occurred. Skipped only on System.exit or a JVM crash.'],
+    ['Custom exceptions','Give errors a type and a message. InsufficientBalanceException says far more than false.'],
+  ],
+},
+{
+  id:'c-patterns', icon:'🧩', title:'Every design pattern in the 20 activities',
+  body:[
+    ['Factory (Activity 11)','A static createAccount hides which concrete class is built. Client asks for "SAVINGS" and receives an IAccount.'],
+    ['Template Method (Activity 9)','AbstractAccount.withdraw fixes the sequence — PIN, status, amount, then processDebit. Subclasses fill in only the debit step.'],
+    ['Singleton (Activity 14)','AccountRulesEngine.getInstance() — private constructor, one shared instance holding the loaded properties.'],
+    ['Command (Activity 17)','DepositCommand, WithdrawCommand and TransferCommand turn an operation into a serializable object that can be logged and replayed.'],
+    ['Bridge (Activity 18)','TransactionLogger (abstraction) holds a LogDestination (implementor). File, Memory and Database backends swap at runtime.'],
+    ['Abstract Factory (Day 5 handout)','A factory of factories — one interface produces a family of related products without naming concrete classes.'],
+  ],
+},
+{
+  id:'c-absfactory', icon:'🏭', title:'Abstract Factory — the handout example',
+  body:[
+    ['Intent','Provide an interface for creating families of related or dependent objects without specifying their concrete classes.'],
+    ['The example','Button and ScrollBar are product interfaces. WindowsButton, WindowsScrollBar, LinuxButton and LinuxScrollBar are concrete products. Factory declares createButton(); WindowsFactory and LinuxFactory are concrete factories.'],
+    ['Why it matters','Client code holds a Factory reference, calls createButton(), and never mentions Windows or Linux. Switching the whole look and feel means swapping one factory object.'],
+    ['Factory Method vs Abstract Factory','Factory Method creates ONE product through a single method (AccountFactory). Abstract Factory creates a FAMILY of related products through an object with several create methods.'],
+  ],
+  code:`package com.training.model;
+
+public interface Button { public void draw(); }
+
+public class WindowsButton implements Button {
+    public void draw() { System.out.println("windows draw"); }
+}
+public class LinuxButton implements Button {
+    public void draw() { System.out.println("linux draw"); }
+}
+
+public interface Factory {
+    public Button createButton();
+    public ScrollBar createScrollBar();
+}
+
+public class WindowsFactory implements Factory {
+    public Button createButton() { return new WindowsButton(); }
+    public ScrollBar createScrollBar() { return new WindowsScrollBar(); }
+}
+
+// Client never names a concrete product
+public class FactoryMain {
+    public static void main(String[] args) {
+        Factory factory = new WindowsFactory();   // swap to LinuxFactory here only
+        Button b = factory.createButton();
+        b.draw();
+    }
+}`,
+},
+{
+  id:'c-solid', icon:'📐', title:'SOLID, mapped to these activities',
+  body:[
+    ['Single Responsibility','AccountRulesEngine holds policy, Account holds state, TransferService holds the transfer workflow, TransactionLog holds persistence.'],
+    ['Open/Closed','Adding a new account type touches only AccountFactory. Adding a new log backend touches only a new LogDestination class.'],
+    ['Liskov Substitution','Any subclass can stand in for AbstractAccount. FixedDeposit throwing on withdraw is the borderline case worth discussing.'],
+    ['Interface Segregation','LogDestination has four focused methods rather than one fat logging interface.'],
+    ['Dependency Inversion','AccountService depends on the TransactionLogger and LogDestination abstractions, not on a concrete file writer.'],
+  ],
+},
+{
+  id:'c-layers', icon:'🗂️', title:'The finished architecture',
+  body:[
+    ['Presentation','AccountUI, Main — reads input, prints output, holds no rules.'],
+    ['Service','AccountService, TransferService — orchestration, the single entry point.'],
+    ['Domain','Account and subclasses, IAccount, AccountFactory, AccountRulesEngine, Transaction, TransactionType — state and business rules.'],
+    ['Command / Logging','TransactionCommand implementations, TransactionLogger, LogDestination implementations, TransactionLog, SimulatedDatabase.'],
+    ['Configuration','config/rules/*.properties — policy values, changeable without recompiling.'],
+    ['Exceptions','com.gdb.exceptions — the shared error vocabulary used by every layer.'],
+  ],
+},
+];
+
+const QBANK = [
+{
+  id:'q-core', title:'Core OOP', icon:'🧠',
+  qs:[
+    ['Define encapsulation and show it from this project.','Bundling data with the methods that operate on it and restricting direct access. In Account, balance and pin are private; the only way to change balance is deposit or withdraw, which validate first. A public balance field would let any code set it to a negative number.'],
+    ['What is the difference between IS-A and HAS-A?','IS-A is inheritance: SavingsAccount IS-A Account. HAS-A is composition: TransactionLogger HAS-A LogDestination, AccountService HAS-A TransferService. Prefer composition when you only need the behaviour, not the identity.'],
+    ['Why must super(...) be the first statement in a subclass constructor?','The parent portion of the object must be fully initialised before the subclass touches any inherited field. Java enforces this so you can never read an uninitialised parent field.'],
+    ['Explain dynamic method dispatch.','The method that runs is chosen from the actual object type at run time, not the reference type at compile time. An AbstractAccount reference pointing at a CurrentAccount runs CurrentAccount.processDebit.'],
+    ['Overloading vs overriding — four differences.','Same class vs subclass; different parameter list vs identical signature; compile-time vs run-time binding; free return type vs same or covariant return type.'],
+    ['Can you instantiate an abstract class?','No. You can declare a reference of that type and point it at a concrete subclass, and the abstract class can have a constructor that subclasses call through super.'],
+    ['What happens if a subclass does not implement an inherited abstract method?','The subclass must itself be declared abstract, otherwise it is a compile error.'],
+    ['Why is AbstractAccount abstract instead of concrete?','A generic "account" has no meaningful debit rule. Making processDebit abstract forces every real account type to state its own rule and prevents anyone creating a rule-less account.'],
+    ['What does the static keyword mean for AccountFactory.createAccount?','It belongs to the class, not an instance, so you call it without constructing a factory object. It cannot use instance fields or this.'],
+    ['Can an interface have a constructor?','No. Interfaces have no instance state to initialise.'],
+  ],
+},
+{
+  id:'q-exc', title:'Exceptions', icon:'⚠️',
+  qs:[
+    ['Checked vs unchecked — which is used where in this project?','Checked extends Exception and must be caught or declared; AccountException and its five subclasses are checked because a caller can reasonably recover. Unchecked extends RuntimeException; IllegalArgumentException in the constructor validations is unchecked because bad construction arguments are a programming error.'],
+    ['Draw the exception hierarchy from Activity 5.','Exception → AccountException → InvalidAmountException, InsufficientBalanceException, MinimumBalanceViolationException, InactiveAccountException, InvalidPinException.'],
+    ['Why does withdraw declare throws AccountException rather than all five?','Every one of them is a subclass, so the base type covers the whole subtree. Callers can still catch a specific subtype when they want to handle it differently.'],
+    ['What is the compile error if you catch the base exception before a subclass?','The subclass catch block is unreachable, because the base catch already handles it. The compiler rejects the code.'],
+    ['Order the checks in Activity 5 withdraw and explain why.','PIN, then status, then amount positive, then sufficient balance. Authentication comes before authorisation, which comes before input validation, which comes before business rules — you should never reveal a balance problem to someone who failed the PIN.'],
+    ['When does a finally block not run?','If the JVM exits (System.exit), the thread is killed, or the JVM crashes. Otherwise it always runs, including after a return inside try.'],
+    ['Why is throwing an exception better than returning false?','The exception carries a type and a message, cannot be silently ignored by the caller, and separates the error path from the success path in the code.'],
+    ['How do you test that a method throws?','Call it inside try, put a fail marker immediately after the call, and print pass inside the matching catch block.'],
+  ],
+},
+{
+  id:'q-pat', title:'Design patterns', icon:'🧩',
+  qs:[
+    ['Explain the Template Method pattern using AbstractAccount.','The parent defines the skeleton of an algorithm in a concrete method (withdraw: PIN → status → amount → processDebit) and defers the varying step to an abstract method the subclass implements. The sequence cannot be broken by a subclass.'],
+    ['Write the Singleton pattern for AccountRulesEngine.','Private static instance field, private constructor, and public static synchronized getInstance() that lazily creates the instance. The private constructor is what stops anyone calling new.'],
+    ['What problem does the Factory pattern solve?','Client code would otherwise scatter new SavingsAccount(...) calls everywhere and depend on concrete classes. The factory centralises creation, so adding a type means editing one switch and nothing else.'],
+    ['Factory Method vs Abstract Factory.','Factory Method produces ONE product through a single method — AccountFactory.createAccount. Abstract Factory produces a FAMILY of related products through an object with several create methods — WindowsFactory producing both a Button and a ScrollBar.'],
+    ['Describe the Command pattern and its four roles.','Command (TransactionCommand interface), ConcreteCommand (DepositCommand, WithdrawCommand, TransferCommand), Receiver (Account, TransferService) and Invoker (TransactionLog / AccountService). It turns a request into an object that can be stored, queued, logged, replayed or undone.'],
+    ['Describe the Bridge pattern and its participants here.','Abstraction is TransactionLogger; Implementor is the LogDestination interface; Concrete Implementors are FileLogDestination, MemoryLogDestination and DatabaseLogDestination. The abstraction holds a reference to the implementor so both hierarchies can grow independently.'],
+    ['Bridge vs Strategy.','Structurally they look alike. Bridge is a structural pattern set up at design time to let two dimensions vary independently. Strategy is a behavioural pattern that swaps one interchangeable algorithm at run time.'],
+    ['How would you add a Kafka log destination?','Write KafkaLogDestination implements LogDestination and pass it to the logger. TransactionLogger, AccountService and every caller stay untouched — that is the Open/Closed Principle in practice.'],
+    ['Which patterns appear inside AccountService?','Factory (account creation), Command (each operation), Bridge (logging destination) and dependency injection of the logger. TransferService and the Singleton rules engine sit just behind it.'],
+  ],
+},
+{
+  id:'q-rules', title:'Rules engine & configuration', icon:'⚙️',
+  qs:[
+    ['State the four Savings tenure buckets with min balance and interest rate.','New (0–1 yr): Rs 10,000 at 2.70%. Standard (1–3 yrs): Rs 7,500 at 3.00%. Premium (3–5 yrs): Rs 5,000 at 3.50%. Privilege (5+ yrs): Rs 2,500 at 4.00%.'],
+    ['Why must the tenure checks run from the highest bucket down?','With an if-chain, a 6-year customer would match tenure >= 1 first and get the wrong bucket. Checking >= 5 first makes each branch exclusive.'],
+    ['What is the Current account overdraft limit for a turnover of Rs 5,000?','2.5 × 5,000 = 12,500, which is below the floor, so the limit is Rs 25,000.'],
+    ['Name the daily transfer limits by bucket.','Savings: 50,000 / 1,00,000 / 2,00,000 / 5,00,000. Current: 1,00,000 / 5,00,000 / 10,00,000 and privilege falls back to 0 because it is not defined. Fixed deposit: 0 at every tier. Salary: 1,00,000 / 5,00,000 / 10,00,000 / 25,00,000.'],
+    ['Why can a Fixed Deposit account never transfer money?','Its daily transfer limit is 0.0 in every tenure bucket, so canTransfer always returns false. Its processDebit also throws on any withdrawal before maturity.'],
+    ['How does java.util.Properties load a file and why supply defaults?','props.load(InputStream) reads key=value lines. getProperty(key, default) and a getDouble wrapper return the fallback when the key is missing or unparseable, so a missing config file degrades to sane values instead of a NullPointerException.'],
+    ['What happens if the .properties files are not copied into bin/?','The loader finds nothing on the classpath and the engine silently uses its default rules, so the test prints the wrong limits without any error. That is why the run instructions copy config into bin first.'],
+    ['Two advantages of external configuration.','Policy changes need no recompilation or redeployment, and non-developers can edit rates. It also keeps business values out of source control diffs of logic code.'],
+  ],
+},
+{
+  id:'q-tx', title:'Transactions, serialization & the service layer', icon:'💾',
+  qs:[
+    ['List the eight ordered steps of TransferService.transfer.','Null check; both accounts active; verify PIN; can withdraw; reset daily counter then check the daily limit; debit the source; credit the destination; update the daily transfer total. Nothing moves until every check has passed.'],
+    ['Why validate everything before moving any money?','Otherwise a failure halfway through leaves the system inconsistent — money debited but not credited. Validate-then-mutate gives you all-or-nothing behaviour without a transaction manager.'],
+    ['Name the Transaction fields and say which make it an audit record.','transactionId, timestamp, accountNumber, type, amount, balanceAfter, status, description, fromAccount, toAccount. The id, timestamp and balanceAfter are what turn it from a log line into an auditable record.'],
+    ['How is a Java enum more than a constant?','TransactionType is a real class — type safe, usable in a switch, printable, and able to carry fields and methods. Integer constants offer none of that and allow nonsense values.'],
+    ['Why keep deposit(double) and add depositWithTransaction(double)?','Backward compatibility. Existing callers and tests keep compiling while new code gets the richer return value. This is method overloading used deliberately.'],
+    ['What is serialVersionUID and why declare it?','A version stamp on a Serializable class. Without an explicit one, the JVM generates it from the class structure, so any later field change makes previously written files unreadable with an InvalidClassException.'],
+    ['Why does appending objects need AppendableObjectOutputStream?','ObjectOutputStream writes a stream header every time it is constructed. Appending a second header mid-file makes the reader fail. The subclass overrides writeStreamHeader to write nothing.'],
+    ['Why is EOFException treated as normal in readAll?','An object stream has no length prefix, so you read until it runs out. EOFException is the signal that the last object was read, not an error.'],
+    ['Why does AccountService take TransactionLogger as a constructor argument?','Dependency injection. Tests pass a MemoryLogDestination for speed and isolation; Main passes a FileLogDestination for real persistence. The service code is identical either way.'],
+    ['Name the four layers of the finished application with one class each.','Presentation: AccountUI. Service: AccountService. Domain: SavingsAccount. Persistence: FileLogDestination. Configuration sits alongside as the .properties files.'],
+  ],
+},
+{
+  id:'q-code', title:'Code output & trace questions', icon:'🧪',
+  qs:[
+    ['An Account has balance 5000 and PIN "1234". What does withdraw(10000, "1234") do in Activity 3 versus Activity 5?','Activity 3 returns false and leaves the balance at 5000. Activity 5 throws InsufficientBalanceException with a message, leaving the balance at 5000.'],
+    ['SavingsAccount has balance 10000 and minBalance 1000. Trace withdraw(9500, "1234").','Template method validates PIN, status and amount, then calls processDebit(9500). 10000 − 9500 = 500, which is below 1000, so MinimumBalanceViolationException is thrown and the balance stays at 10000.'],
+    ['CurrentAccount has balance 5000 and overdraftLimit 25000. What is the balance after withdraw(8000)?','−3000. Current accounts may go negative down to −25000, so the debit is allowed.'],
+    ['Same account — what does withdraw(35000) do?','5000 − 35000 = −30000, which is beyond −25000, so InsufficientBalanceException is thrown and the balance is unchanged.'],
+    ['A FixedDepositAccount with balance 50000 calls withdraw(100, correct PIN). What happens?','AccountException — premature withdrawal is blocked regardless of amount, PIN or balance.'],
+    ['A SavingsAccount with 4 years of tenure is created through the factory. What are its minBalance and interestRate?','Premium bucket: minBalance 5000.0 and interestRate 3.50%.'],
+    ['applyInterest() runs on a Savings balance of 10000 at 4%. What is the new balance?','10400.0 — interest is 10000 × 4 / 100 = 400, added to the balance.'],
+    ['A transfer of Rs 20,000 is attempted six times in one day on a Savings account with 0 years of tenure. What happens?','The limit is Rs 50,000, so the first two succeed (40,000 total). The third pushes the total to 60,000, so canTransfer returns false and AccountException is thrown naming the remaining Rs 10,000.'],
+    ['What does new Account("A1","Minor",16,1000,"SAVINGS","ACTIVE","1234") do?','Throws IllegalArgumentException("Customer age must be 18 or above") from the constructor. No object is created.'],
+    ['What does AccountFactory.createAccount("CRYPTO", ...) do?','Falls to the default branch of the switch and throws IllegalArgumentException("Unknown account type: CRYPTO").'],
+  ],
+},
+];
+
 const BADGES = [
   {id:'b-first', ico:'🎯', nm:'First Move',       ds:'Finish your first item'},
   {id:'b-apt',   ico:'🧠', nm:'Aptitude Ace',     ds:'All 8 aptitude topics'},
@@ -475,6 +1938,14 @@ const BADGES = [
   {id:'b-win',   ico:'🪟', nm:'Window Wizard',    ds:'Every sliding-window problem'},
   {id:'b-hard',  ico:'🔥', nm:'Hard Mode',        ds:'All 6 hard problems'},
   {id:'b-note',  ico:'✍️', nm:'Scribe',           ds:'Notes on 12 different items'},
+  {id:'b-ph1',   ico:'🧱', nm:'Foundations',      ds:'OOP activities 1–6'},
+  {id:'b-ph2',   ico:'🌳', nm:'Shape Shifter',    ds:'OOP activities 7–10'},
+  {id:'b-ph3',   ico:'🏭', nm:'Factory Floor',    ds:'OOP activities 11–13'},
+  {id:'b-ph4',   ico:'⚙️', nm:'Config Master',    ds:'OOP activities 14–16'},
+  {id:'b-ph5',   ico:'🏛️', nm:'Pattern Maker',    ds:'OOP activities 17–20'},
+  {id:'b-oop',   ico:'🏦', nm:'Architect',        ds:'All 20 OOP activities'},
+  {id:'b-easy',  ico:'🌱', nm:'Warmed Up',        ds:'Every easy problem'},
+  {id:'b-plan',  ico:'📅', nm:'On Schedule',      ds:'Clear one full plan day'},
   {id:'b-half',  ico:'⚡', nm:'Halfway There',    ds:'50% of everything done'},
   {id:'b-all',   ico:'👑', nm:'Exam Ready',       ds:'100% of everything done'},
 ];
@@ -492,6 +1963,7 @@ const LEVELS = [
 const ITEMS = {};                     // id -> {kind, label, group, xpDone}
 APT.forEach(a => ITEMS[a.id] = {kind:'apt', label:a.name, group:'Aptitude', xpDone:120});
 LEC.forEach(l => ITEMS[l.id] = {kind:'lec', label:'L'+l.n+' · '+l.t, group:'Lectures', xpDone:80});
+OOP.forEach(a => ITEMS[a.id] = {kind:'oop', label:'A'+a.n+' · '+a.title, group:'OOP', xpDone:110});
 const XP_BY_DIFF = {Easy:35, Medium:70, Hard:120};
 Object.keys(LC).forEach(k => {
   ['easy','medium','hard'].forEach(lvl => LC[k][lvl].forEach(p => {
@@ -578,8 +2050,25 @@ function toggleWorking(id){ setState(id, st(id)==='working' ? 'todo' : 'working'
 function toggleDrawer(id){
   const d = el('dr-'+id), c = el('ca-'+id);
   if(!d) return;
-  d.classList.toggle('open');
-  if(c) c.textContent = d.classList.contains('open') ? '▲' : '▼';
+  const opening = !d.classList.contains('open');
+  if(opening){
+    d.classList.add('open');
+    d.style.maxHeight = d.scrollHeight + 'px';
+    // once the transition finishes, let it size naturally so later edits (typing notes) don't get clipped
+    d.addEventListener('transitionend', function fix(e){
+      if(e.propertyName === 'max-height' && d.classList.contains('open')){
+        d.style.maxHeight = 'none';
+      }
+      d.removeEventListener('transitionend', fix);
+    });
+  } else {
+    d.style.maxHeight = d.scrollHeight + 'px';   // fix current px height first
+    requestAnimationFrame(() => {
+      d.classList.remove('open');
+      d.style.maxHeight = '0px';
+    });
+  }
+  if(c) c.textContent = opening ? '▲' : '▼';
 }
 function resetAll(){
   if(!confirm('Clear every tick, note and badge? This cannot be undone.')) return;
@@ -589,6 +2078,22 @@ function resetAll(){
 }
 
 /* ============ BADGES ============ */
+function phaseDone(ph){
+  const ids = OOP.filter(a => a.ph === ph).map(a => a.id);
+  return ids.length > 0 && countDone(ids) === ids.length;
+}
+const PLAN_ITEMS = [
+  ['apt-pct','apt-series','apt-dir','lec1','lec2','lec3'],
+  ['oop1','oop2','oop3','oop4','oop5','oop6','lec4','lec5','lec6'],
+  ['oop7','oop8','oop9','oop10','lec7','lec8','lec9'],
+  ['oop11','oop12','oop13','lec10','lec11','lec12'],
+  ['oop14','oop15','oop16','oop17','oop18','oop19','oop20'],
+  ['apt-syl','apt-pnc','apt-prob','apt-blood','apt-code'],
+  [],
+];
+function planIds(day){
+  return (PLAN_ITEMS[PLAN.indexOf(day)] || []).filter(id => ITEMS[id]);
+}
 function checkBadges(){
   const aptIds  = APT.map(a=>a.id);
   const lecIds  = LEC.map(l=>l.id);
@@ -607,6 +2112,12 @@ function checkBadges(){
     'b-hard' : countDone(hardIds) === hardIds.length,
     'b-note' : notesN >= 12,
     'b-half' : doneN >= Math.ceil(TOTAL/2),
+    'b-ph1'  : phaseDone('ph1'), 'b-ph2': phaseDone('ph2'), 'b-ph3': phaseDone('ph3'),
+    'b-ph4'  : phaseDone('ph4'), 'b-ph5': phaseDone('ph5'),
+    'b-oop'  : countDone(OOP.map(a=>a.id)) === OOP.length,
+    'b-easy' : countDone(Object.keys(LC).flatMap(k => LC[k].easy.map(p=>p.id)))
+               === Object.keys(LC).reduce((x,k)=>x+LC[k].easy.length,0),
+    'b-plan' : PLAN.some(d => planIds(d).length > 0 && countDone(planIds(d)) === planIds(d).length),
     'b-all'  : doneN === TOTAL,
   };
   let fresh = null;
@@ -712,6 +2223,127 @@ function buildProblems(key){
   return html;
 }
 
+
+/* ---------- PART B builders ---------- */
+let oopView = 'ph1';
+const OOP_TABS = PHASES.map(p => ({id:p.id, label:p.icon+' '+p.label}))
+  .concat([{id:'concepts', label:'📚 Concept notes'},
+           {id:'qbank',    label:'❓ Likely questions'},
+           {id:'glossary', label:'🔤 Glossary'},
+           {id:'scratch',  label:'📝 Scratchpad'}]);
+
+function buildOopTabs(){
+  el('oop-tabs').innerHTML = OOP_TABS.map(t =>
+    '<button class="stab'+(t.id===oopView?' on':'')+'" data-o="'+t.id+'">'+t.label+'</button>').join('');
+  el('oop-tabs').querySelectorAll('.stab').forEach(b => b.addEventListener('click', () => {
+    oopView = b.dataset.o; buildOop();
+  }));
+}
+
+function buildOopPhase(phId){
+  const ph = PHASES.find(x => x.id === phId);
+  const acts = OOP.filter(a => a.ph === phId);
+  const n = countDone(acts.map(a => a.id));
+  let html = '<div class="phase-head"><h4>'+ph.icon+' '+esc(ph.label)+
+    '<span data-phtally="'+ph.id+'">'+esc(ph.range)+' · '+n+'/'+acts.length+' done</span></h4><p>'+esc(ph.blurb)+'</p></div>';
+  html += acts.map(a => {
+    const s = st(a.id);
+    return '<div class="item st-'+s+'" id="it-'+a.id+'">'+
+      '<div class="item-head" onclick="toggleDrawer(\''+a.id+'\')">'+
+        '<div class="tick" onclick="event.stopPropagation();toggleDone(\''+a.id+'\')" title="Mark revised">✓</div>'+
+        '<div class="item-body">'+
+          '<div class="item-title"><span class="lnum">A'+a.n+'</span>'+esc(a.title)+'</div>'+
+          '<div class="item-sub">'+esc(a.obj)+'</div>'+
+          '<div class="item-actions">'+stateBtns(a.id)+'</div>'+
+        '</div>'+
+        '<span class="caret" id="ca-'+a.id+'">▼</span>'+
+      '</div>'+
+      '<div class="drawer" id="dr-'+a.id+'"><div class="drawer-in">'+
+        (WHY[a.id] ? '<div class="whybox">'+
+          '<div class="why-row"><span class="why-tag why-before">BEFORE</span><span>'+esc(WHY[a.id].before)+'</span></div>'+
+          '<div class="why-row"><span class="why-tag why-after">AFTER</span><span>'+esc(WHY[a.id].after)+'</span></div>'+
+          '<div class="why-row"><span class="why-tag why-next">UNLOCKS</span><span>'+esc(WHY[a.id].enables)+'</span></div>'+
+        '</div>' : '')+
+        (PLAIN[a.id] ? '<div class="plainbox"><b>In plain words</b>'+esc(PLAIN[a.id].plain)+'</div>' : '')+
+        (PLAIN[a.id] ? '<div class="dsec"><span class="lbl">WORDS USED HERE, EXPLAINED</span><div class="dl">'+
+          PLAIN[a.id].terms.map(t => '<div class="row"><b>'+esc(t[0])+'</b><span>'+esc(t[1])+'</span></div>').join('')+
+        '</div></div>' : '')+
+        '<div class="dsec"><span class="lbl">FILES YOU TOUCH</span><div class="files">'+
+          a.files.map(f => '<code>'+esc(f)+'</code>').join('')+'</div></div>'+
+        '<div class="dsec"><span class="lbl">WHAT THE ACTIVITY ASKS FOR</span><ol class="steps">'+
+          a.steps.map(x => '<li>'+esc(x)+'</li>').join('')+'</ol></div>'+
+        '<div class="dsec"><span class="lbl">CONCEPTS BEING TESTED</span><ul class="keys">'+
+          a.key.map(x => '<li>'+esc(x)+'</li>').join('')+'</ul></div>'+
+        '<div class="dsec"><span class="lbl">THE CODE THAT MATTERS</span><pre class="code">'+esc(a.code)+'</pre></div>'+
+        '<div class="dsec"><span class="lbl">LIKELY TO BE ASKED</span><ul class="ask">'+
+          a.ask.map(x => '<li>'+esc(x)+'</li>').join('')+'</ul></div>'+
+        notesBlock(a.id, 'Your own explanation of this activity, in one paragraph…')+
+      '</div></div>'+
+    '</div>';
+  }).join('');
+  return html;
+}
+
+function buildConcepts(){
+  return CONCEPTS.map(c =>
+    '<div class="concept"><h4>'+c.icon+' '+esc(c.title)+'</h4><div class="dl">'+
+      c.body.map(r => '<div class="row"><b>'+esc(r[0])+'</b><span>'+esc(r[1])+'</span></div>').join('')+
+    '</div>'+(c.code ? '<pre class="code" style="margin-top:15px">'+esc(c.code)+'</pre>' : '')+'</div>'
+  ).join('');
+}
+
+function toggleQA(qid){
+  const n = el(qid); if(n) n.classList.toggle('open');
+  const c = n && n.querySelector('.qa-q em');
+  if(c) c.textContent = n.classList.contains('open') ? '▲' : '▼';
+}
+
+function buildQbank(){
+  let total = 0;
+  const body = QBANK.map(g => {
+    const rows = g.qs.map((qa, i) => {
+      total++;
+      const qid = g.id + '-' + i;
+      return '<div class="qa" id="'+qid+'">'+
+        '<div class="qa-q" onclick="toggleQA(\''+qid+'\')"><i>Q'+total+'</i>'+esc(qa[0])+'<em>▼</em></div>'+
+        '<div class="qa-a">'+esc(qa[1])+'</div>'+
+      '</div>';
+    }).join('');
+    return '<div class="concept"><h4>'+g.icon+' '+esc(g.title)+'</h4>'+rows+'</div>';
+  }).join('');
+  return '<div class="focus-box" style="margin-bottom:16px">Click any question to reveal the answer. Try to answer out loud first — in a 45-minute written paper the marks come from the <b>because</b>, not the one-word label.</div>' + body;
+}
+
+function buildGlossary(){
+  const seen = new Map();
+  OOP.forEach(a => {
+    const pl = PLAIN[a.id]; if(!pl) return;
+    pl.terms.forEach(t => { if(!seen.has(t[0])) seen.set(t[0], {def:t[1], act:a.n}); });
+  });
+  const rows = [...seen.entries()].sort((x,y) => x[0].toLowerCase().localeCompare(y[0].toLowerCase()));
+  return '<div class="focus-box" style="margin-bottom:16px">Every term used across the 20 activities, in one alphabetical list. '+
+    rows.length+' entries. The number on the right is where it first comes up.</div>'+
+    '<div class="concept"><div class="dl">'+
+      rows.map(r => '<div class="row"><b>'+esc(r[0])+'</b><span>'+esc(r[1].def)+
+        ' <em style="color:var(--mute);font-style:normal;font-family:JetBrains Mono,monospace;font-size:10.5px">A'+r[1].act+'</em></span></div>').join('')+
+    '</div></div>';
+}
+
+function buildOop(){
+  const box = el('oop-body');
+  if(oopView === 'concepts')      box.innerHTML = buildConcepts();
+  else if(oopView === 'qbank')    box.innerHTML = buildQbank();
+  else if(oopView === 'glossary') box.innerHTML = buildGlossary();
+  else if(oopView === 'scratch')  box.innerHTML =
+      '<div class="list-card"><span class="lbl">SCRATCHPAD</span>'+
+      '<textarea id="oop-scratch" style="min-height:260px" placeholder="Anything extra from the Saturday classes — diagrams described in words, doubts, last-minute reminders…"></textarea>'+
+      '<div class="ta-foot"><span>Saved automatically</span><span id="oop-saved"></span></div></div>';
+  else box.innerHTML = buildOopPhase(oopView);
+
+  el('oop-tabs').querySelectorAll('.stab').forEach(b => b.classList.toggle('on', b.dataset.o === oopView));
+  if(oopView === 'scratch') wireScratch(); else wireNotes();
+}
+
 let dsaView = 'lectures';
 function buildDsa(){
   el('dsa-body').innerHTML = dsaView === 'lectures' ? buildLectures() : buildProblems(dsaView);
@@ -728,8 +2360,8 @@ function renderBadges(freshId){
       '<div class="ds">'+esc(b.ds)+'</div>'+
     '</div>';
   }).join('');
-  el('bdg-n').textContent = n + '/10';
-  el('chip-bdg').textContent = n + '/10 unlocked';
+  el('bdg-n').textContent = n + '/' + BADGES.length;
+  el('chip-bdg').textContent = n + '/' + BADGES.length + ' unlocked';
 }
 
 /* ============ RENDER ============ */
@@ -746,8 +2378,9 @@ function renderAll(){
   const aptIds = APT.map(a=>a.id), lecIds = LEC.map(l=>l.id);
   const gIds = k => ['easy','medium','hard'].flatMap(l => LC[k][l].map(p=>p.id));
   const lcIds = Object.keys(LC).flatMap(gIds);
-  const aptD = countDone(aptIds), lecD = countDone(lecIds), lcD = countDone(lcIds);
-  const doneN = aptD + lecD + lcD;
+  const oopIds = OOP.map(a => a.id);
+  const aptD = countDone(aptIds), lecD = countDone(lecIds), lcD = countDone(lcIds), oopD = countDone(oopIds);
+  const doneN = aptD + lecD + lcD + oopD;
   const overall = Math.round(doneN / TOTAL * 100);
 
   el('t-apt').textContent = aptD + '/' + aptIds.length;
@@ -756,13 +2389,15 @@ function renderAll(){
   el('chip-lec').textContent = lecD + '/12 lectures';
   el('chip-lc').textContent  = lcD + ' problems solved';
   el('chip-overall').textContent = overall + '% complete';
+  el('t-oop').textContent = oopD + '/' + oopIds.length;
+  el('chip-oop').textContent = oopD + '/' + oopIds.length + ' activities';
 
   // syllabus part cards
   const partData = [
     {ico:'🧮', h:'Part A · Aptitude', sub:'30 minutes · 8 topics', pane:'apt', d:aptD, t:aptIds.length, c:'var(--teal)',
      lines:['<span>'+aptD+'</span> of '+aptIds.length+' topics watched and ticked', (aptIds.length-aptD)+' still to go']},
-    {ico:'🧩', h:'Part B · OOP', sub:'45 minutes · not filled in yet', pane:'oop', d:0, t:0, c:'var(--violet)',
-     lines:['Based on System Design Saturday classes','up to and including 19 Sep 2026']},
+    {ico:'🧩', h:'Part B · OOP', sub:'45 minutes · 20 activities, 5 phases', pane:'oop', d:oopD, t:oopIds.length, c:'var(--violet)',
+     lines:['<span>'+oopD+'</span> of '+oopIds.length+' activities revised', 'Saturday classes up to 19 Sep 2026']},
     {ico:'⚙️', h:'Part C · DSA', sub:'45 minutes · arrays, two pointer, window', pane:'dsa', d:lecD+lcD, t:lecIds.length+lcIds.length, c:'var(--sky)',
      lines:['<span>'+lecD+'</span> of 12 lectures watched','<span>'+lcD+'</span> of '+lcIds.length+' problems solved']},
   ];
@@ -780,11 +2415,18 @@ function renderAll(){
     '</div>';
   }).join('');
 
+  renderPlan();
+
   // pending / done lists
   const rows = ALL_IDS.map(id => ({id, ...ITEMS[id]}));
   const fmt = r => '<li><b>'+esc(r.group)+'</b><span>'+esc(r.label)+'</span></li>';
   const pend = rows.filter(r => !isDone(r.id));
   const dn   = rows.filter(r =>  isDone(r.id));
+  document.querySelectorAll('[data-phtally]').forEach(sp => {
+    const ph = PHASES.find(x => x.id === sp.dataset.phtally);
+    const acts = OOP.filter(a => a.ph === ph.id);
+    sp.textContent = ph.range + ' · ' + countDone(acts.map(a=>a.id)) + '/' + acts.length + ' done';
+  });
   document.querySelectorAll('[data-tally]').forEach(sp => {
     const [gk, lvl] = sp.dataset.tally.split('.');
     const list = LC[gk][lvl];
@@ -794,6 +2436,63 @@ function renderAll(){
   el('pending').innerHTML = pend.length ? pend.map(fmt).join('') : '<div class="empty">Nothing left. You are done.</div>';
   el('done').innerHTML    = dn.length   ? dn.map(fmt).join('')   : '<div class="empty">Nothing ticked off yet — start with one aptitude video.</div>';
 }
+
+/* ============ STUDY PLAN ============ */
+function todayISO(){
+  const n = new Date();
+  return n.getFullYear()+'-'+String(n.getMonth()+1).padStart(2,'0')+'-'+String(n.getDate()).padStart(2,'0');
+}
+function renderPlan(){
+  const today = todayISO();
+  let remaining = 0;
+  el('plan').innerHTML = PLAN.map(d => {
+    const ids = planIds(d);
+    const done = countDone(ids);
+    const isToday = d.date === today;
+    const isPast  = d.date < today;
+    if(!isPast && ids.length) remaining += (ids.length - done);
+    const rightTag = isToday
+      ? '<span class="now">TODAY</span>'
+      : (ids.length ? '<span class="pg">'+done+'/'+ids.length+'</span>' : '');
+    return '<div class="day'+(isToday?' today':'')+(isPast && !isToday?' past':'')+'">'+
+      '<div class="day-top"><b>'+esc(d.label)+'</b><i>'+esc(d.theme)+'</i>'+rightTag+'</div>'+
+      '<ul>'+d.tasks.map(t => '<li>'+esc(t)+'</li>').join('')+'</ul>'+
+    '</div>';
+  }).join('');
+  const lt = el('plan-left');
+  if(lt) lt.textContent = remaining > 0 ? remaining + ' scheduled items left' : 'schedule clear';
+}
+
+/* ============ BACKUP ============ */
+function openBackup(){
+  el('backup-ta').value = JSON.stringify(S);
+  el('modal').classList.add('on');
+}
+function closeBackup(){ el('modal').classList.remove('on'); }
+function copyBackup(){
+  const ta = el('backup-ta');
+  ta.focus(); ta.select();
+  try{
+    if(navigator.clipboard && navigator.clipboard.writeText){
+      navigator.clipboard.writeText(ta.value).then(()=>toast('Backup copied to clipboard'),
+                                                   ()=>toast('Text selected — press Ctrl+C'));
+    } else { document.execCommand('copy'); toast('Backup copied'); }
+  }catch(e){ toast('Text selected — press Ctrl+C'); }
+}
+function restoreBackup(){
+  const raw = el('backup-ta').value.trim();
+  if(!raw){ toast('Paste your backup text first'); return; }
+  let parsed;
+  try{ parsed = JSON.parse(raw); }
+  catch(e){ toast('That is not a valid backup'); return; }
+  if(!parsed || typeof parsed !== 'object' || !parsed.items){ toast('That is not a valid backup'); return; }
+  if(!confirm('Replace your current progress with this backup?')) return;
+  S = {items:parsed.items||{}, notes:parsed.notes||{}, xp:parsed.xp||0,
+       badges:parsed.badges||{}, oop:parsed.oop||''};
+  save(); buildAll(); renderAll(); renderBadges(); closeBackup();
+  toast('Progress restored');
+}
+document.addEventListener('keydown', e => { if(e.key === 'Escape') closeBackup(); });
 
 /* ============ NOTES WIRING ============ */
 function wireNotes(){
@@ -829,17 +2528,25 @@ document.querySelectorAll('.stab').forEach(b => b.addEventListener('click', () =
 }));
 
 /* ============ OOP SCRATCHPAD ============ */
-const scratch = el('oop-scratch');
-scratch.value = S.oop || '';
 let sTimer;
-scratch.addEventListener('input', () => {
-  S.oop = scratch.value;
-  clearTimeout(sTimer);
-  sTimer = setTimeout(() => { save(); el('oop-saved').textContent='saved'; setTimeout(()=>el('oop-saved').textContent='',1400); }, 500);
-});
+function wireScratch(){
+  const scratch = el('oop-scratch');
+  if(!scratch || scratch.dataset.wired) return;
+  scratch.dataset.wired = '1';
+  scratch.value = S.oop || '';
+  scratch.addEventListener('input', () => {
+    S.oop = scratch.value;
+    clearTimeout(sTimer);
+    sTimer = setTimeout(() => {
+      save();
+      const f = el('oop-saved');
+      if(f){ f.textContent = 'saved'; setTimeout(()=>{ if(f) f.textContent=''; }, 1400); }
+    }, 500);
+  });
+}
 
 /* ============ BOOT ============ */
-function buildAll(){ buildApt(); buildDsa(); wireNotes(); }
+function buildAll(){ buildApt(); buildDsa(); buildOopTabs(); buildOop(); wireNotes(); }
 buildAll();
 renderAll();
 renderBadges();
