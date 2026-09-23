@@ -1,0 +1,510 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Swift Written Test Prep</title>
+<style>
+:root{
+  --bg:#fafaf7; --card:#fff; --ink:#1c1c1c; --sub:#5a5a52; --line:#e4e2da;
+  --accent:#c1440e; --accent2:#2f6f4f; --code-bg:#1e1e1e; --code-ink:#e8e8e0;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --bg:#161513; --card:#1f1e1b; --ink:#f0efe9; --sub:#b3b0a4; --line:#33322c;
+    --accent:#e2703a; --accent2:#5fb98a; --code-bg:#111; --code-ink:#e8e8e0;
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#161513; --card:#1f1e1b; --ink:#f0efe9; --sub:#b3b0a4; --line:#33322c;
+  --accent:#e2703a; --accent2:#5fb98a; --code-bg:#111; --code-ink:#e8e8e0;
+}
+*{box-sizing:border-box}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+body{
+  margin:0;background:var(--bg);color:var(--ink);
+  font-family:"Georgia",serif;line-height:1.5;
+  padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px);
+}
+header{
+  padding:22px 16px 10px;text-align:center;border-bottom:2px solid var(--accent);
+}
+header h1{margin:0 0 4px;font-size:1.5rem;letter-spacing:.3px}
+header p{margin:0;color:var(--sub);font-family:Helvetica,Arial,sans-serif;font-size:.9rem}
+nav{
+  display:flex;flex-wrap:wrap;gap:6px;justify-content:center;padding:14px 10px;
+  position:sticky;top:env(safe-area-inset-top,0px);background:var(--bg);z-index:5;
+  border-bottom:1px solid var(--line);
+}
+nav button{
+  font-family:Helvetica,Arial,sans-serif;font-size:.8rem;padding:7px 12px;border-radius:20px;
+  border:1px solid var(--line);background:var(--card);color:var(--ink);cursor:pointer;
+}
+nav button.active{background:var(--accent);color:#fff;border-color:var(--accent)}
+main{max-width:820px;margin:0 auto;padding:18px 16px 60px}
+.topic{display:none}
+.topic.active{display:block;animation:fade .2s ease}
+@keyframes fade{from{opacity:0}to{opacity:1}}
+h2{color:var(--accent);border-bottom:2px solid var(--line);padding-bottom:6px;font-size:1.3rem}
+h3{font-family:Helvetica,Arial,sans-serif;font-size:.95rem;text-transform:uppercase;letter-spacing:.5px;color:var(--accent2);margin-top:26px}
+.notes{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:14px 16px;margin-top:10px}
+.notes ul{margin:6px 0;padding-left:20px}
+pre{
+  background:var(--code-bg);color:var(--code-ink);padding:12px 14px;border-radius:8px;
+  overflow-x:auto;font-size:.82rem;font-family:Menlo,Consolas,monospace;line-height:1.45;max-width:100%;
+}
+code{font-family:Menlo,Consolas,monospace}
+.qcard{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:12px 16px;margin:10px 0}
+.qcard b{color:var(--ink)}
+details summary{cursor:pointer;color:var(--accent);font-family:Helvetica,Arial,sans-serif;font-size:.85rem;margin-top:6px}
+.opts{font-family:Helvetica,Arial,sans-serif;font-size:.9rem;margin:6px 0;color:var(--sub)}
+.badge{display:inline-block;font-family:Helvetica,Arial,sans-serif;font-size:.7rem;background:var(--accent2);color:#fff;padding:2px 8px;border-radius:10px;margin-left:6px;vertical-align:middle}
+.note-line{font-family:Helvetica,Arial,sans-serif;font-size:.85rem;color:var(--sub);margin-top:20px;border-top:1px solid var(--line);padding-top:10px}
+</style>
+</head>
+<body>
+<header>
+  <h1>Swift Written Test — Prep Sheet</h1>
+  <p>Sept 23, 12–1 PM · 30 marks · 10 MCQ + 2 programming Qs (10 marks each)</p>
+</header>
+
+<nav id="nav"></nav>
+<main id="main"></main>
+
+<script>
+const topics = [
+{id:"structs", name:"Structs", notes:`
+<ul>
+<li><b>Value type</b> — copied on assignment/pass to functions; each copy is independent.</li>
+<li>Gets a free <b>memberwise initializer</b> if you don't write your own.</li>
+<li>Instance methods can't modify stored properties unless marked <code>mutating</code>.</li>
+<li>A <code>let</code> struct instance is fully immutable — can't call mutating methods on it.</li>
+</ul>`,
+code:`struct Point {
+    var x = 0, y = 0
+    mutating func moveBy(dx: Int, dy: Int) {
+        x += dx; y += dy
+    }
+}
+var p = Point(x: 1, y: 2)
+p.moveBy(dx: 3, dy: 1)   // p = (4, 3)
+let q = Point(x: 0, y: 0)
+// q.moveBy(dx: 1, dy: 1) // ERROR: q is immutable (let)`,
+mcqs:[
+ {q:"What's wrong with a struct method that modifies a property but isn't marked <code>mutating</code>?",opts:["Nothing, it compiles fine","Compile-time error: 'self' is immutable","Runtime crash","Works only for classes"],a:"Compile-time error: 'self' is immutable",r:"Struct instance methods are non-mutating by default since structs are value types; you must opt in with <code>mutating</code>."},
+ {q:"When you assign one struct instance to another variable, what happens?",opts:["Both point to the same memory (reference)","A full independent copy is made","Compile error","Only class-type properties are copied"],a:"A full independent copy is made",r:"Structs are value types — assignment copies the entire value."},
+ {q:"If you don't define an <code>init</code>, what initializer does Swift give a struct?",opts:["No initializer at all","A memberwise initializer using all stored properties","A default init(){} only","An init that requires optionals"],a:"A memberwise initializer using all stored properties",r:"Swift auto-generates a memberwise init as long as you don't declare a custom initializer."},
+ {q:"When a struct instance is passed as an argument to a function, what does the function receive?",opts:["A reference to the original instance","A brand-new independent copy","A pointer that can mutate the original","Nothing — structs can't be passed to functions"],a:"A brand-new independent copy",r:"Value-type semantics apply to function arguments too — the function gets its own copy."},
+ {q:"A struct property is declared <code>var name: String = \"Guest\"</code>. Can you skip it in a memberwise init call?",opts:["No, all properties are always required","Yes, default values make that parameter optional to supply","Only if it's declared as optional","Only for computed properties"],a:"Yes, default values make that parameter optional to supply",r:"A stored property with a default value becomes an optional parameter in the auto-generated memberwise initializer."},
+ {q:"How do you declare a property shared across all instances of a struct, not per-instance?",opts:["shared var","static var","global var","class var"],a:"static var",r:"'static' properties belong to the type itself, not to individual instances (structs use 'static', not 'class', for this)."},
+ {q:"If all of a struct's stored properties conform to Equatable, what can Swift do?",opts:["Nothing automatic happens","Automatically synthesize == for the struct if you declare conformance to Equatable","Automatically make it Comparable too","Automatically make it Hashable but not Equatable"],a:"Automatically synthesize == for the struct if you declare conformance to Equatable",r:"Swift synthesizes Equatable's == for free when every stored property is itself Equatable."},
+ {q:"A struct has a stored <code>var items: [Int]</code>. Appending to it inside a method requires —",opts:["Nothing special, arrays are reference types","Marking the method mutating","Making items a class","Using inout in the struct declaration"],a:"Marking the method mutating",r:"Arrays are value types too; modifying one stored inside a struct still counts as mutating the struct."},
+ {q:"Two struct instances of a type that does NOT conform to Equatable are compared with ==. What happens?",opts:["Runtime crash","Compares memory addresses","Compile-time error — == isn't defined","Always returns false"],a:"Compile-time error — == isn't defined",r:"Without Equatable conformance (synthesized or manual), the == operator simply isn't available for that type."},
+],
+progs:[
+ {t:"Book (Comparable, optional rating, descending sort with nils last)",body:`struct Book conforming to Comparable: id:Int, title:String, rating:Double?.
+Sort descending by rating; nil ratings go last; ties broken alphabetically by title. Demonstrate with .sorted().`,
+ sol:`struct Book: Comparable {
+    let id: Int
+    let title: String
+    let rating: Double?
+
+    static func < (lhs: Book, rhs: Book) -> Bool {
+        switch (lhs.rating, rhs.rating) {
+        case let (r1?, r2?):
+            if r1 != r2 { return r1 > r2 }        // higher first
+            return lhs.title < rhs.title
+        case (.some, .none): return true
+        case (.none, .some): return false
+        case (.none, .none): return lhs.title < rhs.title
+        }
+    }
+    static func == (lhs: Book, rhs: Book) -> Bool {
+        lhs.id == rhs.id && lhs.title == rhs.title && lhs.rating == rhs.rating
+    }
+}
+let library = [Book(id:1,title:"Swift Basics",rating:4.5),
+               Book(id:2,title:"Advanced iOS",rating:nil),
+               Book(id:3,title:"Data Structures",rating:4.8)]
+print(library.sorted())`},
+ {t:"Vector2D struct with mutating scale + Equatable",body:`Create struct Vector2D {x:Double, y:Double} with a mutating func scale(by factor: Double). Conform to Equatable and demonstrate adding two vectors via a static + operator.`,
+ sol:`struct Vector2D: Equatable {
+    var x: Double, y: Double
+    mutating func scale(by factor: Double) {
+        x *= factor; y *= factor
+    }
+    static func + (lhs: Vector2D, rhs: Vector2D) -> Vector2D {
+        Vector2D(x: lhs.x + rhs.x, y: lhs.y + rhs.y)
+    }
+}
+var v1 = Vector2D(x: 1, y: 2)
+v1.scale(by: 3)                 // (3, 6)
+let v2 = Vector2D(x: 1, y: 1)
+print(v1 + v2)                  // (4, 7)
+print(v1 == Vector2D(x:3,y:6))  // true`}
+]},
+
+{id:"classes", name:"Classes", notes:`
+<ul>
+<li><b>Reference type</b> — assignment copies the reference, not the object; both variables point to the same instance.</li>
+<li>Supports <b>inheritance</b> (<code>class Sub: Super</code>), <code>override</code>, and <code>deinit</code>.</li>
+<li>In a subclass initializer: set your own stored properties <i>first</i>, then call <code>super.init(...)</code>.</li>
+<li>No <code>mutating</code> keyword needed — class methods can always modify properties.</li>
+</ul>`,
+code:`class Animal {
+    let name: String
+    init(name: String) { self.name = name }
+    func speak() -> String { "..." }
+}
+class Dog: Animal {
+    override func speak() -> String { "\\(name) says Woof!" }
+}
+let d = Dog(name: "Rex")
+print(d.speak())          // Rex says Woof!
+let ref = d                // same instance, not a copy`,
+mcqs:[
+ {q:"Two variables reference the same class instance. Changing a property via one variable —",opts:["Only affects that variable's copy","Is visible through the other variable too","Causes a compile error","Requires 'mutating'"],a:"Is visible through the other variable too",r:"Classes are reference types; both variables point to the same object in memory."},
+ {q:"In a subclass initializer, what's the correct order?",opts:["Call super.init() first, then set own properties","Set own stored properties first, then call super.init()","Order doesn't matter","super.init() is optional if the class has no stored properties"],a:"Set own stored properties first, then call super.init()",r:"Swift's two-phase initialization requires the subclass to fully initialize its own properties before handing control to the superclass."},
+ {q:"Which feature is unique to classes and not available to structs?",opts:["Computed properties","Inheritance","Methods","Protocol conformance"],a:"Inheritance",r:"Only classes support inheritance from another class; structs cannot inherit."},
+ {q:"When is a class instance's <code>deinit</code> called?",opts:["Right when the app launches","Right before the instance is deallocated from memory","Every time a method is called","Never, deinit is optional and rarely runs"],a:"Right before the instance is deallocated from memory",r:"deinit runs automatically just before ARC frees the instance, useful for cleanup."},
+ {q:"What keyword is required when a subclass redefines a superclass method?",opts:["redefine","override","super","shadow"],a:"override",r:"Swift requires the explicit 'override' keyword so the compiler can confirm you're intentionally replacing a superclass member."},
+ {q:"How many classes can a Swift class directly inherit from?",opts:["As many as needed (multiple inheritance)","Exactly one (single inheritance)","Zero, only protocols can be inherited","Two — one class and one struct"],a:"Exactly one (single inheritance)",r:"Swift classes support single inheritance only; use protocols/composition for multiple behaviors."},
+ {q:"What does marking a class <code>final</code> do?",opts:["Makes all its properties constants","Prevents it from being subclassed","Prevents instances from being deallocated","Makes its methods run faster with no other effect"],a:"Prevents it from being subclassed",r:"'final' stops any other class from inheriting from it (and can also stop specific members from being overridden)."},
+ {q:"Do classes get a free memberwise initializer like structs do?",opts:["Yes, identical to structs","No — you must write your own initializer(s)","Only if there's no superclass","Only if all properties are optional"],a:"No — you must write your own initializer(s)",r:"Unlike structs, classes do not get an automatic memberwise init; you must define init yourself (except for the empty default init in specific cases)."},
+ {q:"What does the <code>===</code> operator check for class instances?",opts:["Property-by-property equality","Whether both refer to the exact same instance in memory","Whether two instances are of the same type","Whether one is a subclass of the other"],a:"Whether both refer to the exact same instance in memory",r:"'===' is identity comparison (same object), while '==' (if implemented) compares values."},
+],
+progs:[
+ {t:"User / Member with guard-based VIP filter",body:`Base class User(id:Int, name:String). Subclass Member adds membershipTier:String? and overrides init. Write printVIPMembers(from:) using guard let to print only "VIP" tier members.`,
+ sol:`class User {
+    let id: Int; let name: String
+    init(id: Int, name: String) { self.id = id; self.name = name }
+}
+class Member: User {
+    let membershipTier: String?
+    init(id: Int, name: String, membershipTier: String?) {
+        self.membershipTier = membershipTier
+        super.init(id: id, name: name)
+    }
+}
+func printVIPMembers(from members: [Member]) {
+    for m in members {
+        guard let tier = m.membershipTier, tier == "VIP" else { continue }
+        print("VIP: \\(m.name) (ID \\(m.id))")
+    }
+}`},
+ {t:"Shape hierarchy: Shape base class, area override",body:`Create class Shape with a method area() -> Double returning 0. Subclasses Circle(radius) and Rectangle(w,h) override area(). Write a function totalArea(_ shapes:[Shape]) -> Double summing all areas using reduce.`,
+ sol:`class Shape {
+    func area() -> Double { 0 }
+}
+class Circle: Shape {
+    let radius: Double
+    init(radius: Double) { self.radius = radius }
+    override func area() -> Double { .pi * radius * radius }
+}
+class Rectangle: Shape {
+    let w: Double, h: Double
+    init(w: Double, h: Double) { self.w = w; self.h = h }
+    override func area() -> Double { w * h }
+}
+func totalArea(_ shapes: [Shape]) -> Double {
+    shapes.reduce(0) { $0 + $1.area() }
+}
+let shapes: [Shape] = [Circle(radius: 2), Rectangle(w: 3, h: 4)]
+print(totalArea(shapes))`}
+]},
+
+{id:"collections", name:"Collections", notes:`
+<ul>
+<li><b>Array</b> — ordered, allows duplicates. <b>Set</b> — unordered, unique elements (needs Hashable). <b>Dictionary</b> — key/value, unique keys.</li>
+<li>Dictionary subscript <code>dict[key]</code> always returns an <b>optional</b> (<code>Value?</code>) since the key may not exist.</li>
+<li>Declare with <code>var</code> to mutate (append/remove); <code>let</code> collections are fixed.</li>
+<li>Common methods: <code>.append</code>, <code>.remove</code>, <code>.contains</code>, <code>.sorted()</code>, <code>.map/.filter/.reduce</code>.</li>
+</ul>`,
+code:`let scores: [String: Int] = ["Alice": 90, "Bob": 85]
+let s = scores["Charlie"] ?? -1     // -1, key missing
+var uniqueNums = Set([1,2,2,3,3,3]) // {1,2,3}
+var fruits = ["apple","mango"]
+fruits.append("kiwi")`,
+mcqs:[
+ {q:"What does <code>scores[\"Charlie\"]</code> return if \"Charlie\" isn't a key?",opts:["A runtime crash","0","nil (it's an optional)","An empty string"],a:"nil (it's an optional)",r:"Dictionary subscripting always yields Value?, so a missing key yields nil rather than crashing."},
+ {q:"Which collection type automatically removes duplicate elements?",opts:["Array","Set","Dictionary","Tuple"],a:"Set",r:"Set enforces uniqueness of its elements via Hashable/Equatable conformance."},
+ {q:"What must an element type conform to, to be stored in a Set?",opts:["Comparable","Equatable only","Hashable","Codable"],a:"Hashable",r:"Set relies on hashing to check membership/uniqueness efficiently, so elements must be Hashable."},
+ {q:"What happens if you try to insert a duplicate key into a Dictionary literal, e.g. [\"a\":1,\"a\":2]?",opts:["Both values are kept in a list","Compile-time error — duplicate keys aren't allowed in a literal","The second value silently overwrites the first at runtime","Only the first value is kept, second is ignored"],a:"Compile-time error — duplicate keys aren't allowed in a literal",r:"Dictionary keys must be unique; a literal with a repeated key fails to compile. (Overwriting only happens via subscript assignment at runtime.)"},
+ {q:"Which best describes a Tuple compared to an Array?",opts:["A tuple can hold a fixed, heterogeneous group of typed values","A tuple is just an alias for Array<Any>","A tuple must contain elements of the same type","A tuple can be appended to like an array"],a:"A tuple can hold a fixed, heterogeneous group of typed values",r:"Tuples group a fixed number of values, possibly of different types, e.g. (Int, String); they aren't resizable collections."},
+ {q:"What is the difference between <code>array.sorted()</code> and <code>array.sort()</code>?",opts:["No difference, both mutate in place","sorted() returns a new sorted array; sort() mutates the array in place","sort() only works on Sets","sorted() is only for Dictionaries"],a:"sorted() returns a new sorted array; sort() mutates the array in place",r:"sorted() is non-mutating and returns a new array; sort() requires a 'var' array and sorts it in place, returning Void."},
+ {q:"What does <code>array.contains(where: { $0 > 10 })</code> do?",opts:["Returns the first element greater than 10","Returns true if any element satisfies the closure's condition","Removes elements greater than 10","Crashes if no element matches"],a:"Returns true if any element satisfies the closure's condition",r:"contains(where:) returns a Bool indicating whether at least one element matches the predicate."},
+ {q:"What is the inferred type of <code>let mix = [1, 2.5, 3]</code>?",opts:["[Int]","[Double] — all elements promoted to Double","[Any]","Compile-time error, can't mix types"],a:"[Double] — all elements promoted to Double",r:"Swift infers a single common type for array literals; integer literals are promoted to Double here since 2.5 forces it."},
+ {q:"Which collection type guarantees element order is preserved?",opts:["Set","Dictionary","Array","None of them guarantee order"],a:"Array",r:"Array is an ordered collection; Set and Dictionary do not guarantee any particular iteration order."},
+ {q:"What does <code>array.removeAll()</code> do to a 'var' array?",opts:["Deletes the variable itself","Empties the array, leaving count == 0","Only removes duplicate elements","Throws an error if the array is already empty"],a:"Empties the array, leaving count == 0",r:"removeAll() clears every element from the array in place; the array still exists but is now empty."},
+],
+progs:[
+ {t:"Word frequency counter",body:`Given a sentence, split into words and use a Dictionary to count how many times each word appears (case-insensitive).`,
+ sol:`let sentence = "the cat sat on the mat the cat ran"
+var freq: [String: Int] = [:]
+for word in sentence.lowercased().split(separator: " ") {
+    freq[String(word), default: 0] += 1
+}
+for (word, count) in freq.sorted(by: { $0.key < $1.key }) {
+    print("\\(word): \\(count)")
+}`},
+ {t:"Remove duplicates while preserving first-seen order",body:`Given an array of Ints with duplicates, return a new array with duplicates removed, preserving original order (don't just use Set(), since that loses order).`,
+ sol:`func dedupePreserveOrder(_ nums: [Int]) -> [Int] {
+    var seen = Set<Int>()
+    var result: [Int] = []
+    for n in nums where !seen.contains(n) {
+        seen.insert(n)
+        result.append(n)
+    }
+    return result
+}
+print(dedupePreserveOrder([4,1,4,2,3,1,5])) // [4,1,2,3,5]`}
+]},
+
+{id:"loops", name:"Loops", notes:`
+<ul>
+<li><code>for-in</code> over ranges/collections; <code>while</code> checks condition first; <code>repeat-while</code> runs body at least once.</li>
+<li><code>stride(from:to:by:)</code> excludes the end value; <code>stride(from:through:by:)</code> includes it.</li>
+<li><code>break</code> exits a loop, <code>continue</code> skips to the next iteration; labels (<code>outer: for ...</code>) target an outer loop from a nested one.</li>
+</ul>`,
+code:`outer: for i in 1...3 {
+    for j in 1...3 {
+        if j == 2 { continue outer }
+        print(i, j)
+    }
+}
+for i in stride(from: 0, to: 10, by: 3) { print(i) } // 0,3,6,9`,
+mcqs:[
+ {q:"How many times does a <code>repeat-while</code> loop's body execute if the condition starts false?",opts:["0 times","Exactly once","Infinite loop","Compile error"],a:"Exactly once",r:"repeat-while always runs the body first, then checks the condition — so it always executes at least once."},
+ {q:"What does <code>continue outer</code> do inside a nested loop labeled 'outer'?",opts:["Exits both loops entirely","Skips to the next iteration of the outer loop","Skips to the next iteration of the inner loop","Compile error, labels aren't supported"],a:"Skips to the next iteration of the outer loop",r:"A labeled continue targets the specified loop, letting you skip the outer loop's remaining inner iterations."},
+ {q:"<code>stride(from: 1, to: 5, by: 1)</code> produces which sequence?",opts:["1,2,3,4,5","1,2,3,4","2,3,4,5","0,1,2,3,4"],a:"1,2,3,4",r:"'to' is exclusive of the end value; use 'through' to include 5."},
+ {q:"What is guaranteed about the order elements are visited when using <code>for (key,value) in someDictionary</code>?",opts:["Alphabetical by key","Insertion order","No guaranteed order at all","Reverse insertion order"],a:"No guaranteed order at all",r:"Dictionary iteration order is unspecified and can vary between runs."},
+ {q:"What happens if a <code>while</code> loop's condition never becomes false?",opts:["Swift throws a compile error","It becomes an infinite loop","It automatically stops after 1000 iterations","It behaves like repeat-while"],a:"It becomes an infinite loop",r:"A while loop keeps running as long as its condition is true — with no way to become false, it never terminates."},
+ {q:"Inside two nested loops (no labels), what does a plain <code>break</code> do?",opts:["Exits only the innermost loop","Exits both loops immediately","Exits the whole function","Acts like 'continue' instead"],a:"Exits only the innermost loop",r:"An unlabeled break only terminates the nearest enclosing loop; use a label to break an outer loop from inside a nested one."},
+ {q:"What does <code>for ch in \"Swift\"</code> iterate over?",opts:["UTF-8 byte values","Each Character in the string","Word-by-word tokens","It's a compile error — strings aren't iterable"],a:"Each Character in the string",r:"String conforms to Sequence with Character elements, so a for-in loop walks each character."},
+ {q:"What is the key difference between <code>1..&lt;5</code> and <code>1...5</code>?",opts:["No difference","..&lt; excludes the upper bound, ... includes it","... excludes the upper bound, ..&lt; includes it","..&lt; only works with Int, ... works with any type"],a:"..&lt; excludes the upper bound, ... includes it",r:"..< is the half-open range operator; ... is the closed range operator that includes the final value."},
+ {q:"What does <code>continue</code> do inside a for loop?",opts:["Exits the loop entirely","Skips the rest of the current iteration's body and moves to the next iteration","Pauses the loop until a condition is met","Restarts the loop from index 0"],a:"Skips the rest of the current iteration's body and moves to the next iteration",r:"continue jumps straight to the next iteration, skipping any remaining statements in the current one."},
+ {q:"In a nested loop, what is required to <code>break</code> out of the outer loop directly from the inner loop?",opts:["It's impossible in Swift","A labeled loop, e.g. break outerLabel","Using return instead","Wrapping both loops in a function"],a:"A labeled loop, e.g. break outerLabel",r:"Labeling the outer loop (label: for ...) lets 'break label' or 'continue label' target it directly from nested code."},
+],
+progs:[
+ {t:"FizzBuzz",body:`Print numbers 1 to 30. Multiples of 3 → \"Fizz\", multiples of 5 → \"Buzz\", multiples of both → \"FizzBuzz\".`,
+ sol:`for n in 1...30 {
+    switch (n % 3, n % 5) {
+    case (0, 0): print("FizzBuzz")
+    case (0, _): print("Fizz")
+    case (_, 0): print("Buzz")
+    default: print(n)
+    }
+}`},
+ {t:"Prime check function using a loop",body:`Write func isPrime(_ n: Int) -> Bool using a for loop up to sqrt(n), and print all primes between 2 and 50.`,
+ sol:`func isPrime(_ n: Int) -> Bool {
+    if n < 2 { return false }
+    var i = 2
+    while i * i <= n {
+        if n % i == 0 { return false }
+        i += 1
+    }
+    return true
+}
+for n in 2...50 where isPrime(n) { print(n, terminator: " ") }`}
+]},
+
+{id:"optionals", name:"Optionals", notes:`
+<ul>
+<li>An optional (<code>Type?</code>) either holds a value or <code>nil</code>. Force-unwrapping (<code>!</code>) a nil crashes at runtime.</li>
+<li><code>if let</code> / <code>guard let</code> safely unwrap. Guard's <code>else</code> block <b>must</b> exit scope (return/break/continue/throw).</li>
+<li><code>??</code> (nil-coalescing) supplies a default. Optional chaining (<code>a?.b?.c</code>) short-circuits to nil if any link is nil.</li>
+</ul>`,
+code:`func safeDivide(_ a: Int, _ b: Int) -> Int? {
+    guard b != 0 else { return nil }
+    return a / b
+}
+if let result = safeDivide(10, 2) {
+    print(result)          // 5
+}
+let x: Int? = nil
+print(x ?? -1)              // -1`,
+mcqs:[
+ {q:"What must a guard statement's else block do?",opts:["Assign a default value","Nothing special is required","Transfer control out of scope (return/break/continue/throw)","Print an error message"],a:"Transfer control out of scope (return/break/continue/throw)",r:"guard's else must exit the current scope — the compiler enforces this."},
+ {q:"What does <code>scores[\"Charlie\"] ?? -1</code> print if the key is missing?",opts:["nil","0","-1","Crash"],a:"-1",r:"The nil-coalescing operator substitutes -1 when the dictionary lookup returns nil."},
+ {q:"Force-unwrapping a nil optional with <code>!</code> causes —",opts:["A compile-time error","nil to print","A runtime crash","It silently returns 0"],a:"A runtime crash",r:"The force-unwrap operator trusts the optional has a value; if it's nil, the app crashes."},
+ {q:"What does optional chaining <code>person.address?.city</code> return if <code>address</code> is nil?",opts:["Runtime crash","An empty string","nil","Compile error"],a:"nil",r:"Optional chaining short-circuits and returns nil for the whole expression when any link in the chain is nil."},
+ {q:"What is special about a property declared as <code>var name: String!</code> (implicitly unwrapped optional)?",opts:["It can never be nil","It's automatically unwrapped when accessed, but still crashes if nil","It behaves exactly like a non-optional String at compile time with no risk","It can only be set once"],a:"It's automatically unwrapped when accessed, but still crashes if nil",r:"An IUO lets you use the value without '?' or '!' syntax, but accessing it while nil still crashes at runtime."},
+ {q:"Is <code>if let a = optA, let b = optB, a > 0 { }</code> valid syntax?",opts:["No, only one optional can be unwrapped per if let","Yes — multiple bindings and a boolean condition can be chained with commas","Yes, but only in a guard statement, not if let","No, it must be written as nested if lets"],a:"Yes — multiple bindings and a boolean condition can be chained with commas",r:"Swift allows combining multiple optional bindings and boolean conditions in one if/guard statement, comma-separated."},
+ {q:"If a method returns a non-optional Int, and you call it via optional chaining like <code>obj?.getScore()</code>, what's the result type?",opts:["Int","Int?","Int!","Void"],a:"Int?",r:"Optional chaining wraps the result in an optional regardless of the method's own return type, since obj itself might be nil."},
+ {q:"What does <code>a ?? b ?? c</code> evaluate to if 'a' is nil and 'b' is nil?",opts:["nil","c","Compile error, can't chain ??","a"],a:"c",r:"Nil-coalescing is right-associative and chains — it evaluates left to right, falling through each nil until it finds a non-nil value or reaches the final default."},
+ {q:"What does <code>try?</code> convert a throwing function's result into?",opts:["A Bool — true on success","An optional — nil on failure, the value on success","It re-throws the error always","A tuple of (value, error)"],a:"An optional — nil on failure, the value on success",r:"try? suppresses the thrown error and converts the result into an optional, nil if it threw."},
+],
+progs:[
+ {t:"Safe average of an optional array of scores",body:`Write func average(of scores: [Int?]) -> Double? that ignores nil entries, and returns nil if the array has no non-nil values. Use compactMap.`,
+ sol:`func average(of scores: [Int?]) -> Double? {
+    let valid = scores.compactMap { $0 }
+    guard !valid.isEmpty else { return nil }
+    return Double(valid.reduce(0, +)) / Double(valid.count)
+}
+print(average(of: [80, nil, 90, nil, 70]) ?? -1) // 80.0`},
+ {t:"Parse Ints from a String array, skipping invalid ones",body:`Given ["12","abc","7","","9"], produce an array of Ints, skipping any string that fails to convert, using guard let inside a loop.`,
+ sol:`let raw = ["12", "abc", "7", "", "9"]
+var numbers: [Int] = []
+for s in raw {
+    guard let n = Int(s) else { continue }
+    numbers.append(n)
+}
+print(numbers) // [12, 7, 9]`}
+]},
+
+{id:"protocols", name:"Protocols", notes:`
+<ul>
+<li>A protocol declares requirements (properties/methods); types <b>conform</b> by implementing them. Structs need <code>mutating</code> on methods that change state.</li>
+<li>Conforming to <code>Comparable</code>: implement <code>&lt;</code> and <code>==</code> (via Equatable); Swift's protocol extensions give you <code>&gt;, &lt;=, &gt;=</code> for free.</li>
+<li>Protocols can be used as types; check/cast with <code>is</code> / <code>as?</code>.</li>
+</ul>`,
+code:`protocol Greetable { var name: String { get } }
+extension Greetable {
+    func greet() -> String { "Hello, \\(name)!" }   // default implementation
+}
+struct Visitor: Greetable { let name: String }
+print(Visitor(name: "Amit").greet())`,
+mcqs:[
+ {q:"To conform to Comparable, which operator(s) must you implement yourself?",opts:["Both < and >","Only <, (== comes from Equatable)","All four: <,>,<=,>=","None, it's automatic"],a:"Only <, (== comes from Equatable)",r:"Swift's standard library supplies default >, <=, >= once < and == are defined."},
+ {q:"A protocol declares <code>mutating func restock(by:)</code>. What does a conforming struct need?",opts:["Nothing special","Mark its implementation 'mutating' too","Use a class instead","Make the property computed"],a:"Mark its implementation 'mutating' too",r:"Since structs are value types, any protocol method that mutates state must be marked mutating in both the protocol and the conforming struct."},
+ {q:"What does <code>if let v = item as? SomeProtocol</code> do?",opts:["Force-casts, crashing on failure","Attempts a conditional cast, returning nil on failure","Always succeeds","Only works with classes"],a:"Attempts a conditional cast, returning nil on failure",r:"as? performs an optional (safe) downcast/protocol-cast, yielding nil rather than crashing if it fails."},
+ {q:"Can one protocol inherit requirements from another protocol?",opts:["No, protocols can't inherit","Yes, using protocol A: B syntax, just like class inheritance","Only if both are class-only protocols","Only via an extension"],a:"Yes, using protocol A: B syntax, just like class inheritance",r:"A protocol can inherit one or more other protocols, inheriting all their requirements."},
+ {q:"What does restricting a protocol with <code>protocol Foo: AnyObject</code> mean?",opts:["Only structs can conform to Foo","Only classes can conform to Foo","Any type at all can conform","It requires Codable conformance too"],a:"Only classes can conform to Foo",r:"Constraining a protocol to AnyObject limits conformance to reference types (classes) only — useful for delegate patterns."},
+ {q:"How does a type conform to multiple protocols at once?",opts:["It's not possible in Swift","struct X: ProtocolA, ProtocolB { }","struct X: ProtocolA & ProtocolB { } only in declarations","Using a tuple of protocols"],a:"struct X: ProtocolA, ProtocolB { }",r:"List multiple protocols comma-separated after the colon to conform to all of them."},
+ {q:"If a protocol extension provides a default implementation of a method, can a conforming type override it?",opts:["No, defaults are final","Yes, the conforming type can supply its own implementation instead","Only classes can override, structs can't","Only if the method is marked 'open'"],a:"Yes, the conforming type can supply its own implementation instead",r:"A conforming type's own implementation takes precedence over the protocol extension's default."},
+ {q:"What does <code>ProtocolA & ProtocolB</code> express as a type?",opts:["A protocol composition — a type conforming to both protocols","An error, & isn't valid between protocols","A protocol that overrides both","An array of protocols"],a:"A protocol composition — a type conforming to both protocols",r:"Protocol composition (&) lets you require conformance to multiple protocols in a single type constraint."},
+ {q:"Can you add protocol conformance to a type you didn't write (e.g. a standard library type) via an extension?",opts:["No, only the original type declaration can add conformance","Yes — extend the type and implement the protocol's requirements","Only for classes, not structs or built-in types","Only if the protocol has no requirements"],a:"Yes — extend the type and implement the protocol's requirements",r:"Retroactive conformance via extension is a core Swift feature — e.g. extending Int to conform to a custom protocol."},
+],
+progs:[
+ {t:"InventoryItem protocol + Product struct + closures",body:`Protocol InventoryItem: sku:String, price:Double, quantity:Int{get set}, mutating func restock(by:). Struct Product conforms. Given [Product], filter out out-of-stock items and compute total value with map+reduce.`,
+ sol:`protocol InventoryItem {
+    var sku: String { get }
+    var price: Double { get }
+    var quantity: Int { get set }
+    mutating func restock(by amount: Int)
+}
+struct Product: InventoryItem {
+    let sku: String; let price: Double; var quantity: Int
+    mutating func restock(by amount: Int) { quantity += amount }
+}
+let inventory = [Product(sku:"A", price:25, quantity:10),
+                  Product(sku:"B", price:50, quantity:0)]
+let inStock = inventory.filter { $0.quantity > 0 }
+let totalValue = inStock.map { $0.price * Double($0.quantity) }.reduce(0, +)
+print(totalValue) // 250.0`},
+ {t:"Shape protocol with computed area, Circle & Square conform",body:`Protocol Shape { var area: Double { get } }. Structs Circle(radius) and Square(side) conform. Write a function describing the largest shape in an array using max(by:).`,
+ sol:`protocol Shape { var area: Double { get } }
+struct Circle: Shape {
+    let radius: Double
+    var area: Double { .pi * radius * radius }
+}
+struct Square: Shape {
+    let side: Double
+    var area: Double { side * side }
+}
+let shapes: [Shape] = [Circle(radius: 2), Square(side: 5)]
+if let largest = shapes.max(by: { $0.area < $1.area }) {
+    print("Largest area: \\(largest.area)")
+}`}
+]},
+
+{id:"closures", name:"Closures", notes:`
+<ul>
+<li>Closures are self-contained blocks of functionality; can capture variables from their surrounding scope.</li>
+<li><code>sorted(by:)</code> on <code>[T]</code> needs a closure of type <code>(T, T) -> Bool</code> returning true if the first goes before the second.</li>
+<li>Trailing closure syntax: last argument closure written outside the parentheses.</li>
+<li><code>map</code> transforms, <code>filter</code> keeps matching elements, <code>reduce</code> combines into one value.</li>
+</ul>`,
+code:`let names = ["Zoe","Amit","Neha"]
+let sortedNames = names.sorted { $0 < $1 }   // trailing closure
+
+func makeCounter() -> () -> Int {
+    var count = 0
+    return { count += 1; return count }       // captures 'count'
+}
+let counter = makeCounter()
+print(counter(), counter(), counter())        // 1 2 3`,
+mcqs:[
+ {q:"What is the closure type expected by <code>sorted(by:)</code> for <code>[String]</code>?",opts:["(String) -> Bool","(String, String) -> Bool","(String, String) -> Void","(inout String, inout String) -> Bool"],a:"(String, String) -> Bool",r:"It needs a binary predicate taking two elements and returning whether the first precedes the second."},
+ {q:"Writing <code>names.sorted { $0 < $1 }</code> uses which syntax feature?",opts:["Computed property","Trailing closure","Optional chaining","Protocol extension"],a:"Trailing closure",r:"When a function's last parameter is a closure, it can be written outside the parentheses — trailing closure syntax."},
+ {q:"In the counter example, why does <code>count</code> persist between calls to the returned closure?",opts:["It's a global variable","The closure captures 'count' by reference","Swift resets it each call","It's a struct so it's copied"],a:"The closure captures 'count' by reference",r:"Closures capture variables from their enclosing scope by reference, keeping them alive as long as the closure exists."},
+ {q:"What does the <code>@escaping</code> attribute on a closure parameter mean?",opts:["The closure can throw errors","The closure may be called after the function it was passed to has returned (e.g. stored or used asynchronously)","The closure escapes memory management (no ARC)","It marks the closure as a trailing closure"],a:"The closure may be called after the function it was passed to has returned (e.g. stored or used asynchronously)",r:"Non-escaping is the default; @escaping is required when the closure outlives the function call, e.g. stored in a property or used in an async callback."},
+ {q:"Why might a closure capturing 'self' inside a class cause a retain cycle?",opts:["Closures can't reference self at all","The closure and self strongly reference each other, so ARC never frees either","Closures always deallocate immediately","Retain cycles only happen with structs"],a:"The closure and self strongly reference each other, so ARC never frees either",r:"If self holds a strong reference to the closure (e.g. as a stored property) and the closure strongly captures self, neither can ever be deallocated — fixed with [weak self]."},
+ {q:"What's the difference between <code>array.map { }</code> and <code>array.forEach { }</code>?",opts:["No difference at all","map returns a new transformed array; forEach just performs an action and returns Void","forEach is faster but does the same thing as map","map can't use trailing closures"],a:"map returns a new transformed array; forEach just performs an action and returns Void",r:"map produces a new array of transformed results, while forEach is purely for side effects and discards any return value."},
+ {q:"In <code>{ $0 * 2 }</code>, what does <code>$0</code> refer to?",opts:["The closure's return type","A global counter","The first (shorthand) argument passed to the closure","The closure's own name"],a:"The first (shorthand) argument passed to the closure",r:"$0, $1, etc. are Swift's automatically-generated shorthand names for a closure's positional arguments."},
+ {q:"What does <code>array.compactMap { Int($0) }</code> do differently from <code>array.map { Int($0) }</code> on an array of Strings?",opts:["compactMap also removes nil results from failed conversions; map keeps the nils as Int?","They behave identically","compactMap crashes on invalid input; map doesn't","map converts to Int, compactMap converts to Double"],a:"compactMap also removes nil results from failed conversions; map keeps the nils as Int?",r:"compactMap applies the transform and then unwraps + drops any nil results, giving you a non-optional array of only the successful conversions."},
+ {q:"What is the type of a closure that takes no parameters and returns nothing?",opts:["() -> Void","Void -> Void","(Void) -> ()","None, this isn't valid"],a:"() -> Void",r:"An empty parameter list with a Void (or omitted) return type is written () -> Void."},
+],
+progs:[
+ {t:"Sort custom structs by closure, tie-break with a second closure",body:`Given struct Employee{name:String, salary:Int}, sort an array by salary descending, and when salaries tie, by name ascending — all using a single sorted(by:) closure.`,
+ sol:`struct Employee { let name: String; let salary: Int }
+let team = [Employee(name:"Ravi", salary:50000),
+            Employee(name:"Anu", salary:60000),
+            Employee(name:"Zara", salary:50000)]
+let ranked = team.sorted {
+    if $0.salary != $1.salary { return $0.salary > $1.salary }
+    return $0.name < $1.name
+}
+ranked.forEach { print($0.name, $0.salary) }`},
+ {t:"Build a generic 'transform and total' using map + reduce",body:`Write a function totalLength(of words:[String]) -> Int that maps each word to its character count and reduces to a sum, using closures (not a for loop).`,
+ sol:`func totalLength(of words: [String]) -> Int {
+    words.map { $0.count }.reduce(0, +)
+}
+print(totalLength(of: ["Swift","is","fun"])) // 10`}
+]},
+];
+
+const nav = document.getElementById('nav');
+const main = document.getElementById('main');
+
+topics.forEach((t, idx) => {
+  const btn = document.createElement('button');
+  btn.textContent = t.name;
+  btn.onclick = () => select(idx);
+  btn.id = 'nav-' + t.id;
+  nav.appendChild(btn);
+
+  const sec = document.createElement('section');
+  sec.className = 'topic';
+  sec.id = 'sec-' + t.id;
+
+  let mcqHtml = t.mcqs.map((m,i) => `
+    <div class="qcard">
+      <b>Q${i+1}.</b> ${m.q}
+      <div class="opts">${m.opts.map(o=>`• ${o}`).join('<br>')}</div>
+      <details><summary>Show answer</summary><p><b>${m.a}</b> — ${m.r}</p></details>
+    </div>`).join('');
+
+  let progHtml = t.progs.map((p,i) => `
+    <div class="qcard">
+      <b>Programming Q${i+1} (10 marks): ${p.t}</b>
+      <p>${p.body}</p>
+      <details><summary>Show solution</summary><pre>${escapeHtml(p.sol)}</pre></details>
+    </div>`).join('');
+
+  sec.innerHTML = `
+    <h2>${t.name}</h2>
+    <div class="notes">${t.notes}</div>
+    <h3>Sample Code</h3>
+    <pre>${escapeHtml(t.code)}</pre>
+    <h3>MCQs <span class="badge">${t.mcqs.length}</span></h3>
+    ${mcqHtml}
+    <h3>Programming Questions <span class="badge">${t.progs.length}</span></h3>
+    ${progHtml}
+  `;
+  main.appendChild(sec);
+});
+
+function select(idx){
+  document.querySelectorAll('.topic').forEach(s=>s.classList.remove('active'));
+  document.querySelectorAll('#nav button').forEach(b=>b.classList.remove('active'));
+  document.getElementById('sec-' + topics[idx].id).classList.add('active');
+  document.getElementById('nav-' + topics[idx].id).classList.add('active');
+}
+function escapeHtml(s){
+  return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+}
+select(0);
+</script>
+</body>
+</html>
