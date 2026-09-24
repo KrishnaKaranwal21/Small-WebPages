@@ -79,7 +79,7 @@ nav{display:flex;gap:4px;overflow-x:auto;padding-bottom:2px}
 .tab.on em{color:var(--teal);opacity:.7}
 
 /* ---------- panels ---------- */
-main{padding:26px 0 80px}
+main{padding:64px 0 80px}
 .panel{display:none}
 .panel.on{display:block;animation:in .28s ease}
 @keyframes in{from{opacity:0;transform:translateY(7px)}to{opacity:1;transform:none}}
@@ -200,6 +200,37 @@ pre.code .k{color:var(--violet)}
 .why-before{color:var(--coral);background:rgba(251,113,133,.1);border:1px solid rgba(251,113,133,.25)}
 .why-after{color:var(--lime);background:rgba(163,230,53,.1);border:1px solid rgba(163,230,53,.25)}
 .why-next{color:var(--sky);background:rgba(56,189,248,.1);border:1px solid rgba(56,189,248,.25)}
+.exercise{border:1px solid var(--line);border-radius:var(--r);background:var(--card);padding:18px;margin-bottom:14px}
+.exercise-top{display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin-bottom:10px}
+.exercise-top h4{font-size:15px;font-weight:700}
+.exercise-top .pill{margin-left:auto}
+.exercise-scenario{font-size:13px;color:var(--fg-dim);line-height:1.7;margin-bottom:14px}
+.exercise-code{position:relative}
+.reveal-btn{font-family:'JetBrains Mono',monospace;font-size:11.5px;font-weight:600;padding:7px 15px;border-radius:9px;border:1px solid rgba(45,212,191,.4);background:rgba(45,212,191,.09);color:var(--teal);cursor:pointer;margin-top:12px;transition:all .2s}
+.reveal-btn:hover{background:rgba(45,212,191,.18)}
+.solution-block{display:none;margin-top:14px;border-top:1px solid var(--line);padding-top:14px}
+.solution-block.shown{display:block}
+.sol-label{font-family:'JetBrains Mono',monospace;font-size:10px;font-weight:700;letter-spacing:.09em;color:var(--lime);margin-bottom:8px}
+.explain-box{background:var(--elev);border-left:2px solid var(--lime);border-radius:0 10px 10px 0;padding:11px 14px;font-size:12.5px;line-height:1.7;color:var(--fg-dim);margin-top:12px}
+
+.mcq-card{border:1px solid var(--line);border-radius:var(--r);background:var(--card);padding:17px 18px;margin-bottom:12px}
+.mcq-cat{font-family:'JetBrains Mono',monospace;font-size:10px;font-weight:700;color:var(--violet);background:rgba(167,139,250,.09);border:1px solid rgba(167,139,250,.25);border-radius:99px;padding:3px 10px;display:inline-block;margin-bottom:10px}
+.mcq-q{font-size:14px;font-weight:600;line-height:1.55;margin-bottom:12px}
+.mcq-opts{display:flex;flex-direction:column;gap:7px}
+.mcq-opt{text-align:left;font-size:13px;line-height:1.5;padding:10px 14px;border-radius:9px;border:1px solid var(--line);background:var(--elev);color:var(--fg-dim);cursor:pointer;transition:all .15s}
+.mcq-opt:hover{border-color:var(--line-hi);color:var(--fg)}
+.mcq-opt.correct{border-color:var(--lime);background:rgba(163,230,53,.1);color:var(--fg)}
+.mcq-opt.wrong{border-color:var(--coral);background:rgba(251,113,133,.1);color:var(--fg)}
+.mcq-opt.disabled{cursor:default;pointer-events:none}
+.mcq-opt.disabled:not(.correct):not(.wrong){opacity:.45}
+.mcq-explain{display:none;margin-top:12px;font-size:12.5px;line-height:1.7;color:var(--fg-dim);background:var(--elev);border-left:2px solid var(--sky);border-radius:0 10px 10px 0;padding:11px 14px}
+.mcq-explain.shown{display:block}
+.mcq-verdict{font-family:'JetBrains Mono',monospace;font-size:11px;font-weight:700;margin-top:10px}
+.mcq-verdict.ok{color:var(--lime)}
+.mcq-verdict.bad{color:var(--coral)}
+.practice-progress{display:flex;justify-content:space-between;align-items:center;margin-bottom:16px;font-family:'JetBrains Mono',monospace;font-size:11.5px;color:var(--mute)}
+.tagrow{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:14px}
+.otag{font-family:'JetBrains Mono',monospace;font-size:10px;font-weight:600;color:var(--violet);background:rgba(167,139,250,.09);border:1px solid rgba(167,139,250,.28);border-radius:99px;padding:3px 10px}
 .plainbox{background:linear-gradient(120deg,rgba(56,189,248,.09),rgba(45,212,191,.04));border:1px solid rgba(56,189,248,.24);border-radius:12px;padding:14px 16px;font-size:13.5px;line-height:1.75;color:var(--fg);margin-bottom:16px}
 .plainbox b{display:block;font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:.11em;color:var(--sky);margin-bottom:7px;font-weight:700}
 .day{border:1px solid var(--line);border-radius:var(--r);background:var(--card);padding:16px 18px;margin-bottom:10px;transition:border-color .25s}
@@ -345,12 +376,11 @@ footer{border-top:1px solid var(--line);margin-top:44px;padding:18px 0;display:f
 <section class="panel" id="p-oop">
   <div class="hero">
     <h2>Part B &middot; Object-Oriented Programming</h2>
-    <p>45 minutes on the System Design Saturday classes up to 19 September 2026 &mdash; the 20-activity banking system build. Five phases take one Account class all the way to a layered application — the exact build from your Saturday classes. Every activity says what problem existed before it, what it fixes, and what it unlocks next, plus a plain-English explanation and every technical word defined.</p>
+    <p>Confirmed format: a scenario with a class structure that has empty methods for you to complete, plus general MCQs. Questions are <b>not</b> about the bank project specifically &mdash; they test the same OOP concepts (encapsulation, inheritance, polymorphism, abstraction, interfaces, exceptions, design patterns) applied to a fresh scenario you have not seen. Practise finishing stub methods and answering concept MCQs below. The 20-activity bank project is kept further down as background reference for how these concepts were taught, not as exam content itself.</p>
     <div class="hero-meta">
-      <span class="chip hot mono" id="chip-oop">0/20 activities</span>
-      <span class="chip mono">6 patterns</span>
-      <span class="chip mono">55 practice questions</span>
-      <span class="chip mono">plain-English glossary</span>
+      <span class="chip hot mono" id="chip-practice">0/10 exercises</span>
+      <span class="chip mono" id="chip-mcqscore">0/27 MCQs answered</span>
+      <span class="chip mono">7 concept areas</span>
     </div>
   </div>
   <div class="subtabs" id="oop-tabs"></div>
@@ -543,6 +573,605 @@ const LC = {
 };
 
 /* ============ PART B · OOP ============ */
+const EXERCISES = [
+{
+id:"ex1",difficulty:"Easy",concept:"Encapsulation",title:"Library Book",
+scenario:"A library system needs a Book class. Each book has a title, an ISBN, and a number of copies available. Complete the methods below so a copy can be borrowed (only if at least one is available) and returned (capped at the original total so returns can't exceed what the library owns).",
+skeleton:`public class Book {
+    private String title;
+    private String isbn;
+    private int totalCopies;
+    private int availableCopies;
+
+    public Book(String title, String isbn, int totalCopies) {
+        this.title = title;
+        this.isbn = isbn;
+        this.totalCopies = totalCopies;
+        this.availableCopies = totalCopies;
+    }
+
+    // TODO: return true and reduce availableCopies by 1 if a copy is available,
+    // otherwise return false and change nothing
+    public boolean borrowCopy() {
+
+    }
+
+    // TODO: increase availableCopies by 1, but never let it exceed totalCopies
+    public void returnCopy() {
+
+    }
+
+    public int getAvailableCopies() { return availableCopies; }
+}`,
+solution:`public boolean borrowCopy() {
+    if (availableCopies > 0) {
+        availableCopies--;
+        return true;
+    }
+    return false;
+}
+
+public void returnCopy() {
+    if (availableCopies < totalCopies) {
+        availableCopies++;
+    }
+}`,
+explanation:"This is a guard-clause pattern: check the condition first, only mutate state if it holds. borrowCopy() must check availableCopies > 0 before decrementing, and return the correct boolean either way. returnCopy() must never push availableCopies past totalCopies \u2014 without that cap, an over-return would let more copies exist than the library actually owns.",
+},
+{
+id:"ex2",difficulty:"Easy",concept:"Inheritance & super()",title:"Vehicle Rental",
+scenario:"A vehicle rental system has a base Vehicle class and a Car subclass that adds a numberOfSeats field. Complete the Car constructor so it correctly initialises both the inherited fields and its own new field.",
+skeleton:`public class Vehicle {
+    protected String registrationNumber;
+    protected double dailyRate;
+
+    public Vehicle(String registrationNumber, double dailyRate) {
+        this.registrationNumber = registrationNumber;
+        this.dailyRate = dailyRate;
+    }
+
+    public double calculateRentalCost(int days) {
+        return dailyRate * days;
+    }
+}
+
+public class Car extends Vehicle {
+    private int numberOfSeats;
+
+    // TODO: complete this constructor. It must initialise registrationNumber
+    // and dailyRate via the parent class, then set numberOfSeats itself.
+    public Car(String registrationNumber, double dailyRate, int numberOfSeats) {
+
+    }
+}`,
+solution:`public Car(String registrationNumber, double dailyRate, int numberOfSeats) {
+    super(registrationNumber, dailyRate);   // must be the FIRST statement
+    this.numberOfSeats = numberOfSeats;
+}`,
+explanation:"super(...) hands the two inherited values up to the Vehicle constructor and must be the very first statement in Car's constructor \u2014 Java enforces this so the parent portion of the object is fully built before Car touches anything of its own. Only after that line runs can this.numberOfSeats be set.",
+},
+{
+id:"ex3",difficulty:"Medium",concept:"Polymorphism & Overriding",title:"Shape Area Calculator",
+scenario:"An abstract Shape class declares an abstract area() method. Circle and Rectangle extend it. Complete both overrides, then complete the loop that prints the total area of a mixed list of shapes using polymorphism.",
+skeleton:`public abstract class Shape {
+    public abstract double area();
+}
+
+public class Circle extends Shape {
+    private double radius;
+    public Circle(double radius) { this.radius = radius; }
+
+    // TODO: override area() to return pi * radius^2
+    @Override
+    public double area() {
+
+    }
+}
+
+public class Rectangle extends Shape {
+    private double width, height;
+    public Rectangle(double width, double height) { this.width = width; this.height = height; }
+
+    // TODO: override area() to return width * height
+    @Override
+    public double area() {
+
+    }
+}
+
+public class ShapeMain {
+    public static void main(String[] args) {
+        Shape[] shapes = { new Circle(3), new Rectangle(4, 5) };
+        double total = 0;
+        // TODO: loop through shapes and add each one's area() to total,
+        // relying on polymorphism - do not use instanceof or casting
+        for (Shape s : shapes) {
+
+        }
+        System.out.println("Total area: " + total);
+    }
+}`,
+solution:`// Circle
+@Override
+public double area() {
+    return Math.PI * radius * radius;
+}
+
+// Rectangle
+@Override
+public double area() {
+    return width * height;
+}
+
+// ShapeMain loop
+for (Shape s : shapes) {
+    total += s.area();
+}`,
+explanation:"The loop never needs to know whether s is a Circle or a Rectangle. Calling s.area() triggers dynamic method dispatch: at runtime the JVM looks at the actual object each Shape reference points to and runs that object's own override. This is the entire point of polymorphism - one line of calling code, many possible behaviours.",
+},
+{
+id:"ex4",difficulty:"Medium",concept:"Abstract Class & Template Method",title:"Employee Payroll",
+scenario:"An abstract Employee class fixes the overall payslip calculation as a template method, but leaves the bonus calculation to each subclass. Complete the abstract method's two overrides so Manager and Developer compute bonus differently, without touching the fixed calculatePay() method.",
+skeleton:`public abstract class Employee {
+    protected double baseSalary;
+    public Employee(double baseSalary) { this.baseSalary = baseSalary; }
+
+    // fixed sequence - do not change this method
+    public double calculatePay() {
+        return baseSalary + calculateBonus();
+    }
+
+    public abstract double calculateBonus();
+}
+
+public class Manager extends Employee {
+    public Manager(double baseSalary) { super(baseSalary); }
+
+    // TODO: a Manager's bonus is 20% of their base salary
+    @Override
+    public double calculateBonus() {
+
+    }
+}
+
+public class Developer extends Employee {
+    private int projectsCompleted;
+    public Developer(double baseSalary, int projectsCompleted) {
+        super(baseSalary);
+        this.projectsCompleted = projectsCompleted;
+    }
+
+    // TODO: a Developer's bonus is Rs 5000 per completed project
+    @Override
+    public double calculateBonus() {
+
+    }
+}`,
+solution:`// Manager
+@Override
+public double calculateBonus() {
+    return baseSalary * 0.20;
+}
+
+// Developer
+@Override
+public double calculateBonus() {
+    return projectsCompleted * 5000.0;
+}`,
+explanation:"This is the Template Method pattern: calculatePay() defines the fixed algorithm (base + bonus) and delegates just one varying step - calculateBonus() - to each subclass. Neither subclass is allowed to change the order or skip a step; they only supply the one piece of logic the parent asks for. That's exactly why calculateBonus() is abstract and calculatePay() is not.",
+},
+{
+id:"ex5",difficulty:"Medium",concept:"Interfaces & Polymorphism",title:"Payment Processing",
+scenario:"An online store accepts multiple payment methods. A Payable interface defines a single method. Complete CreditCard and UPI implementations, then complete the checkout method that works with any Payable without knowing which one it got.",
+skeleton:`public interface Payable {
+    boolean processPayment(double amount);
+}
+
+public class CreditCard implements Payable {
+    private String cardNumber;
+    private double creditLimit;
+    public CreditCard(String cardNumber, double creditLimit) {
+        this.cardNumber = cardNumber; this.creditLimit = creditLimit;
+    }
+
+    // TODO: return true and reduce creditLimit if amount <= creditLimit,
+    // otherwise return false and change nothing
+    @Override
+    public boolean processPayment(double amount) {
+
+    }
+}
+
+public class UPI implements Payable {
+    private String upiId;
+    public UPI(String upiId) { this.upiId = upiId; }
+
+    // TODO: UPI has no limit - always succeed and just print a confirmation
+    @Override
+    public boolean processPayment(double amount) {
+
+    }
+}
+
+public class Checkout {
+    // TODO: accept any Payable and call processPayment - do not check
+    // which concrete class it is
+    public static boolean pay(Payable method, double amount) {
+
+    }
+}`,
+solution:`// CreditCard
+@Override
+public boolean processPayment(double amount) {
+    if (amount <= creditLimit) {
+        creditLimit -= amount;
+        return true;
+    }
+    return false;
+}
+
+// UPI
+@Override
+public boolean processPayment(double amount) {
+    System.out.println("UPI payment of Rs. " + amount + " confirmed.");
+    return true;
+}
+
+// Checkout
+public static boolean pay(Payable method, double amount) {
+    return method.processPayment(amount);
+}`,
+explanation:"Checkout.pay() is written entirely against the Payable interface - it has no idea whether it received a CreditCard or a UPI object, and it doesn't need to. This is programming to an interface: the caller depends on a contract, not a concrete class, so a new payment method can be added later without touching Checkout at all.",
+},
+{
+id:"ex6",difficulty:"Medium",concept:"Custom Exceptions",title:"Inventory Stock Check",
+scenario:"A warehouse Inventory class must reject an order that asks for more stock than exists. Define a checked custom exception, then complete the method that throws it.",
+skeleton:`// TODO: define a checked exception class called InsufficientStockException
+// that extends Exception and takes a message in its constructor
+
+
+public class Inventory {
+    private int stockCount;
+    public Inventory(int stockCount) { this.stockCount = stockCount; }
+
+    // TODO: if requestedQuantity is more than stockCount, throw
+    // InsufficientStockException with a message stating how many are short.
+    // Otherwise reduce stockCount by requestedQuantity.
+    public void fulfilOrder(int requestedQuantity) throws InsufficientStockException {
+
+    }
+}`,
+solution:`public class InsufficientStockException extends Exception {
+    public InsufficientStockException(String message) {
+        super(message);
+    }
+}
+
+public void fulfilOrder(int requestedQuantity) throws InsufficientStockException {
+    if (requestedQuantity > stockCount) {
+        int shortBy = requestedQuantity - stockCount;
+        throw new InsufficientStockException("Short by " + shortBy + " units");
+    }
+    stockCount -= requestedQuantity;
+}`,
+explanation:"extends Exception (not RuntimeException) makes this a checked exception - any caller of fulfilOrder must either catch it or declare throws themselves, because running out of stock is a business condition a caller can reasonably recover from, not a programming bug. The guard clause runs before any state change, so a failed order never partially reduces stockCount.",
+},
+{
+id:"ex7",difficulty:"Hard",concept:"Factory Pattern",title:"Notification Factory",
+scenario:"An app sends notifications by Email or SMS depending on user preference, but calling code should never say new EmailNotification() directly. Complete the factory method.",
+skeleton:`public interface Notification {
+    void send(String message);
+}
+
+public class EmailNotification implements Notification {
+    @Override
+    public void send(String message) {
+        System.out.println("Email sent: " + message);
+    }
+}
+
+public class SMSNotification implements Notification {
+    @Override
+    public void send(String message) {
+        System.out.println("SMS sent: " + message);
+    }
+}
+
+public class NotificationFactory {
+    // TODO: return an EmailNotification for "EMAIL", an SMSNotification for
+    // "SMS" (case-insensitive), and throw IllegalArgumentException for
+    // anything else
+    public static Notification createNotification(String type) {
+
+    }
+}`,
+solution:`public static Notification createNotification(String type) {
+    if (type == null) throw new IllegalArgumentException("Type cannot be null");
+    switch (type.toUpperCase()) {
+        case "EMAIL": return new EmailNotification();
+        case "SMS":   return new SMSNotification();
+        default: throw new IllegalArgumentException("Unknown notification type: " + type);
+    }
+}`,
+explanation:"This is the Factory pattern: object creation is centralised in one static method, and callers ask for a type by name instead of writing new EmailNotification() themselves. The method returns the Notification interface type, not a concrete class, so calling code stays decoupled - and adding a PushNotification later means editing only this one switch statement.",
+},
+{
+id:"ex8",difficulty:"Hard",concept:"Singleton Pattern",title:"App Configuration Manager",
+scenario:"An application needs exactly one shared ConfigManager holding settings loaded once at startup. Complete the Singleton implementation.",
+skeleton:`public class ConfigManager {
+    private static ConfigManager instance;
+    private Map<String, String> settings;
+
+    // TODO: make the constructor private, and initialise settings as
+    // a new empty HashMap
+    public ConfigManager() {
+
+    }
+
+    // TODO: return the single shared instance, creating it the first
+    // time this is called (lazy initialisation)
+    public static ConfigManager getInstance() {
+
+    }
+
+    public void set(String key, String value) { settings.put(key, value); }
+    public String get(String key) { return settings.get(key); }
+}`,
+solution:`private ConfigManager() {
+    settings = new HashMap<>();
+}
+
+public static ConfigManager getInstance() {
+    if (instance == null) {
+        instance = new ConfigManager();
+    }
+    return instance;
+}`,
+explanation:"The private constructor is what actually enforces the Singleton - it stops any other class from calling new ConfigManager() directly, so the only way to get an instance is through getInstance(). Checking if (instance == null) before creating it is lazy initialisation: the object isn't built until it's first needed, not automatically at class load time.",
+},
+{
+id:"ex9",difficulty:"Easy",concept:"Constructor Overloading",title:"Student Record",
+scenario:"A Student class should support creating a record with just a name (defaulting grade to 'A'), or with both a name and an explicit grade. Complete the second constructor so it reuses the first instead of duplicating its logic.",
+skeleton:`public class Student {
+    private String name;
+    private String grade;
+
+    public Student(String name) {
+        this.name = name;
+        this.grade = "A";
+    }
+
+    // TODO: complete this constructor so it reuses the constructor above
+    // (via this(...)) and then sets grade to the given value
+    public Student(String name, String grade) {
+
+    }
+}`,
+solution:`public Student(String name, String grade) {
+    this(name);           // must be the FIRST statement - calls the other constructor
+    this.grade = grade;   // then overwrite the default
+}`,
+explanation:"this(name) is constructor chaining: it calls the other constructor in the same class, and like super(...), it must be the first statement. This avoids repeating this.name = name in two places - the single-argument constructor's logic runs once, and the two-argument version only adds what's different (overwriting the default grade).",
+},
+{
+id:"ex10",difficulty:"Hard",concept:"Exception Hierarchy & Catch Order",title:"File Processor",
+scenario:"A file processor can fail in two specific ways - a corrupt file, or a missing file - and both should be catchable individually or together as a general processing failure. Complete the exception hierarchy and the catch block that handles both.",
+skeleton:`// TODO: define ProcessingException as a checked base exception
+
+// TODO: define CorruptFileException and MissingFileException, both
+// extending ProcessingException
+
+public class FileProcessor {
+    public void process(String filename) throws ProcessingException {
+        if (filename == null || filename.isEmpty()) {
+            throw new MissingFileException("File not found: " + filename);
+        }
+        if (filename.endsWith(".corrupt")) {
+            throw new CorruptFileException("File is corrupted: " + filename);
+        }
+        System.out.println("Processing " + filename);
+    }
+}
+
+public class Main {
+    public static void main(String[] args) {
+        FileProcessor processor = new FileProcessor();
+        // TODO: call process("data.corrupt") and catch CorruptFileException
+        // specifically first, then MissingFileException, then a general
+        // ProcessingException last - in the correct order
+    }
+}`,
+solution:`public class ProcessingException extends Exception {
+    public ProcessingException(String message) { super(message); }
+}
+
+public class CorruptFileException extends ProcessingException {
+    public CorruptFileException(String message) { super(message); }
+}
+
+public class MissingFileException extends ProcessingException {
+    public MissingFileException(String message) { super(message); }
+}
+
+// Main
+try {
+    processor.process("data.corrupt");
+} catch (CorruptFileException e) {
+    System.out.println("Corrupt file handling: " + e.getMessage());
+} catch (MissingFileException e) {
+    System.out.println("Missing file handling: " + e.getMessage());
+} catch (ProcessingException e) {
+    System.out.println("General processing error: " + e.getMessage());
+}`,
+explanation:"The two specific catch blocks must come before the general ProcessingException catch block, or the compiler rejects the code as unreachable - once a catch(ProcessingException) exists, it would already handle every subclass, so a more specific catch after it could never run. This ordering rule (specific to general, always) applies to any exception hierarchy, not just this one.",
+},
+];
+
+const MCQS = [
+{
+id:"m1",cat:"Encapsulation & Classes",q:"What is the primary purpose of declaring a field as private?",
+options:["To make the class run faster", "To prevent the field from being accessed or modified directly from outside the class", "To allow the field to be inherited", "To make the field static"],
+correct:1,
+explain:"private restricts access to within the declaring class only. Outside code must go through public methods (getters/setters) to read or change it - this is the core mechanism of encapsulation.",
+},
+{
+id:"m2",cat:"Encapsulation & Classes",q:"Which keyword refers to the current object instance inside a method?",
+options:["self", "current", "this", "instance"],
+correct:2,
+explain:"this refers to the object the method is currently running on. It's commonly used to disambiguate a field from a same-named constructor or method parameter, e.g. this.name = name.",
+},
+{
+id:"m3",cat:"Encapsulation & Classes",q:"What happens if a class has no explicit constructor written?",
+options:["The class will not compile", "Java automatically provides a no-argument default constructor", "The class becomes abstract", "All fields become static"],
+correct:1,
+explain:"If you write no constructor at all, Java inserts a public no-argument default constructor automatically. As soon as you write ANY constructor yourself, that automatic one disappears.",
+},
+{
+id:"m4",cat:"Inheritance",q:"Which keyword allows a class to inherit from another class in Java?",
+options:["implements", "inherits", "extends", "super"],
+correct:2,
+explain:"extends is used for class inheritance. implements is used when a class signs up to an interface's contract instead.",
+},
+{
+id:"m5",cat:"Inheritance",q:"Where must a call to super(...) appear in a subclass constructor?",
+options:["Anywhere in the constructor", "As the last statement", "As the first statement", "It's optional and can be omitted freely"],
+correct:2,
+explain:"super(...) must be the first statement so the parent's part of the object is fully initialised before the subclass constructor touches anything of its own. If you don't write it, Java inserts an implicit no-argument super() call in that position.",
+},
+{
+id:"m6",cat:"Inheritance",q:"A class can extend how many other classes directly in Java?",
+options:["As many as needed", "Exactly one", "Zero or two", "Unlimited, same as interfaces"],
+correct:1,
+explain:"Java supports only single inheritance for classes - a class can extend exactly one other class. This is different from interfaces, where a class can implement any number of them.",
+},
+{
+id:"m7",cat:"Inheritance",q:"What is the relationship described by inheritance commonly called?",
+options:["HAS-A", "IS-A", "USES-A", "CONTAINS-A"],
+correct:1,
+explain:"Inheritance models an IS-A relationship - a Car IS-A Vehicle. Composition (holding a reference to another object as a field) models a HAS-A relationship instead - a Car HAS-A Engine.",
+},
+{
+id:"m8",cat:"Polymorphism",q:"Method overloading is resolved at which stage?",
+options:["Run time, based on the actual object", "Compile time, based on the reference type and arguments", "During garbage collection", "At class-loading time only"],
+correct:1,
+explain:"Overloading (same name, different parameter list) is resolved at compile time - this is static binding. Overriding (same signature in a subclass) is resolved at run time - dynamic binding.",
+},
+{
+id:"m9",cat:"Polymorphism",q:"An overriding method in a subclass CANNOT do which of the following?",
+options:["Return a subtype of the parent method's return type", "Call the parent's version using super", "Throw a broader checked exception than the parent method declared", "Have the exact same parameter list as the parent"],
+correct:2,
+explain:"An overriding method may narrow or keep the same checked exceptions as the method it overrides, but it can never widen them - that would break code written against the parent's original contract.",
+},
+{
+id:"m10",cat:"Polymorphism",q:"What is the technical term for the JVM choosing which overridden method to run based on the actual object at run time?",
+options:["Static binding", "Dynamic method dispatch", "Constructor chaining", "Garbage collection"],
+correct:1,
+explain:"Dynamic method dispatch (also called late binding) means the version of an overridden method that executes is decided by the real object type at run time, not the declared type of the reference variable.",
+},
+{
+id:"m11",cat:"Polymorphism",q:"Animal a = new Dog(); a.makeSound(); \u2014 assuming Dog overrides makeSound(), which version runs?",
+options:["Animal's makeSound(), because that's the declared type", "Dog's makeSound(), because that's the actual object", "Neither - this causes a compile error", "It depends on which package the classes are in"],
+correct:1,
+explain:"Even though a is declared as type Animal, it points to a Dog object at run time, so Dog's overridden makeSound() is what actually executes. This is polymorphism in action - the object's real type wins for overridden methods, not the reference's declared type.",
+},
+{
+id:"m12",cat:"Abstraction",q:"Which of these can an interface NOT contain (in standard pre-Java 8 style)?",
+options:["Method signatures with no body", "Constants (public static final fields)", "Instance fields with actual state", "Both A and B are allowed, only C is disallowed"],
+correct:3,
+explain:"A classic interface holds only method signatures and constants - it cannot hold instance state. That's one of the two big differences from an abstract class, which CAN hold instance fields.",
+},
+{
+id:"m13",cat:"Abstraction",q:"Which statement about abstract classes is TRUE?",
+options:["They cannot have constructors", "They cannot be instantiated directly", "A class with one abstract method may remain non-abstract", "They cannot have any concrete (non-abstract) methods"],
+correct:1,
+explain:"You cannot write new AbstractClass() directly. Abstract classes CAN have constructors (called via super() from subclasses) and CAN mix abstract and concrete methods freely.",
+},
+{
+id:"m14",cat:"Abstraction",q:"A class implements an interface but does not provide a body for one of its methods. What happens?",
+options:["It compiles fine, the method just does nothing", "The class itself must be declared abstract, or it fails to compile", "Java provides a default empty body automatically", "This is only a problem if the method is called"],
+correct:1,
+explain:"Any class that doesn't implement every abstract method it's supposed to (from a class or interface) must itself be declared abstract. Otherwise the compiler rejects it - a concrete class can never leave a method unimplemented.",
+},
+{
+id:"m15",cat:"Abstraction",q:"What is the Template Method pattern's core idea?",
+options:["Every method must be templated using generics", "A parent class fixes the sequence of an algorithm and lets subclasses fill in one or more specific steps", "All methods in a class must follow the same naming template", "It's another name for the Factory pattern"],
+correct:1,
+explain:"The Template Method pattern puts the fixed skeleton of an algorithm in a concrete parent method, and delegates just the varying step(s) to abstract methods that subclasses implement. The overall sequence can't be changed by the subclass.",
+},
+{
+id:"m16",cat:"Exceptions",q:"Which of these directly extends RuntimeException, making it unchecked?",
+options:["IOException", "SQLException", "IllegalArgumentException", "ClassNotFoundException"],
+correct:2,
+explain:"IllegalArgumentException extends RuntimeException, so it's unchecked - the compiler doesn't force a catch or a throws declaration. The other three are all checked exceptions.",
+},
+{
+id:"m17",cat:"Exceptions",q:"In a catch block chain, what happens if you place catch(Exception e) BEFORE catch(NullPointerException e)?",
+options:["It works fine, Java checks all blocks anyway", "Compile error - the more specific catch becomes unreachable", "Only the general catch runs, the specific one is ignored silently", "It only fails at run time, not compile time"],
+correct:1,
+explain:"Catch blocks must go from most specific to most general. If a general catch appears first, it would already catch everything the more specific block was meant to catch, making that later block unreachable - a compile-time error.",
+},
+{
+id:"m18",cat:"Exceptions",q:"Which block is guaranteed to run whether or not an exception was thrown (barring System.exit or a crash)?",
+options:["catch", "finally", "throw", "try"],
+correct:1,
+explain:"finally always executes after try/catch, regardless of whether an exception occurred or was caught - it's typically used for cleanup like closing files or connections.",
+},
+{
+id:"m19",cat:"Exceptions",q:"A method declares 'throws ProcessingException', and ProcessingException has three subclasses. What does this mean for callers?",
+options:["Only ProcessingException itself can be thrown, never its subclasses", "Any of ProcessingException or its three subclasses could be thrown, since all of them ARE ProcessingException", "This is a compile error - each subclass would need to be listed separately", "It means the method never actually throws anything"],
+correct:1,
+explain:"Because the subclasses extend ProcessingException, declaring the base type in throws covers the whole hierarchy - any of them could come out of that method. Callers can still catch by the base type in one block, or catch specific subclasses individually if they want different handling.",
+},
+{
+id:"m20",cat:"Exceptions",q:"What is a custom exception typically used for instead of returning a boolean or an error code?",
+options:["To make the program run faster", "To carry a specific type and a descriptive message about what went wrong, and to force the caller to handle it", "To avoid writing any validation logic", "To automatically fix the error"],
+correct:1,
+explain:"A custom exception gives an error both a distinct TYPE (so different failures can be caught differently) and a MESSAGE (so the caller knows exactly what happened) - a plain boolean or int error code carries neither.",
+},
+{
+id:"m21",cat:"Design Patterns",q:"What is the main benefit of the Factory pattern?",
+options:["It makes object creation faster at runtime", "It centralises object creation so callers don't depend on concrete classes directly", "It removes the need for constructors entirely", "It only works with abstract classes, never interfaces"],
+correct:1,
+explain:"The Factory pattern hides which concrete class gets instantiated behind a single creation method. Callers ask for a type by name and get back an interface reference - adding a new type later means changing only the factory.",
+},
+{
+id:"m22",cat:"Design Patterns",q:"Which two things must a classic Singleton implementation include?",
+options:["A public constructor and a static factory method", "A private constructor and a static method that returns the single shared instance", "An abstract class and multiple subclasses", "An interface and a factory class"],
+correct:1,
+explain:"The private constructor is what prevents anyone from creating additional instances with 'new'. The static getInstance() method (often with lazy initialisation) is the only way to obtain the one shared object.",
+},
+{
+id:"m23",cat:"Design Patterns",q:"What distinguishes the Bridge pattern from simple inheritance?",
+options:["Bridge uses composition to let an abstraction and its implementation vary independently, rather than being locked together by inheritance", "Bridge is only usable with static methods", "Bridge requires exactly two classes total", "There is no real difference, they're the same pattern"],
+correct:0,
+explain:"Bridge separates 'what something does' (the abstraction) from 'how it does it' (the implementation) using composition - the abstraction HOLDS a reference to an implementation interface, so either side can change without touching the other.",
+},
+{
+id:"m24",cat:"Design Patterns",q:"In the Command pattern, what is a 'Command' object?",
+options:["A database query", "A request turned into an object, with an execute() method, so it can be stored, logged, queued or replayed", "A type of exception", "A synonym for a constructor"],
+correct:1,
+explain:"Instead of directly calling a method, you wrap the request (what to do, and on what) inside an object that exposes an execute() method. This is what allows the action to be saved, logged, undone, or run later rather than immediately.",
+},
+{
+id:"m25",cat:"Misc / Java Keywords",q:"What does the 'static' keyword mean when applied to a method?",
+options:["The method cannot be overridden", "The method belongs to the class itself, not to any individual instance", "The method runs only once per program", "The method is automatically private"],
+correct:1,
+explain:"A static method belongs to the class rather than to any object, so it's called as ClassName.method() without needing an instance. It also cannot directly access instance (non-static) fields or use 'this'.",
+},
+{
+id:"m26",cat:"Misc / Java Keywords",q:"What is the difference between == and .equals() when comparing two objects?",
+options:["They always behave identically for all types", "== compares object references (are they the same object in memory), .equals() compares logical/content equality (by default, unless overridden)", "== is only for primitives, never usable on objects", "'.equals()' is faster than =="],
+correct:1,
+explain:"== checks whether two references point to the exact same object in memory. .equals() is a method that can be overridden to compare actual content - String and most collection classes override it to do meaningful content comparison.",
+},
+{
+id:"m27",cat:"Misc / Java Keywords",q:"Which access modifier allows access from the same package AND from subclasses in other packages?",
+options:["private", "default (no modifier)", "protected", "public only"],
+correct:2,
+explain:"protected grants access within the same package, plus to subclasses even if they're in a different package. private is most restrictive (same class only), default is package-only, and public is unrestricted.",
+},
+];
+
 const PHASES = [
   {id:'ph1', label:'Foundations',            icon:'🧱', range:'Activities 1–6',   blurb:'Encapsulation, defensive validation and a custom checked-exception hierarchy. Everything later is built on the Account class you write here.'},
   {id:'ph2', label:'Inheritance & Polymorphism', icon:'🌳', range:'Activities 7–10', blurb:'Four account subclasses, overridden withdrawal rules, then an abstract base class that locks the withdrawal sequence with the Template Method pattern.'},
@@ -594,6 +1223,7 @@ const OOP = [
 
     public double getBalance() { return balance; }
 }`,
+  officialTags:['OOP', 'Class', 'Object', 'Encapsulation'],
   ask:['Why must balance be private instead of public?','What does deposit(-500) return and what happens to the balance?','What is the difference between this.balance and balance inside the constructor?'],
 },
 {
@@ -623,6 +1253,7 @@ const OOP = [
         System.out.println(name + ": " + (ok ? "[PASS]" : "[FAIL]"));
     }
 }`,
+  officialTags:['Testing', 'Main Method', 'Console I/O'],
   ask:['Why test negative amounts separately from over-limit amounts?','What is wrong with asserting balance == 7000.0 on doubles in production code?'],
 },
 {
@@ -660,6 +1291,7 @@ public boolean withdraw(double amount, String enteredPin) {
     balance -= amount;
     return true;
 }`,
+  officialTags:['Validation', 'State Management', 'Business Rules'],
   ask:['Why is IllegalArgumentException thrown rather than returning false from the constructor?','Why use "ACTIVE".equalsIgnoreCase(status) instead of status.equals("ACTIVE")?','Is adding withdraw(double, String) overloading or overriding?'],
 },
 {
@@ -680,6 +1312,7 @@ public boolean withdraw(double amount, String enteredPin) {
 } catch (IllegalArgumentException e) {
     System.out.println("Test 1: [PASS] - " + e.getMessage());
 }`,
+  officialTags:['Testing', 'Edge Cases', 'Test Coverage'],
   ask:['How do you write a test that passes only when an exception is thrown?','After changePin succeeds, why must the old PIN stop working?'],
 },
 {
@@ -689,16 +1322,24 @@ public boolean withdraw(double amount, String enteredPin) {
   steps:[
     'AccountException extends Exception — a constructor that passes the message up with super(message).',
     'Five subclasses, each extending AccountException: InvalidAmountException, InsufficientBalanceException, MinimumBalanceViolationException, InactiveAccountException, InvalidPinException.',
+    'Rewrite deposit too, not just withdraw: it now throws InvalidAmountException on amount <= 0 instead of returning false.',
     'Rewrite withdraw so it throws instead of returning false: wrong PIN → InvalidPinException, non-active → InactiveAccountException, amount <= 0 → InvalidAmountException, amount > balance → InsufficientBalanceException.',
-    'Declare throws AccountException on withdraw — the single base type covers all five.',
+    'Declare throws AccountException on both deposit and withdraw — the single base type covers all five.',
   ],
-  key:['Checked (extends Exception) vs unchecked (extends RuntimeException)','One base type in the throws clause covers the whole subtree','Exceptions carry context; a boolean carries none','Exception chaining with super(message) and super(message, cause)'],
+  key:['Checked (extends Exception) vs unchecked (extends RuntimeException)','One base type in the throws clause covers the whole subtree','deposit changes from a boolean-returning method to a throwing void method here too, not just withdraw','Exceptions carry context; a boolean carries none','Exception chaining with super(message) and super(message, cause)'],
   code:`public class AccountException extends Exception {
     public AccountException(String message) { super(message); }
 }
 
 public class InvalidPinException extends AccountException {
     public InvalidPinException(String message) { super(message); }
+}
+
+public void deposit(double amount) throws InvalidAmountException {
+    if (amount <= 0) {
+        throw new InvalidAmountException("Deposit amount must be positive");
+    }
+    this.balance += amount;
 }
 
 public void withdraw(double amount, String enteredPin) throws AccountException {
@@ -712,6 +1353,7 @@ public void withdraw(double amount, String enteredPin) throws AccountException {
         throw new InsufficientBalanceException("Insufficient funds in account");
     balance -= amount;
 }`,
+  officialTags:['Exceptions', 'Custom Exceptions', 'Error Handling'],
   ask:['Why extend Exception rather than RuntimeException here?','If withdraw declares throws AccountException, can it still throw InvalidPinException? Why?','What advantage does a custom exception have over returning false?'],
 },
 {
@@ -721,7 +1363,7 @@ public void withdraw(double amount, String enteredPin) throws AccountException {
   steps:[
     'try { withdraw with wrong PIN } catch (InvalidPinException e) → print message, [PASS].',
     'Suspend the account, then try a correct-PIN withdrawal → catch InactiveAccountException.',
-    'Try a negative amount → catch InvalidAmountException.',
+    'Try a negative deposit — acc.deposit(-500.0) — and catch InvalidAmountException (not withdraw; deposit throws it in this test).',
     'Try withdrawing more than the balance → catch InsufficientBalanceException.',
     'Close the account, attempt an operation, and catch the base AccountException — proving one catch block handles every subclass.',
   ],
@@ -737,45 +1379,63 @@ public void withdraw(double amount, String enteredPin) throws AccountException {
 } finally {
     System.out.println("Balance is still Rs " + account.getBalance());
 }`,
+  officialTags:['Try-Catch', 'Exception Handling', 'Error Reporting'],
   ask:['What happens if you put catch(AccountException) before catch(InvalidPinException)?','Name one situation where finally does not run.','How does polymorphism apply to catch blocks?'],
 },
 {
   n:7, id:'oop7', ph:'ph2', title:'Account Subclasses (Inheritance)',
-  obj:'Create four specialised account types extending Account, each with its own fields and its own constructor calling super().',
+  obj:'Create four specialised account types extending Account, each with its own fields and its own constructor calling super(). This is also where Account\'s fields change from private to protected, so the subclasses can reach balance and status directly.',
   files:['SavingsAccount.java','CurrentAccount.java','FixedDepositAccount.java','SalaryAccount.java'],
   steps:[
-    'SavingsAccount — fields minBalance (1000.0) and interestRate (4.0); super(..., "SAVINGS", ...); applyInterest() adds balance * rate / 100.',
-    'CurrentAccount — field overdraftLimit (25000.0); super(..., "CURRENT", ...); getter and setter.',
-    'FixedDepositAccount — fields tenureMonths (12) and interestRate (6.5); super(..., "FIXED_DEPOSIT", ...); calculateMaturityAmount() using compound interest.',
-    'SalaryAccount — fields employerName and inactiveMonths; super(..., "SALARY", ...).',
+    'Change every field in Account from private to protected — the subclasses need direct access to balance and status.',
+    'SavingsAccount — fields minBalance (1000.0) and interestRate (4.0); a short constructor using the defaults plus a full constructor overload that sets both; applyInterest() adds balance * rate / 100.',
+    'CurrentAccount — field overdraftLimit; a short constructor and a full overload taking overdraftLimit explicitly.',
+    'FixedDepositAccount — fields tenureMonths and interestRate; calculateMaturityAmount() compounds monthly: balance × (1 + rate/100/12)^(12 × years).',
+    'SalaryAccount — fields employerName and inactiveMonths (starts at 0), with increment/reset helpers for tracking dormancy.',
   ],
-  key:['extends creates an IS-A relationship','super(...) must be the first statement in the subclass constructor','Subclass adds state and behaviour; it does not copy the parent','Constructor chaining runs parent-first, top down'],
-  code:`public class SavingsAccount extends Account {
+  key:['extends creates an IS-A relationship','super(...) must be the first statement in the subclass constructor','protected replaces private here so children can touch balance directly','Constructor overloading — a short constructor with sane defaults, plus a full one for custom values','Fixed Deposit maturity compounds monthly, not annually — a common exam trap'],
+  code:`// Account.java — fields become protected from this activity onward,
+// but the class itself is still concrete (it only becomes abstract in Activity 9)
+public class Account {
+    protected String accountNumber, name, accountType, status, pin;
+    protected int age;
+    protected double balance;
+    // ...
+}
+
+public class SavingsAccount extends Account {
     private double minBalance = 1000.0;
     private double interestRate = 4.0;
 
     public SavingsAccount(String accNum, String name, int age, double balance,
-                          String status, String pin, double minBalance, double rate) {
-        super(accNum, name, age, balance, "SAVINGS", status, pin);  // must be first
+                          String status, String pin) {
+        super(accNum, name, age, balance, "SAVINGS", status, pin);   // uses the defaults above
+    }
+
+    public SavingsAccount(String accNum, String name, int age, double balance,
+                          String status, String pin, double minBalance, double interestRate) {
+        super(accNum, name, age, balance, "SAVINGS", status, pin);
         this.minBalance = minBalance;
-        this.interestRate = rate;
+        this.interestRate = interestRate;
     }
 
     public void applyInterest() {
-        this.balance += this.balance * (interestRate / 100.0);
+        double interest = this.balance * (interestRate / 100.0);
+        this.balance += interest;
     }
 }
 
 public class FixedDepositAccount extends Account {
-    private int tenureMonths = 12;
-    private double interestRate = 6.5;
+    private int tenureMonths;
+    private double interestRate;
 
     public double calculateMaturityAmount() {
-        double years = tenureMonths / 12.0;
-        return balance * Math.pow(1 + interestRate / 100.0, years);
+        // monthly compounding, not annual
+        return this.balance * Math.pow(1 + (interestRate / 100.0) / 12, 12 * (tenureMonths / 12.0));
     }
 }`,
-  ask:['Why must super(...) be the first statement in a constructor?','What is the difference between the IS-A and HAS-A relationships? Give one example from this codebase.','If the parent has no no-arg constructor, what happens when the child omits super(...)?'],
+  officialTags:['Inheritance', 'Extends', 'Super', 'Method Overriding'],
+  ask:['Why must super(...) be the first statement in a constructor?','Why do the fields change from private to protected in this activity specifically?','What is the difference between the IS-A and HAS-A relationships? Give one example from this codebase.','Does calculateMaturityAmount compound annually or monthly? Write the formula from memory.'],
 },
 {
   n:8, id:'oop8', ph:'ph2', title:'Polymorphism & Dynamic Method Dispatch',
@@ -804,6 +1464,7 @@ for (Account a : portfolio) {
     try { a.withdraw(5000, "1234"); }   // three different behaviours, one call
     catch (AccountException e) { System.out.println(e.getMessage()); }
 }`,
+  officialTags:['Polymorphism', 'Dynamic Dispatch', 'Type-Specific Testing'],
   ask:['Overloading vs overriding — give the four differences.','An Account reference holds a SavingsAccount. Which withdraw runs and why?','Can an overriding method throw a broader checked exception than the parent?','Why can a Current account balance go negative but a Savings one cannot?'],
 },
 {
@@ -843,6 +1504,7 @@ public void processDebit(double amount) throws AccountException {
         throw new MinimumBalanceViolationException("...");
     balance -= amount;
 }`,
+  officialTags:['Abstract Class', 'Abstract Methods', 'Template Method', 'Contract'],
   ask:['Abstract class vs interface — when do you pick each?','Which method here is the template method and which is the hook?','Can an abstract class have a constructor? Why would it need one?','What is the compile error if SavingsAccount does not implement processDebit?'],
 },
 {
@@ -872,6 +1534,7 @@ for (AbstractAccount a : portfolio) {
         ((SavingsAccount) a).applyInterest();
     }
 }`,
+  officialTags:['Polymorphism', 'Abstract Dispatch', 'Type-Specific Rules'],
   ask:['Why withdraw before deposit and not the other way round?','What goes wrong if deposit throws after a successful withdraw?','Why is a long chain of instanceof checks considered a design smell?'],
 },
 {
@@ -913,6 +1576,7 @@ public class AccountFactory {
         }
     }
 }`,
+  officialTags:['Interface', 'Factory Pattern', 'Loose Coupling', 'Abstraction'],
   ask:['Why does createAccount return IAccount instead of AbstractAccount?','Why is createAccount static?','Which SOLID principle does the factory serve, and how?','Can an interface have method bodies in modern Java?'],
 },
 {
@@ -926,24 +1590,31 @@ public class AccountFactory {
     'Verify AccountFactory.createAccount("CRYPTO", ...) throws IllegalArgumentException.',
   ],
   key:['Program to an interface, not an implementation','Loose coupling — the test file imports no concrete account class','Behaviour still varies per type thanks to dynamic dispatch','Casting back to a concrete type defeats the purpose'],
-  code:`IAccount savings = AccountFactory.createAccount("SAVINGS",
-        "ACC1001", "Rajesh Sharma", 30, 10000.0, "ACTIVE", "1234");
-IAccount current = AccountFactory.createAccount("CURRENT",
-        "ACC1002", "Priya Patel", 35, 5000.0, "ACTIVE", "5678");
+  code:`IAccount sav = AccountFactory.createAccount("SAVINGS",
+        "SAV1001", "Rajesh Sharma", 28, 5000.0, "ACTIVE", "1234");
+sav.deposit(2000.0);
+boolean t1 = (sav.getBalance() == 7000.0);       // works purely through IAccount
 
-savings.deposit(2000.0);
+IAccount cur = AccountFactory.createAccount("CURRENT",
+        "CUR1001", "Priya Patel", 34, 5000.0, "ACTIVE", "5678");
+cur.withdraw(8000.0, "5678");
+boolean t2 = (cur.getBalance() == -3000.0);      // overdraft allowed, still via IAccount
+
+IAccount fd = AccountFactory.createAccount("FIXED_DEPOSIT",
+        "FD1001", "Amit Kumar", 45, 50000.0, "ACTIVE", "1111");
 try {
-    savings.withdraw(11500.0, "1234");     // breaches min balance
-    System.out.println("[Test] [FAIL]");
-} catch (MinimumBalanceViolationException e) {
-    System.out.println("[Test] [PASS] " + e.getMessage());
+    fd.withdraw(5000.0, "1111");
+    System.out.println("[Test 3] [FAIL]");
+} catch (AccountException e) {
+    System.out.println("[Test 3] Fixed Deposit Premature Withdrawal Block: [PASS]");
 }
 
 try {
-    AccountFactory.createAccount("CRYPTO", "X", "Y", 30, 0, "ACTIVE", "1111");
+    AccountFactory.createAccount("INVALID_TYPE", "INV001", "Test", 30, 1000.0, "ACTIVE", "0000");
 } catch (IllegalArgumentException e) {
     System.out.println("[Test 4] Invalid Type Rejection: [PASS]");
 }`,
+  officialTags:['Interface Polymorphism', 'Factory Usage', 'Runtime Selection'],
   ask:['What is lost if you declare the variable as SavingsAccount instead of IAccount?','How does this test prove loose coupling?','Why is IllegalArgumentException (unchecked) used here rather than a checked one?'],
 },
 {
@@ -958,35 +1629,58 @@ try {
     '13.2 — AccountFactory.createAccount now accepts tenure and passes it through.',
     '13.2 — Verify with customers of 0, 2, 4 and 6 years that the rules differ.',
   ],
-  key:['Separation of concerns — policy lives in the engine, not the entity','A lookup Map or a tiered if-chain both work; order the checks from highest tenure down','Static utility methods versus an injected dependency','This is the step that makes Activity 14 (properties files) possible'],
+  key:['Separation of concerns — policy lives in the engine, not the entity','The real solution uses a Map<String,Double> keyed by bucket name, filled by a getSavingsBucket helper — not a raw if-chain repeated in every method','Order the tenure checks from highest down, or a 6-year customer wrongly matches the 1-year rule first','Static utility methods versus an injected dependency','This is the step that makes Activity 14 (properties files) possible'],
   code:`public class AccountRulesEngine {
+    private static final Map<String, Double> SAVINGS_MIN_BALANCES = new HashMap<>();
+    private static final Map<String, Double> SAVINGS_INTEREST_RATES = new HashMap<>();
+    static {
+        SAVINGS_MIN_BALANCES.put("NEW", 10000.0);
+        SAVINGS_MIN_BALANCES.put("STANDARD", 7500.0);
+        SAVINGS_MIN_BALANCES.put("PREMIUM", 5000.0);
+        SAVINGS_MIN_BALANCES.put("PRIVILEGE", 2500.0);
+        SAVINGS_INTEREST_RATES.put("NEW", 2.70);
+        SAVINGS_INTEREST_RATES.put("STANDARD", 3.00);
+        SAVINGS_INTEREST_RATES.put("PREMIUM", 3.50);
+        SAVINGS_INTEREST_RATES.put("PRIVILEGE", 4.00);
+    }
+
+    // one helper decides the bucket; every getter reuses it
+    public static String getSavingsBucket(int tenureYears) {
+        if (tenureYears >= 5) return "PRIVILEGE";
+        if (tenureYears >= 3) return "PREMIUM";
+        if (tenureYears >= 1) return "STANDARD";
+        return "NEW";
+    }
+
     public static double getSavingsMinBalance(int tenureYears) {
-        if (tenureYears >= 5) return 2500.0;    // privilege
-        if (tenureYears >= 3) return 5000.0;    // premium
-        if (tenureYears >= 1) return 7500.0;    // standard
-        return 10000.0;                         // new
+        return SAVINGS_MIN_BALANCES.getOrDefault(getSavingsBucket(tenureYears), 10000.0);
     }
 
     public static double getSavingsInterestRate(int tenureYears) {
-        if (tenureYears >= 5) return 4.00;
-        if (tenureYears >= 3) return 3.50;
-        if (tenureYears >= 1) return 3.00;
-        return 2.70;
+        return SAVINGS_INTEREST_RATES.getOrDefault(getSavingsBucket(tenureYears), 2.70);
     }
 
     public static double getCurrentOverdraftLimit(double monthlyTurnover) {
         return Math.max(25000.0, monthlyTurnover * 2.5);
     }
+
+    public static double getFDInterestRate(int months) {
+        if (months >= 36) return 7.50;
+        if (months >= 12) return 6.50;
+        return 5.00;
+    }
 }
 
 // 13.2 - the account asks the engine instead of hardcoding
-public SavingsAccount(..., int tenureYears) {
-    super(...);
+public SavingsAccount(String accNum, String name, int age, double balance,
+                      String status, String pin, int tenureYears) {
+    super(accNum, name, age, balance, "SAVINGS", status, pin);
     this.tenureYears  = tenureYears;
     this.minBalance   = AccountRulesEngine.getSavingsMinBalance(tenureYears);
     this.interestRate = AccountRulesEngine.getSavingsInterestRate(tenureYears);
 }`,
-  ask:['Give the min balance and interest rate for a customer with 4 years of tenure.','Why must the tenure checks run from highest to lowest?','What is the overdraft limit for a monthly turnover of Rs 5,000?','Why is a rules engine better than a constant inside SavingsAccount?'],
+  officialTags:['Singleton (goal)', 'Conditional Logic', 'Map Refactor', 'Tenure Buckets'],
+  ask:['Give the min balance and interest rate for a customer with 4 years of tenure.','Why does getSavingsBucket exist as its own method instead of repeating the if-chain in every getter?','What is the overdraft limit for a monthly turnover of Rs 5,000?','What is the FD interest rate at 36 months of tenure?'],
 },
 {
   n:14, id:'oop14', ph:'ph4', title:'External Properties Rules Engine',
@@ -994,69 +1688,176 @@ public SavingsAccount(..., int tenureYears) {
   files:['config/rules/savings.properties','current.properties','fixeddeposit.properties','salary.properties','AccountRulesPropertiesLoader.java','AccountRulesEngine.java'],
   steps:[
     'Write key-value pairs in savings.properties for minimum balance and interest rate across the four tenure buckets (new, standard, premium, privilege).',
-    'AccountRulesPropertiesLoader uses java.util.Properties to load the file from disk or the classpath stream.',
-    'Helper methods: getProperty(String key, String defaultValue) for text, getDouble(String key, double defaultValue) for numbers (parse and fall back on failure).',
-    'Refactor AccountRulesEngine so getSavingsMinBalance / getSavingsInterestRate read from the loader instead of in-memory maps.',
-    'The engine is a Singleton — AccountRulesEngine.getInstance().',
+    'AccountRulesPropertiesLoader is instantiated once per file — new AccountRulesPropertiesLoader("src/main/resources/config/rules/savings.properties") — and reads it with java.util.Properties, checking the classpath first and falling back to a direct file path.',
+    'Helper methods: getProperty(String key, String defaultValue) for text, getDouble / getInt with a default value that is returned on a missing key or a NumberFormatException.',
+    'AccountRulesEngine keeps a private static loader field for each account type and asks it for values by key, e.g. "min.balance." + bucket. Note: at this activity the engine is still plain static methods, not yet a Singleton — that arrives in Activity 15.',
     'Run TestAccountRulesEngineProperties and confirm tenure 0/2/4/6 yrs produce 10000/7500/5000/2500 and 2.70/3.00/3.50/4.00%.',
   ],
-  key:['java.util.Properties — load(InputStream), getProperty(key, default)','Classpath resource loading: getClass().getResourceAsStream("/config/rules/savings.properties")','Always supply a default so a missing key degrades gracefully instead of crashing','Externalised configuration — change policy without recompiling','Singleton: private constructor + private static instance + public static getInstance()','The .properties files must be copied next to the compiled .class files or the engine silently uses defaults'],
+  key:['java.util.Properties — load(InputStream), getProperty(key, default)','Classpath resource loading first via getClassLoader().getResourceAsStream(...), then a plain File as a fallback','Always supply a default so a missing key degrades gracefully instead of crashing','Externalised configuration — change policy without recompiling','This activity is NOT yet the Singleton — the engine is a static loader field per file. The Singleton getInstance() pattern is introduced in Activity 15, when the engine gains hot-reload and a shared rules map','If the properties file path is wrong, the loader silently falls back to defaults and prints nothing — a common source of "why are my numbers wrong" bugs'],
   code:`# savings.properties
-min.balance.new=10000.0
-min.balance.standard=7500.0
-min.balance.premium=5000.0
-min.balance.privilege=2500.0
+min.balance.new=10000
+min.balance.standard=7500
+min.balance.premium=5000
+min.balance.privilege=2500
 interest.rate.new=2.70
 interest.rate.standard=3.00
 interest.rate.premium=3.50
 interest.rate.privilege=4.00
 
 // AccountRulesPropertiesLoader.java
-private Properties props = new Properties();
+public class AccountRulesPropertiesLoader {
+    private Properties properties = new Properties();
 
-public void load(String path) throws IOException {
-    try (InputStream in = new FileInputStream(path)) {
-        props.load(in);
+    public AccountRulesPropertiesLoader(String configPath) {
+        loadProperties(configPath);
+    }
+
+    private void loadProperties(String configPath) {
+        try {
+            InputStream in = getClass().getClassLoader().getResourceAsStream(configPath);
+            if (in == null) {
+                File file = new File(configPath);
+                if (file.exists()) in = new FileInputStream(file);
+            }
+            if (in != null) { properties.load(in); in.close(); }
+        } catch (Exception e) {
+            System.err.println("Could not load properties: " + configPath);
+        }
+    }
+
+    public double getDouble(String key, double defaultValue) {
+        String val = properties.getProperty(key);
+        if (val == null) return defaultValue;
+        try { return Double.parseDouble(val.trim()); }
+        catch (NumberFormatException e) { return defaultValue; }
     }
 }
 
-public double getDouble(String key, double defaultValue) {
-    String raw = props.getProperty(key);
-    if (raw == null) return defaultValue;
-    try { return Double.parseDouble(raw.trim()); }
-    catch (NumberFormatException e) { return defaultValue; }
-}
-
-// Singleton engine
+// AccountRulesEngine.java — still plain static at this activity, no getInstance() yet
 public class AccountRulesEngine {
-    private static AccountRulesEngine instance;
-    private AccountRulesEngine() { /* load properties */ }
-    public static synchronized AccountRulesEngine getInstance() {
-        if (instance == null) instance = new AccountRulesEngine();
-        return instance;
+    private static AccountRulesPropertiesLoader savingsLoader =
+        new AccountRulesPropertiesLoader("src/main/resources/config/rules/savings.properties");
+
+    public static String getSavingsBucket(int tenureYears) {
+        if (tenureYears >= 5) return "privilege";
+        if (tenureYears >= 3) return "premium";
+        if (tenureYears >= 1) return "standard";
+        return "new";
+    }
+
+    public static double getSavingsMinBalance(int tenureYears) {
+        return savingsLoader.getDouble("min.balance." + getSavingsBucket(tenureYears), 10000.0);
     }
 }`,
-  ask:['Write the Singleton pattern for AccountRulesEngine and explain the private constructor.','Why does getDouble take a default value?','What happens at runtime if the properties file is missing from bin/?','Name two advantages of external configuration over hardcoded constants.'],
+  officialTags:['Properties Files', 'Externalized Config', 'Resource Loading', 'Hot Reload'],
+  ask:['Why does the loader check the classpath before falling back to a plain File path?','What happens at runtime if the properties file path is wrong?','Is AccountRulesEngine a Singleton at this activity? At which activity does it become one?','Name two advantages of external configuration over hardcoded constants.'],
 },
 {
-  n:15, id:'oop15', ph:'ph4', title:'Funds Transfer with Daily Limits',
-  obj:'Add a TransferService that moves money between accounts, capped by a daily transfer limit that depends on account type and tenure.',
-  files:['src/com/gdb/service/TransferService.java','src/com/gdb/domain/Account.java','AccountRulesEngine.java','tests/TestTransfer.java'],
-  steps:[
-    'TransferService.transfer(from, to, amount, pin) runs eight checks IN ORDER — nothing moves until every check passes.',
-    '1. Null check → AccountException("Source and destination accounts are required").',
-    '2. Both accounts ACTIVE → InactiveAccountException.',
-    '3. from.verifyPin(pin) → InvalidPinException("Incorrect PIN").',
-    '4. from.canWithdraw(amount) → InsufficientBalanceException.',
-    '5. resetDailyTransferIfNeeded() then canTransfer(amount) → AccountException with the remaining limit.',
-    '6. Debit from.withdraw(amount, pin). 7. Credit to.deposit(amount). 8. Record source.updateDailyTransferTotal(amount).',
-    'Account tracks dailyTransferTotal and lastTransferDate; resetDailyTransferIfNeeded() zeroes the total when lastTransferDate.toLocalDate() is not today.',
-    'getRemainingDailyTransferLimit() = Math.max(0.0, limit - dailyTransferTotal).',
-    'AccountRulesEngine.getDailyTransferLimit(type, tenure) reads the dailyTransferLimit feature; returns 0.0 when null.',
-  ],
-  key:['Daily limits by bucket — savings 50k/100k/200k/500k, current 100k/500k/1M/(fallback 0), FD 0 at every tier, salary 100k/500k/1M/2.5M','Validate-then-mutate: all checks before any state change','LocalDate comparison for the day rollover','Service layer holds orchestration; the entity holds its own state','FD daily limit is 0 at every tier, so FD accounts can never transfer'],
-  code:`public void transfer(IAccount from, IAccount to, double amount, int pin)
-        throws AccountException {
+  n:15, id:'oop15', ph:'ph4', title:"Funds Transfer with Daily Limits",
+  obj:"Add a TransferService that moves money between accounts, capped by a daily transfer limit that depends on account type and tenure. This activity is also a large structural rewrite: accountNumber and pin both become int, AccountRulesEngine becomes a real Singleton with hot-reload, SalaryAccount is dropped, and the separate AbstractAccount class is folded back into a single abstract Account class.",
+  files:["src/com/gdb/domain/Account.java", "SavingsAccount.java", "CurrentAccount.java", "FixedDepositAccount.java", "AccountFactory.java", "AccountRulesEngine.java", "src/com/gdb/service/TransferService.java", "tests/TestTransfer.java"],
+  steps:["Account is rewritten: fields become accountNumber (int, was String), accountHolderName (was name), age, balance, status (defaults to \"Active\", was \"ACTIVE\"), pin (Integer, starts null), openingDate (new field), tenureYears.", "The constructor now takes (int accountNumber, String name, int age, double initialBalance[, int tenureYears]) and declares throws InvalidAgeException \u2014 a new checked exception replacing the unchecked IllegalArgumentException used through Activity 14, for both the under-18 check and a new empty-name check.", "pin is no longer a constructor parameter. It starts null and is set afterward with setPin(int pin) throws InvalidPinException, which validates it is a 4-digit number between 1000 and 9999.", "deposit(double) now declares throws InactiveAccountException, InvalidAmountException \u2014 an inactive account blocks deposits too, not just withdrawals. withdraw(double, int pin) takes the PIN as an int, not a String.", "AccountFactory.createAccount(type, accountNumber, name, age, initialBalance[, tenureYears]) drops SALARY entirely \u2014 only SAVINGS, CURRENT and FIXEDDEPOSIT remain (note: FIXEDDEPOSIT has no underscore, unlike the FIXED_DEPOSIT/FD used earlier). An unknown or blank type throws the new InvalidAccountTypeException (checked, extends AccountException) \u2014 not IllegalArgumentException as in Activities 11\u201314.", "AccountRulesEngine becomes a true double-checked-locking Singleton (getInstance()), loading a Map<String, Map<Integer, Rule>> from all four properties files (yes, salary.properties is still loaded even though SalaryAccount no longer exists in the domain model) via a private loadAllRules(), with a public reloadRules() for hot-reload.", "Each account type asks the engine directly: getMinimumBalance(\"SAVINGS\", tenureYears), getInterestRate(...), and getAdditionalFeature(type, tenureYears, \"dailyTransferLimit\") / \"overdraftLimit\" / \"lockinMonths\" / \"penaltyPercentage\" for the extra per-type numbers.", "CurrentAccount grows real overdraft tracking: a private overdraftUsed field, canWithdraw checks balance minus minimum plus overdraft limit minus overdraft already used, and a new repayOverdraft(amount) method pays it back.", "FixedDepositAccount.withdraw now always throws InsufficientBalanceException naming the months remaining and the maturity date \u2014 not a generic AccountException as earlier activities implied.", "TransferService.transfer(from, to, amount, int pin) runs the same eight ordered checks as before, just with pin as an int: null check, both active, PIN, can-withdraw, daily-limit check via canTransfer, debit, credit, update daily total."],
+  key:["This is the single biggest structural jump in the whole project \u2014 treat it as its own mental checkpoint, not just \"transfer service\"", "accountNumber: String \u2192 int. pin: constructor parameter \u2192 separate setPin(int) call, starting from null", "status text changes: \"ACTIVE\" \u2192 \"Active\" (different case) \u2014 a direct string comparison written the old way will silently fail", "The unchecked IllegalArgumentException from Activities 3\u201314 is replaced by two new CHECKED exceptions: InvalidAgeException (constructor) and InvalidAccountTypeException (factory)", "SalaryAccount is removed from the domain model, but salary.properties is still loaded by the rules engine \u2014 dead configuration nobody reads anymore", "AccountRulesEngine.getInstance() uses double-checked locking: check null, synchronize, check null again, only then construct \u2014 the standard thread-safe Singleton idiom", "Tenure buckets are stored as integer keys 0, 1, 3, 5 (not four separate named constants) matching the tenure.bucket.* values in each properties file", "CurrentAccount now actually tracks how much overdraft is in use, not just a static limit \u2014 canWithdraw and withdraw both account for overdraftUsed"],
+  code:`public abstract class Account implements IAccount {
+    protected int accountNumber;
+    protected String accountHolderName;
+    protected int age;
+    protected double balance;
+    protected String status;
+    protected Integer pin;              // starts null - set separately via setPin()
+    protected String openingDate;
+    protected int tenureYears;
+
+    public Account(int accountNumber, String name, int age, double initialBalance, int tenureYears)
+            throws InvalidAgeException {
+        if (age < 18)
+            throw new InvalidAgeException("Customer must be at least 18 years old. Provided: " + age);
+        if (name == null || name.trim().isEmpty())
+            throw new InvalidAgeException("Name cannot be empty");
+
+        this.accountNumber = accountNumber;
+        this.accountHolderName = name;
+        this.age = age;
+        this.balance = initialBalance;
+        this.status = "Active";          // note the case - not "ACTIVE" anymore
+        this.pin = null;
+        this.tenureYears = Math.max(0, tenureYears);
+    }
+
+    @Override
+    public void deposit(double amount) throws InactiveAccountException, InvalidAmountException {
+        if (!"Active".equals(status))
+            throw new InactiveAccountException("Account is inactive.");
+        if (amount <= 0)
+            throw new InvalidAmountException("Deposit amount must be positive. Provided: Rs. " + amount);
+        balance += amount;
+    }
+
+    @Override
+    public void withdraw(double amount, int pin) throws InactiveAccountException,
+            InvalidPinException, InvalidAmountException, InsufficientBalanceException {
+        if (!"Active".equals(status)) throw new InactiveAccountException("Account is inactive.");
+        if (this.pin == null) throw new InvalidPinException("PIN not set for this account");
+        if (this.pin != pin) throw new InvalidPinException("Incorrect PIN");
+        if (amount <= 0) throw new InvalidAmountException("Amount must be positive. Provided: Rs. " + amount);
+        if (!canWithdraw(amount)) throw new InsufficientBalanceException("Withdrawal not allowed");
+        balance -= amount;
+    }
+
+    @Override
+    public void setPin(int pin) throws InvalidPinException {
+        if (pin < 1000 || pin > 9999)
+            throw new InvalidPinException("PIN must be a 4-digit number (1000-9999). Provided: " + pin);
+        this.pin = pin;
+    }
+}
+
+// AccountRulesEngine - the REAL Singleton, with double-checked locking
+public class AccountRulesEngine {
+    private static AccountRulesEngine instance;
+    private Map<String, Map<Integer, Rule>> rulesMap;
+
+    private AccountRulesEngine() { loadAllRules(); }
+
+    public static AccountRulesEngine getInstance() {
+        if (instance == null) {
+            synchronized (AccountRulesEngine.class) {
+                if (instance == null) instance = new AccountRulesEngine();
+            }
+        }
+        return instance;
+    }
+
+    public synchronized void loadAllRules() {
+        rulesMap = new ConcurrentHashMap<>();
+        String[] types = {"SAVINGS", "CURRENT", "FIXEDDEPOSIT", "SALARY"};   // SALARY still loaded, unused
+        for (String type : types) {
+            Map<Integer, Rule> rules = AccountRulesPropertiesLoader.loadRules(type);
+            if (rules != null && !rules.isEmpty()) rulesMap.put(type, rules);
+        }
+    }
+
+    public double getMinimumBalance(String accountType, int tenureYears) {
+        Rule rule = getRule(accountType, tenureYears);
+        return rule != null ? rule.getMinBalance() : 0;
+    }
+}
+
+// AccountFactory - three types only, checked exception on failure
+public static IAccount createAccount(String accountType, int accountNumber, String name,
+        int age, double initialBalance, int tenureYears) throws AccountException {
+    if (accountType == null || accountType.trim().isEmpty())
+        throw new InvalidAccountTypeException("Unknown account type: " + accountType);
+    switch (accountType.trim().toUpperCase()) {
+        case "SAVINGS":      return new SavingsAccount(accountNumber, name, age, initialBalance, tenureYears);
+        case "CURRENT":      return new CurrentAccount(accountNumber, name, age, initialBalance, tenureYears);
+        case "FIXEDDEPOSIT": return new FixedDepositAccount(accountNumber, name, age, initialBalance, tenureYears);
+        default: throw new InvalidAccountTypeException("Unknown account type: " + accountType);
+    }
+}
+
+// TransferService - same eight steps, pin is now int
+public void transfer(IAccount from, IAccount to, double amount, int pin) throws AccountException {
     if (from == null || to == null)
         throw new AccountException("Source and destination accounts are required");
     if (!from.isActive() || !to.isActive())
@@ -1071,48 +1872,49 @@ public class AccountRulesEngine {
     if (!source.canTransfer(amount))
         throw new AccountException("Daily transfer limit exceeded. Remaining today: Rs. "
                                    + source.getRemainingDailyTransferLimit());
-
-    from.withdraw(amount, pin);                 // debit
-    to.deposit(amount);                         // credit
-    source.updateDailyTransferTotal(amount);    // record
-}
-
-public void resetDailyTransferIfNeeded() {
-    if (lastTransferDate == null
-        || !lastTransferDate.toLocalDate().equals(LocalDate.now())) {
-        dailyTransferTotal = 0.0;
-        lastTransferDate = LocalDateTime.now();
-    }
+    from.withdraw(amount, pin);
+    to.deposit(amount);
+    source.updateDailyTransferTotal(amount);
 }`,
-  ask:['List the eight steps of transfer in order and say why the order matters.','Why is the daily total reset lazily rather than by a scheduled job?','What is the daily transfer limit for a Savings account with 4 years of tenure?','Why can a Fixed Deposit account never transfer money?'],
+  officialTags:['Service Layer', 'Atomic Operations', 'Daily Limits', 'Privilege Rules'],
+  ask:["List everything that changes about the Account class at this single activity \u2014 there are at least five separate changes.", "Why does pin start as null instead of being passed into the constructor like the other fields?", "Which two checked exceptions appear for the first time here, and which unchecked exceptions do they each replace?", "Why would salary.properties still be loaded by the rules engine even though SalaryAccount no longer exists?", "Write the double-checked locking Singleton pattern for AccountRulesEngine from memory and explain why the null check appears twice.", "What is the daily transfer limit for a Savings account with 4 years of tenure?", "Why can a Fixed Deposit account never transfer money?"],
 },
 {
-  n:16, id:'oop16', ph:'ph4', title:'Transaction Model',
-  obj:'Capture every money movement as an immutable Transaction record, backed by a TransactionType enum, without breaking existing method signatures.',
-  files:['TransactionType.java','Transaction.java','Account.java','TransferService.java','tests/TestTransactionModel.java'],
-  steps:[
-    'TransactionType enum: DEPOSIT, WITHDRAW, TRANSFER.',
-    'Transaction fields: transactionId (String), timestamp (LocalDateTime), accountNumber (int), type, amount, balanceAfter, status ("SUCCESS"/"FAILED"), description, fromAccount, toAccount.',
-    'All-args constructor, getters and setters.',
-    'toString() formats as: [TXN-...] TYPE | Rs. amount | Balance After: Rs. bal | Status: SUCCESS | description.',
-    'static generateId() returns "TXN-" + System.currentTimeMillis() + "-" + (++counter).',
-    'Account.depositWithTransaction(amount) calls deposit(amount) then returns a DEPOSIT Transaction.',
-    'Account.withdrawWithTransaction(amount, pin) calls withdraw then returns a WITHDRAW Transaction.',
-    'TransferService.transferWithTransaction(...) calls transfer then returns a TRANSFER Transaction.',
-    'Legacy deposit(1000) still works — backward compatibility is the point of the overload.',
-  ],
-  key:['Java enum is a full class — it can hold fields, constructors and methods','Overloading for backward compatibility: keep the old method, add a richer one','Audit record pattern — who, what, when, how much, resulting balance','Static counter for ID uniqueness within a run; a UUID would be safer across runs','LocalDateTime from java.time, not the legacy Date'],
+  n:16, id:'oop16', ph:'ph4', title:"Transaction Model",
+  obj:"Capture every money movement as an immutable Transaction record, backed by a TransactionType enum, without breaking existing method signatures.",
+  files:["TransactionType.java", "Transaction.java", "Account.java", "TransferService.java", "tests/TestTransactionModel.java"],
+  steps:["TransactionType enum: DEPOSIT, WITHDRAW, TRANSFER.", "Transaction fields: transactionId (String), timestamp (LocalDateTime), accountNumber (int), type, amount, balanceAfter, status (\"SUCCESS\"/\"FAILED\"), description, fromAccount (int), toAccount (int).", "All-args constructor, getters and setters for every field.", "toString() formats as: [TXN-...] TYPE | Rs. amount | Balance After: Rs. bal | Status: SUCCESS | description.", "static synchronized generateId() returns \"TXN-\" + System.currentTimeMillis() + \"-\" + (++counter) \u2014 synchronized because counter is a shared static field.", "Account.depositWithTransaction(amount) throws AccountException \u2014 calls deposit(amount) then builds and returns a DEPOSIT Transaction.", "Account.withdrawWithTransaction(amount, int pin) throws AccountException \u2014 calls withdraw then builds and returns a WITHDRAW Transaction.", "TransferService.transferWithTransaction(...) calls transfer then returns a TRANSFER Transaction.", "The plain deposit(amount) and withdraw(amount, pin) from Activity 15 still work unchanged \u2014 this is a pure addition, not a replacement."],
+  key:["Java enum is a full class \u2014 it can hold fields, constructors and methods", "Overloading for backward compatibility: keep the old method, add a richer one beside it", "Audit record pattern \u2014 who, what, when, how much, resulting balance", "static counter needs synchronized on generateId() for thread safety, since multiple callers could increment it at once", "LocalDateTime from java.time, not the legacy Date class", "This activity needed no structural rewrite \u2014 the Transaction class as originally designed already matches the real solution field-for-field"],
   code:`public enum TransactionType { DEPOSIT, WITHDRAW, TRANSFER }
 
-public class Transaction {
-    private static int counter = 0;
+public class Transaction implements Serializable {
+    private static final long serialVersionUID = 1L;
+    private static long counter = 0;
+
     private String transactionId;
     private LocalDateTime timestamp;
+    private int accountNumber;
     private TransactionType type;
     private double amount, balanceAfter;
     private String status, description;
+    private int fromAccount, toAccount;
 
-    public static String generateId() {
+    public Transaction(String transactionId, LocalDateTime timestamp, int accountNumber,
+                       TransactionType type, double amount, double balanceAfter,
+                       String status, String description, int fromAccount, int toAccount) {
+        this.transactionId = transactionId;
+        this.timestamp = timestamp != null ? timestamp : LocalDateTime.now();
+        this.accountNumber = accountNumber;
+        this.type = type;
+        this.amount = amount;
+        this.balanceAfter = balanceAfter;
+        this.status = status;
+        this.description = description;
+        this.fromAccount = fromAccount;
+        this.toAccount = toAccount;
+    }
+
+    public static synchronized String generateId() {
         return "TXN-" + System.currentTimeMillis() + "-" + (++counter);
     }
 
@@ -1124,29 +1926,25 @@ public class Transaction {
     }
 }
 
-// Backward-compatible overload on Account
-public Transaction depositWithTransaction(double amount) throws Exception {
-    deposit(amount);                    // reuse the legacy method
-    return new Transaction(Transaction.generateId(), LocalDateTime.now(),
-        getAccountNumber(), TransactionType.DEPOSIT, amount, getBalance(),
-        "SUCCESS", "Deposit of Rs. " + amount, 0, 0);
+// Account.java - backward-compatible overload, throws AccountException now
+public Transaction depositWithTransaction(double amount) throws AccountException {
+    deposit(amount);                    // reuse the Activity 15 method unchanged
+    return buildTransaction(TransactionType.DEPOSIT, amount, 0, 0, "Deposit of Rs. " + amount);
+}
+
+public Transaction withdrawWithTransaction(double amount, int pin) throws AccountException {
+    withdraw(amount, pin);
+    return buildTransaction(TransactionType.WITHDRAW, amount, 0, 0, "Withdrawal of Rs. " + amount);
 }`,
-  ask:['Why add depositWithTransaction instead of changing deposit to return a Transaction?','How is a Java enum different from a set of static final int constants?','What would break if generateId used only System.currentTimeMillis()?','Which fields make this record an audit trail rather than just a log line?'],
+  officialTags:['Domain Modeling', 'Enums', 'Method Overloading', 'Coexistence'],
+  ask:["Why add depositWithTransaction instead of changing deposit itself to return a Transaction?", "How is a Java enum different from a set of static final int constants?", "What would break if generateId used only System.currentTimeMillis() with no counter?", "Why is generateId() declared synchronized?", "Which fields make Transaction an audit record rather than just a log line?"],
 },
 {
-  n:17, id:'oop17', ph:'ph5', title:'Command Pattern + File Logging',
-  obj:'Wrap every money movement in a serializable Command object and persist executed commands to a binary file with Java object serialization.',
-  files:['command/TransactionCommand.java','DepositCommand.java','WithdrawCommand.java','TransferCommand.java','logging/TransactionLog.java','tests/TestCommandLogging.java'],
-  steps:[
-    'TransactionCommand interface declares void execute() throws Exception and Transaction getTransaction().',
-    'DepositCommand / WithdrawCommand / TransferCommand store their account references, amount, pin and the resulting Transaction.',
-    'Each execute() calls the matching method (depositWithTransaction, withdrawWithTransaction, transferWithTransaction) and stores the returned Transaction.',
-    'TransactionLog.log(cmd) — make sure data/ exists; if the file does not exist use ObjectOutputStream, if it does use AppendableObjectOutputStream so a second stream header is not written; write, flush, close.',
-    'TransactionLog.readAll() — open ObjectInputStream on data/transactions.ser, loop readObject() until EOFException, return List<TransactionCommand>.',
-    'TransactionLog.clear() — delete data/transactions.ser if present.',
-    'Test: execute and log all three command types, read the history back, verify the count, then open a fresh TransactionLog to prove the file persists.',
-  ],
-  key:['Command pattern: turn a request into an object, so it can be stored, queued, logged, undone or replayed','The invoker (TransactionLog) does not know what the command does','Serializable marker interface + serialVersionUID','The duplicate-header problem — ObjectOutputStream writes a header each time it opens, so appending needs a subclass overriding writeStreamHeader() to do nothing','EOFException is the normal loop terminator when reading an object stream','transient fields are skipped during serialization'],
+  n:17, id:'oop17', ph:'ph5', title:"Command Pattern + File Logging",
+  obj:"Wrap every money movement in a serializable Command object and persist executed commands to a binary file with Java object serialization.",
+  files:["command/TransactionCommand.java", "DepositCommand.java", "WithdrawCommand.java", "TransferCommand.java", "logging/TransactionLog.java", "tests/TestCommandLogging.java"],
+  steps:["TransactionCommand interface extends Serializable and declares void execute() throws Exception and Transaction getTransaction().", "DepositCommand stores an IAccount and the amount. execute() checks instanceof Account \u2014 if true, calls depositWithTransaction for the full Transaction record; otherwise falls back to the plain deposit(amount).", "WithdrawCommand and TransferCommand store an int pin alongside the account(s) and amount, matching Account's int-pin signature from Activity 15.", "TransferCommand.execute() does not touch the accounts directly \u2014 it builds a fresh TransferService and calls transferWithTransaction(fromAccount, toAccount, amount, pin).", "TransactionLog.log(cmd) \u2014 ensure data/ exists; use ObjectOutputStream for a new file, or AppendableObjectOutputStream for an existing one so a second stream header is not written mid-file; write, flush, close.", "TransactionLog.readAll() \u2014 open ObjectInputStream on data/transactions.ser, loop readObject() until EOFException, return the list of commands read."],
+  key:["Command pattern: turn a request into an object, so it can be stored, queued, logged, or replayed", "The invoker (TransactionLog) does not know what the command does", "The instanceof Account check inside DepositCommand lets the same command work against a plain IAccount OR a full Account with transaction support", "Serializable marker interface + serialVersionUID", "The duplicate-header problem \u2014 ObjectOutputStream writes a header each time it opens, so appending needs a subclass overriding writeStreamHeader() to do nothing", "EOFException is the normal loop terminator when reading an object stream, not an error"],
   code:`public interface TransactionCommand extends Serializable {
     void execute() throws Exception;
     Transaction getTransaction();
@@ -1154,15 +1952,54 @@ public Transaction depositWithTransaction(double amount) throws Exception {
 
 public class DepositCommand implements TransactionCommand {
     private static final long serialVersionUID = 1L;
-    private Account account;
+    private IAccount account;
     private double amount;
     private Transaction transaction;
 
-    public DepositCommand(Account account, double amount) {
+    public DepositCommand(IAccount account, double amount) {
         this.account = account; this.amount = amount;
     }
-    @Override public void execute() throws Exception {
-        this.transaction = account.depositWithTransaction(amount);
+
+    @Override
+    public void execute() throws Exception {
+        if (account instanceof Account) {
+            this.transaction = ((Account) account).depositWithTransaction(amount);
+        } else {
+            account.deposit(amount);            // falls back if not a full Account
+        }
+    }
+    @Override public Transaction getTransaction() { return transaction; }
+}
+
+public class WithdrawCommand implements TransactionCommand {
+    private IAccount account;
+    private double amount;
+    private int pin;                            // int, matching Activity 15's Account
+    private Transaction transaction;
+
+    public WithdrawCommand(IAccount account, double amount, int pin) {
+        this.account = account; this.amount = amount; this.pin = pin;
+    }
+    @Override
+    public void execute() throws Exception {
+        if (account instanceof Account) {
+            this.transaction = ((Account) account).withdrawWithTransaction(amount, pin);
+        } else {
+            account.withdraw(amount, pin);
+        }
+    }
+    @Override public Transaction getTransaction() { return transaction; }
+}
+
+public class TransferCommand implements TransactionCommand {
+    private IAccount fromAccount, toAccount;
+    private double amount;
+    private int pin;
+    private Transaction transaction;
+
+    @Override
+    public void execute() throws Exception {
+        this.transaction = new TransferService().transferWithTransaction(fromAccount, toAccount, amount, pin);
     }
     @Override public Transaction getTransaction() { return transaction; }
 }
@@ -1173,11 +2010,9 @@ class AppendableObjectOutputStream extends ObjectOutputStream {
     @Override protected void writeStreamHeader() throws IOException { reset(); }
 }
 
-// Reading until the stream runs out
 public List<TransactionCommand> readAll() {
     List<TransactionCommand> list = new ArrayList<>();
-    try (ObjectInputStream in = new ObjectInputStream(
-             new FileInputStream("data/transactions.ser"))) {
+    try (ObjectInputStream in = new ObjectInputStream(new FileInputStream("data/transactions.ser"))) {
         while (true) list.add((TransactionCommand) in.readObject());
     } catch (EOFException e) {
         // normal end of stream
@@ -1186,26 +2021,29 @@ public List<TransactionCommand> readAll() {
     }
     return list;
 }`,
-  ask:['Explain the Command pattern with the four roles and map each to a class here.','Why does appending to an ObjectOutputStream need AppendableObjectOutputStream?','Why is EOFException caught separately and treated as success?','What is serialVersionUID and what breaks without it?','Name two capabilities the Command pattern unlocks that a plain method call cannot.'],
+  officialTags:['Command Pattern', 'Java Serialization', 'File I/O', 'Encapsulation'],
+  ask:["Explain the Command pattern with its four roles and map each to a class here.", "Why does DepositCommand check instanceof Account before choosing which deposit method to call?", "Why does appending to an ObjectOutputStream need AppendableObjectOutputStream?", "Why is EOFException caught separately and treated as success?", "What is serialVersionUID and what breaks without it?", "Why does TransferCommand build a brand new TransferService inside execute() rather than being handed one?"],
 },
 {
-  n:18, id:'oop18', ph:'ph5', title:'Bridge Pattern (File + Database)',
-  obj:'Separate the TransactionLogger abstraction from its storage backend so destinations can be swapped at runtime.',
-  files:['logging/LogDestination.java','FileLogDestination.java','DatabaseLogDestination.java','TransactionLogger.java','tests/TestBridgeLogging.java'],
-  steps:[
-    'LogDestination interface: void write(TransactionCommand), List<TransactionCommand> readAll(), void clear(), String getDestinationName().',
-    'FileLogDestination holds a TransactionLog, delegates write/readAll/clear to it, and returns "FILE".',
-    'DatabaseLogDestination holds a final SimulatedDatabase; write → db.insert("transaction_log", cmd); readAll → db.selectAll("transaction_log"); clear → db.deleteAll("transaction_log"); name "DATABASE".',
-    'TransactionLogger holds protected LogDestination destination, a constructor taking one, and setDestination(...) for runtime switching. It delegates log/readAll/clear/getDestinationName.',
-    'Test: instantiate File, Database and Memory destinations, log through each via logger.setDestination(...), and verify the data stays isolated per backend.',
-  ],
-  key:['Bridge separates an abstraction hierarchy from an implementation hierarchy so both can vary independently','Composition over inheritance — the logger HAS-A destination instead of extending one','Adding Kafka, S3 or PostgreSQL means one new class and zero changes to TransactionLogger or any caller','Bridge vs Strategy: Bridge is structural and set up front for two dimensions; Strategy is behavioural and swaps an algorithm','Null-safe delegation returns Collections.emptyList() rather than throwing'],
-  code:`// Implementor
-public interface LogDestination {
+  n:18, id:'oop18', ph:'ph5', title:"Bridge Pattern (File + Database)",
+  obj:"Separate the TransactionLogger abstraction from its storage backend so destinations can be swapped at runtime.",
+  files:["logging/LogDestination.java", "FileLogDestination.java", "DatabaseLogDestination.java", "MemoryLogDestination.java", "TransactionLogger.java", "tests/TestBridgeLogging.java"],
+  steps:["LogDestination interface: void write(TransactionCommand), List<TransactionCommand> readAll(), void clear(), String getDestinationName().", "FileLogDestination holds a TransactionLog, delegates write/readAll/clear to it, and returns \"FILE\".", "DatabaseLogDestination holds a SimulatedDatabase; write inserts into a \"transaction_log\" table, readAll/clear delegate the same way; returns \"DATABASE\".", "MemoryLogDestination holds a plain List<TransactionCommand> in memory \u2014 write appends, readAll returns a defensive copy, clear empties it; returns \"MEMORY\". Used heavily in tests since it needs no disk or database.", "TransactionLogger holds protected LogDestination destination, a constructor taking one, and setDestination(...) for runtime switching. It delegates log/readAll/clear/getDestinationName, returning safe defaults (empty list, \"UNKNOWN\") when the destination is null."],
+  key:["Bridge separates an abstraction hierarchy from an implementation hierarchy so both can vary independently", "Composition over inheritance \u2014 the logger HAS-A destination instead of extending one", "Adding Kafka, S3 or PostgreSQL means one new class and zero changes to TransactionLogger or any caller", "Bridge vs Strategy: Bridge is structural and set up front for two dimensions; Strategy is behavioural and swaps an algorithm", "MemoryLogDestination exists purely to make tests fast and isolated \u2014 no file or database needed to prove the logging logic works"],
+  code:`public interface LogDestination {
     void write(TransactionCommand cmd);
     List<TransactionCommand> readAll();
     void clear();
     String getDestinationName();
+}
+
+public class MemoryLogDestination implements LogDestination {
+    private final List<TransactionCommand> commands = new ArrayList<>();
+
+    @Override public void write(TransactionCommand cmd) { commands.add(cmd); }
+    @Override public List<TransactionCommand> readAll() { return new ArrayList<>(commands); }
+    @Override public void clear() { commands.clear(); }
+    @Override public String getDestinationName() { return "MEMORY"; }
 }
 
 // Abstraction - holds a reference to the implementor (the "bridge")
@@ -1226,101 +2064,130 @@ public class TransactionLogger {
     }
 }
 
-// Runtime switching
-logger.setDestination(new FileLogDestination());      logger.log(cmd);
-logger.setDestination(new DatabaseLogDestination(db)); logger.log(cmd);`,
-  ask:['Draw the Bridge structure and label Abstraction, Refined Abstraction, Implementor and Concrete Implementor.','How would you add a KafkaLogDestination? Which existing files change?','Bridge vs Strategy vs Adapter — one line each.','Why is setDestination a setter rather than a constructor-only argument?'],
+// Runtime switching between three real backends
+logger.setDestination(new FileLogDestination());
+logger.setDestination(new DatabaseLogDestination(db));
+logger.setDestination(new MemoryLogDestination());     // fast, isolated, used in tests`,
+  officialTags:['Bridge Pattern', 'Abstraction vs Implementation', 'Runtime Switching', 'Simulated DB'],
+  ask:["Draw the Bridge structure and label Abstraction, Refined Abstraction, Implementor and Concrete Implementor.", "How would you add a KafkaLogDestination? Which existing files change?", "Bridge vs Strategy vs Adapter \u2014 one line each.", "Why does MemoryLogDestination exist alongside File and Database when it stores nothing permanently?"],
 },
 {
-  n:19, id:'oop19', ph:'ph5', title:'AccountService (Service Layer)',
-  obj:'Make AccountService the single entry point: it owns the account registry, coordinates factory and transfer service, and logs every movement.',
-  files:['service/AccountService.java','tests/TestAccountService.java','Main.java'],
-  steps:[
-    'Fields: Map<Integer, IAccount> accounts, TransactionLogger logger, TransferService transferService, int nextAccountNumber = 1001. Initialise in the constructor.',
-    'openAccount(type, name, age, initialBalance) — generate the next account number, call AccountFactory, store in the map, return the account.',
-    'closeAccount(accountNumber, pin) — look up, verify the PIN, close.',
-    'deposit / withdraw / transfer — look up accounts, build the matching Command, execute it, log it through TransactionLogger, return the Transaction.',
-    'Queries: getAccount(accNo), getAllAccounts(), getTransactionHistory(), getNextAccountNumber().',
-    'Test wiring: MemoryLogDestination → TransactionLogger → AccountService. Verify the full lifecycle, transfers, history retrieval and exception handling.',
-    'Main.java wires FileLogDestination and runs a demo workflow.',
-  ],
-  key:['Service layer = orchestration; the domain layer holds rules; the persistence layer stores','Dependency injection through the constructor makes the service testable with a memory backend','Facade-like single entry point for the UI','Map<Integer, IAccount> gives O(1) lookup by account number','Layered architecture: UI → Service → Domain → Persistence'],
+  n:19, id:'oop19', ph:'ph5', title:"AccountService (Service Layer)",
+  obj:"Make AccountService the single entry point: it owns the account registry, coordinates the factory and transfer service, and logs every movement.",
+  files:["service/AccountService.java", "tests/TestAccountService.java", "Main.java"],
+  steps:["Fields: final Map<Integer, IAccount> accounts, final TransactionLogger logger, final TransferService transferService, int nextAccountNumber = 1001 \u2014 all set in the constructor, most marked final since they never change after construction.", "openAccount(type, name, age, initialBalance) throws AccountException \u2014 generate the next account number, call AccountFactory.createAccount, store in the map, return the account.", "closeAccount(int accountNumber, int pin) throws AccountException \u2014 look up the account (throw AccountException if not found), verify the PIN, then call closeAccount() on it.", "deposit(int accountNumber, double amount) / withdraw(int accountNumber, double amount, int pin) / transfer(...) \u2014 look up accounts, build the matching Command, execute it, log it through TransactionLogger if the logger is not null, return the Transaction.", "Queries: getAccount(accNo), getAllAccounts(), getTransactionHistory(), getNextAccountNumber().", "Test wiring: MemoryLogDestination \u2192 TransactionLogger \u2192 AccountService. Verify the full lifecycle, transfers, history retrieval and exception handling with no file or database needed.", "Main.java wires FileLogDestination \u2192 TransactionLogger \u2192 AccountService \u2192 AccountUI and runs the console app."],
+  key:["Service layer = orchestration; the domain layer holds rules; the persistence layer stores", "Dependency injection through the constructor makes the service testable with a memory backend", "Facade-like single entry point for the UI", "Map<Integer, IAccount> gives O(1) lookup by account number \u2014 matches int accountNumber from Activity 15 onward", "Layered architecture: UI \u2192 Service \u2192 Domain \u2192 Persistence", "Every operation checks if (logger != null) before logging \u2014 the service works even with no logger configured at all"],
   code:`public class AccountService {
-    private Map<Integer, IAccount> accounts = new HashMap<>();
-    private TransactionLogger logger;
-    private TransferService transferService;
-    private int nextAccountNumber = 1001;
+    private final Map<Integer, IAccount> accounts;
+    private final TransactionLogger logger;
+    private final TransferService transferService;
+    private int nextAccountNumber;
 
     public AccountService(TransactionLogger logger) {   // injected dependency
         this.logger = logger;
+        this.accounts = new HashMap<>();
         this.transferService = new TransferService();
+        this.nextAccountNumber = 1001;
     }
 
-    public IAccount openAccount(String type, String name, int age, double initialBalance) {
-        int accNo = nextAccountNumber++;
-        IAccount account = AccountFactory.createAccount(type, accNo, name, age, initialBalance);
-        accounts.put(accNo, account);
+    public IAccount openAccount(String type, String name, int age, double initialBalance)
+            throws AccountException {
+        int accountNumber = nextAccountNumber++;
+        IAccount account = AccountFactory.createAccount(type, accountNumber, name, age, initialBalance);
+        accounts.put(accountNumber, account);
         return account;
     }
 
+    public void closeAccount(int accountNumber, int pin) throws AccountException {
+        IAccount account = accounts.get(accountNumber);
+        if (account == null) throw new AccountException("Account not found: " + accountNumber);
+        if (!account.verifyPin(pin)) throw new InvalidPinException("Incorrect PIN");
+        account.closeAccount();
+    }
+
     public Transaction deposit(int accountNumber, double amount) throws Exception {
-        Account acc = (Account) accounts.get(accountNumber);
-        DepositCommand cmd = new DepositCommand(acc, amount);
+        IAccount account = accounts.get(accountNumber);
+        if (account == null) throw new AccountException("Account not found: " + accountNumber);
+        DepositCommand cmd = new DepositCommand(account, amount);
         cmd.execute();
-        logger.log(cmd);                 // Bridge decides where it lands
+        if (logger != null) logger.log(cmd);       // Bridge decides where it lands
         return cmd.getTransaction();
     }
 }`,
-  ask:['Which four patterns meet inside AccountService? Name each and where it appears.','Why is TransactionLogger passed into the constructor instead of created inside?','Why does the test use MemoryLogDestination while Main uses FileLogDestination?','What responsibility belongs in the service layer and what belongs in the domain?'],
+  officialTags:['Service Layer', 'Orchestration', 'Separation of Concerns', 'Single Entry Point'],
+  ask:["Which four patterns meet inside AccountService? Name each and where it appears.", "Why is TransactionLogger passed into the constructor instead of created inside?", "Why does the test use MemoryLogDestination while Main uses FileLogDestination?", "Why does every method check if (logger != null) before logging rather than assuming a logger always exists?", "What responsibility belongs in the service layer and what belongs in the domain?"],
 },
 {
-  n:20, id:'oop20', ph:'ph5', title:'AccountUI (Interactive Console Application)',
-  obj:'Put a menu-driven console interface on top of AccountService — the presentation layer that completes the architecture.',
-  files:['ui/AccountUI.java','tests/TestAccountUI.java','Main.java'],
-  steps:[
-    'AccountUI reads input with Scanner and shows a numbered menu: open account, deposit, withdraw, transfer, view account, view all, view history, close account, exit.',
-    'Each menu option calls exactly one AccountService method — the UI holds no business rules.',
-    'Wrap calls in try-catch so an AccountException prints a friendly message instead of a stack trace, and the menu loops again.',
-    'Validate and re-prompt on bad numeric input rather than crashing.',
-    'Main.java bootstraps: LogDestination → TransactionLogger → AccountService → AccountUI → start().',
-    'TestAccountUI drives the service endpoints the UI depends on.',
-  ],
-  key:['Presentation layer is thin: read input, call the service, format output','Separation of concerns across four layers — the reason every earlier activity exists','Scanner pitfalls: nextInt() leaves the newline, so call nextLine() after it','A menu loop is a simple state machine driven by a switch','The UI could be swapped for a REST API with no change to the service'],
+  n:20, id:'oop20', ph:'ph5', title:"AccountUI (Interactive Console Application)",
+  obj:"Put a menu-driven console interface on top of AccountService \u2014 the presentation layer that completes the architecture.",
+  files:["ui/AccountUI.java", "tests/TestAccountUI.java", "Main.java"],
+  steps:["AccountUI shows an 8-option menu: 1 Open Account, 2 Deposit, 3 Withdraw, 4 Transfer, 5 Close Account, 6 View Account Details, 7 View Transaction History, 8 Exit.", "handleOpenAccount() prompts for type, name, age and initial balance, calls service.openAccount(...), prints the result, then immediately prompts to set a 4-digit PIN via acc.setPin(pin) \u2014 because pin is no longer part of account creation itself since Activity 15.", "Each other menu option calls exactly one AccountService method \u2014 the UI holds no business rules.", "The whole switch sits inside one try-catch, so any AccountException prints a friendly \"ERROR: message\" instead of a stack trace, and the loop continues.", "readInt/readDouble/readString all read with scanner.nextLine() and parse the result themselves, re-prompting in a while(true) loop on a NumberFormatException \u2014 this sidesteps the classic nextInt() trap entirely by never calling nextInt() at all.", "Main.java bootstraps exactly four objects in a line: LogDestination \u2192 TransactionLogger \u2192 AccountService \u2192 AccountUI, then calls start()."],
+  key:["Presentation layer is thin: read input, call the service, format output", "Separation of concerns across four layers \u2014 the reason every earlier activity exists", "This solution avoids the Scanner nextInt/nextLine trap on purpose: every read goes through nextLine() and manual parsing, never nextInt() directly", "PIN-setting is now a separate step after account creation, mirroring the constructor no longer taking a pin from Activity 15 onward", "A menu loop is a simple state machine driven by a switch", "The account-type prompt text still lists \"Salary\" as an option even though the factory dropped it at Activity 15 \u2014 a small leftover in the real solution worth noticing, not a bug you need to fix"],
   code:`public class AccountUI {
     private final AccountService service;
-    private final Scanner sc = new Scanner(System.in);
+    private final Scanner scanner;
 
-    public AccountUI(AccountService service) { this.service = service; }
+    public AccountUI(AccountService service) {
+        this.service = service;
+        this.scanner = new Scanner(System.in);
+    }
 
     public void start() {
-        boolean running = true;
-        while (running) {
-            printMenu();
-            int choice = readInt("Choice: ");
+        while (true) {
+            displayMainMenu();
+            int choice = readInt("Enter your choice: ");
             try {
                 switch (choice) {
-                    case 1: openAccount();   break;
-                    case 2: deposit();       break;
-                    case 3: withdraw();      break;
-                    case 4: transfer();      break;
-                    case 9: running = false; break;
-                    default: System.out.println("Invalid choice");
+                    case 1: handleOpenAccount();      break;
+                    case 2: handleDeposit();          break;
+                    case 3: handleWithdraw();         break;
+                    case 4: handleTransfer();         break;
+                    case 5: handleCloseAccount();     break;
+                    case 6: handleViewAccount();      break;
+                    case 7: handleViewTransactions(); break;
+                    case 8: System.out.println("Thank you! Goodbye."); return;
+                    default: System.out.println("Invalid choice. Please enter 1-8.");
                 }
-            } catch (AccountException e) {
-                System.out.println("Error: " + e.getMessage());   // friendly, no stack trace
             } catch (Exception e) {
-                System.out.println("Unexpected error: " + e.getMessage());
+                System.out.println("ERROR: " + e.getMessage());   // friendly, no stack trace
+            }
+        }
+    }
+
+    private void handleOpenAccount() throws Exception {
+        String type = readString("Account Type (Savings/Current/FixedDeposit/Salary): ");
+        String name = readString("Name: ");
+        int age = readInt("Age: ");
+        double amount = readDouble("Initial Balance: ");
+
+        IAccount acc = service.openAccount(type, name, age, amount);
+        System.out.println("SUCCESS: " + acc.getAccountInfo());
+
+        int pin = readInt("Set 4-digit PIN: ");   // PIN is set AFTER creation, not during it
+        acc.setPin(pin);
+        System.out.println("PIN set successfully.");
+    }
+
+    // nextLine() + manual parsing everywhere - no nextInt() trap possible
+    private int readInt(String prompt) {
+        while (true) {
+            System.out.print(prompt);
+            try {
+                return Integer.parseInt(scanner.nextLine().trim());
+            } catch (NumberFormatException e) {
+                System.out.println("Invalid integer number. Please try again.");
             }
         }
     }
 }
 
 // Main.java - the whole stack wired together
-LogDestination dest = new FileLogDestination();
-TransactionLogger logger = new TransactionLogger(dest);
+LogDestination destination = new FileLogDestination();
+TransactionLogger logger = new TransactionLogger(destination);
 AccountService service = new AccountService(logger);
 new AccountUI(service).start();`,
-  ask:['Draw the four layers of this application and name one class in each.','Why must the UI catch AccountException instead of letting it propagate?','What is the Scanner nextInt/nextLine trap and how do you avoid it?','If you replaced the console with a web front end, which classes would change?'],
+  officialTags:['UI Layer', 'Menu Design', 'User Input', 'Delegation', 'End-to-End Flow'],
+  ask:["Draw the four layers of this application and name one class in each.", "Why does the whole switch sit inside one try-catch rather than one per case?", "How does readInt avoid the classic Scanner nextInt/nextLine trap?", "Why does handleOpenAccount call setPin as a separate step instead of passing the PIN into openAccount?", "If you replaced the console with a web front end, which classes would change?"],
 },
 ];
 
@@ -1398,9 +2265,9 @@ oop14:{
   enables:"Activity 15's daily transfer limits are read the same way from the same properties files \u2014 this activity builds the plumbing that 15 immediately reuses.",
 },
 oop15:{
-  before:"Activity 10's transfer function moves any amount with no upper bound and no protection against a compromised account being drained in one shot.",
-  after:"Transfers are capped per day, per account type, per tenure, matching how real transfer limits work, and the limit resets automatically at midnight without any scheduled job.",
-  enables:"This is the version of transfer that Activity 16 wraps in a Transaction record, and that Activity 17 wraps again in a TransferCommand.",
+  before:"Activity 10's transfer function moves any amount with no upper bound and no protection against a compromised account being drained in one shot. Also, underage construction still throws the unchecked IllegalArgumentException, pin is a String baked into the constructor, and the codebase still supports a SalaryAccount type nobody has revisited since Activity 11.",
+  after:"Transfers are capped per day, per account type, per tenure, and the limit resets automatically at midnight without any scheduled job. Alongside that, this activity quietly rewrites a lot of the foundation: accountNumber and pin both become int, pin moves to a separate setPin() call after construction, underage construction becomes a checked InvalidAgeException, and SalaryAccount is dropped entirely.",
+  enables:"This is the version of transfer that Activity 16 wraps in a Transaction record, and that Activity 17 wraps again in a TransferCommand. Every later activity — 16 through 20 — is built on these new int-based signatures, not the String-based ones from Activities 1 through 14.",
 },
 oop16:{
   before:"A completed deposit or withdrawal leaves no trace. If a customer disputes a transaction, there is nothing to show them \u2014 the balance changed, and that is the entire history.",
@@ -1593,22 +2460,21 @@ oop13:{
   ],
 },
 oop14:{
-  plain:'The rules move out of Java entirely and into plain text files. Now a manager can change an interest rate by editing savings.properties, with no programmer and no recompiling. The engine becomes a Singleton so the files are read once and shared. Watch out for the classic trap: if the properties files are not copied next to the compiled classes, the program quietly falls back to defaults and prints wrong numbers with no error at all.',
+  plain:'The rules move out of Java entirely and into plain text files. Now a manager can change an interest rate by editing savings.properties, with no programmer and no recompiling. The engine is still plain static methods at this stage — one loader object per properties file, checked first on the classpath and then as a plain file. Watch out for the classic trap: if the path is wrong or the file was never copied, the loader quietly falls back to its defaults and prints wrong numbers with no error at all.',
   terms:[
     ['properties file','A plain text file of key=value lines, read by java.util.Properties.'],
     ['externalised configuration','Keeping settings outside the code so they can change without a rebuild.'],
-    ['classpath','The set of folders Java searches for classes and resources at run time.'],
+    ['classpath','The set of folders and packaged resources Java searches for classes and files at run time.'],
     ['InputStream','A stream of bytes being read, here from the properties file.'],
     ['default value','The fallback returned when a key is missing, so the program degrades instead of crashing.'],
     ['parsing','Turning text into a number. Double.parseDouble("2.70") gives 2.70.'],
     ['NumberFormatException','Thrown when the text is not a valid number. Catch it and return the default.'],
-    ['Singleton pattern','Exactly one instance for the whole program: private constructor, private static field, public static getInstance().'],
-    ['lazy initialisation','Creating the instance only on the first getInstance() call, not at startup.'],
-    ['try-with-resources','try (InputStream in = ...) closes the stream automatically.'],
+    ['getResourceAsStream','Reads a file bundled on the classpath rather than from a fixed disk path — works the same whether run from source or from a packaged jar.'],
+    ['fallback to file','If the classpath lookup finds nothing, the loader tries a plain File at that path instead, so the code still works when run directly from source.'],
   ],
 },
 oop15:{
-  plain:'A transfer is not just two method calls — it is eight checks that must all pass before a single rupee moves. You also add a daily cap that depends on account type and tenure. The counter resets lazily: instead of a nightly job, you check the stored date each time and zero the total if it belongs to yesterday.',
+  plain:'This is the biggest single jump in the whole project, so slow down here. On the surface it is about transfers: eight checks that must all pass before a rupee moves, plus a daily cap that resets itself lazily instead of needing a nightly job. But underneath, a lot of the foundation gets rebuilt at the same time — account numbers and PINs switch from text to plain numbers, PINs are now set after an account is created rather than during it, the rules engine becomes a real shared Singleton, and the old "underage customer" error changes from one Java already provides (IllegalArgumentException) to one this project defines itself (InvalidAgeException). If you only remember one activity\'s exact code precisely, make it this one — everything from here to the end of the project is built on these new signatures.',
   terms:[
     ['service class','A class that coordinates a workflow across several objects. It owns no data itself.'],
     ['orchestration','Calling several objects in the right order to complete one business operation.'],
@@ -1617,7 +2483,10 @@ oop15:{
     ['lazy reset','Recomputing on access instead of on a schedule. Cheap and needs no background job.'],
     ['LocalDate / LocalDateTime','Modern Java date and time types. toLocalDate() strips the time so you can compare days.'],
     ['running total','dailyTransferTotal, the sum moved so far today.'],
-    ['fallback','What happens when a config key is missing. Current privilege is undefined, so it falls back to 0.'],
+    ['Singleton pattern','Exactly one instance for the whole program. AccountRulesEngine becomes one here, using double-checked locking — a null check, then a synchronized block, then a second null check — so it stays thread-safe without paying the synchronization cost on every call.'],
+    ['double-checked locking','Checking a condition twice around a synchronized block: once before locking (cheap, handles the common case), once after (safe, handles the rare race).'],
+    ['int vs String identifiers','accountNumber and pin both switch from String to int at this activity. A number stored as text ("1234") and a number stored as a number (1234) behave differently — you cannot do arithmetic on the former without parsing it first.'],
+    ['checked vs unchecked, revisited','Up through Activity 14, an underage customer triggered IllegalArgumentException, a built-in unchecked exception. From here on it is InvalidAgeException, a checked exception this project defines — meaning the constructor itself now has a throws clause.'],
   ],
 },
 oop16:{
@@ -1677,15 +2546,15 @@ oop19:{
   ],
 },
 oop20:{
-  plain:'The last piece is the screen. A loop prints a menu, reads a number, calls one service method, prints the result, and loops again. The rule is that this file contains no banking logic at all — if you moved to a website tomorrow, you would delete this class and nothing else would change. Wrap every call in try-catch so a wrong PIN shows a polite line instead of a stack trace.',
+  plain:'The last piece is the screen. A loop prints an 8-option menu, reads a choice, calls one service method, prints the result, and loops again. The rule is that this file contains no banking logic at all — if you moved to a website tomorrow, you would delete this class and nothing else would change. Every case sits inside one try-catch around the whole switch, so any error — wrong PIN, closed account, anything — shows one polite "ERROR: message" line instead of a stack trace, and the menu just comes back.',
   terms:[
     ['presentation layer','The part that talks to the human. Thin by design.'],
     ['Scanner','Java class for reading keyboard input.'],
-    ['nextInt / nextLine trap','nextInt leaves the Enter key in the buffer, so the next nextLine returns empty. Call nextLine once to clear it.'],
-    ['menu loop','A while loop that keeps showing options until the user chooses exit.'],
+    ['nextInt / nextLine trap','A classic bug: nextInt() leaves the Enter key in the buffer, so the very next nextLine() call returns empty. This solution sidesteps it completely by never calling nextInt() — every read goes through nextLine() plus manual parsing.'],
+    ['menu loop','A while(true) loop that keeps showing options until the user picks exit.'],
     ['state machine','A system that sits in one state and moves to another based on input. A menu is the simplest kind.'],
     ['graceful degradation','Failing politely with a message instead of crashing.'],
-    ['bootstrapping','The wiring in Main that creates each layer and connects them.'],
+    ['bootstrapping','The four-line wiring in Main that creates each layer and connects them in order.'],
     ['thin client','A UI that holds no logic, only display and input.'],
   ],
 },
@@ -1761,8 +2630,9 @@ const CONCEPTS = [
   id:'c-exceptions', icon:'⚠️', title:'Exception model',
   body:[
     ['Throwable','Splits into Error (JVM problems, do not catch) and Exception.'],
-    ['Checked','Extends Exception. The compiler forces you to catch or declare. AccountException and all five subclasses are checked.'],
-    ['Unchecked','Extends RuntimeException. No compiler obligation. IllegalArgumentException from the constructor validations is unchecked.'],
+    ['Checked','Extends Exception. The compiler forces you to catch or declare. AccountException and its subclasses are checked — five from Activity 5 (InvalidAmountException, InsufficientBalanceException, MinimumBalanceViolationException, InactiveAccountException, InvalidPinException), plus two more added at Activity 15 (InvalidAccountTypeException, InvalidAgeException).'],
+    ['Unchecked','Extends RuntimeException. No compiler obligation. IllegalArgumentException is what the constructor throws for underage customers and what the factory throws for an unknown type — but only from Activity 3 through Activity 14.'],
+    ['A change worth knowing cold','From Activity 15 onward, both of those become checked: underage construction throws InvalidAgeException, and an unknown factory type throws InvalidAccountTypeException. The Account constructor itself now declares throws InvalidAgeException — proof that a constructor can throw a checked exception exactly like any other method.'],
     ['throw vs throws','throw raises an instance right now; throws declares what a method may raise.'],
     ['Catch order','Most specific first, base last, or the compiler reports unreachable code.'],
     ['finally','Runs whether or not an exception occurred. Skipped only on System.exit or a JVM crash.'],
@@ -1860,7 +2730,7 @@ const QBANK = [
 {
   id:'q-exc', title:'Exceptions', icon:'⚠️',
   qs:[
-    ['Checked vs unchecked — which is used where in this project?','Checked extends Exception and must be caught or declared; AccountException and its five subclasses are checked because a caller can reasonably recover. Unchecked extends RuntimeException; IllegalArgumentException in the constructor validations is unchecked because bad construction arguments are a programming error.'],
+    ['Checked vs unchecked — which is used where in this project?','Checked extends Exception and must be caught or declared; AccountException and its subclasses are checked because a caller can reasonably recover — five from Activity 5, plus InvalidAccountTypeException and InvalidAgeException added at Activity 15. Unchecked extends RuntimeException; IllegalArgumentException is used for the same two situations only up through Activity 14, after which both become checked.'],
     ['Draw the exception hierarchy from Activity 5.','Exception → AccountException → InvalidAmountException, InsufficientBalanceException, MinimumBalanceViolationException, InactiveAccountException, InvalidPinException.'],
     ['Why does withdraw declare throws AccountException rather than all five?','Every one of them is a subclass, so the base type covers the whole subtree. Callers can still catch a specific subtype when they want to handle it differently.'],
     ['What is the compile error if you catch the base exception before a subclass?','The subclass catch block is unreachable, because the base catch already handles it. The compiler rejects the code.'],
@@ -1890,7 +2760,7 @@ const QBANK = [
     ['State the four Savings tenure buckets with min balance and interest rate.','New (0–1 yr): Rs 10,000 at 2.70%. Standard (1–3 yrs): Rs 7,500 at 3.00%. Premium (3–5 yrs): Rs 5,000 at 3.50%. Privilege (5+ yrs): Rs 2,500 at 4.00%.'],
     ['Why must the tenure checks run from the highest bucket down?','With an if-chain, a 6-year customer would match tenure >= 1 first and get the wrong bucket. Checking >= 5 first makes each branch exclusive.'],
     ['What is the Current account overdraft limit for a turnover of Rs 5,000?','2.5 × 5,000 = 12,500, which is below the floor, so the limit is Rs 25,000.'],
-    ['Name the daily transfer limits by bucket.','Savings: 50,000 / 1,00,000 / 2,00,000 / 5,00,000. Current: 1,00,000 / 5,00,000 / 10,00,000 and privilege falls back to 0 because it is not defined. Fixed deposit: 0 at every tier. Salary: 1,00,000 / 5,00,000 / 10,00,000 / 25,00,000.'],
+    ['Name the daily transfer limits by bucket.','Savings: 50,000 / 1,00,000 / 2,00,000 / 5,00,000. Current: 1,00,000 / 5,00,000 / 10,00,000, and privilege stays at 10,00,000 too — it does not increase further. Fixed deposit: 0 at every tier. Salary: 1,00,000 / 5,00,000 / 10,00,000 / 25,00,000.'],
     ['Why can a Fixed Deposit account never transfer money?','Its daily transfer limit is 0.0 in every tenure bucket, so canTransfer always returns false. Its processDebit also throws on any withdrawal before maturity.'],
     ['How does java.util.Properties load a file and why supply defaults?','props.load(InputStream) reads key=value lines. getProperty(key, default) and a getDouble wrapper return the fallback when the key is missing or unparseable, so a missing config file degrades to sane values instead of a NullPointerException.'],
     ['What happens if the .properties files are not copied into bin/?','The loader finds nothing on the classpath and the engine silently uses its default rules, so the test prints the wrong limits without any error. That is why the run instructions copy config into bin first.'],
@@ -2225,12 +3095,103 @@ function buildProblems(key){
 
 
 /* ---------- PART B builders ---------- */
-let oopView = 'ph1';
-const OOP_TABS = PHASES.map(p => ({id:p.id, label:p.icon+' '+p.label}))
-  .concat([{id:'concepts', label:'📚 Concept notes'},
-           {id:'qbank',    label:'❓ Likely questions'},
-           {id:'glossary', label:'🔤 Glossary'},
-           {id:'scratch',  label:'📝 Scratchpad'}]);
+let oopView = 'practice';
+const OOP_TABS = [
+  {id:'practice', label:'🧩 Code Practice'},
+  {id:'mcq',      label:'✅ MCQ Quiz'},
+  {id:'concepts', label:'📚 Concept notes'},
+  {id:'glossary', label:'🔤 Glossary'},
+].concat(PHASES.map(p => ({id:p.id, label:p.icon+' '+p.label})))
+ .concat([{id:'qbank',    label:'❓ Q&A (bank project)'},
+          {id:'scratch',  label:'📝 Scratchpad'}]);
+
+/* ---------- CODE PRACTICE (exam format: scenario + stub methods) ---------- */
+const exState = {}; // exId -> 'revealed' | undefined
+function buildPractice(){
+  const diffClass = {Easy:'d-easy', Medium:'d-med', Hard:'d-hard'};
+  const done = Object.keys(exState).length;
+  let html = '<div class="focus-box" style="margin-bottom:16px">This mirrors the real format: a short scenario, a class with method bodies left empty, and you write the missing code. Try it yourself first — then reveal the solution and read why it works, not just what it is.</div>';
+  html += '<div class="practice-progress"><span>Exercises revealed: <b style="color:var(--teal)">'+done+'</b>/'+EXERCISES.length+'</span></div>';
+  html += EXERCISES.map(e => {
+    const shown = exState[e.id] === 'revealed';
+    return '<div class="exercise" id="exwrap-'+e.id+'">'+
+      '<div class="exercise-top"><h4>'+esc(e.title)+'</h4>'+
+        '<span class="lnum">'+esc(e.concept)+'</span>'+
+        '<span class="pill '+diffClass[e.difficulty]+'">'+e.difficulty+'</span></div>'+
+      '<div class="exercise-scenario">'+esc(e.scenario)+'</div>'+
+      '<pre class="code">'+esc(e.skeleton)+'</pre>'+
+      (shown ? '' : '<button class="reveal-btn" onclick="revealSolution(\''+e.id+'\')">Show solution &amp; explanation</button>')+
+      '<div class="solution-block'+(shown?' shown':'')+'" id="sol-'+e.id+'">'+
+        '<div class="sol-label">COMPLETED METHOD(S)</div>'+
+        '<pre class="code">'+esc(e.solution)+'</pre>'+
+        '<div class="explain-box">'+esc(e.explanation)+'</div>'+
+      '</div>'+
+    '</div>';
+  }).join('');
+  return html;
+}
+function revealSolution(id){
+  exState[id] = 'revealed';
+  const wrap = el('exwrap-'+id);
+  if(!wrap) return;
+  const btn = wrap.querySelector('.reveal-btn');
+  if(btn) btn.remove();
+  const sol = el('sol-'+id);
+  if(sol) sol.classList.add('shown');
+  const p = wrap.parentElement && wrap.parentElement.querySelector('.practice-progress b');
+  if(p) p.textContent = Object.keys(exState).length;
+  const chip = el('chip-practice');
+  if(chip) chip.textContent = Object.keys(exState).length + '/' + EXERCISES.length + ' exercises';
+}
+
+/* ---------- MCQ QUIZ (general OOP, exam format) ---------- */
+const mcqState = {}; // mcqId -> chosen option index
+function buildMcq(){
+  const answered = Object.keys(mcqState).length;
+  const correct = Object.keys(mcqState).filter(id => {
+    const m = MCQS.find(x => x.id === id);
+    return m && mcqState[id] === m.correct;
+  }).length;
+  let html = '<div class="focus-box" style="margin-bottom:16px">General OOP multiple choice — not tied to the bank project. Pick an option to see whether you are right, with a short explanation either way.</div>';
+  html += '<div class="practice-progress"><span>Answered: <b id="mcq-answered" style="color:var(--teal)">'+answered+'</b>/'+MCQS.length+'</span><span>Correct: <b id="mcq-correct" style="color:var(--lime)">'+correct+'</b>/'+answered+'</span></div>';
+  html += MCQS.map((m, qi) => {
+    const chosen = mcqState[m.id];
+    const isAnswered = chosen !== undefined;
+    return '<div class="mcq-card" id="mcqwrap-'+m.id+'">'+
+      '<span class="mcq-cat">'+esc(m.cat)+'</span>'+
+      '<div class="mcq-q">Q'+(qi+1)+'. '+esc(m.q)+'</div>'+
+      '<div class="mcq-opts">'+
+        m.options.map((opt,oi) => {
+          let cls = 'mcq-opt';
+          if(isAnswered){
+            cls += ' disabled';
+            if(oi === m.correct) cls += ' correct';
+            else if(oi === chosen) cls += ' wrong';
+          }
+          return '<button class="'+cls+'" onclick="answerMcq(\''+m.id+'\','+oi+')" '+(isAnswered?'disabled':'')+'>'+
+            String.fromCharCode(65+oi)+'. '+esc(opt)+'</button>';
+        }).join('')+
+      '</div>'+
+      (isAnswered ? '<div class="mcq-verdict '+(chosen===m.correct?'ok':'bad')+'">'+(chosen===m.correct?'✓ Correct':'✗ Not quite — correct answer highlighted above')+'</div>' : '')+
+      '<div class="mcq-explain'+(isAnswered?' shown':'')+'" id="mexp-'+m.id+'">'+esc(m.explain)+'</div>'+
+    '</div>';
+  }).join('');
+  return html;
+}
+function answerMcq(id, chosenIndex){
+  if(mcqState[id] !== undefined) return; // already answered, ignore
+  mcqState[id] = chosenIndex;
+  buildMcq_refresh();
+  const chip = el('chip-mcqscore');
+  const answered = Object.keys(mcqState).length;
+  if(chip) chip.textContent = answered + '/' + MCQS.length + ' MCQs answered';
+}
+function buildMcq_refresh(){
+  if(oopView === 'mcq'){
+    const box = el('oop-body');
+    if(box) box.innerHTML = buildMcq();
+  }
+}
 
 function buildOopTabs(){
   el('oop-tabs').innerHTML = OOP_TABS.map(t =>
@@ -2259,6 +3220,7 @@ function buildOopPhase(phId){
         '<span class="caret" id="ca-'+a.id+'">▼</span>'+
       '</div>'+
       '<div class="drawer" id="dr-'+a.id+'"><div class="drawer-in">'+
+        (a.officialTags ? '<div class="tagrow">'+a.officialTags.map(t=>'<span class="otag">'+esc(t)+'</span>').join('')+'</div>' : '')+
         (WHY[a.id] ? '<div class="whybox">'+
           '<div class="why-row"><span class="why-tag why-before">BEFORE</span><span>'+esc(WHY[a.id].before)+'</span></div>'+
           '<div class="why-row"><span class="why-tag why-after">AFTER</span><span>'+esc(WHY[a.id].after)+'</span></div>'+
@@ -2331,7 +3293,9 @@ function buildGlossary(){
 
 function buildOop(){
   const box = el('oop-body');
-  if(oopView === 'concepts')      box.innerHTML = buildConcepts();
+  if(oopView === 'practice')      box.innerHTML = buildPractice();
+  else if(oopView === 'mcq')      box.innerHTML = buildMcq();
+  else if(oopView === 'concepts') box.innerHTML = buildConcepts();
   else if(oopView === 'qbank')    box.innerHTML = buildQbank();
   else if(oopView === 'glossary') box.innerHTML = buildGlossary();
   else if(oopView === 'scratch')  box.innerHTML =
@@ -2341,7 +3305,10 @@ function buildOop(){
   else box.innerHTML = buildOopPhase(oopView);
 
   el('oop-tabs').querySelectorAll('.stab').forEach(b => b.classList.toggle('on', b.dataset.o === oopView));
-  if(oopView === 'scratch') wireScratch(); else wireNotes();
+  if(oopView === 'scratch') wireScratch();
+  else if(oopView === 'practice') wireNotes();
+  else if(oopView === 'mcq') { /* MCQ wiring happens inline via onclick */ }
+  else wireNotes();
 }
 
 let dsaView = 'lectures';
@@ -2390,7 +3357,6 @@ function renderAll(){
   el('chip-lc').textContent  = lcD + ' problems solved';
   el('chip-overall').textContent = overall + '% complete';
   el('t-oop').textContent = oopD + '/' + oopIds.length;
-  el('chip-oop').textContent = oopD + '/' + oopIds.length + ' activities';
 
   // syllabus part cards
   const partData = [
