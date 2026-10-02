@@ -1,0 +1,651 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>DSA Exam Prep</title>
+<style>
+:root{box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px);--bg:#f6f7fb;--card:#fff;--tx:#1b1f2a;--mu:#5d667a;--bd:#dfe3ee;--ac:#4f46e5;--cb:#0f172a;--ct:#e2e8f0;--e:#16a34a;--m:#d97706;--h:#dc2626}
+@media(prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#0e1118;--card:#171b26;--tx:#e8eaf2;--mu:#9aa3b8;--bd:#272d3d;--ac:#8b85ff;--cb:#0a0d14}}
+:root[data-theme="dark"]{--bg:#0e1118;--card:#171b26;--tx:#e8eaf2;--mu:#9aa3b8;--bd:#272d3d;--ac:#8b85ff;--cb:#0a0d14}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--tx);font:15px/1.55 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif}
+.w{max-width:860px;margin:0 auto;padding:20px 16px 60px}
+h1{margin:0 0 4px;font-size:26px}h2{font-size:18px;margin:28px 0 10px}
+.mu{color:var(--mu)}
+.bar{height:8px;background:var(--bd);border-radius:9px;overflow:hidden;margin:10px 0}
+.bar i{display:block;height:100%;width:0;background:var(--ac);transition:width .3s}
+.tabs{display:flex;gap:8px;flex-wrap:wrap;margin:14px 0}
+.tabs button,.cp{border:1px solid var(--bd);background:var(--card);color:var(--tx);padding:7px 12px;border-radius:20px;cursor:pointer;font:inherit;font-size:13px}
+.tabs button.on{background:var(--ac);color:#fff;border-color:var(--ac)}
+input[type=search]{width:100%;padding:10px 12px;border-radius:10px;border:1px solid var(--bd);background:var(--card);color:var(--tx);font:inherit}
+.tips{background:var(--card);border:1px solid var(--bd);border-radius:12px;padding:6px 18px}
+.tips li{margin:6px 0}
+details{background:var(--card);border:1px solid var(--bd);border-radius:12px;margin:10px 0;overflow:hidden}
+summary{cursor:pointer;padding:12px 14px;display:flex;gap:10px;align-items:center;list-style:none;font-weight:600}
+summary::-webkit-details-marker{display:none}
+.d{font-size:11px;padding:2px 8px;border-radius:10px;color:#fff;margin-left:auto;white-space:nowrap}
+.Easy{background:var(--e)}.Medium{background:var(--m)}.Hard{background:var(--h)}
+.in{padding:0 14px 14px}
+.pat{border-left:3px solid var(--ac);padding:6px 10px;margin:8px 0;background:color-mix(in srgb,var(--ac) 8%,transparent);border-radius:0 8px 8px 0}
+pre{background:var(--cb);color:var(--ct);padding:12px;border-radius:10px;overflow-x:auto;font:13px/1.5 ui-monospace,Menlo,Consolas,monospace;margin:8px 0}
+.cx{display:inline-block;font-size:12px;border:1px solid var(--bd);border-radius:8px;padding:2px 8px;margin-right:6px}
+.note{margin-top:8px}
+h4{margin:14px 0 4px;font-size:14px}
+pre.dr{background:color-mix(in srgb,var(--ac) 10%,var(--card));color:var(--tx);border:1px solid var(--bd);white-space:pre-wrap}
+</style></head><body><div class="w">
+<h1>DSA Assessment Prep</h1>
+<div class="mu">Arrays • Hashing • Subarray/Subsequence • Optimization — 20 problems, Python solutions, exam notes</div>
+<div class="bar"><i id="pb"></i></div><div class="mu" id="pt"></div>
+
+<h2>Exam strategy</h2>
+<ul class="tips">
+<li><b>Read constraints first.</b> n ≤ 10^5 means aim for O(n) or O(n log n); n ≤ 10^3 allows O(n²).</li>
+<li><b>Say brute force first</b>, then name the pattern that improves it. Examiners reward the reasoning.</li>
+<li><b>Edge cases:</b> empty array, single element, all equal, negatives, duplicates, overflow of window/pointers.</li>
+<li><b>Pattern cues:</b> sorted → two pointers/binary search • "pair/complement" → hash map • "contiguous sum" → prefix sum or sliding window • "next greater" → monotonic stack • "max reachable/locally best" → greedy.</li>
+<li><b>Python helpers:</b> <code>Counter</code>, <code>defaultdict(list)</code>, <code>enumerate</code>, <code>bisect_left</code>, <code>heapq</code>, <code>list.sort(key=...)</code>.</li>
+<li><b>Always state time and space complexity</b> at the end, and dry-run on a tiny example.</li>
+</ul>
+
+<div class="tabs" id="tabs"></div>
+<input type="search" id="q" placeholder="Search problem or pattern…">
+<div id="list"></div>
+</div>
+<script>
+const T=["All","Array Problem Solving","Hashing Techniques","Subarray / Subsequence","Optimization"];
+// [no,title,diff,topic,description,pattern,code,complexity,note]
+const P=[
+[167,"Two Sum II - Input Array Is Sorted","Medium",1,"Given a 1-indexed array sorted ascending, find two numbers that add to target. Return their 1-based indices. Exactly one solution exists; use O(1) extra space.","Two pointers from both ends",
+`def twoSum(numbers, target):
+    l, r = 0, len(numbers) - 1
+    while l < r:
+        s = numbers[l] + numbers[r]
+        if s == target:
+            return [l + 1, r + 1]
+        if s < target:
+            l += 1
+        else:
+            r -= 1`,"O(n) / O(1)","Sum too small → move left up; too big → move right down. Sorted order is what makes this valid. Remember the 1-based output."],
+[11,"Container With Most Water","Medium",1,"heights[i] is a vertical line at x=i. Pick two lines forming a container with the x-axis that holds the most water. Return the max area.","Two pointers; always move the shorter wall",
+`def maxArea(h):
+    l, r, best = 0, len(h) - 1, 0
+    while l < r:
+        best = max(best, min(h[l], h[r]) * (r - l))
+        if h[l] < h[r]:
+            l += 1
+        else:
+            r -= 1
+    return best`,"O(n) / O(1)","Area = min(height) × width. Moving the taller wall can never help (width shrinks, min can't grow), so move the shorter one."],
+[75,"Sort Colors","Medium",1,"Array of 0s, 1s and 2s (red, white, blue). Sort in place so same colors are adjacent in order 0,1,2 without using library sort.","Dutch National Flag, 3 pointers",
+`def sortColors(a):
+    lo, i, hi = 0, 0, len(a) - 1
+    while i <= hi:
+        if a[i] == 0:
+            a[lo], a[i] = a[i], a[lo]
+            lo += 1; i += 1
+        elif a[i] == 2:
+            a[i], a[hi] = a[hi], a[i]
+            hi -= 1          # do NOT advance i
+        else:
+            i += 1`,"O(n) / O(1), one pass","Invariant: [0,lo)=0, [lo,i)=1, (hi,end]=2. After swapping with hi, the new a[i] is unchecked, so don't increment i."],
+[15,"3Sum","Medium",1,"Return all unique triplets [a,b,c] in nums with a+b+c = 0. The solution set must not contain duplicate triplets.","Sort + fixed index + two pointers; skip duplicates",
+`def threeSum(a):
+    a.sort()
+    res = []
+    for i in range(len(a) - 2):
+        if i and a[i] == a[i - 1]:
+            continue
+        l, r = i + 1, len(a) - 1
+        while l < r:
+            s = a[i] + a[l] + a[r]
+            if s < 0:
+                l += 1
+            elif s > 0:
+                r -= 1
+            else:
+                res.append([a[i], a[l], a[r]])
+                l += 1
+                while l < r and a[l] == a[l - 1]:
+                    l += 1
+    return res`,"O(n²) / O(1) extra","Reduces to Two Sum II for each i. Duplicate skipping is the part most people lose marks on: skip repeated i, and repeated l after a hit."],
+[56,"Merge Intervals","Medium",1,"Given intervals [start,end], merge all overlapping intervals and return the non-overlapping set covering all inputs.","Sort by start, then compact",
+`def merge(iv):
+    iv.sort(key=lambda x: x[0])
+    out = [iv[0]]
+    for s, e in iv[1:]:
+        if s <= out[-1][1]:
+            out[-1][1] = max(out[-1][1], e)
+        else:
+            out.append([s, e])
+    return out`,"O(n log n) / O(n)","Use max() on the end: [1,10] and [2,3] must stay [1,10]. Touching intervals ([1,2],[2,3]) count as overlapping with <=."],
+[1,"Two Sum","Easy",2,"Return indices of the two numbers in nums that add up to target. Exactly one solution; don't reuse the same element.","Complement lookup in hash map",
+`def twoSum(nums, t):
+    seen = {}
+    for i, x in enumerate(nums):
+        if t - x in seen:
+            return [seen[t - x], i]
+        seen[x] = i`,"O(n) / O(n)","Check the complement before inserting the current number, which avoids using the same element twice."],
+[49,"Group Anagrams","Medium",2,"Group the strings in strs so that all anagrams are together. Answer may be in any order.","Canonical key (sorted string or 26-count tuple)",
+`from collections import defaultdict
+def groupAnagrams(strs):
+    d = defaultdict(list)
+    for s in strs:
+        d[tuple(sorted(s))].append(s)
+    return list(d.values())`,"O(n·k log k) / O(n·k)","Lists aren't hashable → use tuple or string key. For lowercase only, a 26-length count tuple gives O(n·k)."],
+[128,"Longest Consecutive Sequence","Medium",2,"Given an unsorted array, return the length of the longest run of consecutive integers (e.g. 1,2,3,4). Must run in O(n).","Hash set; start counting only when x-1 is absent",
+`def longestConsecutive(nums):
+    S = set(nums)
+    best = 0
+    for x in S:
+        if x - 1 not in S:        # x starts a sequence
+            y = x
+            while y + 1 in S:
+                y += 1
+            best = max(best, y - x + 1)
+    return best`,"O(n) / O(n)","Sorting is O(n log n), which fails the requirement. Each element is visited at most twice because only sequence starts expand."],
+[169,"Majority Element","Easy",2,"Return the element appearing more than ⌊n/2⌋ times. It is guaranteed to exist.","Boyer-Moore voting (hash map is the simpler fallback)",
+`def majorityElement(nums):
+    cand = cnt = 0
+    for x in nums:
+        if cnt == 0:
+            cand = x
+        cnt += 1 if x == cand else -1
+    return cand`,"O(n) / O(1)","Pairs of different elements cancel out; the majority survives. Mention the Counter solution (O(n) space) first if you blank."],
+[347,"Top K Frequent Elements","Medium",2,"Return the k most frequent elements of nums in any order.","Frequency map + bucket sort (or min-heap of size k)",
+`from collections import Counter
+def topK(nums, k):
+    cnt = Counter(nums)
+    buckets = [[] for _ in range(len(nums) + 1)]
+    for x, c in cnt.items():
+        buckets[c].append(x)
+    res = []
+    for b in reversed(buckets):
+        res += b
+        if len(res) >= k:
+            return res[:k]
+# heap alternative: heapq.nlargest(k, cnt, key=cnt.get)  -> O(n log k)`,"O(n) / O(n)","Index of bucket = frequency (max n). Walk from highest frequency down until you have k."],
+[53,"Maximum Subarray","Medium",3,"Find the contiguous subarray with the largest sum and return that sum.","Kadane: drop a negative running prefix",
+`def maxSubArray(nums):
+    cur = best = nums[0]
+    for x in nums[1:]:
+        cur = max(x, cur + x)
+        best = max(best, cur)
+    return best`,"O(n) / O(1)","Initialise with nums[0], not 0, or all-negative arrays break. cur = best sum ending at this index."],
+[560,"Subarray Sum Equals K","Medium",3,"Count the contiguous subarrays whose sum equals k. Array may contain negatives.","Prefix sum + hash map of prefix frequencies",
+`def subarraySum(nums, k):
+    cnt = {0: 1}
+    s = res = 0
+    for x in nums:
+        s += x
+        res += cnt.get(s - k, 0)
+        cnt[s] = cnt.get(s, 0) + 1
+    return res`,"O(n) / O(n)","Subarray (i,j] has sum k iff prefix[j] - prefix[i] = k. Seed {0:1} to count subarrays starting at index 0. Sliding window fails with negatives."],
+[525,"Contiguous Array","Medium",3,"Binary array: find the maximum length of a contiguous subarray with equal numbers of 0 and 1.","Map 0→-1, then earliest index of each prefix sum",
+`def findMaxLength(nums):
+    first = {0: -1}
+    s = best = 0
+    for i, x in enumerate(nums):
+        s += 1 if x else -1
+        if s in first:
+            best = max(best, i - first[s])
+        else:
+            first[s] = i
+    return best`,"O(n) / O(n)","Same prefix sum twice → the stretch between sums to 0. Store only the first occurrence to maximise length."],
+[3,"Longest Substring Without Repeating Characters","Medium",3,"Return the length of the longest substring of s with no repeated characters.","Sliding window + last-seen index map",
+`def lengthOfLongestSubstring(s):
+    last = {}
+    l = best = 0
+    for r, c in enumerate(s):
+        if c in last and last[c] >= l:
+            l = last[c] + 1
+        last[c] = r
+        best = max(best, r - l + 1)
+    return best`,"O(n) / O(min(n, charset))","The check last[c] >= l matters: an old occurrence outside the window must be ignored. Jump l directly instead of shrinking one by one."],
+[76,"Minimum Window Substring","Hard",3,"Return the smallest substring of s containing every character of t (with multiplicity), or an empty string if none exists.","Expand right, contract left while valid; need-count balance",
+`from collections import Counter
+def minWindow(s, t):
+    need = Counter(t)
+    missing = len(t)
+    l = 0
+    best = (0, float('inf'))
+    for r, c in enumerate(s):
+        if need[c] > 0:
+            missing -= 1
+        need[c] -= 1
+        if missing == 0:
+            while need[s[l]] < 0:      # drop surplus chars
+                need[s[l]] += 1
+                l += 1
+            if r - l < best[1] - best[0]:
+                best = (l, r)
+            need[s[l]] += 1            # break validity, keep scanning
+            missing += 1
+            l += 1
+    return "" if best[1] == float('inf') else s[best[0]:best[1] + 1]`,"O(|s|+|t|) / O(charset)","need[c] > 0 means still required; negative means surplus. 'missing' tracks total unmet characters so validity check is O(1)."],
+[300,"Longest Increasing Subsequence","Medium",3,"Return the length of the longest strictly increasing subsequence of nums (elements need not be adjacent).","Patience sorting: tails[] + binary search",
+`from bisect import bisect_left
+def lengthOfLIS(nums):
+    tails = []
+    for x in nums:
+        i = bisect_left(tails, x)
+        if i == len(tails):
+            tails.append(x)
+        else:
+            tails[i] = x
+    return len(tails)
+# O(n^2) DP: dp[i] = 1 + max(dp[j] for j<i if nums[j] < nums[i])`,"O(n log n) / O(n)","tails[i] = smallest tail of an increasing subsequence of length i+1. tails is NOT the actual subsequence. bisect_left = strict; bisect_right = non-decreasing."],
+[238,"Product of Array Except Self","Medium",4,"Return answer[i] equal to the product of all elements except nums[i]. No division, O(n) time.","Left prefix product then right suffix product",
+`def productExceptSelf(nums):
+    n = len(nums)
+    res = [1] * n
+    p = 1
+    for i in range(n):
+        res[i] = p
+        p *= nums[i]
+    p = 1
+    for i in range(n - 1, -1, -1):
+        res[i] *= p
+        p *= nums[i]
+    return res`,"O(n) / O(1) extra","Store prefix in the output array itself, then multiply the running suffix in a backward pass. Zeros work automatically."],
+[42,"Trapping Rain Water","Hard",4,"Given elevation heights of width-1 bars, compute how much rainwater is trapped after raining.","Prefix/suffix max → two pointers",
+`def trap(h):
+    l, r = 0, len(h) - 1
+    lm = rm = water = 0
+    while l < r:
+        if h[l] < h[r]:
+            lm = max(lm, h[l])
+            water += lm - h[l]
+            l += 1
+        else:
+            rm = max(rm, h[r])
+            water += rm - h[r]
+            r -= 1
+    return water`,"O(n) / O(1)","Water at i = min(maxLeft, maxRight) - h[i]. The smaller side is the bottleneck, so process it safely. Explain the O(n)-space prefix/suffix version first."],
+[739,"Daily Temperatures","Medium",4,"For each day, return how many days until a warmer temperature. Use 0 if none.","Monotonic decreasing stack of indices",
+`def dailyTemperatures(t):
+    res = [0] * len(t)
+    st = []                       # indices, temps decreasing
+    for i, x in enumerate(t):
+        while st and t[st[-1]] < x:
+            j = st.pop()
+            res[j] = i - j
+        st.append(i)
+    return res`,"O(n) / O(n)","Each index is pushed and popped once. Store indices, not values, so you can compute the distance."],
+[136,"Single Number","Easy",4,"Every element appears twice except one. Find it with linear time and constant extra space.","XOR cancellation: a ^ a = 0, a ^ 0 = a",
+`def singleNumber(nums):
+    r = 0
+    for x in nums:
+        r ^= x
+    return r`,"O(n) / O(1)","XOR is commutative and associative, so order doesn't matter. Pairs cancel, the single remains."],
+[55,"Jump Game","Medium",4,"nums[i] is the max jump length from i. Starting at index 0, can you reach the last index?","Greedy: track farthest reachable index",
+`def canJump(nums):
+    far = 0
+    for i, x in enumerate(nums):
+        if i > far:
+            return False
+        far = max(far, i + x)
+    return True`,"O(n) / O(1)","If you ever stand on an index beyond 'far', you're stuck. No DP needed; greedy is provably enough."]
+];
+const X={
+167:[`def twoSum(numbers, target):
+    l, r = 0, len(numbers) - 1      # pointers at both ends
+    while l < r:
+        s = numbers[l] + numbers[r]
+        if s == target:
+            return [l + 1, r + 1]   # problem wants 1-based indices
+        if s < target:
+            l += 1                  # sum too small -> need a bigger left value
+        else:
+            r -= 1                  # sum too big -> need a smaller right value`,
+`numbers=[2,7,11,15], target=9
+l=0,r=3: 2+15=17 > 9 -> r=2
+l=0,r=2: 2+11=13 > 9 -> r=1
+l=0,r=1: 2+7=9 found -> [1,2]
+Edge: [-1,0], target=-1 -> -1+0=-1 -> [1,2]. Negatives are fine because the array is sorted.
+Edge: 2 elements -> loop runs once.`],
+11:[`def maxArea(h):
+    l, r, best = 0, len(h) - 1, 0
+    while l < r:
+        # water level is the SHORTER wall, width is the distance between walls
+        best = max(best, min(h[l], h[r]) * (r - l))
+        # moving the taller wall can only shrink width and not raise the level,
+        # so always move the shorter one hoping for a taller wall
+        if h[l] < h[r]:
+            l += 1
+        else:
+            r -= 1
+    return best`,
+`h=[1,8,6,2,5,4,8,3,7]
+l=0,r=8: min(1,7)*8=8, h[l] shorter -> l=1
+l=1,r=8: min(8,7)*7=49 (best), h[r] shorter -> r=7
+l=1,r=7: min(8,3)*6=18 ... later areas are smaller. Answer 49.
+Edge: [1,1] -> 1*1=1.  [5] -> loop never runs -> 0.`],
+75:[`def sortColors(a):
+    lo, i, hi = 0, 0, len(a) - 1
+    # zone map: [0,lo)=all 0s | [lo,i)=all 1s | [i,hi]=unknown | (hi,end]=all 2s
+    while i <= hi:
+        if a[i] == 0:
+            a[lo], a[i] = a[i], a[lo]   # send 0 to the front zone
+            lo += 1
+            i += 1                       # swapped-in value is a known 1, safe to pass
+        elif a[i] == 2:
+            a[i], a[hi] = a[hi], a[i]   # send 2 to the back zone
+            hi -= 1                      # DON'T move i: the swapped-in value is unknown
+        else:
+            i += 1                       # 1 is already in the middle zone`,
+`a=[2,0,1]  lo=0,i=0,hi=2
+a[0]=2 -> swap with a[2]: [1,0,2], hi=1
+a[0]=1 -> i=1
+a[1]=0 -> swap with a[lo=0]: [0,1,2], lo=1, i=2
+i=2 > hi=1 -> stop. Result [0,1,2]
+Edge: [2,2,2] -> every step swaps with hi and shrinks it, still fine.
+Edge: [0] -> swaps with itself, done.`],
+15:[`def threeSum(a):
+    a.sort()                              # sorting enables two pointers + easy duplicate skipping
+    res = []
+    for i in range(len(a) - 2):
+        if i > 0 and a[i] == a[i - 1]:
+            continue                      # same first number as before -> would repeat triplets
+        l, r = i + 1, len(a) - 1
+        while l < r:                      # now it's Two Sum II for target -a[i]
+            s = a[i] + a[l] + a[r]
+            if s < 0:
+                l += 1
+            elif s > 0:
+                r -= 1
+            else:
+                res.append([a[i], a[l], a[r]])
+                l += 1
+                while l < r and a[l] == a[l - 1]:
+                    l += 1                # skip repeated second numbers
+    return res`,
+`nums=[-1,0,1,2,-1,-4] -> sorted [-4,-1,-1,0,1,2]
+i=0 (-4): sums stay negative, nothing found
+i=1 (-1): l=2,r=5: -1-1+2=0 -> add [-1,-1,2], l=3
+          l=3,r=5: -1+0+2=1 >0 -> r=4
+          l=3,r=4: -1+0+1=0 -> add [-1,0,1]
+i=2 (-1): equals a[1] -> skip (otherwise duplicates)
+Result [[-1,-1,2],[-1,0,1]]
+Edge: [0,0,0] -> [[0,0,0]].  Fewer than 3 numbers -> range is empty -> [].`],
+56:[`def merge(iv):
+    iv.sort(key=lambda x: x[0])           # sort by start so overlaps become neighbours
+    out = [iv[0]]
+    for s, e in iv[1:]:
+        if s <= out[-1][1]:               # starts before (or when) the last one ends -> overlap
+            out[-1][1] = max(out[-1][1], e)   # extend, keep the larger end
+        else:
+            out.append([s, e])            # gap -> new separate interval
+    return out`,
+`[[1,3],[2,6],[8,10]]
+out=[[1,3]]
+[2,6]: 2<=3 overlap -> end=max(3,6)=6 -> [[1,6]]
+[8,10]: 8>6 gap -> append -> [[1,6],[8,10]]
+Edge: [[1,4],[2,3]] -> end=max(4,3)=4, stays [1,4] (that's why max is needed).
+Edge: [[1,4],[4,5]] touching -> merged [1,5] because of <=.
+Edge: empty input crashes on iv[0]; add "if not iv: return []" if allowed.`],
+1:[`def twoSum(nums, t):
+    seen = {}                       # value -> index
+    for i, x in enumerate(nums):
+        if t - x in seen:           # has its partner already appeared?
+            return [seen[t - x], i]
+        seen[x] = i                 # store AFTER checking so x can't pair with itself`,
+`nums=[2,7,11,15], t=9
+i=0,x=2: need 7, seen empty -> seen={2:0}
+i=1,x=7: need 2, found at 0 -> [0,1]
+Edge: [3,3], t=6 -> i=0 stores 3; i=1 needs 3, found -> [0,1].
+Edge: [3,2,4], t=6 -> at i=0 need 3 but seen is empty, so 3 isn't reused. Answer [1,2].`],
+49:[`from collections import defaultdict
+def groupAnagrams(strs):
+    d = defaultdict(list)           # key -> list of words
+    for s in strs:
+        d[tuple(sorted(s))].append(s)   # anagrams have the same sorted letters = same key
+    return list(d.values())`,
+`["eat","tea","tan","ate","nat","bat"]
+eat -> key (a,e,t); tea -> same key; tan -> (a,n,t); ate -> (a,e,t); nat -> (a,n,t); bat -> (a,b,t)
+Groups: [eat,tea,ate], [tan,nat], [bat]
+Edge: [""] -> key () -> [[""]].  Single letters -> each its own group unless repeated.`],
+128:[`def longestConsecutive(nums):
+    S = set(nums)                   # O(1) lookups, also removes duplicates
+    best = 0
+    for x in S:
+        if x - 1 not in S:          # x is the START of a run (nothing just below it)
+            y = x
+            while y + 1 in S:       # walk upward through the run
+                y += 1
+            best = max(best, y - x + 1)
+    return best`,
+`[100,4,200,1,3,2]
+100: 99 absent -> start, 101 absent -> length 1
+4: 3 present -> not a start, skip
+200: start, length 1
+1: 0 absent -> start, 2,3,4 present -> length 4
+3, 2: skipped (not starts). Answer 4.
+Edge: [] -> 0.  [1,1,1] -> set {1} -> 1.  [-1,0,1] -> 3.`],
+169:[`def majorityElement(nums):
+    cand = cnt = 0
+    for x in nums:
+        if cnt == 0:
+            cand = x                # no leader left, pick the current number
+        cnt += 1 if x == cand else -1   # same number votes for, different votes against
+    return cand                     # majority has > n/2 votes so it can't be cancelled out`,
+`[2,2,1,1,1,2,2]
+x=2: cnt0 -> cand=2, cnt=1
+x=2: cnt=2
+x=1: cnt=1
+x=1: cnt=0
+x=1: cnt0 -> cand=1, cnt=1
+x=2: cnt=0
+x=2: cnt0 -> cand=2, cnt=1 -> return 2
+Edge: [5] -> 5.  Works only because a majority is guaranteed to exist.`],
+347:[`from collections import Counter
+def topK(nums, k):
+    cnt = Counter(nums)                          # value -> frequency
+    buckets = [[] for _ in range(len(nums) + 1)] # index = frequency (max possible n)
+    for x, c in cnt.items():
+        buckets[c].append(x)
+    res = []
+    for b in reversed(buckets):                  # highest frequency first
+        res += b
+        if len(res) >= k:
+            return res[:k]`,
+`nums=[1,1,1,2,2,3], k=2
+cnt={1:3, 2:2, 3:1}
+buckets[3]=[1], buckets[2]=[2], buckets[1]=[3]
+walk from the end: empty buckets..., 3 -> res=[1], 2 -> res=[1,2], len>=2 -> return [1,2]
+Edge: [1], k=1 -> buckets[1]=[1] -> [1].
+Edge: equal frequencies share a bucket, so res[:k] trims extras.`],
+53:[`def maxSubArray(nums):
+    cur = best = nums[0]            # start with first element, NOT 0 (handles all-negative)
+    for x in nums[1:]:
+        cur = max(x, cur + x)       # extend the old subarray, or restart at x if old sum hurts
+        best = max(best, cur)
+    return best`,
+`[-2,1,-3,4,-1,2,1,-5,4]
+start cur=best=-2
+1: max(1,-1)=1, best=1
+-3: max(-3,-2)=-2
+4: max(4,2)=4, best=4
+-1: 3 | 2: 5 best=5 | 1: 6 best=6
+-5: 1 | 4: 5 -> answer 6 (subarray [4,-1,2,1])
+Edge: [-3,-1,-2] -> cur=-3; -1: max(-1,-4)=-1; -2: max(-2,-3)=-2; best=-1.
+Edge: [7] -> 7.`],
+560:[`def subarraySum(nums, k):
+    cnt = {0: 1}                    # prefix sum -> how many times seen; empty prefix = 0
+    s = res = 0
+    for x in nums:
+        s += x                      # running prefix sum
+        res += cnt.get(s - k, 0)    # an earlier prefix of (s-k) means a subarray summing to k
+        cnt[s] = cnt.get(s, 0) + 1  # record this prefix AFTER counting
+    return res`,
+`nums=[1,2,3], k=3  cnt={0:1}
+x=1: s=1, need -2 -> 0, cnt{0:1,1:1}
+x=2: s=3, need 0 -> 1 (subarray [1,2]), res=1
+x=3: s=6, need 3 -> 1 (subarray [3]), res=2
+Edge: [1,-1,0], k=0 -> s=1:0 | s=0: need 0 ->1 | s=0: need 0 ->2 total 3
+ ([1,-1], [0], [1,-1,0]).  Negatives work, a sliding window wouldn't.`],
+525:[`def findMaxLength(nums):
+    first = {0: -1}                 # prefix value -> FIRST index it appeared (-1 = before start)
+    s = best = 0
+    for i, x in enumerate(nums):
+        s += 1 if x else -1         # treat 0 as -1 so "equal 0s and 1s" means sum 0
+        if s in first:
+            best = max(best, i - first[s])   # same sum again -> stretch between sums to 0
+        else:
+            first[s] = i            # keep only the earliest index for longest length
+    return best`,
+`[0,1,0]
+i=0,x=0: s=-1, new -> first[-1]=0
+i=1,x=1: s=0, seen at -1 -> length 1-(-1)=2
+i=2,x=0: s=-1, seen at 0 -> length 2-0=2 -> best=2
+Edge: [0,0,0] -> sums -1,-2,-3 all new -> 0.
+Edge: [0,1] -> s=-1 then 0 -> length 2.`],
+3:[`def lengthOfLongestSubstring(s):
+    last = {}                       # char -> latest index
+    l = best = 0                    # l = left edge of the window
+    for r, c in enumerate(s):
+        if c in last and last[c] >= l:   # repeated INSIDE the current window
+            l = last[c] + 1              # jump left edge just past the old copy
+        last[c] = r
+        best = max(best, r - l + 1)
+    return best`,
+`"abcabcbb"
+r0..2: a,b,c -> window length 3, best=3
+r3 'a': last[a]=0 >= l=0 -> l=1, window "bca" length 3
+r4 'b': last=1 >= 1 -> l=2 ... best stays 3
+Edge: "abba" -> r2 'b': l=2. r3 'a': last[a]=0 < l=2 so IGNORE it (without the >= l check, l would go backwards). Window "ba" -> best=2.
+Edge: "" -> 0.`],
+76:[`from collections import Counter
+def minWindow(s, t):
+    need = Counter(t)               # need[c] > 0: still required, < 0: surplus in window
+    missing = len(t)                # how many required chars are still unmatched
+    l = 0
+    best = (0, float('inf'))
+    for r, c in enumerate(s):       # expand right
+        if need[c] > 0:
+            missing -= 1
+        need[c] -= 1
+        if missing == 0:            # window is valid -> shrink from the left
+            while need[s[l]] < 0:   # drop chars we have extra of
+                need[s[l]] += 1
+                l += 1
+            if r - l < best[1] - best[0]:
+                best = (l, r)
+            need[s[l]] += 1         # drop one needed char to look for the next window
+            missing += 1
+            l += 1
+    return "" if best[1] == float('inf') else s[best[0]:best[1] + 1]`,
+`s="ABAC", t="ABC"  need{A:1,B:1,C:1}, missing=3
+r0 A: missing=2 | r1 B: missing=1
+r2 A: need[A]=0 (not >0) so missing stays 1, need[A]=-1 (surplus)
+r3 C: missing=0 -> valid window [0,3]
+ shrink: s[0]=A has need -1 (<0) -> surplus, l=1. s[1]=B need 0 -> stop.
+ best=(1,3) -> "BAC". Then give up B, missing=1, l=2.
+Edge: t has a letter not in s -> missing never hits 0 -> "".
+Edge: t == s -> the whole string.`],
+300:[`from bisect import bisect_left
+def lengthOfLIS(nums):
+    tails = []                      # tails[i] = smallest ending value of an increasing run of length i+1
+    for x in nums:
+        i = bisect_left(tails, x)   # first position where tails[i] >= x
+        if i == len(tails):
+            tails.append(x)         # x extends the longest run
+        else:
+            tails[i] = x            # x gives a smaller tail for runs of length i+1
+    return len(tails)`,
+`[10,9,2,5,3,7,101,18]
+10 -> [10] | 9 -> [9] | 2 -> [2] | 5 -> [2,5] | 3 replaces 5 -> [2,3]
+7 -> [2,3,7] | 101 -> [2,3,7,101] | 18 replaces 101 -> [2,3,7,18]
+Answer 4. NOTE: tails is not an actual subsequence, only its length is meaningful.
+Edge: [7,7,7] -> bisect_left returns index 0 each time -> 1 (strictly increasing).
+Edge: descending [5,4,3] -> 1.  [] -> 0.`],
+238:[`def productExceptSelf(nums):
+    n = len(nums)
+    res = [1] * n
+    p = 1
+    for i in range(n):              # res[i] = product of everything LEFT of i
+        res[i] = p
+        p *= nums[i]
+    p = 1
+    for i in range(n - 1, -1, -1):  # multiply by product of everything RIGHT of i
+        res[i] *= p
+        p *= nums[i]
+    return res`,
+`[1,2,3,4]
+forward: res=[1,1,2,6]  (left products)
+backward p=1: i3: 6*1=6, p=4 | i2: 2*4=8, p=12 | i1: 1*12=12, p=24 | i0: 1*24=24
+Result [24,12,8,6]
+Edge: [1,0,3] -> forward [1,1,0]; backward: i2 0*1=0,p=3 | i1 1*3=3,p=0 | i0 1*0=0 -> [0,3,0]. Zeros work with no division.`],
+42:[`def trap(h):
+    l, r = 0, len(h) - 1
+    lm = rm = water = 0             # tallest wall seen so far from left / right
+    while l < r:
+        if h[l] < h[r]:             # right side has a wall at least as tall -> left is the bottleneck
+            lm = max(lm, h[l])
+            water += lm - h[l]      # water above this bar = tallest-left - its height
+            l += 1
+        else:
+            rm = max(rm, h[r])
+            water += rm - h[r]
+            r -= 1
+    return water`,
+`h=[3,0,2,0,4]  l=0,r=4
+h[0]=3<4: lm=3, water+=0, l=1
+h[1]=0<4: water+=3-0=3, l=2
+h[2]=2<4: water+=3-2=1 (total 4), l=3
+h[3]=0<4: water+=3 (total 7), l=4 -> stop. Answer 7
+Edge: [1,2,3] increasing -> 0.  Fewer than 3 bars -> 0.`],
+739:[`def dailyTemperatures(t):
+    res = [0] * len(t)              # default 0 = no warmer day
+    st = []                         # stack of INDICES whose answer is still unknown
+    for i, x in enumerate(t):
+        while st and t[st[-1]] < x: # today is warmer than those waiting days
+            j = st.pop()
+            res[j] = i - j          # days waited
+        st.append(i)
+    return res`,
+`[73,74,75,71,69,72,76,73]
+i0: push | i1 74>73: pop0 res0=1, push1 | i2 75>74: pop1 res1=1, push2
+i3 71 push | i4 69 push (stack idx 2,3,4)
+i5 72: pop4 res4=1, pop3 res3=2, 75 not <72 stop, push5
+i6 76: pop5 res5=1, pop2 res2=4, push6 | i7 73 push
+Result [1,1,4,2,1,1,0,0]
+Edge: [70,70] -> equal is not warmer -> [0,0].  Decreasing list -> all 0.`],
+136:[`def singleNumber(nums):
+    r = 0
+    for x in nums:
+        r ^= x                      # x ^ x = 0 and x ^ 0 = x, so pairs cancel out
+    return r`,
+`[4,1,2,1,2]
+0^4=4 | 4^1=5 | 5^2=7 | 7^1=6 | 6^2=4 -> answer 4
+Edge: [9] -> 9.  Negative numbers work too since XOR is bitwise.`],
+55:[`def canJump(nums):
+    far = 0                         # farthest index we can reach so far
+    for i, x in enumerate(nums):
+        if i > far:
+            return False            # this index is unreachable, we're stuck before it
+        far = max(far, i + x)       # from i we can jump up to i + x
+    return True`,
+`[2,3,1,1,4]: i0 far=2 | i1 far=max(2,4)=4 | rest fine -> True
+[3,2,1,0,4]: far stays 3; at i4, 4 > 3 -> False
+Edge: [0] -> already at the last index -> True.
+Edge: [0,1] -> at i1, 1 > far=0 -> False.`]
+};
+const $=id=>document.getElementById(id);
+let tab=0,done={};
+try{done=JSON.parse(localStorage.getItem("dsa_done")||"{}")}catch(e){}
+const esc=s=>s.replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;");
+function prog(){const n=P.filter(p=>done[p[0]]).length;$("pb").style.width=n/P.length*100+"%";$("pt").textContent=n+" / "+P.length+" practiced"}
+function render(){
+  const q=$("q").value.toLowerCase();
+  $("tabs").innerHTML=T.map((t,i)=>`<button class="${i==tab?"on":""}" onclick="tab=${i};render()">${t}</button>`).join("");
+  $("list").innerHTML=P.map((p,i)=>({p,i})).filter(({p})=>(!tab||p[3]==tab)&&(p[1]+p[5]).toLowerCase().includes(q)).map(({p,i})=>
+  `<details><summary><input type="checkbox" ${done[p[0]]?"checked":""} onclick="event.stopPropagation();tog(${p[0]})"><span>${p[0]}. ${p[1]}</span><span class="d ${p[2]}">${p[2]}</span></summary><div class="in">
+  <p>${p[4]}</p><div class="pat"><b>Pattern:</b> ${p[5]}</div>
+  <pre>${esc(X[p[0]][0])}</pre><span class="cx">${p[7]}</span><button class="cp" onclick="cp(${i},this)">Copy code</button>
+  <h4>Dry run &amp; edge cases</h4><pre class="dr">${esc(X[p[0]][1])}</pre><div class="note"><b>Exam note:</b> ${p[8]}</div></div></details>`).join("");
+  prog();
+}
+function tog(n){done[n]=!done[n];try{localStorage.setItem("dsa_done",JSON.stringify(done))}catch(e){}prog()}
+function cp(i,b){try{navigator.clipboard.writeText(X[P[i][0]][0]);b.textContent="Copied"}catch(e){b.textContent="Select manually"}setTimeout(()=>b.textContent="Copy code",1500)}
+$("q").oninput=render;render();
+</script></body></html>
