@@ -30,11 +30,13 @@ summary::-webkit-details-marker{display:none}
 pre{background:var(--cb);color:var(--ct);padding:12px;border-radius:10px;overflow-x:auto;font:13px/1.5 ui-monospace,Menlo,Consolas,monospace;margin:8px 0}
 .cx{display:inline-block;font-size:12px;border:1px solid var(--bd);border-radius:8px;padding:2px 8px;margin-right:6px}
 .note{margin-top:8px}
+a.lc{display:inline-block;margin:2px 0 6px;padding:5px 12px;border-radius:20px;background:var(--ac);color:#fff;text-decoration:none;font-size:13px;font-weight:600}
 h4{margin:14px 0 4px;font-size:14px}
 pre.dr{background:color-mix(in srgb,var(--ac) 10%,var(--card));color:var(--tx);border:1px solid var(--bd);white-space:pre-wrap}
 </style></head><body><div class="w">
+<a href="../index.html" class="mu" style="text-decoration:none">&larr; Command Deck</a>
 <h1>DSA Assessment Prep</h1>
-<div class="mu">Arrays • Hashing • Subarray/Subsequence • Optimization — 20 problems, Python solutions, exam notes</div>
+<div class="mu">Arrays • Hashing • Subarray/Subsequence • Optimization — 21 problems, Python solutions, exam notes</div>
 <div class="bar"><i id="pb"></i></div><div class="mu" id="pt"></div>
 
 <h2>Exam strategy</h2>
@@ -52,6 +54,7 @@ pre.dr{background:color-mix(in srgb,var(--ac) 10%,var(--card));color:var(--tx);b
 <div id="list"></div>
 </div>
 <script>
+try{var _t=localStorage.getItem("hub-theme");if(_t)document.documentElement.setAttribute("data-theme",_t)}catch(e){}
 const T=["All","Array Problem Solving","Hashing Techniques","Subarray / Subsequence","Optimization"];
 // [no,title,diff,topic,description,pattern,code,complexity,note]
 const P=[
@@ -630,6 +633,7 @@ Edge: [9] -> 9.  Negative numbers work too since XOR is bitwise.`],
 Edge: [0] -> already at the last index -> True.
 Edge: [0,1] -> at i1, 1 > far=0 -> False.`]
 };
+const L={167:"two-sum-ii-input-array-is-sorted",11:"container-with-most-water",75:"sort-colors",15:"3sum",56:"merge-intervals",1:"two-sum",49:"group-anagrams",128:"longest-consecutive-sequence",169:"majority-element",347:"top-k-frequent-elements",53:"maximum-subarray",560:"subarray-sum-equals-k",525:"contiguous-array",3:"longest-substring-without-repeating-characters",76:"minimum-window-substring",300:"longest-increasing-subsequence",238:"product-of-array-except-self",42:"trapping-rain-water",739:"daily-temperatures",136:"single-number",55:"jump-game"};
 const $=id=>document.getElementById(id);
 let tab=0,done={};
 try{done=JSON.parse(localStorage.getItem("dsa_done")||"{}")}catch(e){}
@@ -640,6 +644,7 @@ function render(){
   $("tabs").innerHTML=T.map((t,i)=>`<button class="${i==tab?"on":""}" onclick="tab=${i};render()">${t}</button>`).join("");
   $("list").innerHTML=P.map((p,i)=>({p,i})).filter(({p})=>(!tab||p[3]==tab)&&(p[1]+p[5]).toLowerCase().includes(q)).map(({p,i})=>
   `<details><summary><input type="checkbox" ${done[p[0]]?"checked":""} onclick="event.stopPropagation();tog(${p[0]})"><span>${p[0]}. ${p[1]}</span><span class="d ${p[2]}">${p[2]}</span></summary><div class="in">
+  <a class="lc" href="https://leetcode.com/problems/${L[p[0]]}/" target="_blank" rel="noopener">Solve on LeetCode &#8599;</a>
   <p>${p[4]}</p><div class="pat"><b>Pattern:</b> ${p[5]}</div>
   <pre>${esc(X[p[0]][0])}</pre><span class="cx">${p[7]}</span><button class="cp" onclick="cp(${i},this)">Copy code</button>
   <h4>Dry run &amp; edge cases</h4><pre class="dr">${esc(X[p[0]][1])}</pre><div class="note"><b>Exam note:</b> ${p[8]}</div></div></details>`).join("");
