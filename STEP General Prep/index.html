@@ -39,6 +39,7 @@ a:focus-visible,input:focus-visible,button:focus-visible{outline:2px solid var(-
 .m{margin-left:auto;font-size:.8rem;color:var(--mute);white-space:nowrap;padding-left:8px}
 .E{color:var(--done)}.M{color:#c98a00}.H{color:#d6455d}
 .note{margin:10px 0 0;font-size:.85rem;color:var(--mute)}
+#toast{position:fixed;left:50%;bottom:20px;transform:translateX(-50%);background:var(--ink);color:var(--bg);padding:10px 16px;border-radius:8px;font-size:.9rem;opacity:0;pointer-events:none;transition:opacity .2s;max-width:90%;z-index:9}#toast.on{opacity:1}
 footer{max-width:980px;margin:0 auto;padding:0 20px 40px;color:var(--mute);font-size:.85rem}
 button{font:inherit;background:var(--chip);color:var(--ink);border:1px solid var(--line);border-radius:6px;padding:6px 12px;cursor:pointer}
 @media(max-width:720px){.cols{grid-template-columns:1fr}.col+.col{border-left:0;border-top:1px solid var(--line)}.bars{grid-template-columns:1fr}.dh{flex-wrap:wrap}}
@@ -52,7 +53,8 @@ button{font:inherit;background:var(--chip);color:var(--ink);border:1px solid var
 <div class="bar"><b id="ll">LeetCode: 0 / 0</b><div class="track"><div class="fill lc" id="lf"></div></div></div>
 </div></div></header>
 <main id="app"></main>
-<footer>3 hours a day for 7 days. Links open the PDFs from your Mac, so open this page on that Mac. Progress saves in this browser. <button id="reset">Reset progress</button></footer>
+<div id="toast" role="status"></div>
+<footer>3 hours a day for 7 days. Progress saves in this browser. <button id="mode">PDF links</button> <button id="reset">Reset progress</button></footer>
 <script>
 const BASE="file:///Users/user47/Documents/STEP%20Notes/DSA/";
 const D="DSA",A="Advance%20DSA";
@@ -84,7 +86,7 @@ const days=[
  n:"LeetCode topics: hash maps, frequency counts, grouping, hash set lookups. About 75 min."},
 {t:"Problem statement and revision",s:"Apply everything, revise cheatsheets, redo weak problems",
  f:[["StreamVerse Media Engineering Hackathon - Problem Statement.pdf",D,40]],
- x:[["Skim all cheatsheets (Prefix Sum, Kadane’s, Hashing)",30]],
+ g:{t:"Skim all cheatsheets",m:30,i:[["Prefix Sum Array Technique CheatSheet.pdf",D],["Kadanes_Algorithm_Cheatsheet.pdf",D],["Hashing Cheatsheet.pdf",D]]},
  lc:[[438,"Find All Anagrams in a String","find-all-anagrams-in-a-string","M"],[1004,"Max Consecutive Ones III","max-consecutive-ones-iii","M"],[76,"Minimum Window Substring (retry)","minimum-window-substring","H"],[239,"Sliding Window Maximum (retry)","sliding-window-maximum","H"],[560,"Subarray Sum Equals K (redo)","subarray-sum-equals-k","M"],[15,"3Sum (redo)","3sum","M"],[3,"Longest Substring Without Repeating Characters (redo)","longest-substring-without-repeating-characters","M"]],
  n:"LeetCode topics: mixed review across sliding window, prefix sum and two pointers. About 110 min."}
 ];
@@ -97,8 +99,8 @@ const esc=s=>s.replace(/&/g,"&amp;").replace(/</g,"&lt;");
 days.forEach((d,i)=>{
  const n=i+1;
  const rows=(d.f||[]).map((f,j)=>{const id=`d${n}f${j}`;
-  return `<label><input type="checkbox" data-k="${id}" data-t="f"><span class="t"><a href="${BASE+f[1]}/${encodeURIComponent(f[0])}" target="_blank" rel="noopener">${esc(f[0])}</a></span><span class="m">${f[2]} min</span></label>`}).join("")
-  +(d.x||[]).map((x,j)=>{const id=`d${n}x${j}`;return `<label><input type="checkbox" data-k="${id}" data-t="x"><span class="t">${esc(x[0])}</span><span class="m">${x[1]} min</span></label>`}).join("");
+  return `<label><input type="checkbox" data-k="${id}" data-t="f"><span class="t"><a data-dir="${f[1]}" data-n="${encodeURIComponent(f[0])}" target="_blank">${esc(f[0])}</a></span><span class="m">${f[2]} min</span></label>`}).join("")
+  +(d.g?`<p class="note"><b>${d.g.t}</b> (${d.g.m} min total)</p>`+d.g.i.map((x,j)=>{const id=`d${n}x${j}`;return `<label style="padding-left:14px"><input type="checkbox" data-k="${id}" data-t="x"><span class="t"><a data-dir="${x[1]}" data-n="${encodeURIComponent(x[0])}" target="_blank">${esc(x[0])}</a></span></label>`}).join(""):"");
  const lc=d.lc.map((p,j)=>{const id=`d${n}l${j}`;
   return `<label><input type="checkbox" data-k="${id}" data-t="l"><span class="t"><a href="https://leetcode.com/problems/${p[2]}/" target="_blank" rel="noopener">${p[0]}. ${esc(p[1])}</a></span><span class="m ${p[3]}">${{E:"Easy",M:"Medium",H:"Hard"}[p[3]]}</span></label>`}).join("");
  const card=el(`<section class="day" id="day${n}"><div class="dh"><div class="dn">${n}</div><div><h2>${d.t}</h2><p>${d.s}</p></div><span class="badge"></span></div><div class="cols"><div class="col"><h3>Study these files</h3>${rows}</div><div class="col"><h3>Then solve on LeetCode</h3>${lc}<p class="note">${d.n}</p></div></div></section>`);
@@ -117,6 +119,22 @@ function upd(){
   s.querySelector(".badge").textContent=d===bs.length?"Day complete":`${d} / ${bs.length} done`;
   s.classList.toggle("complete",d===bs.length)});
 }
+function setLinks(){
+ const m=st.mode||"file";
+ document.querySelectorAll("a[data-n]").forEach(a=>{a.href=(m==="file"?BASE:"DSA/")+a.dataset.dir+"/"+a.dataset.n});
+ document.getElementById("mode").textContent=m==="file"?"PDF links: local file:// (switch to relative)":"PDF links: relative (switch to local file://)";
+}
+document.getElementById("mode").onclick=()=>{st.mode=(st.mode||"file")==="file"?"rel":"file";save();setLinks()};
+setLinks();
+const toast=document.getElementById("toast");let tt;
+document.addEventListener("click",e=>{
+ const a=e.target.closest("a[data-n]");
+ if(!a||location.protocol==="file:"||!a.href.startsWith("file:"))return;
+ e.preventDefault();
+ const say=m=>{toast.textContent=m;toast.classList.add("on");clearTimeout(tt);tt=setTimeout(()=>toast.classList.remove("on"),4500)};
+ const ok=()=>say("Browsers block file links on hosted pages. Path copied: press Cmd+T, then Cmd+V, then Enter.");
+ (navigator.clipboard?navigator.clipboard.writeText(a.href).then(ok):Promise.reject()).catch(()=>say("Browsers block file links on hosted pages. Right-click the link and choose Copy Link, then paste it in a new tab."));
+});
 document.getElementById("reset").onclick=()=>{if(confirm("Clear all progress?")){st={};save();boxes.forEach(b=>b.checked=false);upd()}};
 upd();
 </script>
