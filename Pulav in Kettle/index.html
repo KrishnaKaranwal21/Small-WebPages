@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Hostel Kettle Pulav</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,600;9..144,800&family=Hind:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --gold:#E5A93C; --cinnamon:#6E260E; --bg:#FAF9F6; --text:#2B2B2B; --card:#F5EBE0;
+  --muted:#6b5a50; --line:#e3d3c0; --on-gold:#2B2B2B; --link:#6E260E;
+  box-sizing:border-box; padding-top:env(safe-area-inset-top,0px); padding-bottom:env(safe-area-inset-bottom,0px);
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){--bg:#1d1814;--text:#f3ece3;--card:#2a221b;--muted:#b9a898;--line:#3d3228;--link:#E5A93C;--cinnamon:#E5A93C}
+}
+:root[data-theme="dark"]{--bg:#1d1814;--text:#f3ece3;--card:#2a221b;--muted:#b9a898;--line:#3d3228;--link:#E5A93C;--cinnamon:#E5A93C}
+*,*::before,*::after{box-sizing:border-box}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+body{margin:0;background:var(--bg);color:var(--text);font:400 1.05rem/1.65 Hind,system-ui,sans-serif}
+h1,h2,h3{font-family:Fraunces,Georgia,serif;line-height:1.15;margin:0}
+.wrap{max-width:760px;margin:0 auto;padding:0 20px}
+header{background:var(--card);border-bottom:4px solid var(--gold);padding:56px 0 40px}
+h1{font-size:clamp(2.4rem,8vw,4rem);font-weight:800;color:var(--cinnamon);letter-spacing:-.01em}
+.lede{margin:14px 0 22px;max-width:46ch;color:var(--muted)}
+.facts{display:flex;flex-wrap:wrap;gap:10px;margin:0;padding:0;list-style:none}
+.facts li{background:var(--bg);border:1px solid var(--line);border-radius:999px;padding:4px 14px;font-weight:500;font-size:.95rem}
+section{padding:44px 0 8px}
+h2{font-size:1.8rem;color:var(--cinnamon);margin-bottom:6px}
+.sub{color:var(--muted);margin:0 0 18px}
+.ing-group{background:var(--card);border-radius:14px;padding:18px 20px;margin-bottom:14px}
+.ing-group h3{font-size:1.1rem;margin-bottom:8px}
+.ing{list-style:none;margin:0;padding:0}
+.ing li{border-top:1px solid var(--line)}
+.ing li:first-child{border-top:0}
+.ing label{display:flex;gap:12px;align-items:baseline;padding:8px 0;cursor:pointer}
+.ing input{accent-color:var(--gold);width:18px;height:18px;flex:none;transform:translateY(3px)}
+.ing b{font-weight:600}
+.ing input:checked+span{text-decoration:line-through;opacity:.5}
+.note{border-left:4px solid var(--gold);padding:6px 16px;margin:18px 0;background:var(--card);border-radius:0 10px 10px 0}
+.step{display:grid;grid-template-columns:44px 1fr;gap:6px 14px;padding:22px 0;border-top:1px solid var(--line)}
+.step .n{width:44px;height:44px;border-radius:50%;background:var(--gold);color:var(--on-gold);font:800 1.2rem Fraunces,Georgia,serif;display:grid;place-items:center}
+.step.done .n{background:var(--cinnamon);color:var(--bg)}
+.step h3{font-size:1.3rem;margin-top:6px}
+.step ul{margin:10px 0 0;padding-left:1.1em}
+.step li{margin:6px 0}
+.dial{display:inline-block;background:var(--card);border:1px solid var(--line);border-radius:6px;padding:0 8px;font-weight:600;font-size:.9rem}
+.tools{grid-column:2;display:flex;flex-wrap:wrap;gap:10px;align-items:center;margin-top:8px}
+button{font:600 .95rem Hind,sans-serif;border:0;border-radius:8px;padding:9px 16px;cursor:pointer;background:var(--gold);color:var(--on-gold)}
+button.ghost{background:transparent;border:1.5px solid var(--cinnamon);color:var(--link)}
+button:hover{filter:brightness(1.06)}
+:focus-visible{outline:3px solid var(--cinnamon);outline-offset:2px}
+:root[data-theme="dark"] :focus-visible{outline-color:var(--gold)}
+.time{font:600 1.3rem Fraunces,Georgia,serif;font-variant-numeric:tabular-nums;min-width:4.2ch}
+.time.end{color:var(--cinnamon)}
+.finish{background:var(--card);border-radius:14px;padding:24px;text-align:center;margin:20px 0 48px}
+.finish h2{margin-bottom:8px}
+footer{border-top:1px solid var(--line);padding:22px 0 30px;color:var(--muted);font-size:.9rem}
+@media (max-width:480px){.step{grid-template-columns:36px 1fr}.step .n{width:36px;height:36px;font-size:1rem}.tools{grid-column:1/-1}}
+</style>
+</head>
+<body>
+<header><div class="wrap">
+  <h1>Hostel Kettle Pulav</h1>
+  <p class="lede">Soya and potato pulav, cooked start to finish in an Agaro multipurpose kettle. One pot, three heat settings, no stove.</p>
+  <ul class="facts"><li>Serves 2</li><li>About 40 minutes</li><li>Rice : water is 1 : 2</li></ul>
+</div></header>
+
+<main class="wrap">
+<section>
+  <h2>Ingredients</h2>
+  <p class="sub">Tap an item to tick it off as you gather it. Use the same cup for rice and water.</p>
+
+  <div class="ing-group"><h3>Main</h3><ul class="ing">
+    <li><label><input type="checkbox"><span><b>Rice</b>, 1.5 cups (about 200–250 g)</span></label></li>
+    <li><label><input type="checkbox"><span><b>Water</b>, 3 cups for cooking, plus 2 cups for soaking the soya</span></label></li>
+    <li><label><input type="checkbox"><span><b>Ghee</b>, 2 to 2.5 tablespoons</span></label></li>
+    <li><label><input type="checkbox"><span><b>Soya chunks</b>, 1 to 1.5 large handfuls (about 35–40 g)</span></label></li>
+    <li><label><input type="checkbox"><span><b>Potato</b>, 1 medium or 2 small, diced into thin 1 cm cubes</span></label></li>
+    <li><label><input type="checkbox"><span><b>Tomato</b>, 2–3 medium-size (or 1 large), finely chopped</span></label></li>
+    <li><label><input type="checkbox"><span><b>Ginger-garlic paste</b>, 1.5 to 2 teaspoons</span></label></li>
+    <li><label><input type="checkbox"><span><b>Jeera (cumin)</b>, 1 level teaspoon</span></label></li>
+  </ul></div>
+
+  <div class="ing-group"><h3>Spices</h3><ul class="ing">
+    <li><label><input type="checkbox"><span><b>Turmeric powder</b>, ½ teaspoon</span></label></li>
+    <li><label><input type="checkbox"><span><b>Red chilli powder</b>, 1 teaspoon</span></label></li>
+    <li><label><input type="checkbox"><span><b>Maggi Magic Masala</b>, 1 full sachet</span></label></li>
+    <li><label><input type="checkbox"><span><b>Garam masala</b>, ½ teaspoon</span></label></li>
+    <li><label><input type="checkbox"><span><b>Salt</b>, approx. 1.25 to 1.5 teaspoons, adjust to taste</span></label></li>
+  </ul></div>
+
+  <div class="ing-group"><h3>To finish</h3><ul class="ing">
+    <li><label><input type="checkbox"><span><b>Chaat masala</b>, a light dusting</span></label></li>
+  </ul></div>
+
+  <p class="note">Use a steel spoon, never a metal fork or knife, so you don’t scratch the kettle’s base plate.</p>
+</section>
+
+<section>
+  <h2>Method</h2>
+  <p class="sub">Tap a step’s number when it’s done. Steps with a wait have a timer.</p>
+
+  <div class="step" data-step>
+    <div class="n">1</div>
+    <div><h3>Hydrate the soya chunks</h3>
+    <ul>
+      <li>Pour 2 cups of water into the kettle, set it to <span class="dial">High / Boil</span> and drop in the soya chunks (about 35–40 g, 1 to 1.5 large handfuls).</li>
+      <li>Once boiling, switch to <span class="dial">Off</span> and let them soak.</li>
+      <li>Drain, rinse under the tap, squeeze out all the water firmly and keep aside.</li>
+    </ul></div>
+    <div class="tools"><span class="time" data-t="300">5:00</span><button data-start>Start 5 min soak</button></div>
+  </div>
+
+  <div class="step" data-step>
+    <div class="n">2</div>
+    <div><h3>Sauté the base</h3>
+    <ul>
+      <li>Dry the pot. Add 2 to 2.5 tablespoons of ghee and set the dial to <span class="dial">Low</span>, or halfway between Low and Mid.</li>
+      <li>Add 1 level teaspoon of jeera and let it crackle for 20–30 seconds.</li>
+      <li>Add 1.5 to 2 teaspoons of ginger-garlic paste and stir gently with the steel spoon until fragrant.</li>
+    </ul></div>
+    <div class="tools"><span class="time" data-t="45">0:45</span><button data-start>Start 45 s for the paste</button></div>
+  </div>
+
+  <div class="step" data-step>
+    <div class="n">3</div>
+    <div><h3>Cook the masala and veggies</h3>
+    <ul>
+      <li>In a small glass or cup, mix ½ teaspoon turmeric, 1 teaspoon red chilli powder, 1 full sachet of Magic Masala, ½ teaspoon garam masala and approx. 1.25 to 1.5 teaspoons salt with 2 tablespoons of water to make a slurry.</li>
+      <li>Pour the slurry into the kettle. This protects the base plate from burning.</li>
+      <li>Add the chopped tomatoes (2–3 medium-size), diced potato (1 medium or 2 small, in 1 cm cubes) and the squeezed soya chunks.</li>
+      <li>Cook on <span class="dial">Low / Mid</span>, stirring now and then, until the tomatoes soften and coat everything in a thick gravy.</li>
+    </ul></div>
+    <div class="tools"><span class="time" data-t="150">2:30</span><button data-start>Start 2–3 min timer</button></div>
+  </div>
+
+  <div class="step" data-step>
+    <div class="n">4</div>
+    <div><h3>Layer the rice and water</h3>
+    <ul>
+      <li>Add 1.5 cups of unwashed rice (about 200–250 g) evenly on top.</li>
+      <li>Pour in 3 cups of water, measured with the same cup as the rice.</li>
+      <li>Give it one gentle circular stir to mix the salt into the water. Nudge the potatoes and soya towards the base so the rice doesn’t sit directly on the hot plate.</li>
+    </ul></div>
+  </div>
+
+  <div class="step" data-step>
+    <div class="n">5</div>
+    <div><h3>Simmer and control the starch</h3>
+    <ul>
+      <li>Cover with the glass lid and set the dial to <span class="dial">High / Boil</span>.</li>
+      <li>With 1.5 cups of unwashed rice the starch foam rises fast, so watch through the glass.</li>
+      <li>As soon as vigorous bubbles reach near the top rim, turn the dial down to <span class="dial">Low</span> and crack the lid slightly to vent steam.</li>
+      <li>Simmer gently until the water drops below the rice surface and steam holes form.</li>
+    </ul></div>
+    <div class="tools"><span class="time" data-t="540">9:00</span><button data-start>Start 8–10 min simmer</button></div>
+  </div>
+
+  <div class="step" data-step>
+    <div class="n">6</div>
+    <div><h3>Finish with carryover steam</h3>
+    <ul>
+      <li>Switch the dial to <span class="dial">Off</span> and unplug the kettle.</li>
+      <li>Seal the glass lid completely.</li>
+      <li>Don’t open or disturb it. The residual heat steams the rice and potatoes through to a fluffy, non-mushy texture without scorching the element.</li>
+    </ul></div>
+    <div class="tools"><span class="time" data-t="780">13:00</span><button data-start>Start 12–14 min rest</button></div>
+  </div>
+
+  <div class="finish">
+    <h2>Fluff, dust, serve</h2>
+    <p>Fluff gently with the spoon, dust with chaat masala and eat it hot.</p>
+  </div>
+</main>
+
+<footer><div class="wrap">Always unplug the kettle before opening the lid fully and keep the cord away from water.</div></footer>
+
+<script>
+(function(){
+  function fmt(s){var m=Math.floor(s/60),r=s%60;return m+":"+(r<10?"0":"")+r}
+  function beep(){
+    try{var c=new (window.AudioContext||window.webkitAudioContext)();for(var i=0;i<3;i++){(function(i){var o=c.createOscillator(),g=c.createGain();o.connect(g);g.connect(c.destination);o.frequency.value=880;var s=c.currentTime+i*0.45;g.gain.setValueAtTime(0.4,s);g.gain.setValueAtTime(0,s+0.25);o.start(s);o.stop(s+0.3)})(i)}setTimeout(function(){c.close()},1800)}catch(e){}
+  }
+  document.querySelectorAll("[data-step]").forEach(function(step){
+    var n=step.querySelector(".n");
+    n.setAttribute("role","button");n.setAttribute("tabindex","0");n.setAttribute("aria-label","Mark step done");
+    function toggle(){step.classList.toggle("done")}
+    n.addEventListener("click",toggle);
+    n.addEventListener("keydown",function(e){if(e.key==="Enter"||e.key===" "){e.preventDefault();toggle()}});
+    var btn=step.querySelector("[data-start]"),t=step.querySelector(".time");
+    if(!btn)return;
+    var total=+t.dataset.t,left=total,id=null,label=btn.textContent;
+    btn.addEventListener("click",function(){
+      if(id){clearInterval(id);id=null;left=total;t.textContent=fmt(total);t.classList.remove("end");btn.textContent=label;btn.classList.remove("ghost");return}
+      btn.textContent="Reset";btn.classList.add("ghost");
+      id=setInterval(function(){
+        left--;t.textContent=fmt(left);
+        if(left<=0){clearInterval(id);id=null;t.textContent="Done";t.classList.add("end");btn.textContent="Restart";left=total;beep();step.classList.add("done")}
+      },1000);
+    });
+  });
+})();
+</script>
+</body>
+</html>
