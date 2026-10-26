@@ -1,716 +1,182 @@
 <!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Command Deck | Micro-Apps Hub</title>
-    <style>
-        /* Theme Configurations */
-        :root {
-            /* Smooth Transition Hub */
-            --transition-speed: 0.4s;
-            --transition-curve: cubic-bezier(0.16, 1, 0.3, 1);
-
-            /* App Accent Colors (Shared) */
-            --p1-color: #10b981; /* Emerald */
-            --p2-color: #f59e0b; /* Amber */
-            --p3-color: #0071e3; /* Classic Blue */
-            --p4-color: #8b5cf6; /* Violet */
-            --p5-color: #14b8a6; /* Teal */
-        }
-
-        /* LIGHT MODE VARIABLES */
-        [data-theme="light"] {
-            --bg-color: #f4f7f6;
-            --card-bg: rgba(255, 255, 255, 0.75);
-            --border-color: rgba(0, 0, 0, 0.06);
-            --text-main: #1d1d1f;
-            --text-muted: #6e6e73;
-            --header-title: #000000;
-            --badge-bg: rgba(0, 0, 0, 0.03);
-            --action-btn-bg: #ffffff;
-            
-            --p1-glow: rgba(16, 185, 129, 0.12);
-            --p2-glow: rgba(245, 158, 11, 0.12);
-            --p3-glow: rgba(0, 113, 227, 0.12);
-            --p4-glow: rgba(139, 92, 246, 0.12);
-            --p5-glow: rgba(20, 184, 166, 0.12);
-            
-            --bg-gradient: 
-                radial-gradient(circle at 0% 0%, rgba(0, 113, 227, 0.04) 0%, transparent 35%),
-                radial-gradient(circle at 100% 100%, rgba(16, 185, 129, 0.04) 0%, transparent 35%);
-        }
-
-        /* DARK MODE VARIABLES */
-        [data-theme="dark"] {
-            --bg-color: #0d1117;
-            --card-bg: rgba(22, 27, 34, 0.7);
-            --border-color: #30363d;
-            --text-main: #c9d1d9;
-            --text-muted: #8b949e;
-            --header-title: #ffffff;
-            --badge-bg: rgba(255, 255, 255, 0.05);
-            --action-btn-bg: rgba(255, 255, 255, 0.03);
-            
-            --p1-glow: rgba(16, 185, 129, 0.08);
-            --p2-glow: rgba(245, 158, 11, 0.08);
-            --p3-glow: rgba(0, 113, 227, 0.08);
-            --p4-glow: rgba(139, 92, 246, 0.08);
-            --p5-glow: rgba(20, 184, 166, 0.08);
-            
-            --bg-gradient: 
-                radial-gradient(circle at 10% 20%, rgba(56, 189, 248, 0.03) 0%, transparent 40%),
-                radial-gradient(circle at 90% 80%, rgba(74, 222, 128, 0.03) 0%, transparent 40%);
-        }
-
-        * {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-        }
-
-        body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
-            background-color: var(--bg-color);
-            background-image: var(--bg-gradient);
-            color: var(--text-main);
-            min-height: 100vh;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            padding: 60px 20px;
-            -webkit-font-smoothing: antialiased;
-            transition: background-color var(--transition-speed) var(--transition-curve),
-                        color var(--transition-speed) var(--transition-curve);
-        }
-
-        .container {
-            width: 100%;
-            max-width: 840px;
-        }
-
-        /* Header Architecture */
-        header {
-            margin-bottom: 48px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            border-bottom: 1px solid var(--border-color);
-            padding-bottom: 24px;
-            transition: border-color var(--transition-speed) var(--transition-curve);
-        }
-
-        header h1 {
-            font-size: 2.4rem;
-            font-weight: 700;
-            letter-spacing: -0.03em;
-            color: var(--header-title);
-            transition: color var(--transition-speed) var(--transition-curve);
-        }
-
-        .header-right {
-            display: flex;
-            align-items: center;
-            gap: 16px;
-        }
-
-        .subtitle {
-            font-family: 'SF Mono', SFMono-Regular, Consolas, monospace;
-            color: var(--text-muted);
-            font-size: 0.85rem;
-            font-weight: 600;
-            background: var(--badge-bg);
-            padding: 6px 14px;
-            border-radius: 20px;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            transition: all var(--transition-speed) var(--transition-curve);
-        }
-
-        .pulse-dot {
-            width: 7px;
-            height: 7px;
-            background-color: var(--p1-color);
-            border-radius: 50%;
-            animation: pulse 2s infinite;
-        }
-
-        /* Switch Toggle Styles */
-        .theme-toggle-btn {
-            background: var(--badge-bg);
-            border: 1px solid var(--border-color);
-            width: 44px;
-            height: 44px;
-            border-radius: 14px;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: var(--text-main);
-            transition: all var(--transition-speed) var(--transition-curve);
-        }
-
-        .theme-toggle-btn:hover {
-            transform: scale(1.05);
-            border-color: var(--text-muted);
-        }
-
-        .theme-toggle-btn svg {
-            width: 20px;
-            height: 20px;
-            fill: none;
-            stroke: currentColor;
-            stroke-width: 2;
-        }
-
-        [data-theme="light"] .sun-icon,
-        [data-theme="dark"] .moon-icon {
-            display: none;
-        }
-
-        /* Stacked Card Layout */
-        .apps-grid {
-            display: flex;
-            flex-direction: column;
-            gap: 24px;
-        }
-
-        /* Card Framework */
-        .app-card {
-            text-decoration: none;
-            color: inherit;
-            background: var(--card-bg);
-            border: 1px solid var(--border-color);
-            border-radius: 24px;
-            padding: 32px;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            position: relative;
-            overflow: hidden;
-            backdrop-filter: blur(20px);
-            -webkit-backdrop-filter: blur(20px);
-            box-shadow: 0 4px 24px rgba(0, 0, 0, 0.01);
-            opacity: 0;
-            animation: cardIn 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards;
-            transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1), 
-                        border-color 0.4s, 
-                        box-shadow 0.4s,
-                        background-color var(--transition-speed) var(--transition-curve);
-        }
-
-        .apps-grid .app-card:nth-child(1)  { animation-delay: 0.04s; }
-        .apps-grid .app-card:nth-child(2)  { animation-delay: 0.10s; }
-        .apps-grid .app-card:nth-child(3)  { animation-delay: 0.16s; }
-        .apps-grid .app-card:nth-child(4)  { animation-delay: 0.22s; }
-        .apps-grid .app-card:nth-child(5)  { animation-delay: 0.28s; }
-        .apps-grid .app-card:nth-child(6)  { animation-delay: 0.34s; }
-        .apps-grid .app-card:nth-child(7)  { animation-delay: 0.40s; }
-        .apps-grid .app-card:nth-child(8)  { animation-delay: 0.46s; }
-        .apps-grid .app-card:nth-child(9)  { animation-delay: 0.52s; }
-        .apps-grid .app-card:nth-child(10) { animation-delay: 0.58s; }
-        .apps-grid .app-card:nth-child(11) { animation-delay: 0.64s; }
-
-        /* Fluid Cursor Follow Aura */
-        .app-card::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: radial-gradient(400px circle at var(--x, 0px) var(--y, 0px), var(--card-glow), transparent 60%);
-            z-index: 1;
-            pointer-events: none;
-            opacity: 0;
-            transition: opacity 0.3s ease;
-        }
-
-        .app-card:hover::before {
-            opacity: 1;
-        }
-
-        .app-card:hover {
-            transform: scale(1.015) translateY(-2px);
-            border-color: var(--app-color);
-            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.03), 0 0 1px var(--app-color);
-        }
-
-        /* Dynamic Card Property Assignments */
-        .app-card.p1 { --app-color: var(--p1-color); --card-glow: var(--p1-glow); }
-        .app-card.p2 { --app-color: var(--p2-color); --card-glow: var(--p2-glow); }
-        .app-card.p3 { --app-color: var(--p3-color); --card-glow: var(--p3-glow); }
-        .app-card.p4 { --app-color: var(--p4-color); --card-glow: var(--p4-glow); }
-        .app-card.p5 { --app-color: var(--p5-color); --card-glow: var(--p5-glow); }
-
-        .app-info {
-            z-index: 2;
-            flex-grow: 1;
-            padding-right: 40px;
-        }
-
-        .app-meta {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            margin-bottom: 12px;
-        }
-
-        .app-badge {
-            font-size: 0.75rem;
-            font-weight: 600;
-            letter-spacing: 0.02em;
-            padding: 4px 10px;
-            border-radius: 8px;
-            background: var(--badge-bg);
-            color: var(--app-color);
-            transition: background-color var(--transition-speed) var(--transition-curve);
-        }
-
-        .new-badge {
-            background: var(--app-color);
-            color: #ffffff;
-            animation: glow 2s ease-in-out infinite;
-        }
-
-        .app-title {
-            font-size: 1.5rem;
-            font-weight: 700;
-            color: var(--header-title);
-            letter-spacing: -0.01em;
-            transition: color 0.2s ease;
-        }
-
-        .app-card:hover .app-title {
-            color: var(--app-color);
-        }
-
-        .app-desc {
-            font-size: 0.95rem;
-            color: var(--text-muted);
-            margin-top: 8px;
-            line-height: 1.5;
-            max-width: 540px;
-            transition: color var(--transition-speed) var(--transition-curve);
-        }
-
-        /* Micro Progress Engines */
-        .app-visual {
-            margin-top: 20px;
-            width: 100%;
-            max-width: 320px;
-        }
-        
-        .visual-text {
-            font-family: 'SF Mono', monospace;
-            font-size: 0.75rem;
-            font-weight: 600;
-            color: var(--text-muted);
-            display: flex;
-            justify-content: space-between;
-            margin-bottom: 6px;
-            transition: color var(--transition-speed) var(--transition-curve);
-        }
-
-        .progress-bar-bg {
-            background: var(--badge-bg);
-            height: 5px;
-            border-radius: 10px;
-            overflow: hidden;
-            transition: background-color var(--transition-speed) var(--transition-curve);
-        }
-
-        .progress-bar-fill {
-            background: var(--app-color);
-            height: 100%;
-            border-radius: 10px;
-            transform: scaleX(0);
-            transform-origin: left;
-            animation: growBar 1s cubic-bezier(0.16, 1, 0.3, 1) forwards;
-        }
-
-        /* Action Pill Navigation Trigger */
-        .app-action {
-            z-index: 2;
-            width: 52px;
-            height: 52px;
-            border-radius: 18px;
-            background: var(--action-btn-bg);
-            border: 1px solid var(--border-color);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.01);
-            transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
-            flex-shrink: 0;
-        }
-
-        .app-action svg {
-            width: 20px;
-            height: 20px;
-            fill: none;
-            stroke: var(--header-title);
-            stroke-width: 2.5;
-            transition: transform 0.3s ease, stroke var(--transition-speed) var(--transition-curve);
-        }
-
-        .app-card:hover .app-action {
-            background: var(--app-color);
-            border-color: var(--app-color);
-            box-shadow: 0 8px 20px var(--card-glow);
-        }
-
-        .app-card:hover .app-action svg {
-            stroke: #ffffff;
-            transform: translateX(3px);
-        }
-
-        /* Keyframes */
-        @keyframes pulse {
-            0% { box-shadow: 0 0 0 0 rgba(16, 185, 129, 0.4); }
-            70% { box-shadow: 0 0 0 6px rgba(16, 185, 129, 0); }
-            100% { box-shadow: 0 0 0 0 rgba(16, 185, 129, 0); }
-        }
-
-        @keyframes growBar {
-            to { transform: scaleX(1); }
-        }
-
-        @keyframes cardIn {
-            from { opacity: 0; transform: translateY(14px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-
-        @keyframes glow {
-            0%, 100% { box-shadow: 0 0 0 0 var(--card-glow); }
-            50% { box-shadow: 0 0 0 4px var(--card-glow); }
-        }
-
-        @media (max-width: 680px) {
-            header { flex-direction: row; align-items: center; justify-content: space-between; }
-            header h1 { font-size: 1.8rem; }
-            .subtitle { display: none; }
-            .app-card { flex-direction: column; align-items: flex-start; gap: 24px; padding: 24px; }
-            .app-action { align-self: flex-end; width: 100%; height: 44px; border-radius: 12px; }
-            .app-card:hover .app-action svg { transform: translateX(5px); }
-            .app-visual { max-width: 100%; }
-        }
-    </style>
-</head>
-<body>
-
-    <div class="container">
-        <header>
-            <h1>Command Deck</h1>
-            <div class="header-right">
-                <div class="subtitle">
-                    <span class="pulse-dot"></span>
-                    <span>DECK ENGINE ACTIVE</span>
-                </div>
-                <button class="theme-toggle-btn" id="themeToggle" aria-label="Toggle Theme">
-                    <svg class="moon-icon" viewBox="0 0 24 24"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
-                    <svg class="sun-icon" viewBox="0 0 24 24"><circle cx="12" cy="12" r="5"/><path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"/></svg>
-                </button>
-            </div>
-        </header>
-
-        <main class="apps-grid">
-
-            <!-- 0000. FLA MCQ Text (Latest Addition) -->
-            <a href="./FLA%20MCQ%20Text/" class="app-card p4">
-                <div class="app-info">
-                    <div class="app-meta">
-                        <span class="app-badge">AUTOMATA &amp; THEORY</span>
-                        <span class="app-badge new-badge">NEW</span>
-                    </div>
-                    <div class="app-title">FLA MCQ Prep</div>
-                    <div class="app-desc">Formal Languages and Automata question practice deck: finite automata, grammars, regular expressions, Turing machines, and interactive MCQ test review.</div>
-
-                    <div class="app-visual">
-                        <div class="visual-text">
-                            <span>Question Bank</span>
-                            <span>Practice &amp; Review</span>
-                        </div>
-                        <div class="progress-bar-bg">
-                            <div class="progress-bar-fill" style="width: 100%;"></div>
-                        </div>
-                    </div>
-                </div>
-                <div class="app-action">
-                    <svg viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
-                </div>
-            </a>
-
-            <!-- 000. Pulav in Kettle -->
-            <a href="./Pulav%20in%20Kettle/" class="app-card p2">
-                <div class="app-info">
-                    <div class="app-meta">
-                        <span class="app-badge">HOSTEL RECIPE</span>
-                    </div>
-                    <div class="app-title">Pulav in Kettle</div>
-                    <div class="app-desc">Soya and potato pulav cooked in an Agaro multipurpose kettle, with tick-off ingredients, exact quantities in every step, dial settings and built-in timers.</div>
-
-                    <div class="app-visual">
-                        <div class="visual-text">
-                            <span>Serves 2</span>
-                            <span>6 Steps · About 40 min</span>
-                        </div>
-                        <div class="progress-bar-bg">
-                            <div class="progress-bar-fill" style="width: 100%;"></div>
-                        </div>
-                    </div>
-                </div>
-                <div class="app-action">
-                    <svg viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
-                </div>
-            </a>
-
-            <!-- 00. STEP General Prep: DSA 7-Day Study Tracker -->
-            <a href="./STEP%20General%20Prep/" class="app-card p3">
-                <div class="app-info">
-                    <div class="app-meta">
-                        <span class="app-badge">STUDY PLAN</span>
-                    </div>
-                    <div class="app-title">STEP General Prep</div>
-                    <div class="app-desc">7-day DSA study tracker covering 21 PDFs in the right order, 3 hours a day, with LeetCode problems to solve after each day and live progress bars.</div>
-
-                    <div class="app-visual">
-                        <div class="visual-text">
-                            <span>Study Plan</span>
-                            <span>7 Days · 21 PDFs</span>
-                        </div>
-                        <div class="progress-bar-bg">
-                            <div class="progress-bar-fill" style="width: 100%;"></div>
-                        </div>
-                    </div>
-                </div>
-                <div class="app-action">
-                    <svg viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
-                </div>
-            </a>
-
-            <a href="./Step4/" class="app-card p5">
-                <div class="app-info">
-                    <div class="app-meta">
-                        <span class="app-badge">ASSESSMENT</span>
-                    </div>
-                    <div class="app-title">STEP Major Assessment</div>
-                    <div class="app-desc">21 problems across Arrays, Hashing, Subarray/Subsequence and Optimization, with commented Python solutions, dry runs, edge cases and exam notes.</div>
-
-                    <div class="app-visual">
-                        <div class="visual-text">
-                            <span>Exam Target</span>
-                            <span>25 Sep 2026 · 1:30 PM</span>
-                        </div>
-                        <div class="progress-bar-bg">
-                            <div class="progress-bar-fill" style="width: 100%;"></div>
-                        </div>
-                    </div>
-                </div>
-                <div class="app-action">
-                    <svg viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
-                </div>
-            </a>
-
-            <!-- 0. STEP Major Assessment Prep Tracker -->
-            <a href="./STEP%20Major%20Assessment/" class="app-card p5">
-                <div class="app-info">
-                    <div class="app-meta">
-                        <span class="app-badge">ASSESSMENT</span>
-                    </div>
-                    <div class="app-title">STEP Major Assessment</div>
-                    <div class="app-desc">Comprehensive 120-minute prep hub: Part A Aptitude, Part B Object-Oriented Programming, and Part C DSA (Arrays, Two Pointer, Sliding Window) with live XP, notes, and milestones.</div>
-
-                    <div class="app-visual">
-                        <div class="visual-text">
-                            <span>Exam Target</span>
-                            <span>25 Sep 2026 · 1:30 PM</span>
-                        </div>
-                        <div class="progress-bar-bg">
-                            <div class="progress-bar-fill" style="width: 100%;"></div>
-                        </div>
-                    </div>
-                </div>
-                <div class="app-action">
-                    <svg viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
-                </div>
-            </a>
-            
-            <a href="./Swift%20Paper/" class="app-card p5">
-                <div class="app-info">
-                    <div class="app-meta">
-                        <span class="app-badge">ASSESSMENT</span>
-                    </div>
-                    <div class="app-title">Swift Assessment</div>
-                    <div class="app-desc">10 MCQ + 2 programming Qs (10 marks each)</div>
-
-                    <div class="app-visual">
-                        <div class="visual-text">
-                            <span>Exam Target</span>
-                            <span>25 Sep 2026 · 1:30 PM</span>
-                        </div>
-                        <div class="progress-bar-bg">
-                            <div class="progress-bar-fill" style="width: 100%;"></div>
-                        </div>
-                    </div>
-                </div>
-                <div class="app-action">
-                    <svg viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
-                </div>
-            </a>
-            
-            <!-- 1. NPTEL Interview Prep -->
-            <a href="./NPTEL%20Interview%20Prep/" class="app-card p1">
-                <div class="app-info">
-                    <div class="app-meta">
-                        <span class="app-badge">INTERNSHIP</span>
-                    </div>
-                    <div class="app-title">NPTEL Interview Prep</div>
-                    <div class="app-desc">Round-2 briefing for the Built Environment Lab, IIT Roorkee — lab research threads, DBMS ammunition, resume line-by-line defense, and a 90-second answer timer.</div>
-
-                    <div class="app-visual">
-                        <div class="visual-text">
-                            <span>Interview</span>
-                            <span>Mon, 14 Sept — Prof. P.S. Chani</span>
-                        </div>
-                        <div class="progress-bar-bg">
-                            <div class="progress-bar-fill" style="width: 100%;"></div>
-                        </div>
-                    </div>
-                </div>
-                <div class="app-action">
-                    <svg viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
-                </div>
-            </a>
-
-            <!-- 2. LeetCode Company Wise -->
-            <a href="./Leetcode%20Company%20Wise%20Question%20/" class="app-card p4">
-                <div class="app-info">
-                    <div class="app-meta">
-                        <span class="app-badge">INTERVIEW PREP</span>
-                    </div>
-                    <div class="app-title">Company-Wise LeetCode Questions</div>
-                    <div class="app-desc">Targeted algorithmic problem sets organized by company frequency and patterns to streamline interview readiness.</div>
-                    
-                    <div class="app-visual">
-                        <div class="visual-text">
-                            <span>Coverage</span>
-                            <span>Top Tech Companies</span>
-                        </div>
-                        <div class="progress-bar-bg">
-                            <div class="progress-bar-fill" style="width: 85%;"></div>
-                        </div>
-                    </div>
-                </div>
-                <div class="app-action">
-                    <svg viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
-                </div>
-            </a>
-
-            <!-- 3. LeetCode Analytics Tracker -->
-            <a href="./Leetcode%20Target/" class="app-card p2">
-                <div class="app-info">
-                    <div class="app-meta">
-                        <span class="app-badge">ALGORITHMS</span>
-                    </div>
-                    <div class="app-title">LeetCode Analytics Tracker</div>
-                    <div class="app-desc">Algorithmic metrics dashboard. Keeps a strict inventory of absolute problems solved, tracks dynamic targets, and generates next optimal problems to conquer.</div>
-                    
-                    <div class="app-visual">
-                        <div class="visual-text">
-                            <span>Queue Status</span>
-                            <span>Optimal Path Active</span>
-                        </div>
-                        <div class="progress-bar-bg">
-                            <div class="progress-bar-fill" style="width: 70%;"></div>
-                        </div>
-                    </div>
-                </div>
-                <div class="app-action">
-                    <svg viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
-                </div>
-            </a>
-
-            <!-- 4. DSA Timetable Plan -->
-            <a href="./TimeTable/" class="app-card p3">
-                <div class="app-info">
-                    <div class="app-meta">
-                        <span class="app-badge">SPRINT SCHEDULE</span>
-                    </div>
-                    <div class="app-title">DSA Timetable Plan</div>
-                    <div class="app-desc">High-intensity runtime planner mapping out focused daily objectives from June 5 to July 14. Designed to monitor layout scaling for master-level foundations.</div>
-                    
-                    <div class="app-visual">
-                        <div class="visual-text">
-                            <span>Timeline</span>
-                            <span>June 05 - July 14</span>
-                        </div>
-                        <div class="progress-bar-bg">
-                            <div class="progress-bar-fill" style="width: 100%;"></div>
-                        </div>
-                    </div>
-                </div>
-                <div class="app-action">
-                    <svg viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
-                </div>
-            </a>
-
-            <!-- 5. GPA Calculator Sem 4 -->
-            <a href="./GPA%20Sem%204/" class="app-card p1">
-                <div class="app-info">
-                    <div class="app-meta">
-                        <span class="app-badge">ACADEMICS</span>
-                    </div>
-                    <div class="app-title">GPA Calculator (Sem 4)</div>
-                    <div class="app-desc">Interactive credit-weighted performance metrics module tailored specifically for Semester 4 curriculum. Evaluates targets effortlessly.</div>
-                    
-                    <div class="app-visual">
-                        <div class="visual-text">
-                            <span>Target Tracker</span>
-                            <span>9.5+ SGPA Target</span>
-                        </div>
-                        <div class="progress-bar-bg">
-                            <div class="progress-bar-fill" style="width: 95%;"></div>
-                        </div>
-                    </div>
-                </div>
-                <div class="app-action">
-                    <svg viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
-                </div>
-            </a>
-
-        </main>
-    </div>
-
-    <script>
-        /* Interactive Card Aura Tracker Script */
-        const cards = document.querySelectorAll('.app-card');
-        cards.forEach(card => {
-            card.addEventListener('mousemove', e => {
-                const rect = card.getBoundingClientRect();
-                const x = e.clientX - rect.left;
-                const y = e.clientY - rect.top;
-                card.style.setProperty('--x', `${x}px`);
-                card.style.setProperty('--y', `${y}px`);
-            });
-        });
-
-        /* Dynamic Theme State Alternator Script */
-        const toggleBtn = document.getElementById('themeToggle');
-        
-        const currentSavedTheme = localStorage.getItem('hub-theme');
-        const systemPrefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
-        
-        let activeTheme = currentSavedTheme || (systemPrefersDark ? 'dark' : 'light');
-        document.documentElement.setAttribute('data-theme', activeTheme);
-
-        toggleBtn.addEventListener('click', () => {
-            activeTheme = (activeTheme === 'light') ? 'dark' : 'light';
-            document.documentElement.setAttribute('data-theme', activeTheme);
-            localStorage.setItem('hub-theme', activeTheme);
-        });
-    </script>
-</body>
-</html>
+<html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>FLA Practice – Units II & III</title>
+<style>
+:root{--bg:#f6f7fb;--card:#fff;--tx:#1d2433;--mu:#5d667a;--bd:#dde1ec;--ac:#4256d0;--ok:#1b7f4b;--okb:#e3f6ea;--no:#b3261e;--nob:#fdeaea;--hd:#c2410c;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media(prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#12151d;--card:#1b2030;--tx:#e7eaf3;--mu:#99a2b8;--bd:#2d3450;--ac:#8b9bff;--ok:#6fdc9d;--okb:#12301f;--no:#ff8a80;--nob:#3a1717;--hd:#fb923c}color-scheme:dark}
+:root[data-theme="dark"]{--bg:#12151d;--card:#1b2030;--tx:#e7eaf3;--mu:#99a2b8;--bd:#2d3450;--ac:#8b9bff;--ok:#6fdc9d;--okb:#12301f;--no:#ff8a80;--nob:#3a1717;--hd:#fb923c;color-scheme:dark}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--tx);font:16px/1.5 system-ui,Segoe UI,Roboto,sans-serif}
+main{max-width:820px;margin:auto;padding:16px}
+h1{font-size:1.4rem;margin:.2em 0}.sub{color:var(--mu);margin:0 0 14px}
+.tabs{display:flex;gap:8px;margin:8px 0;flex-wrap:wrap}
+.tab{border:1px solid var(--bd);background:var(--card);color:var(--tx);padding:8px 16px;border-radius:999px;cursor:pointer;font:inherit}
+.tab.on{background:var(--ac);color:#fff;border-color:var(--ac)}
+@media(prefers-color-scheme:dark){.tab.on{color:#101425}}
+.bar{display:flex;justify-content:space-between;align-items:center;gap:8px;margin:12px 0;flex-wrap:wrap;color:var(--mu)}
+.bar button{border:1px solid var(--bd);background:var(--card);color:var(--tx);padding:6px 12px;border-radius:8px;cursor:pointer;font:inherit}
+.q{background:var(--card);border:1px solid var(--bd);border-radius:12px;padding:14px;margin:12px 0}
+.q h3{font-size:1rem;margin:0 0 4px}.n{color:var(--mu);font-size:.8rem}.hd{color:var(--hd);font-weight:600}
+.o{display:block;width:100%;text-align:left;border:1px solid var(--bd);background:transparent;color:var(--tx);padding:9px 12px;margin:6px 0;border-radius:8px;cursor:pointer;font:inherit}
+.o:hover:not(:disabled){border-color:var(--ac)}
+.o.ok{background:var(--okb);border-color:var(--ok)}.o.no{background:var(--nob);border-color:var(--no)}
+.e{display:none;margin-top:8px;padding:10px 12px;border-left:3px solid var(--ac);background:var(--bg);border-radius:6px;font-size:.93rem}
+.e.s{display:block}
+</style></head><body><main>
+<h1>📚 21CSC301T – Formal Language &amp; Automata</h1>
+<p class="sub">Unit II (Pumping Lemma, GNF) and Unit III. Options reshuffle every time.</p>
+<div class="tabs" id="st"></div><div class="tabs" id="ut"></div>
+<div class="bar"><span id="sc"></span><button id="rs">🔀 Reshuffle &amp; reset</button></div>
+<div id="qs"></div></main>
+<script>
+// [question, correct, [3 wrong], explanation]
+const D={sample:{u2:[
+["Pumping Lemma (regular): a long string w splits as xyz such that…","|xy| ≤ p, |y| ≥ 1, and xy^i z ∈ L for all i ≥ 0",["y is empty and xz ∈ L","z must be empty","x must equal z"],"The three conditions are |xy| ≤ p, |y| ≥ 1, and pumping y any number of times (including 0) stays in L."],
+["The Pumping Lemma is used to show a language is…","NOT regular (proof by contradiction)",["Regular","Context-free","Turing-decidable"],"It is a necessary condition for regularity, so it can only disprove regularity."],
+["Why is {a^n b^n} not regular by pumping?","Pumping y (inside the a-block) unbalances the a’s and b’s",["The language is finite","It has only one string","Regular languages cannot contain b"],"With w = a^p b^p, y lies within the a’s; xy²z has more a’s than b’s."],
+["Which language can be shown regular directly with a DFA?","{ w : w has an even number of a’s }",["{ a^n b^n }","{ a^p : p prime }","{ ww }"],"Two states (even/odd) suffice. The others need unbounded counting or memory."],
+["A common mistake when using the pumping lemma:","Choosing a convenient split instead of handling every split with |xy| ≤ p",["Choosing w based on p","Letting the adversary pick p","Using proof by contradiction"],"You choose w and i; the adversary chooses p and the split. You must beat every valid split."],
+["A CFG is in GNF if every production has the form…","A → aα (a terminal, α a possibly empty string of non-terminals)",["A → αa","A → BC","A → ε only"],"GNF: one leading terminal followed by non-terminals."],
+["A structural benefit of GNF:","Each derivation step emits one terminal, so a PDA needs no ε-moves",["It removes all terminals","It guarantees the grammar is regular","It doubles the non-terminals"],"Every step consumes exactly one input symbol, so a string of length n takes n steps."],
+["Converting a CFG to GNF typically requires first eliminating…","Left recursion",["Right recursion only","All terminals","The start symbol"],"Left-recursive rules cannot be rewritten to start with a terminal."],
+["Removing left recursion from A → Aα | β gives…","A → βA′, A′ → αA′ | ε",["A → αA′, A′ → βA′ | ε","A → Aα unchanged","A deleted"],"β must come first, then repeated α’s are generated by the right-recursive A′."],
+["Why remove left recursion before GNF?","GNF needs a leading terminal; a left-recursive rule cannot give one without infinite regress",["Left recursion is illegal in all CFGs","GNF has no non-terminals","It makes the grammar finite"],"A → Aα keeps a non-terminal at the front forever."]],
+u3:[
+["A PDA extends a finite automaton with…","An auxiliary stack (unbounded LIFO memory)",["A second read head","A random-access tape","A second input alphabet"],"The stack gives unbounded but restricted-access memory."],
+["A PDA transition depends on…","Current state, input symbol (or ε), and stack top",["Only the state","Only the input symbol","The input length"],"δ: Q × (Σ∪{ε}) × Γ → finite subsets of Q × Γ*."],
+["Standard PDA acceptance modes:","Final state, or empty stack",["Full stack only","Reading input twice","Stack with exactly one symbol"],"The two modes are equivalent in power for NPDAs."],
+["PDA for {a^n b^n}: stack usage?","Push a marker per a, pop one per b",["Push per b, never pop","Nothing pushed","Push two per a, one per b"],"Matching counts: the stack empties exactly when #b = #a."],
+["A PDA is deterministic if for each (state, input/ε, stack top)…","There is at most one applicable move",["There are always two","Stack must be empty","It must accept by empty stack"],"Also, an ε-move and an input move cannot both apply."],
+["Languages accepted by DPDAs are called…","Deterministic CFLs (DCFLs)",["Regular languages","Recursively enumerable","NP-complete"],"DCFL ⊂ CFL."],
+["Regarding DPDA acceptance modes:","Final-state acceptance is strictly more powerful than empty-stack",["Empty-stack is always more powerful","Both are identical for DPDAs","Mode never matters"],"Empty-stack DPDAs accept only prefix-free languages; for NPDAs both modes are equal."],
+["A CFL not accepted by any DPDA:","{ w w^R } (even palindromes)",["{ a^n b^n }","{ a^n b^m }","{ a^n }"],"The midpoint must be guessed, which needs non-determinism."],
+["An NPDA differs from a DPDA in that…","It may have multiple valid moves for the same configuration",["It cannot use a stack","It rejects ambiguous strings","It has no final states"],"Multiple branches are explored; accept if any branch accepts."],
+["Why is non-determinism essential for PDAs (unlike for DFAs)?","Some CFLs, e.g. palindromes, require guessing the midpoint",["DPDAs have no stack","Only regular languages need it","NPDAs have unlimited states"],"NPDA ≡ CFL, but DPDA ⊊ CFL."],
+["CFG ↔ PDA theorem:","L is context-free iff some PDA accepts it",["Every PDA accepts a regular language","PDAs accept only finite languages","They are unrelated"],"Analogous to FA ≡ regular expressions."],
+["PDA → CFG uses non-terminals of the form…","[q, X, p]: popping X moves the PDA from q to p consuming some input",["Single state names only","Random symbols","Pairs of input symbols"],"Triples track state, stack symbol popped, and resulting state."],
+["CFLs are closed under…","Union, concatenation, and Kleene star",["Intersection with any CFL","Complementation","Set difference"],"Intersection and complement fail in general."],
+["FALSE statement about CFL closure:","CFLs are closed under intersection with another arbitrary CFL",["Closed under union","Closed under Kleene star","Closed under concatenation"],"{a^n b^n c^m} ∩ {a^m b^n c^n} = {a^n b^n c^n}, not a CFL."],
+["{a^n b^n c^n} is shown not context-free using…","The Pumping Lemma for CFLs",["A PDA construction","Kleene’s theorem","Subset construction"],"vwx spans at most two of the three blocks, so pumping breaks equality."],
+["CFL Pumping Lemma:","|vwx| ≤ p, |vx| ≥ 1, and uv^i w x^i y ∈ L for all i ≥ 0",["v and x must both be empty","w must be empty","u and y must be equal"],"Two substrings (v and x) are pumped simultaneously."],
+["Is “w ∈ L(G)?” decidable for a CFG?","Yes, e.g. CYK on a CNF grammar",["Undecidable","Only with pumping lemma","Only if w is empty"],"CYK runs in O(n³)."],
+["Which CFG question is undecidable?","Whether two CFGs generate the same language",["Whether L(G) is empty","Whether w is derivable (CNF)","Whether G has useless symbols"],"Emptiness, membership, and finiteness are decidable; equivalence is not."],
+["CYK time complexity (CNF grammar, |w| = n):","O(n³)",["O(n)","O(2^n)","O(log n)"],"Three nested loops: substring length, start position, split point."],
+["Is CFG ambiguity decidable?","Undecidable in general",["Polynomial time","True for every CFG","Only for regular grammars"],"Reducible from PCP."],
+["Simple top-down parsers fail on…","Left recursion (infinite recursion without consuming input)",["Right recursion","Terminals","One production per non-terminal"],"A → Aα makes the parser call A forever."],
+["LL(1) avoids backtracking by…","Using one lookahead symbol to choose the production",["Random choice","Ignoring input","Needing an ambiguous grammar"],"Parsing table M[A, a] has a unique entry per cell."],
+["A shift-reduce “reduce” means…","Replace the RHS of a production on top of the stack by its LHS",["Delete the stack","Push the start symbol","Skip input"],"Reverse of a rightmost derivation step."],
+["A handle is…","A stack substring matching a production’s RHS whose reduction is a step of a reverse rightmost derivation",["The accepted string","The start symbol","Any substring of input"],"Handle pruning drives bottom-up parsing."],
+["A shift-reduce conflict means the parser cannot decide between…","Shifting the next symbol and reducing by a production",["Accepting or rejecting ε","Two start symbols","Left vs right reading"],"Typical with ambiguous grammars such as E → E+E | E*E."],
+["A PDA’s instantaneous description (ID) records…","Remaining input, current state, and stack contents",["Only the current state","Only the stack contents","Number of steps so far"],"ID = (q, w, γ); the relation ⊢ denotes a single move between IDs."],
+["DPDAs matter in compiler design because…","They correspond to LR-parsable languages, parsed deterministically and efficiently",["They parse any ambiguous grammar","They remove the need for a stack","They need exponential time"],"LR parsers are essentially DPDAs; every DCFL has an LR(1) grammar."],
+["The full class of CFLs is exactly captured by…","NPDAs (not necessarily DPDAs)",["DPDAs only","Finite automata","Single-tape Turing machines"],"DCFL ⊊ CFL, so non-determinism is needed."],
+["In an NPDA for { w w^R }, the non-deterministic choice is to…","Guess the midpoint, switching from pushing to popping",["Guess the total input length","Choose the initial state randomly","Decide the stack alphabet first"],"The machine cannot tell deterministically where w ends and w^R begins."],
+["Simplest NPDA design for { a^i b^j c^k : i = j or j = k }:","Branch non-deterministically into two sub-PDAs (check i = j or j = k) and accept via union",["Check only i = j","Reject any string with c","One deterministic pass without branching"],"CFLs are closed under union, so each case gets its own simple PDA."],
+["CFG → PDA construction: after pushing the start symbol, the PDA…","Simulates leftmost derivations by replacing non-terminals on the stack with production RHSs, matching terminals with input",["Ignores the productions","Reads all input before using the stack","Converts productions to regexes"],"Non-terminal on top: replace by a RHS. Terminal on top: pop it if it matches the input symbol."],
+["The PDA ≡ CFG theorem is analogous to which earlier result?","Equivalence of finite automata and regular expressions",["Undecidability of halting","Church-Turing thesis","NP-completeness of SAT"],"Both say a machine model and a grammar/expression formalism define the same class."],
+["A direct consequence of PDA ≡ CFL:","Every regular language (being context-free) is accepted by some PDA",["No regular language is accepted by a PDA","PDAs need an infinite stack alphabet","CFGs cannot generate PDA languages"],"Regular ⊆ CFL, so a PDA (even one ignoring its stack) accepts every regular language."],
+["If L is context-free and R is regular, then L ∩ R is…","Always context-free",["Never context-free unless R = Σ*","Always regular","Undefined"],"Run the PDA for L in product with a DFA for R; the stack still handles the context-free part."],
+["Using closure properties to show { a^n b^n c^n } is not context-free:","Assume it is a CFL and intersect with a regular language, or use two CFLs, to produce a known non-CFL",["Show it is finite","Show it is regular","Show it has no strings"],"For instance { a^n b^n c^m } ∩ { a^m b^n c^n } gives it as an intersection of two CFLs, so CFLs would be closed under intersection, a contradiction."],
+["Compared with the regular pumping lemma, the CFL pumping lemma pumps…","Two substrings (v and x) simultaneously",["Zero substrings","Only the entire string","Only the last symbol"],"The parse tree has a repeated non-terminal, and pumping repeats both sides of its subtree."],
+["The CFL pumping lemma contradiction for { a^n b^n c^n } arises because…","vwx spans at most two blocks, so pumping cannot raise all three counts equally",["The language is regular","v and x must be terminals","The language contains only ε"],"Since |vwx| ≤ p, there is a symbol absent from vx. Pumping changes the others but not it."],
+["Which language can be shown context-free directly (no pumping lemma needed)?","{ a^n b^n : n ≥ 0 }",["{ a^n b^n c^n }","{ ww }","{ a^p : p prime }"],"S → aSb | ε. The other three are not context-free."],
+["A common error with the CFL pumping lemma:","Assuming one decomposition uvwxy instead of contradicting every valid decomposition",["Using it to prove a language is context-free","Applying it only to finite languages","Choosing a string longer than p"],"The adversary picks the decomposition; you must refute all with |vwx| ≤ p and |vx| ≥ 1."],
+["Is “L(G) = ∅?” decidable for a CFG G?","Decidable, using a generating-symbols computation",["Undecidable in general","Only for regular grammars","Always true"],"L(G) is empty iff the start symbol is non-generating."],
+["Top-down parsing builds the parse tree by…","Starting at the start symbol and expanding productions toward the leaves",["Starting at leaves and combining upward","Ignoring the productions","Reading input right to left"],"It predicts a derivation (leftmost) and matches it against the input."],
+["Recursive-descent parsing implements…","One procedure per non-terminal, each matching its productions",["One global stack with no procedures","Bottom-up shift-reduce actions","Only regex matching"],"The call stack plays the role of the parse stack."],
+["For an LL(1) parser, the grammar must generally NOT be…","Left-recursive or ambiguous",["Right-recursive","In CNF","Made of terminals only"],"Left recursion causes infinite recursion; ambiguity gives conflicting table entries."],
+["Bottom-up parsing constructs a derivation by…","Starting from input symbols and reducing handles back to the start symbol",["Predicting productions downward","Ignoring the stack","Working only for regular languages"],"It traces a rightmost derivation in reverse."],
+["LR parsers are more powerful than LL parsers because they handle…","A broader class of grammars, including many left-recursive ones",["Only regular grammars","Only ambiguous grammars","Fewer grammars than LL"],"Every LL(k) grammar is LR(k), but not conversely."],
+["Compilers prefer LR-family parsers mainly because…","They handle a larger class of practical grammars, including left-recursive expression grammars",["They need no stack","Top-down parsers handle ambiguity efficiently","Bottom-up parsers cannot detect syntax errors"],"No grammar rewriting is needed for left recursion, and parsing is linear-time."],
+["Which parsing approach corresponds closely to a DPDA?","LR (bottom-up) parsing, using a stack of grammar symbols",["Recursive descent has nothing to do with PDAs","Only NPDAs relate to parsing","Parsing is unrelated to automata"],"An LR parser is a DPDA driven by an action/goto table."],
+["A key trade-off between top-down and bottom-up parsing:","Top-down is easier to hand-write; bottom-up (tool-generated) handles more grammars but is harder by hand",["Bottom-up cannot be automated","Top-down is always exponential","There is no difference"],"Hand-written recursive descent is common; yacc/bison-style tools generate LALR parsers."],
+["A transformation often needed before top-down parsing but not for LR:","Left-recursion elimination",["Right-recursion elimination","Conversion to CNF","Conversion to GNF"],"LR parsers handle left recursion naturally and often prefer it."],
+["For a language with complex left-recursive expression grammars needing linear-time deterministic parsing, choose…","An LR parser from an LALR/LR(1) generator",["A naive backtracking top-down parser","Direct interpretation via the pumping lemma","A Moore machine"],"LR handles left recursion and runs in O(n); backtracking can be exponential."]]},
+extra:{u2:[
+["Which language is NOT regular?","{ a^n b^m : n ≠ m }",["{ w ∈ {a,b}* : #a(w) mod 3 = 1 }","{ a^n b^m : n + m is even }","{ a^n b^m : n, m ≥ 0 }"],"Its complement within a*b* is {a^n b^n}. Regular languages are closed under complement and intersection, so it would be regular, a contradiction. The others use only bounded counters."],
+["Is L = { w ∈ {a,b}* : #ab(w) = #ba(w) } regular?","Yes, it is exactly the strings that start and end with the same symbol (plus ε)",["No, pumping w = a^p b^p","No, it is a CFL needing a counter","Undecidable"],"Between consecutive blocks, ab and ba alternate. The counts differ by at most one and are equal iff first and last symbols match. A DFA remembers the first symbol."],
+["To show { a^(n²) : n ≥ 1 } is not regular, take w = a^(p²). After pumping once (i = 2), |xy²z| lies strictly between…","p² and (p+1)², so it is not a perfect square",["p² and p²+1","0 and p","(p−1)² and p²"],"|y| ≤ p gives p² < p²+|y| ≤ p²+p < p²+2p+1 = (p+1)²."],
+["To prove { a^p : p prime } is not regular with w = a^q (q ≥ p prime), which pumping count i gives the contradiction?","i = q + 1 (length q(1+|y|) is composite)",["i = 0 always","i = 2 always","i = q − 1"],"|xy^i z| = q + (i−1)|y|. With i = q+1 this is q + q|y| = q(1+|y|), composite since |y| ≥ 1 and q ≥ 2."],
+["To prove { 0^i 1^j : i > j } non-regular with w = 0^(p+1) 1^p, which pump works?","i = 0 (pump down)",["i = 2 (pump up)","i = 1","No i works"],"y consists of 0s. Pumping down gives ≤ p zeros against p ones, so i > j fails. Pumping up would keep i > j and give no contradiction."],
+["Smallest pumping length p for L = (ab)* is…","2",["1","3","4"],"p = 1 fails: for w = ab, y = a, pumping down gives b ∉ L. p = 2 works: for w = (ab)^k, choose y = ab."],
+["L = { a^i b^j c^k : i = 1 ⇒ j = k } is non-regular, yet every string can be pumped. This shows…","The pumping lemma is necessary but not sufficient for regularity",["The pumping lemma is false","L is regular","Regular languages are not closed under ∩"],"Intersecting with ab*c* gives {a b^n c^n}, which is non-regular. Yet the pumping conditions hold for every string. The lemma can only disprove regularity."],
+["In the pumping-lemma game for proving non-regularity, who picks what?","Adversary picks p and the split; you pick w and i",["You pick p and the split","Adversary picks w and i","You pick p and w only"],"The lemma is ∃p ∀w ∃split ∀i. Your task is to beat every adversary move."],
+["A slick proof that L = { w : #0(w) = #1(w) } is not regular:","L ∩ 0*1* = {0^n 1^n} would be regular by closure under ∩",["L is finite","L ∪ 0*1* is regular","Reverse of L is regular"],"Regular languages are closed under intersection, and {0^n 1^n} is non-regular."],
+["Convert S → AB, A → a, B → b to GNF.","S → aB, A → a, B → b",["S → AB, A → a, B → b","S → aA, A → a, B → b","S → Ba, A → a, B → b"],"Substitute A → a into S → AB so the leading symbol is a terminal."],
+["GNF of S → aSb | ab:","S → aSB | aB, B → b",["S → aSb | ab","S → aBS | aB, B → b","S → aS | a, B → b"],"The trailing terminal b is replaced by a non-terminal B → b so everything after the first terminal is non-terminals."],
+["Removing left recursion from A → Aa | Ab | c gives…","A → cB | c, B → aB | bB | a | b",["A → Ba | Bb | c","A → cA | c","A → aB | bB | c"],"β = c comes first, then the repeated tails (a or b) come from B."],
+["Derivation length of a string of n ≥ 1 symbols in a GNF grammar:","Exactly n steps",["2n − 1 steps","n − 1 steps","Unbounded"],"Each step produces exactly one terminal, as the leftmost-derivation prefix grows by one."],
+["A PDA built from a GNF grammar (accepting by empty stack) needs how many states?","One",["Two","|V|","|P|"],"The stack holds the sentential form; each production A → aα becomes δ(q, a, A) ∋ (q, α)."],
+["Can a GNF grammar be left-recursive?","No, every production starts with a terminal",["Yes, if α starts with A","Yes, only for the start symbol","Only if ambiguous"],"Left recursion needs a production whose RHS starts with a non-terminal."]],
+u3:[
+["{ a^i b^j c^k : i = j or j = k } is…","A CFL that is not a DCFL",["A DCFL","Not context-free","Regular"],"The machine must guess which equality to verify, and a deterministic PDA cannot decide in time. Non-determinism is inherent."],
+["Which closure property holds for DCFLs but NOT for CFLs?","Complementation",["Union","Intersection with regular","Kleene star"],"Swap accepting/non-accepting states of a normalised DPDA. For CFLs, complement closure would imply intersection closure by De Morgan."],
+["The complement of { ww : w ∈ {a,b}* } is…","Context-free",["Regular","Not context-free","Undecidable"],"A non-ww string either has odd length or has a position i with mismatch at distance n/2, which an NPDA can guess. {ww} itself is not a CFL."],
+["The complement of { a^n b^n c^n : n ≥ 0 } is…","Context-free",["Not context-free","Regular","Finite"],"A string is outside iff it is not of form a*b*c*, or the counts of a, b, c are unequal. This is a union of CFLs."],
+["To show { ww } is not context-free with the pumping lemma, a good string is…","0^p 1^p 0^p 1^p",["0^p 0^p","0^p 1^p","(01)^p"],"Any window |vwx| ≤ p lies in at most two adjacent blocks. Pumping misaligns the halves. The other strings are pumpable."],
+["{ a^(n²) : n ≥ 0 } is not context-free because…","Every unary CFL is regular (Parikh), and squares are not regular",["It has no PDA","The pumping lemma fails for ε","It needs two stacks"],"Squares have growing gaps, so the language is not ultimately periodic, hence not regular."],
+["{ a^n b^n c^m } ∩ { a^m b^n c^n } equals…","{ a^n b^n c^n : n ≥ 0 }, not a CFL",["A CFL","Empty","Regular"],"Both are CFLs. Their intersection forces all three counts to be equal."],
+["In CYK on a string of length n = 5, the triangular table has how many cells?","15",["10","25","20"],"n(n+1)/2 = 15 (substrings of length 1 to 5)."],
+["In CYK, how many split points are checked for a substring of length 6?","5",["6","3","2^6"],"A split divides the substring into two non-empty parts, so there are 6 − 1 = 5 splits."],
+["A CNF grammar derives a string of length n ≥ 1 in exactly…","2n − 1 steps",["n steps","n − 1 steps","n² steps"],"n − 1 binary rules produce n non-terminals; n terminal rules convert them. (n−1) + n = 2n − 1."],
+["In the PDA → CFG construction, a PDA with 3 states and 2 stack symbols gives at most how many variables?","19",["12","18","7"],"|Q|²|Γ| = 3·3·2 = 18 triples [p, X, q], plus the start symbol S."],
+["Which question about a CFG G is decidable?","Whether L(G) is finite",["Whether L(G) = Σ*","Whether L(G) is regular","Whether L(G) ∩ L(G′) = ∅"],"Finiteness: remove useless symbols and check the dependency graph for a cycle. The others are undecidable."],
+["Whether a given CFG generates a regular language is…","Undecidable",["Decidable in O(n³)","Decidable via pumping","Trivially true"],"A reduction from PCP shows that regularity of CFLs cannot be decided."],
+["Which languages are accepted by DPDAs with empty-stack acceptance?","Only prefix-free DCFLs, so { a, aa } is impossible",["All DCFLs","All CFLs","All regular languages"],"If u ∈ L and its extension uv ∈ L, the stack would already be empty after u, so the machine would halt."],
+["Which language is a DCFL?","{ w c w^R : w ∈ {a,b}* }",["{ w w^R }","{ ww }","{ a^i b^j c^k : i = j or j = k }"],"The marker c tells the DPDA exactly when to start popping, so no guess is needed."],
+["For L = { a^i b^j : i ≤ j ≤ 2i }, a correct NPDA strategy is…","On each a push 1 or 2 symbols (guess), then pop one per b",["Push one per a, pop two per b","Push per a and per b","Guess midpoint then match"],"Pushing i to 2i symbols guarantees the number of b’s lies in [i, 2i]."],
+["Which set is closed under all of: union, reversal, homomorphism, inverse homomorphism?","CFLs",["DCFLs","CFLs but not reversal","None of them"],"All four hold for CFLs. DCFLs are not closed under union or reversal."],
+["A PDA with two stacks is as powerful as…","A Turing machine",["A DPDA","An NPDA","A finite automaton"],"Two stacks simulate the tape: one holds the left of the head and one the right."],
+["Grammar S → aS | a is not LL(1) because…","FIRST(aS) ∩ FIRST(a) = {a}; left factoring fixes it",["It is left-recursive","It is ambiguous","It has no terminals"],"Rewrite as S → aS′, S′ → S | ε."],
+["For E → TE′, E′ → +TE′ | ε, T → id, FOLLOW(T) = …","{ +, $ }",["{ $ }","{ + }","{ id, + }"],"From E → TE′, FOLLOW(T) ⊇ FIRST(E′)\\{ε} = {+}. Since E′ is nullable, FOLLOW(T) ⊇ FOLLOW(E) = {$}."],
+["For A → α | β where α ⇒* ε, LL(1) additionally requires…","FIRST(β) ∩ FOLLOW(A) = ∅",["FIRST(α) = FIRST(β)","β = ε","A is the start symbol"],"If α can vanish, the parser may choose A → α upon seeing a FOLLOW symbol, so β must not start with one."],
+["Which containment of grammar classes is correct?","LR(0) ⊂ SLR(1) ⊂ LALR(1) ⊂ LR(1)",["LR(1) ⊂ LALR(1) ⊂ SLR(1)","LL(1) ⊃ LR(1)","SLR(1) ⊂ LR(0)"],"Each class adds more lookahead precision. LL(1) grammars are also LR(1)."],
+["The class of languages having LR(1) grammars equals…","The DCFLs",["The CFLs","The regular languages","The LL(1) languages"],"Knuth showed every DCFL has an LR(1) grammar. LL(k) languages form a proper subset."],
+["For E → E+E | id, after the stack holds E+E and the next input is +, the parser has a…","Shift/reduce conflict",["Reduce/reduce conflict","Accept action","No conflict"],"Reducing gives left associativity, shifting gives right. An ambiguous grammar produces the conflict."]]},
+univ:{u2:[
+["(Jun 2023, 18AIC303T Q9) Which one is not a regular language?","L = { a^i b^j | i = 2j }",["L = { a^n b^n | n ≤ 1 }","L = { a^n b^n c^m | n, m ≤ 1 }","L = { p^n | p is an even number }"],"i = 2j needs unbounded counting. Take w = a^(2p) b^p: y falls inside the a’s, so pumping breaks i = 2j. As printed, A and B have n ≤ 1, so they are finite and therefore regular; C is a single repeated symbol pattern, also regular. (A and B probably had a typo in the paper.)"],
+["(Nov 2023, 18AIC303T Q5) In the pumping lemma, w = xyz ∈ L. Which part cannot be empty?","y",["x","z","x and z"],"Condition 2 of the lemma is |y| ≥ 1. x and z may be empty, but y must be non-empty, otherwise pumping does nothing."],
+["(Nov 2023, 18CSC261T Q8) The last condition of the pumping lemma says xy^i z ∈ L for all…","i ≥ 0",["i > 0","i < 0","i ≤ 0"],"i = 0 deletes y (pump down), i = 1 gives w, and i ≥ 2 pumps up. Pumping down is often what gives the contradiction."],
+["(Jun 2023, 18CSC261T Q4) While applying the pumping lemma, a string w ∈ L is fragmented into how many parts?","3",["2","5","6"],"w = xyz, where |xy| ≤ p, |y| ≥ 1 and xy^i z ∈ L."],
+["(May 2022, 18CSC301T Q2) The logic of the pumping lemma is derived from…","Pigeonhole principle",["Recursion","Iteration","Divide and conquer"],"A string of length ≥ p (number of DFA states) visits p+1 states, so some state repeats. The loop between the repeats is y, which can be pumped."],
+["(Jun 2023 Open Book, 18CSC301T Q4.iii) L = { 1^n | n is a square } is not regular.","True",["False","Either true or false","Neither true nor false"],"Take w = 1^(p²). Then p² < |xy²z| ≤ p²+p < (p+1)², so the length is not a perfect square, a contradiction."]],
+u3:[
+["(Jun 2023 18AIC303T Q11; Nov 2023 18AIC303T Q12) Equivalent CFG production for δ(q1, a, A) = (q2, ε):","[q1, A, q2] → a",["[q1, A, q2] → a[q1, A, q2]","[A, q2] → ε","[q2, A, q1] → a"],"A move that pops A and reads a (pushing nothing) gives [q1, A, q2] → a. The variable [p, X, q] means popping X takes p to q while consuming input. (In the Nov paper the ε option is a distractor: the input a must appear.)"],
+["(Jun 2023 18AIC303T Q12; Nov 2023 18AIC303T Q11) A pushdown machine represents…","Type 2 grammar",["Type 0 grammar","Type 1 grammar","Type 3 grammar"],"PDA ≡ CFL, and context-free grammars are Type 2 in the Chomsky hierarchy."],
+["(Jun 2023 18AIC303T Q13) For G = ({S}, {a}, {S → SS}, S), the language generated is…","L(G) = ∅",["L(G) = a^n","L(G) = a*","L(G) = a^m b a^r"],"There is no production that produces a terminal or ε, so S never derives a terminal string."],
+["(Jun 2023 18AIC303T Q14) Which string is NOT generated by S → SaSbS | ε?","baaa",["aabb","abab","abaabb"],"Every non-empty string begins with a (the leading S either vanishes or itself starts with a), and #a = #b. baaa starts with b. Also: aabb = a(ab)b, abab = (ab)(ab), abaabb = (ab)(aabb)."],
+["(Nov 2023 18AIC303T Q9) In a PDA, the symbol ⊢ denotes…","A move (one step between instantaneous descriptions)",["The stack top symbol","An or/not symbol","The transition function"],"(q, aw, Xγ) ⊢ (p, w, αγ) means one move; ⊢* means zero or more moves."],
+["(Nov 2023 18AIC303T Q10) A PDA differs from a finite automaton by its…","Memory (stack)",["Number of states","Difficulty in design","ε-moves"],"The stack gives unbounded memory. FAs can have ε-moves too, so that is not the difference."],
+["(Nov 2023 18CSC261T Q9; Nov 2023 18CSE004T Q9; Open Book 18CSC301T Q4.b.i) The memory/data structure used in a PDA is…","Stack",["Queue","Circular queue","Tape"],"LIFO access only: only the top is visible, and no random access is possible."],
+["(Nov 2023 18CSC261T Q10; May 2022 18CSC301T Q13) A PDA’s transition additionally depends on the…","Stack (top symbol)",["Input tape","Terminals","Production"],"δ(state, input or ε, stack top). That stack-top dependence is what a finite automaton lacks."],
+["(Nov 2023 18CSC261T Q11) A PDA is ____ if it has at most one transition in every configuration.","Deterministic",["Finite","Non-regular","Non-deterministic"],"Determinism means a unique move (including no ε/input conflict) for each state, input and stack top."],
+["(Nov 2023 18CSC261T Q12; Jun 2023 18CSC261T Q11) A CFG G has an equivalent grammar G′ with no ε-productions if…","ε ∉ L(G)",["ε ∈ L(G)","w ∉ L(G)","w ∈ L(G)"],"Find nullable variables, then add variants with them omitted. If ε ∈ L(G) one can only get L(G) \ {ε}. S → ε must remain."],
+["(Jun 2023 18CSC261T Q10) Given S → A, A → aA | ε, B → bA, which production is useless?","B → bA",["S → A","A → aA","A → ε"],"B is not reachable from S. B generates strings (bA is fine), but being unreachable makes it useless."],
+["(Jun 2023 18CSC261T Q12) Which statement is FALSE?","Context-sensitive languages are a subset of context-free languages",["CFLs are a subset of CSLs","Regular languages are a subset of CSLs","Recursively enumerable languages are a superset of regular languages"],"Chomsky hierarchy: Regular ⊂ CFL ⊂ CSL ⊂ Recursive ⊂ RE. The false statement reverses CFL ⊂ CSL."],
+["(May 2022 18CSC301T Q9) For S → 0S1 | ε, which statement is wrong? ⚠ exam key: D","The language is regular",["The language is non-regular","The language is { 0^n 1^n : n ≥ 0 }","The language is { 0^n 1^n : n ≥ 1 }"],"L = {0^n 1^n : n ≥ 0} is context-free but not regular. Note: strictly, the n ≥ 1 option is also wrong because ε ∈ L, but the exam key is “regular”."],
+["(May 2022 18CSC301T Q10) Minimum productions for palindromes over {a, b}:","5",["7","9","11"],"S → aSa | bSb | a | b | ε: that is 5 productions."],
+["(May 2022 18CSC301T Q11) If R and T are in L, R is a proper prefix of T, then…","No DPDA can accept L by empty stack",["A DPDA can accept L by empty stack","L is regular","L is a DPDA by definition"],"After reading R the stack would already be empty, so the DPDA could not continue to T. Empty-stack DPDAs accept only prefix-free languages."],
+["(May 2022 18CSC301T Q12) A CFG is Type 2 because of the ____ hierarchy.","Chomsky",["Greibach","Backus","Adam"],"Chomsky’s hierarchy: Type 0 (unrestricted), 1 (context-sensitive), 2 (context-free), 3 (regular). Greibach gives a normal form; Backus gives BNF."],
+["(May 2022 18CSC301T Q14) If the PDA does not stop in an accepting state and the stack is not empty, the string is…","Rejected",["Accepted","Goes into a loop forever","Complemented"],"Neither acceptance criterion (final state or empty stack) is met."],
+["(May 2022 18CSC301T Q15) An NPDA cannot recognize all languages recognized by a…","Turing machine",["DFA","NDFA","DPDA"],"TMs are more powerful (e.g. {a^n b^n c^n}). Regular and DCFL languages are all accepted by an NPDA."],
+["(Nov 2023 18CSE004T Q10) A pushdown automaton accepts…","Context-free languages (grammars)",["Context-sensitive","Regular only","Unrestricted"],"PDA ≡ CFG; regular languages are included as a subset."],
+["(Nov 2023 18CSE004T Q11) By default, a pushdown automaton is…","Non-deterministic",["Deterministic","Centralized","Decentralized"],"The PDA model is non-deterministic (NPDA); the DPDA is a restricted version that accepts fewer languages."],
+["(Nov 2023 18CSE004T Q12) A PDA cannot process the string in…","Random order",["Last-in first-out order","First-in last-out order","Sequence order"],"The input is read left to right, and the stack allows only LIFO access."],
+["(Open Book 18CSC301T Q4.c) How many components (tuple) are there in the formal definition of a PDA?","7",["6","8","4"],"PDA = (Q, Σ, Γ, δ, q0, Z0, F)."]]}};
+const U={u2:"Unit II",u3:"Unit III"},S={sample:"Sample (from PDF)",extra:"Additional (harder)",univ:"University Exam Qs"};
+let sec="sample",unit="u2",ans=0,right=0,tot=0;
+const $=i=>document.getElementById(i),sh=a=>{a=a.slice();for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]]}return a};
+function tabs(){$("st").innerHTML=Object.keys(S).map(k=>`<button class="tab ${k==sec?"on":""}" data-s="${k}">${S[k]} (${D[k].u2.length+D[k].u3.length})</button>`).join("");
+$("ut").innerHTML=Object.keys(U).map(k=>`<button class="tab ${k==unit?"on":""}" data-u="${k}">${U[k]} (${D[sec][k].length})</button>`).join("")}
+function sc(){$("sc").textContent=`Answered ${ans}/${tot} · Correct ${right}`}
+function render(){tabs();const L=D[sec][unit];ans=right=0;tot=L.length;sc();const box=$("qs");box.innerHTML="";
+sh(L).forEach((q,i)=>{const c=document.createElement("div");c.className="q";
+const opts=sh([{t:q[1],c:1},...q[2].map(t=>({t,c:0}))]);
+c.innerHTML=`<div class="n">Q${i+1}${sec=="extra"?' · <span class="hd">Hard</span>':""}</div><h3>${q[0]}</h3>`;
+const e=document.createElement("div");e.className="e";e.innerHTML="<b>Explanation:</b> "+q[3];
+const bs=opts.map((o,k)=>{const b=document.createElement("button");b.className="o";b.textContent="ABCD"[k]+") "+o.t;
+b.onclick=()=>{bs.forEach((x,j)=>{x.disabled=true;if(opts[j].c)x.classList.add("ok")});if(!o.c)b.classList.add("no");else right++;ans++;e.classList.add("s");sc()};c.appendChild(b);return b});
+c.appendChild(e);box.appendChild(c)})}
+document.addEventListener("click",ev=>{const t=ev.target;if(t.dataset.s){sec=t.dataset.s;render()}else if(t.dataset.u){unit=t.dataset.u;render()}});
+$("rs").onclick=render;render();
+</script></body></html>
