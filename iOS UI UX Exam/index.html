@@ -1,0 +1,461 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>UI/UX Foundations – MCQ Master Guide</title>
+<style>
+:root{--bg:#f5f6fb;--sf:#fff;--sf2:#eceefa;--tx:#1b1d33;--mu:#666a8a;--ln:#dfe2f3;--pr:#4f46e5;--c1:#e0446b;--c2:#d98200;--c3:#13966b;--c4:#2272e6;--ok:#13805c;--okb:#ddf5ec;--no:#c8334d;--nob:#fde8ec;--on:#fff;--hero:linear-gradient(135deg,#4f46e5,#7c3aed);box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#0e0f1a;--sf:#171829;--sf2:#212340;--tx:#eceefc;--mu:#9a9fc4;--ln:#2c2f4f;--pr:#a5a0ff;--c1:#ff7b9c;--c2:#ffb547;--c3:#4fe0ae;--c4:#6cb2ff;--ok:#5ee0b0;--okb:#11382c;--no:#ff8aa0;--nob:#3f1a26;--hero:linear-gradient(135deg,#312e81,#4c1d95)}}
+:root[data-theme="dark"]{--bg:#0e0f1a;--sf:#171829;--sf2:#212340;--tx:#eceefc;--mu:#9a9fc4;--ln:#2c2f4f;--pr:#a5a0ff;--c1:#ff7b9c;--c2:#ffb547;--c3:#4fe0ae;--c4:#6cb2ff;--ok:#5ee0b0;--okb:#11382c;--no:#ff8aa0;--nob:#3f1a26;--hero:linear-gradient(135deg,#312e81,#4c1d95)}
+html{scroll-padding-top:120px}
+body{margin:0;background:var(--bg);color:var(--tx);font:16px/1.6 system-ui,-apple-system,'Segoe UI',Roboto,sans-serif}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);background:var(--bg);z-index:30}
+main{max-width:880px;margin:0 auto;padding:14px 16px 40px}
+h1,h2,h3{font-family:Georgia,'Times New Roman',serif;line-height:1.25}
+.hero{background:var(--hero);color:#fff;border-radius:18px;padding:20px 22px;margin:4px 0 10px}
+.hero h1{margin:6px 0 4px;font-size:1.7rem;color:#fff}.hero p{margin:0;opacity:.85;font-size:.95rem}
+.dots{display:flex;gap:6px}.dots i{width:10px;height:10px;border-radius:50%}.dots i:nth-child(1){background:#ff7b9c}.dots i:nth-child(2){background:#ffb547}.dots i:nth-child(3){background:#4fe0ae}.dots i:nth-child(4){background:#6cb2ff}
+.tabs{position:sticky;top:env(safe-area-inset-top,0px);z-index:31;background:var(--bg);padding:8px 0;display:flex;gap:6px}
+.tab{flex:1;border:1px solid var(--ln);background:var(--sf);color:var(--tx);padding:10px 8px;border-radius:12px;font:600 .95rem inherit;font-family:inherit;cursor:pointer}
+.tab.on{background:var(--pr);color:var(--on);border-color:var(--pr)}
+@media (prefers-color-scheme:dark){.tab.on,.pill.on{color:#12112b}}
+.pane{display:none}.pane.on{display:block}
+.jump{display:flex;gap:8px;overflow-x:auto;padding:4px 0 8px;position:sticky;top:calc(env(safe-area-inset-top,0px) + 56px);background:var(--bg);z-index:20}
+.jump button,.pill,.ghost{border:1px solid var(--ln);background:var(--sf);color:var(--tx);padding:8px 14px;border-radius:99px;font:inherit;font-size:.93rem;cursor:pointer;white-space:nowrap}
+.jump button.j1{border-color:var(--c1)}.jump button.j2{border-color:var(--c2)}.jump button.j3{border-color:var(--c3)}.jump button.j4{border-color:var(--c4)}
+h2.ch{margin:30px 0 8px;padding:10px 14px;border-radius:12px;background:var(--sf);border-left:8px solid var(--pr);font-size:1.3rem}
+h2.c1{border-color:var(--c1);color:var(--c1)}h2.c2{border-color:var(--c2);color:var(--c2)}h2.c3{border-color:var(--c3);color:var(--c3)}h2.c4{border-color:var(--c4);color:var(--c4)}
+.card{background:var(--sf);border:1px solid var(--ln);border-radius:14px;padding:14px 18px;margin:10px 0}
+.card h3{margin:0 0 6px;font-size:1.08rem;color:var(--pr)}
+.k1{border-top:4px solid var(--c1)}.k1 h3{color:var(--c1)}.k2{border-top:4px solid var(--c2)}.k2 h3{color:var(--c2)}.k3{border-top:4px solid var(--c3)}.k3 h3{color:var(--c3)}.k4{border-top:4px solid var(--c4)}.k4 h3{color:var(--c4)}
+ul{margin:4px 0;padding-left:20px}li{margin:4px 0}
+.tip{border-left:4px solid var(--c2);background:var(--sf2);padding:10px 14px;margin:14px 0;border-radius:0 10px 10px 0}.tip b{color:var(--c2)}
+.scroll{overflow-x:auto}table{border-collapse:collapse;width:100%}td,th{border-bottom:1px solid var(--ln);padding:7px 9px;text-align:left;font-size:.92rem;vertical-align:top}th{background:var(--sf2);color:var(--pr)}
+.stat{display:flex;gap:12px;align-items:center;justify-content:space-between;flex-wrap:wrap;margin:6px 0 10px}
+.big{font-weight:700;font-size:1.1rem}.big span{color:var(--ok)}
+.bar{height:8px;background:var(--sf2);border-radius:9px;overflow:hidden;margin-top:6px;min-width:200px}.bar b{display:block;height:100%;background:linear-gradient(90deg,var(--c2),var(--c4));width:0;transition:width .3s}
+.pills{display:flex;gap:8px;flex-wrap:wrap;margin:8px 0}
+.pill.on{background:var(--pr);border-color:var(--pr);color:var(--on)}
+.ghost:hover,.pill:hover{border-color:var(--pr)}
+.stat2{display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap;margin:14px 0 8px;color:var(--mu)}.gr{display:flex;gap:8px;flex-wrap:wrap}
+.qc{background:var(--sf);border:1px solid var(--ln);border-radius:16px;padding:16px 18px;margin:12px 0}
+.qh{display:flex;gap:8px;align-items:center;font-size:.85rem;margin-bottom:6px}.qn{color:var(--mu);font-weight:700}
+.tg{font-weight:700;padding:1px 9px;border-radius:99px;background:var(--sf2)}.tg-Hard{color:var(--c2)}.tg-Scenario{color:var(--c4)}.tg-Core{color:var(--c1)}
+.cl{margin-left:auto;font-weight:600}.cl.c1{color:var(--c1)}.cl.c2{color:var(--c2)}.cl.c3{color:var(--c3)}.cl.c4{color:var(--c4)}
+.qc p{margin:0 0 10px;font-weight:600;font-size:1.02rem}
+.op{display:flex;gap:10px;align-items:flex-start;width:100%;text-align:left;margin:6px 0;padding:10px 12px;border:1px solid var(--ln);border-radius:12px;background:var(--bg);color:var(--tx);font:inherit;cursor:pointer}
+.op:hover{border-color:var(--pr)}.lt{flex:none;width:24px;height:24px;border-radius:50%;background:var(--sf2);display:grid;place-items:center;font-size:.8rem;font-weight:700}
+.op.ok{background:var(--okb);border-color:var(--ok)}.op.no{background:var(--nob);border-color:var(--no)}
+.ex{display:none;margin-top:8px;padding:9px 12px;background:var(--sf2);border-radius:10px;font-size:.92rem;color:var(--mu)}.qc.done .ex{display:block}.qc.done .op{cursor:default}
+.res{background:var(--okb);border:1px solid var(--ok);border-radius:12px;padding:10px 14px;margin:8px 0;font-weight:600}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:12px}.grid .card{margin:0}
+.grid .card:nth-child(4n+1){border-top:4px solid var(--c1)}.grid .card:nth-child(4n+2){border-top:4px solid var(--c2)}.grid .card:nth-child(4n+3){border-top:4px solid var(--c3)}.grid .card:nth-child(4n){border-top:4px solid var(--c4)}
+.grid h3{color:var(--tx)}
+@media print{.tabs,.jump,.stat,.pills,.stat2{display:none}.pane{display:block!important}.ex{display:block!important}}
+</style></head><body><main>
+<header class="hero"><div class="dots"><i></i><i></i><i></i><i></i></div><h1>📚 UI/UX Foundations – MCQ Master Guide</h1><p>Classes 1–4 · Theory · 200 practice MCQs · Cheatsheet · built for a 20-question exam</p></header>
+<nav class="tabs"><button class="tab on" data-p="theory">📖 Theory</button><button class="tab" data-p="quiz">🧠 Practice</button><button class="tab" data-p="cheat">⚡ Cheatsheet</button></nav>
+<section id="theory" class="pane on">
+<div class="jump"><button class="j1" data-t="t1">Class 1 · Principles</button><button class="j2" data-t="t2">Class 2 · Evaluation</button><button class="j3" data-t="t3">Class 3 · Fundamentals</button><button class="j4" data-t="t4">Class 4 · Interaction</button></div>
+<h2 class="ch c1" id="t1">Class 1 · Principles of UX/UI</h2>
+<div class="card"><h3>UI vs UX</h3><ul>
+<li><b>UI</b> = what the user sees and interacts with (layout, typography, buttons, colours, icons, controls). Focus: presentation and interaction surface.</li>
+<li><b>UX</b> = the overall experience of achieving a goal (needs, tasks, flow, usability, accessibility, satisfaction). Focus: usefulness, ease, outcomes.</li>
+<li>Car analogy: UI = steering wheel/dashboard; UX = the whole drive. Good UI helps UX, but pretty screens alone don’t guarantee good UX.</li>
+<li><b>UI is 90% perception; UX is 90% behaviour → design is 90% human psychology.</b></li>
+<li>Bad design costs: wasted effort, errors and rework, lost trust.</li></ul></div>
+<div class="card"><h3>7 criteria of a successful interface</h3>
+<p>Useful · Clear · Consistent · Efficient · Feedback-rich · Accessible · Pleasant</p></div>
+<div class="card"><h3>10 Laws of psychology (most-tested)</h3><div class="scroll"><table>
+<tr><th>Law</th><th>Idea</th><th>Design response</th></tr>
+<tr><td>Hick’s</td><td>More choices → slower decisions</td><td>Trim options, progressive disclosure, sensible default</td></tr>
+<tr><td>Fitts’s</td><td>Size + distance decide speed to hit a target</td><td>Large, thumb-reachable primary CTA; related actions close</td></tr>
+<tr><td>Miller’s</td><td>Working memory ≈ 7 ± 2 items</td><td>Chunk lists/forms/numbers (555–123–4567)</td></tr>
+<tr><td>Jakob’s</td><td>Users expect your product to work like others</td><td>Follow conventions; novelty only for differentiator</td></tr>
+<tr><td>Zeigarnik</td><td>Unfinished tasks stick in memory</td><td>Progress bars, “continue where you left off”</td></tr>
+<tr><td>Von Restorff</td><td>What stands out is remembered</td><td>One accent colour for the one key action; isolation</td></tr>
+<tr><td>Social Proof</td><td>Under uncertainty we copy others</td><td>Ratings, review counts, specific testimonials</td></tr>
+<tr><td>Peak-End Rule</td><td>We remember the peak and the ending</td><td>One delight moment; polish checkout/offboarding</td></tr>
+<tr><td>Aesthetic-Usability</td><td>Beautiful reads as usable</td><td>Invest in polish — but never replace testing</td></tr>
+<tr><td>Loss Aversion</td><td>Losses hurt ~2× more than equal gains</td><td>Honest scarcity, streaks at risk; use sparingly</td></tr></table></div></div>
+<div class="card"><h3>4 working principles</h3><ul>
+<li><b>Clarity</b> – make the next action obvious; one primary action per screen; label by what it does.</li>
+<li><b>Consistency</b> – reduce the need to relearn; similar things look, are labelled and behave similarly.</li>
+<li><b>Feedback</b> – users should know what is happening; “Silence is the most common usability failure.” States: Selected, Saved, Loading, Completed, Unavailable.</li>
+<li><b>User Control</b> – prevent errors, then support recovery. Prevent: constrain invalid actions, defaults, clarify destructive actions, confirm only when necessary. Recover: Undo, preserve input, explain, show next action.</li></ul></div>
+<div class="card"><h3>Users, tasks, usability</h3><ul>
+<li>Design starts with the user (who, what they know, device/context, constraints) and the task (goal, info, steps, where error occurs).</li>
+<li><b>Usability dimensions:</b> Learnability, Efficiency, Memorability, Error tolerance, Satisfaction.</li>
+<li><b>Vocabulary:</b> Goal (what they want) · Task (work required) · Journey (sequence of interactions/decisions) · Pain point (effort/confusion/failure rises) · Opportunity (change that reduces friction).</li>
+<li><b>Evaluation framework (6):</b> Goal, Path, Clarity, Consistency, Feedback, Recovery.</li>
+<li>Worked example: Open app → Choose service → Select date → Select time → Confirm. Pain points: unclear availability, hidden fees, lost selections, no confirmation.</li></ul></div>
+
+<h2 class="ch c2" id="t2">Class 2 · Evaluating Interactive Design</h2>
+<div class="card"><h3>Evaluator’s mindset</h3><ul>
+<li>Don’t ask “Do I like it?” Ask: can the user accomplish the goal, understand what to do, do it efficiently, recover from mistakes, and know what happened? Evaluate from the <b>user’s</b> point of view.</li>
+<li><b>5 usability dimensions:</b> Effectiveness (complete the task?) · Efficiency (effort?) · Learnability (new user can understand?) · Error Tolerance (prevent/recover?) · Satisfaction (understandable, manageable?).</li>
+<li><b>Evaluation loop:</b> Goal → Task → Observe → Identify → Improve → Test. (Journey: Principles → Observe → Identify → Improve → Test.)</li></ul></div>
+<div class="card"><h3>5 UX review roles</h3><ul>
+<li><b>User</b> – who am I, goal, expectations, confidence/confusion.</li>
+<li><b>Task Analyst</b> – steps, order, unnecessary steps, efficiency.</li>
+<li><b>UX Observer</b> – friction: hesitation, confusion, uncertainty, errors, unnecessary thinking, missing info.</li>
+<li><b>UI Analyst</b> – layout, hierarchy, buttons, labels, navigation, typography, spacing, consistency.</li>
+<li><b>UX Researcher</b> – impact: how serious, how often, affects main task?, recoverable?, most valuable improvement.</li>
+<li>Team deliverable: 5 role findings + 3 things that work, 3 important problems, 3 improvements. Don’t repeat the same observation across roles.</li></ul></div>
+<div class="card"><h3>Heuristic evaluation</h3><ul>
+<li>Systematic inspection using established usability principles. Instead of “something feels wrong” ask “which principle is violated?” Structured, early, finds common problems fast — but <b>doesn’t replace testing with real users</b>.</li>
+<li><b>10 heuristics (questions):</b> system status visible · familiar language · control &amp; undo · consistency · error prevention · recognition over recall · efficient use · remove unnecessary info · understand &amp; recover from errors · useful help.</li>
+<li>Visibility: Save → “Saved”; Upload → “65% complete”; Payment → “successful”; Delete → “moved to Trash”.</li>
+<li>Recognition beats recall: show “Selected: Chennai → Singapore” instead of making users remember.</li>
+<li>Error flow: <b>Prevent → Detect → Explain → Recover</b>. Prevent = defaults, validation, constrained choices, clear destructive actions. Recover = undo, preserve info, explain, next action.</li></ul></div>
+<div class="card"><h3>Describing problems, tasks, severity</h3><ul>
+<li>Weak: “Looks bad.” Better: names the issue. Strong: what happened → why it matters → what could improve.</li>
+<li><b>Observation → Problem → Impact → Improvement</b> (taps twice → no visible response → thinks first tap failed → give immediate feedback).</li>
+<li>Task-based evaluation: pick a real task (e.g., book a doctor’s appointment); examine actions, hesitation, mistakes, backtracking, goal reached.</li>
+<li><b>Watch behaviour:</b> Hesitation, Error, Backtracking, Question, Workaround (invents another way), Abandonment (stops before completing).</li>
+<li><b>Severity factors:</b> Frequency, Impact, Reach, Recovery. High impact + high frequency = high priority. Blocked checkout &gt; small visual issue.</li>
+<li><b>Comparing alternatives</b> (same task, not taste): Clarity, Efficiency, Consistency, Feedback, Error prevention, Recovery.</li>
+<li><b>Critique:</b> critique the design, not the designer. Good feedback = Specific, Evidence-based, Actionable, Respectful.</li>
+<li>Presentation: 5 speakers × 30 s = 2 min 30 s per team; answer What? Why? So what? What should change?</li></ul></div>
+
+<h2 class="ch c3" id="t3">Class 3 · Design Fundamentals (Building a Design)</h2>
+<div class="card"><h3>Five building blocks</h3><div class="scroll"><table>
+<tr><th>Block</th><th>Role</th><th>Key points</th></tr>
+<tr><td>Layout</td><td>Where things go / organises</td><td>Position, alignment, grouping, balance, flow. Grid = hidden skeleton (columns, margins, gutters, consistent widths). Alignment creates invisible relationships.</td></tr>
+<tr><td>Typography</td><td>How words speak / communicates</td><td>Not decoration – information architecture: communicate, organise, emphasise, set tone, support scanning.</td></tr>
+<tr><td>Colour</td><td>What attracts and signals</td><td>Attract attention, group, show state, emphasise, set mood.</td></tr>
+<tr><td>Hierarchy</td><td>What matters first / prioritises</td><td>Size, weight, colour, order, spacing; one clear primary action.</td></tr>
+<tr><td>Spacing</td><td>What creates rhythm / breathes</td><td>Separates, groups, rhythm, scanning, lowers cognitive load.</td></tr></table></div>
+<p>Together they create <b>Visual Clarity</b>. Class 3 recaps: UI = Perception, UX = Psychology; four principles (Clarity, Consistency, Feedback, User Control).</p></div>
+<div class="card"><h3>Details to memorise</h3><ul>
+<li><b>Visual flow (5):</b> Scan → Orient → Read → Decide → Act.</li>
+<li><b>Layout structure (mobile):</b> top banner, content cards, quick action, bottom navigation, consistent spacing. Navigation always accessible and consistent across screens.</li>
+<li><b>Type scale:</b> Display 64px (biggest statement) · Heading 32px (major section) · Body 16px (main info) · Caption 14px (supporting). H1 48px, button 16px.</li>
+<li><b>Legibility</b> (can I recognise characters?): typeface, letterforms, size, weight. <b>Readability</b> (can I comfortably read content?): line length, line height, spacing, contrast.</li>
+<li>Choose type with purpose: product personality, language support, small-size behaviour, enough weights, read quickly. Inter = modern &amp; clean; Roboto = friendly &amp; neutral; Merriweather = traditional &amp; elegant.</li>
+<li><b>Colour system:</b> Primary #2563EB, Secondary #EC4899, Accent #F59E0B; Neutrals (text #0F172A, secondary #64748B, border #E2E8F0, bg #F8FAFC); <b>Semantic:</b> Success #10B981, Error #EF4444, Warning #F59E0B, Info #3B82F6. Keep it simple, consistent, accessible, good contrast.</li>
+<li><b>Information hierarchy (top→bottom):</b> top level (greeting, notifications, profile) → hero banner → core features → secondary content → bottom navigation.</li>
+<li>Hierarchy tools: larger for key elements, bolder for primary actions, clear order, subtle for secondary details; consistent sizes for similar elements.</li>
+<li><b>One screen, one story:</b> one obvious goal, everything supports it, make the next action easy.</li>
+<li><b>Spacing system:</b> repeatable 8-based scale (8, 16, 24, 32, 48, 64). “Consistency beats random spacing.” “Spacing is not empty. Spacing is structure.”</li>
+<li><b>Class 3 challenge:</b> redesign one screen — fix layout, establish typography, build colour system, create hierarchy, add consistent spacing.</li></ul></div>
+
+<h2 class="ch c4" id="t4">Class 4 · Interaction Design</h2>
+<div class="card"><h3>Core ideas</h3><ul>
+<li><b>Interaction design</b> = how users and products behave with each other. Asks: what can the user do? what happens when they act? how does the system respond? what does the user understand? what next?</li>
+<li>Visual design = layout, typography, colour, hierarchy, spacing. Interaction design = action, response, feedback, state, flow.</li>
+<li><b>Interaction loop:</b> User action → System response → User understands → Next action.</li>
+<li><b>Affordance</b> = communicates what an element lets you do without explanation (button looks tappable, link clickable, text field editable, drag handle = movement, slider = adjustment).</li>
+<li><b>Feedback</b> – “Did it work?”: Tap → pressed state; Save → success message; Load → progress indicator; Delete → confirmation; Submit → result.</li>
+<li><b>States (button family of 8):</b> Default, Hover, Pressed, Focused, Disabled, Loading (“Saving…”), Success (“Saved ✓”), Error (“Retry”). <i>Design the states, not just the component.</i> Ask: what should the button communicate at every moment?</li></ul></div>
+<div class="card"><h3>Navigation, forms, errors</h3><ul>
+<li>Journey: Home → Category → Detail → Action → Confirmation. After every action: does the user know what to do next?</li>
+<li><b>Patterns:</b> Tabs (switch related sections) · Bottom nav (primary areas) · Back (return to previous context) · Breadcrumbs (understand location) · Search (find known target) · Progress indicators (multi-step task). Choose by the user’s task, not preference.</li>
+<li><b>Form parts:</b> Label (what is this?) · Input (where do I type?) · Hint (format?) · Validation (valid?) · Error (how to fix?). Forms are conversations; reduce uncertainty.</li>
+<li>High friction: too many fields, unclear labels, poor defaults, validation only after submit, repeated info. Low friction: clear labels, smart defaults, inline validation, suggestions, only necessary fields.</li>
+<li><b>Error handling:</b> Prevent → Explain → Guide → Recover. Bad: “Payment failed.” Good: “Your card has expired. [Update Card]” (explains, guides, recovers).</li></ul></div>
+<div class="card"><h3>Micro-interactions, motion, loading, empty states, lifecycle</h3><ul>
+<li><b>Micro-interactions:</b> Toggle → state changed; Like → action registered; Copy → content copied; Toast → status communicated; Spinner → work in progress; Animation → change explained. Small things → large gains in perceived quality.</li>
+<li><b>Motion</b> explains, not decorates: where something came from, went, what changed, opened, closed, what belongs together.</li>
+<li><b>Loading:</b> no feedback (“Is it working?”) → spinner (“Something is happening”) → progress (“how far we are”) → time estimate (“what to expect”). Uncertainty creates frustration; feedback creates confidence.</li>
+<li><b>Empty state</b> (“Nothing is still a state”): explain the situation, give context, suggest next action (“You have no saved projects yet. [Create Project]”). Weak: “No data.”</li>
+<li><b>Lifecycle:</b> Default → Interaction → Loading → Success → Error. “Don’t design a screen. Design what the screen becomes.”</li>
+<li><b>User flow:</b> Enter → Browse → Choose → Confirm → Complete; Goal → Flow → Action → Outcome.</li>
+<li><b>5 questions of a complete interaction:</b> What can I do? What will happen? Did it work? What happens next? What if I make a mistake?</li>
+<li><b>5 Fundamentals:</b> Affordance (what can I do?) · Feedback (did it work?) · States (what is happening?) · Flow (where do I go?) · Recovery (what if it fails?). “Clarity of behaviour creates confidence.”</li>
+<li><b>Checklist:</b> actionable clear? every action has feedback? states designed? navigation preserves context? recover from errors? next action obvious?</li></ul></div>
+<div class="tip"><b>Exam tip:</b> MCQs usually test (1) law/term → definition matching, (2) “which is NOT part of…”, (3) scenario → principle. Learn the lists in order and their one-line meanings.</div>
+</section>
+
+<section id="quiz" class="pane">
+<div class="stat"><div><div class="big" id="tot"></div><div class="bar"><b id="tb"></b></div></div><button class="ghost" id="rall">🔀 Reshuffle &amp; reset ALL</button></div>
+<div class="pills" id="cls"></div>
+<div class="stat2"><span id="vs"></span><div class="gr"><button class="ghost" id="rset">🔀 Reshuffle &amp; reset this class</button></div></div>
+<div id="mres"></div><div id="qs"></div></section>
+
+<section id="cheat" class="pane">
+<h2>Revision Cheatsheet</h2>
+<div class="grid">
+<div class="card"><h3>UI vs UX</h3><p>UI = see/interact (surface). UX = whole experience of reaching a goal. UI 90% perception · UX 90% behaviour · Design 90% psychology.</p></div>
+<div class="card"><h3>7 success criteria</h3><p>Useful · Clear · Consistent · Efficient · Feedback-rich · Accessible · Pleasant</p></div>
+<div class="card"><h3>10 laws (one-liners)</h3><ul><li>Hick – choices ↑ time ↑</li><li>Fitts – size + distance</li><li>Miller – 7±2, chunk</li><li>Jakob – like other products</li><li>Zeigarnik – unfinished sticks</li><li>Von Restorff – stands out</li><li>Social Proof – copy others</li><li>Peak-End – peak + ending</li><li>Aesthetic-Usability – pretty = usable</li><li>Loss Aversion – loss ≈ 2× gain</li></ul></div>
+<div class="card"><h3>4 principles</h3><p>Clarity · Consistency · Feedback · User Control (prevent → recover)</p></div>
+<div class="card"><h3>Usability dimensions</h3><p>C1: Learnability, Efficiency, Memorability, Error tolerance, Satisfaction.<br>C2: Effectiveness, Efficiency, Learnability, Error Tolerance, Satisfaction.</p></div>
+<div class="card"><h3>Evaluation</h3><p>Loop: Goal → Task → Observe → Identify → Improve → Test.<br>Framework: Goal, Path, Clarity, Consistency, Feedback, Recovery.<br>Chain: Observation → Problem → Impact → Improvement.</p></div>
+<div class="card"><h3>5 UX roles</h3><p>User · Task Analyst · UX Observer · UI Analyst · UX Researcher</p></div>
+<div class="card"><h3>Heuristics & severity</h3><p>10 heuristics; doesn’t replace user testing. Severity = Frequency, Impact, Reach, Recovery. Behaviours: hesitation, error, backtracking, question, workaround, abandonment.</p></div>
+<div class="card"><h3>Good feedback / critique</h3><p>Specific · Evidence-based · Actionable · Respectful. Critique design, not designer.</p></div>
+<div class="card"><h3>5 building blocks</h3><p>Layout (where) · Typography (words speak) · Colour (signals) · Hierarchy (what first) · Spacing (rhythm) → Visual Clarity</p></div>
+<div class="card"><h3>Numbers to remember</h3><ul><li>Type: Display 64 · Heading 32 · Body 16 · Caption 14 px</li><li>Spacing: 8·16·24·32·48·64</li><li>Primary #2563EB · Success #10B981 · Error #EF4444 · Warning #F59E0B · Info #3B82F6</li><li>Miller 7±2 · Loss ≈ 2×</li></ul></div>
+<div class="card"><h3>Visual flow / grid</h3><p>Scan → Orient → Read → Decide → Act.<br>Grid: columns, margins, gutters. Legibility = characters; Readability = comfortable reading.</p></div>
+<div class="card"><h3>Interaction basics</h3><p>Loop: Action → Response → Understands → Next. Affordance = what can I do. Feedback = did it work. States = default, hover, pressed, focused, disabled, loading, success, error.</p></div>
+<div class="card"><h3>Navigation patterns</h3><p>Tabs – related sections · Bottom nav – primary areas · Back – previous context · Breadcrumbs – location · Search – known target · Progress – multi-step</p></div>
+<div class="card"><h3>Forms & errors</h3><p>Label · Input · Hint · Validation · Error. Errors: Prevent → Explain → Guide → Recover. Inline validation &gt; after-submit.</p></div>
+<div class="card"><h3>Loading, motion, empty</h3><p>Spinner → progress → time estimate. Motion explains change. Empty state = explain + context + next action.</p></div>
+<div class="card"><h3>Class 4 five fundamentals</h3><p>Affordance · Feedback · States · Flow · Recovery.<br>Five questions: What can I do? What will happen? Did it work? What next? What if I err?</p></div>
+<div class="card"><h3>Quotes to recognise</h3><ul><li>“Silence is the most common usability failure.”</li><li>“Spacing is structure.”</li><li>“Recognition beats recall.”</li><li>“Design the states, not just the component.”</li><li>“Don’t design a screen. Design what it becomes.”</li></ul></div>
+</div>
+<div class="tip"><b>Last-minute strategy:</b> Eliminate “NOT” options first, match laws by keyword (choices → Hick, size/distance → Fitts, 7±2 → Miller, unfinished → Zeigarnik), and for scenarios ask “which principle is violated?”</div>
+</section>
+</main>
+<script>
+// [question, [options], correctIndex, explanation]
+var D={1:[
+["Which best describes UI?",["The overall experience of achieving a goal","What the user sees and interacts with","The business strategy of a product","The speed of a server"],1,"UI = visible interaction surface: layout, type, buttons, colours, icons."],
+["Which term focuses on usefulness, ease and outcomes?",["UX","UI","Typography","Grid"],0,"UX is the whole experience of reaching a goal."],
+["In the car analogy, the steering wheel and dashboard represent…",["UX","Journey","UI","Pain point"],2,"UI = controls; UX = the entire driving experience."],
+["Which is NOT one of the seven success criteria of an interface?",["Clear","Feedback-rich","Accessible","Colourful"],3,"Seven: Useful, Clear, Consistent, Efficient, Feedback-rich, Accessible, Pleasant."],
+["“UI is 90% perception. UX is 90% ____.”",["Colour","Behaviour","Layout","Branding"],1,"Hence design is ~90% human psychology."],
+["Design is 90% what, according to the course?",["Human psychology","Typography","Engineering","Marketing"],0,"UI perception + UX behaviour → psychology."],
+["Which law says more choices lead to slower decisions?",["Fitts’s Law","Miller’s Law","Hick’s Law","Jakob’s Law"],2,"Hick’s: decision time grows with number/complexity of choices."],
+["Which law links target size and distance to speed of selection?",["Fitts’s Law","Hick’s Law","Zeigarnik Effect","Peak-End Rule"],0,"Make primary CTAs large and close/thumb-reachable."],
+["Working memory holds about how many items (Miller’s Law)?",["3 ± 1","7 ± 2","12 ± 3","20 ± 5"],1,"Hence chunking: 555–123–4567."],
+["“Users expect your product to work like every other one” is…",["Von Restorff Effect","Social Proof","Jakob’s Law","Loss Aversion"],2,"Follow conventions for navigation and icons."],
+["A profile-completion progress bar that pulls users back uses the…",["Zeigarnik Effect","Aesthetic-Usability Effect","Hick’s Law","Fitts’s Law"],0,"Unfinished tasks stick in memory."],
+["Using one accent colour for the single key action applies…",["Miller’s Law","Von Restorff Effect","Social Proof","Peak-End Rule"],1,"What stands out gets remembered; isolation creates emphasis."],
+["Showing ratings and “1,240 bought today” applies…",["Hick’s Law","Loss Aversion","Jakob’s Law","Social Proof"],3,"People look to others under uncertainty."],
+["People judge an experience mostly by its most intense moment and its…",["Beginning","Average","Ending","Length"],2,"Peak-End Rule: invest in checkout and offboarding."],
+["Which effect says attractive designs are perceived as easier to use?",["Aesthetic-Usability Effect","Zeigarnik Effect","Von Restorff Effect","Hick’s Law"],0,"But polish must never replace usability testing."],
+["Losses motivate action roughly how strongly compared to equal gains?",["Half as much","The same","Twice as much","Ten times"],2,"Loss Aversion; use honestly and sparingly."],
+["Splitting a phone number into groups most directly applies…",["Fitts’s Law","Miller’s Law","Hick’s Law","Jakob’s Law"],1,"Chunking aids working memory."],
+["Pre-selecting a recommended plan and trimming options applies…",["Social Proof","Peak-End Rule","Hick’s Law","Zeigarnik Effect"],2,"Fewer options + default = faster, confident choice."],
+["“Make the next action obvious” belongs to which principle?",["Clarity","Consistency","Feedback","User Control"],0,"Clarity = removing the need to guess."],
+["“Silence is the most common usability failure” relates to…",["Clarity","Consistency","User Control","Feedback"],3,"Users must know what is happening."],
+["“Prevent errors, then support recovery” belongs to…",["User Control","Clarity","Consistency","Feedback"],0,"Prevent: defaults, constraints. Recover: undo, preserve input."],
+["Which is NOT a usability dimension in Class 1?",["Learnability","Memorability","Profitability","Error tolerance"],2,"Class 1: Learnability, Efficiency, Memorability, Error tolerance, Satisfaction."],
+["A place where effort, confusion or failure increases is a…",["Goal","Opportunity","Task","Pain point"],3,"An opportunity is the design change that reduces it."],
+["In the Class 1 evaluation framework, “What happens if the user makes a mistake?” tests…",["Path","Recovery","Clarity","Goal"],1,"Framework: Goal, Path, Clarity, Consistency, Feedback, Recovery."],
+["The sequence of interactions and decisions to reach a goal is the…",["Task","Journey","Heuristic","Grid"],1,"Goal = want; Task = work required; Journey = sequence."]
+],2:[
+["The evaluator should NOT primarily ask…",["Can the user complete the goal?","Do I like it?","Can they recover from mistakes?","Do they know what happened?"],1,"Evaluate from the user’s POV, not personal taste."],
+["“Can a new user understand it?” measures which dimension?",["Learnability","Efficiency","Satisfaction","Effectiveness"],0,"Class 2 dimensions: Effectiveness, Efficiency, Learnability, Error Tolerance, Satisfaction."],
+["Which step comes right after Observe in the evaluation loop?",["Improve","Test","Goal","Identify"],3,"Goal → Task → Observe → Identify → Improve → Test."],
+["The final step of the evaluation loop is…",["Test","Goal","Identify","Observe"],0,"Test: did the change actually help?"],
+["Which role asks “Who am I? What would confuse me?”",["Task Analyst","UI Analyst","The User","UX Researcher"],2,"Role 1 thinks like the actual user."],
+["Which role checks for unnecessary steps and right order?",["UX Observer","Task Analyst","UI Analyst","The User"],1,"Role 2 studies the journey."],
+["Which role watches hesitation and confusion?",["UX Observer","UI Analyst","Task Analyst","UX Researcher"],0,"Role 3 looks for friction."],
+["Layout, typography, spacing and consistency are examined by the…",["UX Researcher","User","UI Analyst","Task Analyst"],2,"Role 4 studies the interface."],
+["Which role judges severity and frequency of a problem?",["UI Analyst","UX Researcher","UX Observer","The User"],1,"Role 5 understands impact and priority."],
+["Heuristic evaluation is best described as…",["Random opinion gathering","Systematic inspection against usability principles","A/B testing with live traffic","Code review"],1,"Structured and early."],
+["A key limitation of heuristic evaluation is that it…",["Is too slow","Needs no principles","Cannot find any problems","Doesn’t replace testing with real users"],3,"Expert evaluation ≠ user testing."],
+["How many heuristics were listed in the class?",["5","10","7","12"],1,"Ten questions to ask."],
+["Showing “Upload: 65% complete” satisfies which heuristic?",["Visibility of system status","Error prevention","Help and documentation","Consistency"],0,"Silence creates uncertainty."],
+["Showing “Selected: Chennai → Singapore” supports…",["Recall over recognition","Recognition rather than recall","Efficiency only","Error recovery"],1,"Don’t make users remember earlier choices."],
+["The error flow taught in Class 2 is…",["Detect → Prevent → Recover → Explain","Explain → Prevent → Detect → Recover","Prevent → Detect → Explain → Recover","Recover → Explain → Detect → Prevent"],2,"Good design prevents, then supports recovery."],
+["Which is the STRONG problem statement?",["“This screen looks bad.”","“The button is wrong.”","“I don’t like the colours.”","“Users may miss the primary action because it has similar emphasis to three secondary actions.”"],3,"What happened → why it matters → what could improve."],
+["User taps twice because nothing happened. Likely problem?",["No visible response after the first tap","Button too large","Wrong typeface","Too much spacing"],0,"Impact: user may think it failed; fix with immediate feedback."],
+["Task-based evaluation means evaluating…",["Only colours","Real user tasks, not just screens","Server logs only","The brand"],1,"E.g., book a doctor’s appointment for tomorrow."],
+["A user invents another way to accomplish the task. This is a…",["Hesitation","Question","Workaround","Abandonment"],2,"Observed behaviour types."],
+["A user stops before completing the task. This is…",["Backtracking","Abandonment","Error","Workaround"],1,"Often the most serious signal."],
+["Which is NOT a severity factor?",["Frequency","Reach","Recovery","Brand colour"],3,"Severity: Frequency, Impact, Reach, Recovery."],
+["High impact + high frequency =",["Low priority","Ignore","Cosmetic issue","High priority"],3,"A blocked checkout outranks a small visual issue."],
+["Design alternatives should be compared…",["By personal taste","By popularity","Against the same user task using criteria","By cost only"],2,"Clarity, efficiency, consistency, feedback, error prevention, recovery."],
+["Good critique is…",["Specific, evidence-based, actionable, respectful","Short and blunt","Based on preference","Directed at the designer"],0,"Critique the design, not the designer."],
+["Each team presents for 2 min 30 s. How long per role?",["15 seconds","30 seconds","45 seconds","1 minute"],1,"5 members × 30 s."]
+],3:[
+["In Class 3: UI = Perception and UX = ?",["Psychology","Layout","Colour","Code"],0,"Design is how it works, not only how it looks."],
+["The four principles of good experience are…",["Layout, Colour, Type, Space","Clarity, Consistency, Feedback, User Control","Speed, Cost, Quality, Scope","Hick, Fitts, Miller, Jakob"],1,"Recap of Class 1."],
+["Which is NOT one of the five building blocks?",["Layout","Hierarchy","Animation","Spacing"],2,"Layout, Typography, Colour, Hierarchy, Spacing."],
+["Layout answers which question?",["How words speak","What creates rhythm","Where things go","What attracts and signals"],2,"Layout organises."],
+["Typography is described as…",["Where things go","How words speak","What matters first","What creates rhythm"],1,"Information architecture, not decoration."],
+["Colour is described as what…",["Breathes","Organises","Prioritises","Attracts and signals"],3,"Colour communicates before words are read."],
+["Which block answers “What matters first?”",["Hierarchy","Spacing","Layout","Typography"],0,"Hierarchy prioritises."],
+["Which block creates rhythm?",["Colour","Layout","Spacing","Typography"],2,"Spacing breathes."],
+["A grid is called a…",["Colour system","Hidden skeleton","Type scale","Flow chart"],1,"Columns, margins, gutters, consistent widths."],
+["Which is NOT a grid component?",["Margin","Gutter","Column","Caption"],3,"Caption is a type level."],
+["Alignment creates…",["Visible borders","Louder colours","Invisible relationships","Faster servers"],2,"Aligned edges group elements."],
+["The visual flow sequence is…",["Read → Scan → Act → Decide → Orient","Orient → Scan → Decide → Read → Act","Decide → Act → Scan → Read → Orient","Scan → Orient → Read → Decide → Act"],3,"The eye guides the user to act."],
+["Typography is described as…",["Information architecture, not decoration","Pure decoration","Only font choice","A colour tool"],0,"Communicate, organise, emphasise, set tone, support scanning."],
+["In the type scale, Body text is…",["14px","16px","32px","64px"],1,"Display 64 · Heading 32 · Body 16 · Caption 14."],
+["Line length, line height, spacing and contrast affect…",["Legibility","Branding","Readability","Grid"],2,"Legibility = recognising characters."],
+["Which font was described as “Modern & clean”?",["Roboto","Merriweather","Georgia","Inter"],3,"Roboto = friendly & neutral; Merriweather = traditional & elegant."],
+["Colour system hex for Primary in the slides is…",["#2563EB","#10B981","#EF4444","#F59E0B"],0,"Success #10B981, Error #EF4444, Warning #F59E0B."],
+["Which set are semantic colours?",["Primary, Secondary, Accent","Success, Error, Warning, Info","Display, Heading, Body","Margin, Column, Gutter"],1,"Semantic colours signal state."],
+["A colour palette in the course includes Primary, Secondary, Accent, Neutral and…",["Gloss","Shadow","Dark","Pastel"],2,"Simple, consistent palette."],
+["Which tool is used to build hierarchy?",["Random fonts","Size, weight and order","Many colours","Dense text"],1,"Larger for key elements, bolder for primary actions, subtle for secondary."],
+["“One screen, one story” means a screen should have…",["Many equal actions","Only images","A clear primary action","No navigation"],2,"One obvious goal; everything supports it."],
+["The spacing system is based on a repeatable scale like…",["8, 16, 24, 32, 48, 64","5, 11, 17, 23","7, 13, 29, 31","Random values"],0,"Consistency beats random spacing."],
+["“Spacing is not empty. Spacing is ____.”",["Waste","Decoration","Colour","Structure"],3,"Separates, groups, creates rhythm, reduces cognitive load."],
+["The five fundamentals combine to create…",["Brand loyalty","Visual clarity","Faster loading","More features"],1,"Layout organises, Typography communicates, Colour signals, Hierarchy prioritises, Spacing breathes."],
+["In the information hierarchy, bottom navigation should be…",["Hidden","Always accessible and consistent","Different per screen","Removed"],1,"Primary navigation, always visible."]
+],4:[
+["Interaction design is the design of…",["Only visual style","How users and products behave with each other","Database schemas","Brand logos"],1,"Action, response, feedback, state, flow."],
+["Which pair belongs to interaction design (not visual)?",["Colour, Spacing","Layout, Typography","Hierarchy, Colour","Action, Response"],3,"Visual: layout, typography, colour, hierarchy, spacing."],
+["The interaction loop is…",["Response → Action → Next → Understands","Action → Response → Understands → Next action","Understands → Next → Action → Response","Next → Response → Action → Understands"],1,"User action → system response → user understands → next action."],
+["An affordance communicates…",["What an element allows the user to do","How fast it loads","The brand voice","The colour palette"],0,"Without requiring explanation."],
+["A drag handle suggests…",["Deletion","Navigation","Movement","Editing text"],2,"Slider suggests adjustment."],
+["“Did it work?” is answered by…",["Layout","Typography","Grid","Feedback"],3,"Save → success message; Load → progress."],
+["Which is NOT one of the eight button states?",["Hover","Pressed","Zoomed","Disabled"],2,"Default, hover, pressed, focused, disabled, loading, success, error."],
+["“Design the states, not just the ____.”",["colour","component","font","grid"],1,"A good designer thinks beyond the default screen."],
+["The “Complete Button” question is…",["What colour should it be?","What size is best?","What should it communicate at every moment?","Where is it placed?"],2,"It’s a family of states."],
+["A typical journey is…",["Home → Category → Detail → Action → Confirmation","Detail → Home → Action → Category","Action → Home → Detail","Confirmation → Home"],0,"After every action, does the user know what next?"],
+["Breadcrumbs help users…",["Switch sections","Find a known target","Understand location","See progress"],2,"Tabs switch sections; search finds known targets."],
+["Which pattern suits a multi-step task?",["Breadcrumbs","Progress indicators","Bottom nav","Back"],1,"Progress indicators show where you are in the task."],
+["Navigation should be chosen based on…",["The user’s task","Designer preference","Trends","Competitors only"],0,"“Not preference.”"],
+["Which is NOT a form part in the slides?",["Label","Hint","Validation","Animation"],3,"Label, Input, Hint, Validation, Error."],
+["Which is a LOW-friction form trait?",["Validation only after submit","Inline validation","Too many fields","Repeated information"],1,"Also clear labels, smart defaults."],
+["The best form asks…",["Everything possible","Only what is necessary","Nothing","Only optional fields"],1,"Reduce user work."],
+["The four steps of error handling are…",["Prevent, Explain, Guide, Recover","Detect, Hide, Retry, Ignore","Warn, Block, Log, Exit","Explain, Blame, Retry, Reset"],0,"An error should help the user move forward."],
+["Which is the GOOD error message?",["“Error 402.”","“Payment failed.”","“Your card has expired. Update Card”","“Something went wrong.”"],2,"Explains → guides → recovers."],
+["A toggle switch is a micro-interaction showing…",["Work in progress","State changed","Content copied","Action registered"],1,"Spinner = work in progress; Copy = content copied."],
+["Motion should…",["Decorate the interface","Entertain users","Hide loading","Explain what changed"],3,"Where something came from/went, what opened/closed."],
+["A progress bar with “94% complete” tells the user…",["Something is happening","How far we are","Nothing","An error occurred"],1,"Spinner = something happening; time estimate = what to expect."],
+["A good empty state should…",["Say “No data.”","Stay blank","Explain, give context and suggest a next action","Show an error"],2,"E.g., “No saved projects yet. Create Project.”"],
+["The screen lifecycle is…",["Default → Interaction → Loading → Success → Error","Loading → Default → Error → Success","Error → Loading → Default","Success → Default → Loading"],0,"“Design what the screen becomes.”"],
+["The five Class 4 fundamentals include…",["Affordance, Feedback, States, Flow, Recovery","Layout, Colour, Type, Space, Hierarchy","Hick, Fitts, Miller, Jakob, Von Restorff","Goal, Task, Observe, Identify, Test"],0,"Clarity of behaviour creates confidence."],
+["Which is one of the five questions of a complete interaction?",["Who designed it?","What if I make a mistake?","How many colours are used?","Which font is this?"],1,"What can I do? What will happen? Did it work? What next? What if I make a mistake?"]
+]};
+var SETS={core:{n:"Core from slides",tag:"Core"},more:{n:"More",tag:"Core"},hard:{n:"Additional (harder)",tag:"Hard"},scn:{n:"Exam-style scenarios",tag:"Scenario"}};
+
+var H={1:[
+["A checkout shows 12 payment methods, all equally bold. Which two ideas are violated?",["Fitts + Miller","Hick + Von Restorff","Jakob + Zeigarnik","Peak-End + Social Proof"],1,"Too many choices (Hick) and nothing stands out (Von Restorff)."],
+["Which statement about the Aesthetic-Usability Effect is most accurate?",["Polish removes the need for testing","Ugly designs are always unusable","Polish buys patience but must not replace usability testing","It only applies to mobile"],2,"Attractive designs feel easier, which can mask real problems."],
+["“Lose your 12-day streak” is an example of… and its main caution is…",["Social Proof; fake numbers","Loss Aversion; overuse breeds distrust","Hick’s Law; too many options","Peak-End; weak endings"],1,"Frame loss honestly and use sparingly."],
+["Which action best applies the Peak-End Rule?",["Spreading effort evenly","Removing all animation","Investing disproportionately in checkout and offboarding","Adding more steps"],2,"People judge by the peak and the ending."],
+["According to the course, clarity is…",["The same as simplicity","Removing the need to guess","Using fewer colours","Hiding advanced features"],1,"Clarity is not simplicity."]],
+2:[
+["“Main action hard to find” leads to which IMPACT in the course example?",["Task completion becomes slower","Colours clash","Users love it","Server errors"],0,"Observation → Problem → Impact → Improvement."],
+["Which claim about heuristic evaluation is FALSE?",["It is structured","It can be done early","It reveals common problems quickly","It can fully replace user testing"],3,"It does not replace testing with real users."],
+["A user returns to the previous step and re-enters data. This is…",["Backtracking","Abandonment","Workaround","Question"],0,"Backtracking = goes backwards or repeats a step."],
+["Bug A blocks checkout; Bug B is a slightly misaligned icon. Which has priority?",["B, it is visible everywhere","Both equal","A, because it blocks the main task","Neither"],2,"A blocked checkout may affect the entire business."],
+["Which critique is best?",["“Make it look better.”","“I don’t like it.”","“Poor design.”","“The error explains the problem but not how to recover.”"],3,"Specific, evidence-based, actionable, respectful."]],
+3:[
+["Which change most improves READABILITY without changing the typeface?",["Smaller font","More line height and better contrast","Tighter spacing","Lighter colour"],1,"Readability = line length, line height, spacing, contrast."],
+["In the FoodKart before/after, what created clear hierarchy?",["Larger main heading, bold emphasis, smaller supporting text","More colours","More banners","Smaller images"],0,"Size and weight show what is most important."],
+["Misaligned left edges break which idea?",["Gutters","Type scale","Invisible relationships","Semantic colour"],2,"Alignment creates invisible relationships."],
+["Four equal bright-yellow buttons (Add, Wishlist, Share, Compare) fail mainly on…",["Spacing","Hierarchy","Typography","Grid"],1,"No single primary action stands out."],
+["Which two palette roles share #F59E0B in the slides?",["Success and Info","Primary and Error","Accent and Warning","Secondary and Dark"],2,"Accent #F59E0B and Warning #F59E0B."]],
+4:[
+["A Save button gives no change for 3 seconds. Which state is missing?",["Disabled","Loading","Hover","Focused"],1,"Loading (“Saving…”) tells users work is in progress."],
+["Which loading feedback is most informative?",["Nothing","A spinner","A progress bar","Progress with a time estimate"],3,"Spinner → progress → time estimate: what to expect."],
+["Which state shows an element currently has input focus?",["Focused","Disabled","Pressed","Default"],0,"Disabled means unavailable."],
+["“Invalid input.” is weakest because it fails to…",["Explain or guide recovery","Use red","Use a button","Be short"],0,"Good errors explain, guide, recover."],
+["In “You have no saved projects yet. [Create Project]”, what is the next action?",["The heading","The explanation","The context","The Create Project button"],3,"Good empty states suggest a next action."]]};
+var X={1:[
+["A site shows 9 unsorted plans; you redesign to 3 with one recommended. Which law?",["Hick’s Law","Fitts’s Law","Jakob’s Law","Miller’s Law"],0,"Fewer options + default = faster choice."],
+["A tiny “Buy Now” sits far from the cursor. Best fix?",["Make it larger and closer","Change the font","Add more text","Make it grey"],0,"Fitts’s Law: size and distance."],
+["Onboarding shows “80% complete – 1 step left.” Which effect?",["Von Restorff","Loss Aversion","Zeigarnik Effect","Social Proof"],2,"Unfinished tasks pull users back."],
+["A product page shows “4.9 · 812 reviews.” Which idea?",["Peak-End Rule","Social Proof","Hick’s Law","Fitts’s Law"],1,"People look to others under uncertainty."],
+["A user deletes a file and cannot undo. Which principle is weakest?",["Clarity","Consistency","User Control","Feedback"],2,"Support recovery: undo, preserve input."]],
+2:[
+["User taps Save twice because nothing happened. Which heuristic is violated?",["Consistency","Visibility of system status","Help","Efficiency"],1,"Silence creates uncertainty."],
+["A team picks a design because it “looks nicer.” What is wrong?",["Nothing","Should use only colour","Should pick the cheaper","Should compare against the same task using criteria"],3,"Don’t choose by personal taste."],
+["A user calls support to book instead of using the app. This is a…",["Hesitation","Error","Workaround","Question"],2,"The user invents another way to complete the task."],
+["Which of three problems should rank HIGHEST?",["A rare cosmetic glitch","A slow animation","One that blocks payment for many users","A typo in the footer"],2,"High impact + high frequency/reach."],
+["Which rewrite of “You designed this badly” is best?",["“Fix it.”","“Users must scan three areas to find the next action.”","“It looks off.”","“I don’t like it.”"],1,"Specific and evidence-based."]],
+3:[
+["Heading and body text are the same size and weight. Which fundamental fails?",["Spacing","Colour","Hierarchy","Grid"],2,"Hierarchy tells users where to start."],
+["Cards touch each other with no gaps. Which fundamental fails?",["Spacing","Typography","Hierarchy","Colour"],0,"Spacing separates and groups."],
+["You need a friendly, neutral body font. Which fits the slides best?",["Merriweather","Roboto","Inter","Comic Sans"],1,"Roboto = friendly & neutral."],
+["Which semantic colour suits an error banner?",["Success green","Info blue","Error red","Warning-free grey"],2,"Error #EF4444."],
+["Where should primary navigation sit on a mobile home screen?",["Hidden in a menu only","Different each screen","Top-right only","Bottom navigation, always visible"],3,"Consistent across screens."]],
+4:[
+["A checkout shows “Payment failed.” Best improvement?",["“Your card has expired. Update Card.”","“Error.”","“Try later.”","Remove the message"],0,"Explain → Guide → Recover."],
+["A user uploads a 200 MB file. Best feedback?",["A spinner only","Nothing","Progress with a time estimate","An alert at the end"],2,"Tell users how far and what to expect."],
+["A new user opens an empty “Saved projects” page. Best design?",["Blank page","“No data.”","An error","Explain, give context, suggest Create Project"],3,"Nothing is still a state."],
+["A button shows “Saving…” and then “Saved ✓”. Which states?",["Hover then Focused","Loading then Success","Error then Disabled","Default then Pressed"],1,"Loading → Success."],
+["A multi-step checkout needs which navigation pattern?",["Progress indicators","Breadcrumbs only","Bottom nav only","Search"],0,"They show where you are in a multi-step task."]]};
+
+var ALL=[];
+var DROP={1:[],2:[],3:[],4:[]};
+var M={1:[
+["If users can’t tell whether an action worked, which cost does the course highlight?",["Lost trust","Higher server cost","Slower fonts","Fewer features"],0,"Costs: wasted effort, errors and rework, lost trust."],
+["Which Hick’s Law response hides advanced settings until needed?",["Chunking","Progressive disclosure","Social proof","Motion"],1,"Trim options, progressive disclosure, sensible default."],
+["For small tap targets, Fitts’s Law suggests…",["Shrinking the hitbox","Moving them far apart","Generous padding, not just a small hitbox","Using grey text"],2,"Give small targets generous padding."],
+["Jakob’s Law advises saving true novelty for…",["Navigation","Icons","Checkout","Your actual differentiator"],3,"Follow conventions elsewhere; test unfamiliar patterns."],
+["Breaking onboarding into small, completable steps applies…",["Hick’s Law","Loss Aversion","Fitts’s Law","Zeigarnik Effect"],3,"Visible progress pulls users back."],
+["Von Restorff emphasis comes mainly from…",["Size alone","Isolation","More text","Animation"],1,"Use isolation, not just size."],
+["Which testimonial works best for Social Proof?",["“Great product!”","“Best ever!!!”","“Highly recommended.”","“The onboarding felt effortless — my whole team switched in a day.”"],3,"Specific, credible beats vague praise."],
+["Peak-End advice for how a flow should finish is…",["End with clarity and warmth, not friction","End abruptly","Add more steps","Hide the result"],0,"Invest in checkout and offboarding."],
+["Polish should never substitute for…",["Branding","Usability testing","Colour","Animation"],1,"Aesthetic-Usability: polish buys patience, not proof."],
+["Which use of Loss Aversion is acceptable?",["Fake countdown timers","Honest scarcity: “Only 2 left in stock”","Hiding the price","Guilt-based wording"],1,"Frame scarcity honestly, never falsely."],
+["Controls should be labelled by…",["Internal system language","Brand names","What they do","Colour"],2,"Clarity: label by function."],
+["Memorability asks…",["Can new users start?","Can experts finish fast?","Does it feel pleasant?","Can users return after a gap and continue?"],3,"Memorability = returning after a gap."],
+["Efficiency (Class 1) asks…",["Can an experienced user complete tasks quickly?","Can a new user get started?","Can mistakes be prevented?","Does it feel manageable?"],0,"Learnability is for new users."],
+["In Activity 2 (Interface Audit), the task is mapped in how many steps?",["2–3","4–8","10–12","As many as possible"],1,"Map 4–8 steps; check clarity, consistency, feedback, error."],
+["Which is NOT a question about the user in the course?",["Who are they?","What do they already know?","What device and context?","What is the server language?"],3,"Ask who, knowledge, device/context, constraints."]],
+2:[
+["“Can the user complete the task?” measures…",["Efficiency","Learnability","Effectiveness","Satisfaction"],2,"Effectiveness = task completion."],
+["The RideGo design flow is…",["Set location → choose ride → confirm booking → ride tracking","Choose ride → set location → track → pay","Login → pay → book","Track → confirm → choose"],0,"Design 1 of 2 in the common review."],
+["The FoodNow design flow is…",["Order tracking → restaurant → items","Select items → restaurant → tracking","Choose restaurant → select items → review & place order → order tracking","Place order → items → restaurant"],2,"Design 2 of 2."],
+["For Task 2, each team must find at least how many important UX problems?",["1","2","5","3"],3,"At least 3."],
+["For every problem in Task 2, which item is NOT recorded?",["Observation","Principle affected","Improvement","Budget estimate"],3,"Observation, Problem, Impact, Principle, Improvement."],
+["In severity, “Reach” asks…",["How many users experience it?","How often it happens?","Can users recover?","How badly it affects the task?"],0,"Frequency = how often; Impact = effect on task."],
+["“The user asks what something means” is which behaviour?",["Question","Error","Hesitation","Workaround"],0,"Observed behaviour types."],
+["“The user pauses before acting” is…",["Backtracking","Abandonment","Hesitation","Error"],2,"Hesitation."],
+["The Identify step of the loop asks…",["What could change?","Where does friction occur?","What actually happens?","Did it help?"],1,"Observe = what happens; Improve = what could change."],
+["The final team conclusion contains…",["1 work, 1 problem, 1 improvement","5 of each","3 things that work, 3 problems, 3 improvements","Only problems"],2,"Plus 5 role findings."],
+["20 teams × 2 min 30 s ≈ ?",["30 minutes","40 minutes","60 minutes","50 minutes"],3,"5 speakers × 30 s per team."],
+["Satisfaction asks whether the interaction feels…",["Fast","Understandable and manageable","Cheap","Colourful"],1,"Class 2 wording."],
+["Delete → “Item moved to Trash” demonstrates…",["Visibility and feedback","Consistency","Error prevention","Help"],0,"Visibility & feedback examples."],
+["The UI Analyst’s guiding question is…",["Where might the user struggle?","How serious is it?","Does the interface clearly communicate what to do?","What is the task?"],2,"Role 4."],
+["“Where might the user struggle?” belongs to…",["Task Analyst","UX Observer","UI Analyst","UX Researcher"],1,"Role 3 watches for friction."]],
+3:[
+["Which is NOT a layout element in the slides?",["Position","Alignment","Balance","Texture"],3,"Position, alignment, grouping, balance, flow."],
+["Heading 1 in the typography slide is…",["32px","64px","48px","16px"],2,"H1 48px, H2 32px, body 16px, caption 14px."],
+["Legibility depends on…",["Line length","Contrast","Spacing","Typeface and letterforms"],3,"Legibility: typeface, letterforms, size, weight."],
+["Which hex is the Secondary colour?",["#EC4899","#2563EB","#10B981","#0F172A"],0,"Primary #2563EB."],
+["Which hex is the Info colour?",["#EF4444","#3B82F6","#F59E0B","#E2E8F0"],1,"Info #3B82F6."],
+["Success colour hex?",["#EF4444","#64748B","#10B981","#F8FAFC"],2,"Success #10B981."],
+["In the visual flow, “Orient” is step…",["1","3","4","2"],3,"Scan, Orient, Read, Decide, Act."],
+["In the information hierarchy, what comes right after the top level?",["Hero banner","Bottom navigation","Secondary content","Core features"],0,"Top level → hero banner → core features → secondary → navigation."],
+["Class 3 challenge step 3 is…",["Fix the layout","Create hierarchy","Build a colour system","Add spacing"],2,"Layout, typography, colour, hierarchy, spacing."],
+["Spacing groups related items by…",["Changing fonts","Keeping related items closer than unrelated ones","Adding borders only","Using colour only"],1,"Spacing is structure."],
+["A grid’s “repeatable structure” gives…",["Random layouts","More colours","Slower design","Consistent layouts across screens"],3,"Columns, margins, gutters, consistent widths."],
+["Which colour use means “show state”?",["Green for success, red for error","Rainbow headings","Random accents","Brand only"],0,"Semantic colours."],
+["Which is a purpose of typography listed in the slides?",["Set tone","Add shadows","Compress images","Increase speed"],0,"Communicate, organise, emphasise, set tone, support scanning."],
+["The hero banner commonly holds…",["Settings","Key message, featured content, carousel","Legal text","Forms"],1,"Level 2 of the hierarchy."],
+["Which colour-system aim is listed?",["Use many colours","Avoid contrast","Maintain good contrast","Random palette"],2,"Also brand recognition, guide attention, show importance."]],
+4:[
+["Which question does interaction design ask first?",["What does it look like?","What can the user do?","Which font?","Which grid?"],1,"What can the user do? What happens when they act?"],
+["Visual design asks…",["What happens when I use it?","What does it look like?","What is the next step?","What state is it in?"],1,"Interaction design asks what happens."],
+["Tabs are used to…",["Return to previous context","Understand location","Switch between related sections","Find a known target"],2,"Tabs = related sections."],
+["The Back pattern lets users…",["Return to previous context","Search","See progress","Switch tabs"],0,"Back = previous context."],
+["Search is best for…",["Finding a known target","Multi-step tasks","Primary areas","Showing location"],0,"Search = known target."],
+["In forms, “Validation” answers…",["What is this?","Where do I type?","What format?","Is this valid?"],3,"Label, Input, Hint, Validation, Error."],
+["A form Hint answers…",["What format is expected?","Is it valid?","How do I fix it?","What is this?"],0,"Hint = expected format."],
+["A toast communicates…",["Work in progress","Status","State changed","Content copied"],1,"Toast → status communicated."],
+["Copy → “Content copied” is a…",["Navigation pattern","Form error","Micro-interaction","Grid"],2,"Small interactions communicate system activity."],
+["A spinner tells the user…",["How far we are","What to expect","Nothing","Something is happening"],3,"Progress shows how far; time estimate shows what to expect."],
+["User flow step 2 is…",["Enter","Browse","Choose","Confirm"],1,"Enter, Browse, Choose, Confirm, Complete."],
+["Class 4 challenge step 1 is…",["Handle errors","Identify the goal","Create states","Make next action obvious"],1,"Goal → map action → response → states → loading/errors → next action."],
+["“Does navigation preserve context?” is part of…",["The interaction checklist","The typography scale","The colour system","The grid"],0,"Checklist of six questions."],
+["A time estimate (“About 5 seconds left”) tells users…",["Something is happening","How far we are","What to expect","Nothing"],2,"Here is what to expect."],
+["The Error state of the button shows…",["Saved ✓","Retry","Saving…","Disabled"],1,"Success shows Saved ✓."]]};
+function add(set,src){for(var c=1;c<=4;c++)src[c].forEach(function(q,i){if(set==="core"&&DROP[c].indexOf(i)>-1)return;ALL.push({id:set+"-"+c+"-"+i,set:set,c:c,q:q,k:ALL.length})})}
+add("core",D);add("hard",H);add("scn",X);add("more",M);
+var S={ans:{},ord:{},rk:{}},cs="core",cc=1,mock=null;
+var tab="theory";
+try{var sv=localStorage.getItem("uxq2");if(sv){var o=JSON.parse(sv);if(o&&o.ans)S=o}}catch(e){}
+if(S.ui){cc=+S.ui.cc||1;if(cc<1||cc>4)cc=1;tab=S.ui.tab||"theory"}
+function $(i){return document.getElementById(i)}
+function save(){S.ui={cs:cs,cc:cc,mock:mock,tab:tab};try{localStorage.setItem("uxq2",JSON.stringify(S))}catch(e){}}
+function shuf(n){var a=[],i,j,t;for(i=0;i<n;i++)a.push(i);for(i=n-1;i>0;i--){j=Math.floor(Math.random()*(i+1));t=a[i];a[i]=a[j];a[j]=t}return a}
+function ord(it){return S.ord[it.id]||[0,1,2,3]}
+function inSet(it){return it.c===cc}
+function view(){var v;if(mock){v=mock.map(function(id){return ALL.filter(function(x){return x.id===id})[0]});return v}
+v=ALL.filter(inSet);v.sort(function(a,b){var ra=S.rk[a.id]!==undefined?S.rk[a.id]:a.k,rb=S.rk[b.id]!==undefined?S.rk[b.id]:b.k;return ra-rb});return v}
+function stats(L){var d=0,r=0;L.forEach(function(it){if(S.ans[it.id]!==undefined){d++;if(S.ans[it.id]===it.q[2])r++}});return[d,r]}
+function head(){var t=stats(ALL);$("tot").innerHTML="Score <span>"+t[1]+"</span> / "+ALL.length+" · "+t[0]+" answered";$("tb").style.width=(100*t[0]/ALL.length)+"%";
+var L=view(),v=stats(L);$("vs").textContent=(mock?"Mock test · ":"")+"Answered "+v[0]+"/"+L.length;
+if(mock&&v[0]===L.length){$("mres").innerHTML='<div class="res">🏁 Mock finished: '+v[1]+' / '+L.length+' ('+Math.round(100*v[1]/L.length)+'%). '+(v[1]/L.length>=.8?"Excellent – exam ready!":v[1]/L.length>=.6?"Good – revise the misses.":"Revise the theory and retry.")+'</div>'}else $("mres").innerHTML=""}
+function pills(){var h="";[1,2,3,4].forEach(function(c){h+='<button class="pill'+(cc===c?" on":"")+'" data-c="'+c+'">Class '+c+'</button>'});$("cls").innerHTML=h;
+[].forEach.call($("cls").children,function(b){b.onclick=function(){cc=+b.dataset.c;render()}})}
+function render(){save();pills();var L=view(),h="";
+L.forEach(function(it,n){var q=it.q,o=ord(it);h+='<div class="qc" id="Q'+it.id+'"><div class="qh"><span class="qn">Q'+(n+1)+'</span><span class="tg tg-'+SETS[it.set].tag+'">'+SETS[it.set].tag+'</span><span class="cl c'+it.c+'">Class '+it.c+'</span></div><p>'+q[0]+"</p>";
+o.forEach(function(oi,pos){h+='<button class="op" data-id="'+it.id+'" data-p="'+pos+'"><span class="lt">'+"ABCD".charAt(pos)+"</span><span>"+q[1][oi]+"</span></button>"});
+h+='<div class="ex">✔ '+q[1][q[2]]+" — "+q[3]+"</div></div>"});
+$("qs").innerHTML=h;
+[].forEach.call(document.querySelectorAll(".op"),function(b){b.onclick=function(){pick(b)}});
+L.forEach(function(it){if(S.ans[it.id]!==undefined)mark(it)});head()}
+function mark(it){var box=$("Q"+it.id);box.classList.add("done");var o=ord(it),bs=box.querySelectorAll(".op");o.forEach(function(oi,pos){if(oi===it.q[2])bs[pos].classList.add("ok");else if(oi===S.ans[it.id])bs[pos].classList.add("no")})}
+function pick(b){var id=b.dataset.id;if(S.ans[id]!==undefined)return;var it=ALL.filter(function(x){return x.id===id})[0];S.ans[id]=ord(it)[+b.dataset.p];save();mark(it);head()}
+function resetItems(L){L.forEach(function(it){delete S.ans[it.id];S.ord[it.id]=shuf(4);S.rk[it.id]=Math.random()*1000});save()}
+$("rall").onclick=function(){S={ans:{},ord:{},rk:{}};resetItems(ALL);mock=null;render();window.scrollTo(0,0)};
+$("rset").onclick=function(){resetItems(view());if(mock)mock=null;render()};
+
+[].forEach.call(document.querySelectorAll(".tab"),function(b){b.onclick=function(){[].forEach.call(document.querySelectorAll(".tab"),function(x){x.classList.remove("on")});b.classList.add("on");[].forEach.call(document.querySelectorAll(".pane"),function(p){p.classList.remove("on")});$(b.dataset.p).classList.add("on");tab=b.dataset.p;save();window.scrollTo(0,0)}});
+[].forEach.call(document.querySelectorAll(".jump button"),function(b){b.onclick=function(){$(b.dataset.t).scrollIntoView({behavior:"smooth"})}});
+var cur=null;[].forEach.call($("theory").children,function(el){var m=/\bc(\d)\b/.exec(el.className||"");if(el.tagName==="H2"&&m)cur=m[1];else if(cur&&el.classList.contains("card"))el.classList.add("k"+cur)});
+render();
+if(tab!=="theory"){var tb0=document.querySelector('.tab[data-p="'+tab+'"]');if(tb0)tb0.click()}
+</script></body></html>
