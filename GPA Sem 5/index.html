@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>SRM GPA Predictor</title>
-<link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Syne:wght@400;600;700;800&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
 <style>
   :root {
     --bg: #0a0a0f;
@@ -45,7 +45,8 @@
   *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
   body {
-    font-family: 'Syne', sans-serif;
+    -webkit-font-smoothing: antialiased;
+    font-family: 'Inter', sans-serif;
     background: var(--bg);
     color: var(--text);
     min-height: 100vh;
@@ -65,7 +66,7 @@
   .logo-badge {
     background: linear-gradient(135deg, var(--accent), var(--accent2));
     color: white;
-    font-family: 'Space Mono', monospace;
+    font-family: 'JetBrains Mono', monospace;
     font-size: 11px; font-weight: 700;
     padding: 4px 8px; border-radius: 6px;
     letter-spacing: 1px;
@@ -78,7 +79,7 @@
   .theme-toggle {
     background: var(--bg3); border: 1px solid var(--border);
     border-radius: 50px; padding: 6px 14px;
-    cursor: pointer; font-size: 13px; font-family: 'Syne', sans-serif;
+    cursor: pointer; font-size: 13px; font-family: 'Inter', sans-serif;
     color: var(--text2); display: flex; align-items: center; gap: 6px;
     transition: all 0.2s;
   }
@@ -109,7 +110,7 @@
   }
   .input-group input {
     width: 100%; background: transparent; border: none; outline: none;
-    font-family: 'Space Mono', monospace; font-size: 22px; font-weight: 700;
+    font-family: 'JetBrains Mono', monospace; font-size: 22px; font-weight: 700;
     color: var(--text);
   }
   .input-group input::placeholder { color: var(--text3); }
@@ -166,7 +167,7 @@
   }
 
   .card-header { display: flex; align-items: flex-start; justify-content: space-between; margin-bottom: 14px; }
-  .card-title { font-size: 16px; font-weight: 800; }
+  .card-title { font-size: 16px; font-weight: 800; line-height: 1.3; padding-right: 12px; }
   .card-meta { display: flex; gap: 6px; align-items: center; margin-top: 3px; }
   .badge {
     font-size: 10px; font-weight: 700; letter-spacing: 1px; text-transform: uppercase;
@@ -178,7 +179,7 @@
 
   .grade-display { text-align: right; }
   .grade-letter {
-    font-family: 'Space Mono', monospace;
+    font-family: 'JetBrains Mono', monospace;
     font-size: 26px; font-weight: 700;
     line-height: 1;
   }
@@ -198,7 +199,7 @@
   .mini-input-inner:focus-within { border-color: var(--accent); }
   .mini-input-inner input {
     background: transparent; border: none; outline: none;
-    font-family: 'Space Mono', monospace; font-size: 15px; font-weight: 700;
+    font-family: 'JetBrains Mono', monospace; font-size: 15px; font-weight: 700;
     color: var(--text); width: 100%;
   }
   .mini-input-inner input::placeholder { color: var(--text3); font-size: 13px; }
@@ -216,7 +217,7 @@
   .total-text {
     font-size: 11px; color: var(--text3); margin-bottom: 10px; display: flex; justify-content: space-between;
   }
-  .total-text strong { color: var(--text); font-family: 'Space Mono', monospace; font-size: 12px; }
+  .total-text strong { color: var(--text); font-family: 'JetBrains Mono', monospace; font-size: 12px; }
 
   .predictor-label {
     font-size: 10px; font-weight: 700; letter-spacing: 1px; text-transform: uppercase;
@@ -234,7 +235,7 @@
   .pred-pill.selected { border-color: var(--accent2); background: color-mix(in srgb, var(--accent2) 15%, transparent); }
   .pred-pill.relative { border-style: dashed; }
   .pred-grade { font-size: 13px; font-weight: 800; }
-  .pred-marks { font-family: 'Space Mono', monospace; font-size: 10px; color: var(--text3); }
+  .pred-marks { font-family: 'JetBrains Mono', monospace; font-size: 10px; color: var(--text3); }
   .pred-note { font-size: 9px; color: var(--amber); margin-top: 1px; }
 
   .grade-row { display: flex; align-items: center; gap: 8px; }
@@ -273,7 +274,7 @@
     color: var(--text3); margin-bottom: 4px;
   }
   .dash-value {
-    font-family: 'Space Mono', monospace;
+    font-family: 'JetBrains Mono', monospace;
     font-size: 24px; font-weight: 700;
     background: linear-gradient(135deg, var(--accent), var(--accent2));
     -webkit-background-clip: text; -webkit-text-fill-color: transparent;
@@ -284,7 +285,7 @@
   .dash-reset {
     background: var(--bg3); border: 1px solid var(--border);
     border-radius: 10px; padding: 8px 16px;
-    cursor: pointer; font-family: 'Syne', sans-serif;
+    cursor: pointer; font-family: 'Inter', sans-serif;
     font-size: 12px; font-weight: 700; color: var(--text3);
     transition: all 0.2s;
   }
@@ -411,14 +412,14 @@ const GRADE_SCALE = [
 
 const SUBJECTS = {
   endSem: [
-    { id:'dm',   name:'Discrete Maths',         credits:4 },
-    { id:'fla',  name:'Formal Lang & Automata', credits:3 },
+    { id:'dm',   name:'Discrete Mathematics',         credits:4 },
+    { id:'fla',  name:'Formal Language and Automata', credits:3 },
   ],
   internal: [
-    { id:'uxui', name:'UX / UI Design',      credits:3 },
-    { id:'ios1', name:'iOS Prototype Dev',   credits:3 },
-    { id:'ios2', name:'iOS Dev Skills',      credits:3 },
-    { id:'idea', name:'Idea Gen App Design', credits:3 },
+    { id:'uxui', name:'Principles of UX / UI Design',      credits:3 },
+    { id:'ios1', name:'iOS App Prototype Design and Development',   credits:3 },
+    { id:'ios2', name:'iOS App Development Skills',      credits:3 },
+    { id:'idea', name:'Idea Generation App Design', credits:3 },
     { id:'cc',   name:'Community Connect',   credits:1 },
   ],
   elective: []
