@@ -2,7 +2,7 @@
 <html lang="en" data-theme="dark">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <title>SRM GPA Predictor</title>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
 <style>
@@ -85,7 +85,8 @@
   }
   .theme-toggle:hover { border-color: var(--accent); color: var(--text); }
 
-  .main { max-width: 1100px; margin: 0 auto; padding: 28px 20px 0; }
+  /* CHANGED: full width, no side gaps */
+  .main { max-width: none; margin: 0 auto; padding: 28px 24px 0; }
 
   .section-title {
     font-size: 11px; font-weight: 700; letter-spacing: 2px; text-transform: uppercase;
@@ -95,7 +96,9 @@
   .section-title::after { content: ''; flex: 1; height: 1px; background: var(--border); }
 
   .cgpa-row {
-    display: grid; grid-template-columns: 1fr 1fr; gap: 16px;
+    display: grid; grid-template-columns: repeat(2, minmax(0, 460px));
+    justify-content: start;
+    gap: 16px;
     margin-bottom: 28px;
   }
   .input-group {
@@ -141,9 +144,11 @@
   }
   .toggle-switch input:checked ~ .toggle-thumb { transform: translateX(22px); }
 
+  /* CHANGED: auto-fit so cards stretch to fill the row and wrap when narrow */
   .subjects-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+    grid-template-columns: repeat(auto-fill, minmax(300px, 460px));
+    justify-content: start;
     gap: 16px; margin-bottom: 28px;
   }
 
@@ -259,8 +264,9 @@
     backdrop-filter: blur(16px);
     display: flex; align-items: center; justify-content: center;
   }
+  /* CHANGED: full width dashboard */
   .dash-inner {
-    max-width: 1100px; width: 100%;
+    max-width: none; width: 100%;
     display: flex; align-items: center;
     justify-content: space-between;
   }
@@ -291,13 +297,72 @@
   }
   .dash-reset:hover { border-color: var(--red); color: var(--red); }
 
+  /* ---------- TABLET ---------- */
+  @media (max-width: 900px) {
+    .main { padding: 22px 18px 0; }
+    .subjects-grid { grid-template-columns: repeat(auto-fill, minmax(280px, 460px)); }
+  }
+
+  /* ---------- MOBILE ---------- */
   @media (max-width: 600px) {
-    .cgpa-row { grid-template-columns: 1fr; }
-    .subjects-grid { grid-template-columns: 1fr; }
+    body { padding-bottom: calc(110px + env(safe-area-inset-bottom)); }
+
+    /* Header */
+    header { padding: 10px 14px; padding-top: calc(10px + env(safe-area-inset-top)); }
+    .logo { gap: 8px; }
+    .logo-badge { font-size: 10px; padding: 3px 7px; }
+    .logo-title { font-size: 14px; }
+    .theme-toggle { padding: 6px 12px; font-size: 12px; }
+
+    .main { padding: 18px 12px 0; }
+    .section-title { font-size: 10px; letter-spacing: 1.5px; margin-bottom: 10px; }
+
+    /* Past CGPA row: two compact cards side by side */
+    .cgpa-row { grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 22px; }
+    .input-group { padding: 12px 14px; border-radius: 14px; }
+    .input-label { font-size: 9px; letter-spacing: 1px; margin-bottom: 6px; }
+    .input-group input { font-size: 18px; }
+    .input-hint { font-size: 10px; line-height: 1.3; }
+
+    /* Cards: always one per row */
+    .subjects-grid { grid-template-columns: 1fr; gap: 12px; margin-bottom: 22px; }
+    .subject-card { padding: 16px; border-radius: 14px; }
+    .card-title { font-size: 15px; }
+    .grade-letter { font-size: 24px; }
+    .subject-card.fail::before { top: 8px; right: 10px; font-size: 9px; }
+
+    /* 16px inputs stop iOS Safari from zooming on focus */
+    .mini-input-inner input { font-size: 16px; }
+    .mini-input-inner { padding: 8px 10px; }
+
+    /* Predictor pills share the row evenly */
+    .predictor-pills { gap: 6px; }
+    .pred-pill { flex: 1 1 0; min-width: 0; padding: 6px 4px; }
+
+    /* Quick grade chips wrap and are easier to tap */
+    .grade-row { flex-wrap: wrap; gap: 6px; }
+    .grade-chip { padding: 7px 12px; font-size: 12px; }
+
+    /* Bottom dashboard */
+    .sticky-dash { padding: 10px 12px; padding-bottom: calc(10px + env(safe-area-inset-bottom)); }
+    .dash-inner { gap: 6px; }
+    .dash-divider { display: none; }
+    .dash-label { font-size: 8px; letter-spacing: 1px; }
     .dash-value { font-size: 18px; }
-    .logo-title { font-size: 15px; }
-    header { padding: 12px 16px; }
-    .main { padding: 20px 14px 0; }
+    .dash-sub { font-size: 9px; }
+    .dash-reset { padding: 8px 10px; font-size: 11px; border-radius: 8px; }
+  }
+
+  /* ---------- SMALL PHONES ---------- */
+  @media (max-width: 360px) {
+    .cgpa-row { grid-template-columns: 1fr; }
+    .logo-title { font-size: 13px; }
+    .dash-value { font-size: 16px; }
+  }
+
+  /* Touch devices: no sticky hover colors */
+  @media (hover: none) {
+    .subject-card:hover { border-color: var(--border); background: var(--card-bg); }
   }
 
   .subject-card { animation: fadeUp 0.3s ease both; }
